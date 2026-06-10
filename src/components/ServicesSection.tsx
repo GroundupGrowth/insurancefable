@@ -50,12 +50,10 @@ export default function ServicesSection() {
               </p>
               <a
                 href={`${BASE}/life-insurance/`}
-                className="mt-auto inline-flex items-center gap-3 text-[#0D1B3D] font-medium"
+                className="mt-auto self-start inline-flex items-center gap-2 bg-white/80 backdrop-blur text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white transition-colors duration-200"
               >
-                <span className="w-9 h-9 rounded-full bg-white/80 backdrop-blur flex items-center justify-center">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
                 More Info
+                <ArrowRight className="w-4 h-4" />
               </a>
             </div>
           </div>
@@ -78,7 +76,7 @@ export default function ServicesSection() {
             </p>
             <a
               href={`${BASE}/long-term-care-insurance/`}
-              className="mt-auto pt-6 inline-flex items-center gap-2 text-white font-medium hover:text-white/80 transition-colors duration-200"
+              className="mt-auto self-start inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
             >
               More Info
               <ArrowRight className="w-4 h-4" />
@@ -99,7 +97,7 @@ export default function ServicesSection() {
             </p>
             <a
               href={`${BASE}/annuities/`}
-              className="mt-auto pt-6 inline-flex items-center gap-2 text-white font-medium hover:text-white/80 transition-colors duration-200"
+              className="mt-auto self-start inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
             >
               More Info
               <ArrowRight className="w-4 h-4" />
