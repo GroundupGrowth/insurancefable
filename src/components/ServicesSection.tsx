@@ -24,17 +24,8 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
-          <div className="relative rounded-2xl overflow-hidden min-h-80">
-            {/* SWAP-LATER */}
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_183428_ab5e672a-f608-4dcb-b319-f3e040f02e2d.mp4"
-            />
-            <div className="relative z-10 p-7 h-full flex flex-col">
+          <div className="bg-white rounded-2xl overflow-hidden min-h-80 flex flex-col">
+            <div className="p-7">
               <p className="text-sm text-[#0D1B3D]/60 mb-2">
                 Whole Life Insurance &amp; Infinite Banking
               </p>
@@ -57,14 +48,23 @@ export default function ServicesSection() {
               </p>
               <a
                 href={`${BASE}/life-insurance/`}
-                className="mt-auto pt-6 inline-flex items-center gap-3 text-[#0D1B3D] font-medium"
+                className="mt-6 inline-flex items-center gap-3 text-[#0D1B3D] font-medium"
               >
-                <span className="w-9 h-9 rounded-full bg-white/80 backdrop-blur flex items-center justify-center">
+                <span className="w-9 h-9 rounded-full bg-[#F5F5F5] flex items-center justify-center">
                   <ArrowRight className="w-4 h-4" />
                 </span>
                 More Info
               </a>
             </div>
+            {/* SWAP-LATER */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="mt-auto w-full h-48 object-cover"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_183428_ab5e672a-f608-4dcb-b319-f3e040f02e2d.mp4"
+            />
           </div>
 
           <div className="bg-[#0D1B3D] rounded-2xl p-7 min-h-80 flex flex-col">
