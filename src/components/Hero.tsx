@@ -13,23 +13,20 @@ const credentials = [
 
 export default function Hero() {
   return (
-    <section className="flex-1 px-6 pt-20 pb-6 flex items-end">
-      <div className="max-w-[88rem] mx-auto w-full">
-        <div
-          className="relative w-full rounded-2xl overflow-hidden"
-          style={{ height: 'calc(100vh - 96px)' }}
-        >
-          {/* SWAP-LATER */}
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_161253_c72b1869-400f-45ed-ac0c-52f68c2ed5bd.mp4"
-          />
+    <section className="relative flex-1">
+      {/* SWAP-LATER */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_161253_c72b1869-400f-45ed-ac0c-52f68c2ed5bd.mp4"
+      />
 
-          <div className="relative z-10 flex flex-col items-start h-full p-8 md:p-12 pt-28 md:pt-36">
+      <div className="relative z-10 h-full px-6">
+        <div className="max-w-[88rem] mx-auto h-full">
+          <div className="flex flex-col items-start h-full py-8 md:py-12 pt-28 md:pt-36">
             <h1
               className="text-[#0D1B3D] text-4xl md:text-6xl font-medium leading-tight max-w-2xl mb-4"
               style={{ letterSpacing: '-0.04em' }}
