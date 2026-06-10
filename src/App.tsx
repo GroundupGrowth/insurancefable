@@ -104,9 +104,9 @@ export default function App() {
         <Hero />
       </div>
       <TrustedPartners />
+      <ServicesSection />
       <ProcessSection />
       <TestimonialsSection />
-      <ServicesSection />
       <FaqSection />
       <LeadMagnetSection />
       <Footer />
