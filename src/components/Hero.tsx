@@ -1,4 +1,5 @@
-import { ArrowRight, Star } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Play, Star, X } from 'lucide-react';
 
 const BASE = 'https://www.insuranceandestates.com';
 
@@ -11,7 +12,11 @@ const credentials = [
   'AZ License 17508301 · FL License W312971',
 ];
 
+const VIDEO_ID = 'Kk_WZfcTCiM';
+
 export default function Hero() {
+  const [videoOpen, setVideoOpen] = useState(false);
+
   return (
     <section className="relative flex-1">
       {/* SWAP-LATER */}
@@ -25,10 +30,10 @@ export default function Hero() {
       />
 
       <div className="relative z-10 h-full px-6">
-        <div className="max-w-[88rem] mx-auto h-full">
+        <div className="relative max-w-[88rem] mx-auto h-full">
           <div className="flex flex-col items-start h-full py-8 md:py-12 pt-28 md:pt-36">
             <h1
-              className="text-[#0D1B3D] text-4xl md:text-6xl font-medium leading-tight max-w-2xl mb-4"
+              className="text-[#0D1B3D] text-4xl md:text-6xl font-medium leading-[1.1] max-w-4xl mb-6"
               style={{ letterSpacing: '-0.04em' }}
             >
               Take Back Control,
@@ -102,8 +107,56 @@ export default function Hero() {
               </div>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setVideoOpen(true)}
+            aria-label="Play video"
+            className="hidden sm:block absolute right-0 bottom-8 md:bottom-12 w-64 rounded-2xl overflow-hidden group"
+          >
+            <img
+              src={`https://img.youtube.com/vi/${VIDEO_ID}/hqdefault.jpg`}
+              alt="Watch: Insurance & Estates"
+              className="w-full aspect-video object-cover"
+            />
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="w-12 h-12 rounded-full bg-white/80 backdrop-blur flex items-center justify-center group-hover:bg-white transition-colors duration-200">
+                <Play className="w-5 h-5 fill-current text-[#0D1B3D] ml-0.5" />
+              </span>
+            </span>
+          </button>
         </div>
       </div>
+
+      {videoOpen && (
+        <div
+          className="fixed inset-0 z-[100] bg-[#0D1B3D]/80 flex items-center justify-center p-6"
+          onClick={() => setVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              aria-label="Close video"
+              onClick={() => setVideoOpen(false)}
+              className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors duration-200"
+            >
+              <X className="w-7 h-7" />
+            </button>
+            <div className="aspect-video rounded-2xl overflow-hidden bg-[#0D1B3D]">
+              <iframe
+                className="w-full h-full"
+                src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1`}
+                title="Insurance & Estates video"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

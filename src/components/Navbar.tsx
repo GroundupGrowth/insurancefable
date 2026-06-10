@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import LogoIcon from './LogoIcon';
 
 const BASE = 'https://www.insuranceandestates.com';
 
@@ -49,93 +48,81 @@ const navGroups: NavGroup[] = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   return (
-    <header
-      className={`top-0 left-0 right-0 z-50 px-6 transition-colors duration-200 ${
-        scrolled
-          ? 'fixed bg-[#F5F5F5] border-b border-black/5 py-4'
-          : 'absolute py-5'
-      }`}
-    >
-      <div className="relative max-w-[88rem] mx-auto flex items-center justify-between">
-        <a href={`${BASE}/`} className="flex items-center gap-2.5">
-          <LogoIcon className="w-7 h-7" />
-          <span className="text-xl font-medium tracking-tight text-[#0D1B3D]">
-            Insurance &amp; Estates
-          </span>
-        </a>
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-4">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-black/5 px-5 py-3">
+        <div className="flex items-center justify-between gap-6">
+          <a
+            href={`${BASE}/`}
+            className="text-xl font-medium tracking-tight text-[#0D1B3D]"
+          >
+            I&amp;E
+          </a>
 
-        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-          {navGroups.map((group) =>
-            group.items ? (
-              <div key={group.label} className="relative group">
-                <button
-                  type="button"
+          <nav className="hidden md:flex items-center gap-7">
+            {navGroups.map((group) =>
+              group.items ? (
+                <div key={group.label} className="relative group">
+                  <button
+                    type="button"
+                    className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
+                  >
+                    {group.label}
+                  </button>
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 hidden group-hover:block">
+                    <div className="bg-white rounded-xl border border-black/5 py-2 min-w-[16rem]">
+                      {group.items.map((item) => (
+                        <a
+                          key={item.label}
+                          href={item.href}
+                          className="block px-5 py-2.5 text-base text-gray-700 hover:text-[#0D1B3D] whitespace-nowrap"
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={group.label}
+                  href={group.href}
                   className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                 >
                   {group.label}
-                </button>
-                <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 hidden group-hover:block">
-                  <div className="bg-white rounded-xl border border-black/5 py-2 min-w-[16rem]">
-                    {group.items.map((item) => (
-                      <a
-                        key={item.label}
-                        href={item.href}
-                        className="block px-5 py-2.5 text-base text-gray-700 hover:text-[#0D1B3D] whitespace-nowrap"
-                      >
-                        {item.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <a
-                key={group.label}
-                href={group.href}
-                className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
-              >
-                {group.label}
-              </a>
-            ),
-          )}
-        </nav>
+                </a>
+              ),
+            )}
+          </nav>
 
-        <div className="hidden md:flex items-center gap-6">
-          <a
-            href={`${BASE}/start-your-journey/`}
-            className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D] transition-colors duration-200"
+          <div className="hidden md:flex items-center gap-5">
+            <a
+              href={`${BASE}/start-your-journey/`}
+              className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D] transition-colors duration-200"
+            >
+              Start here
+            </a>
+            <a
+              href={`${BASE}/proclientguide/introduction/`}
+              className="inline-flex items-center bg-[#0D1B3D] text-white font-medium px-5 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+            >
+              Connect with an Expert
+            </a>
+          </div>
+
+          <button
+            type="button"
+            className="md:hidden text-[#0D1B3D] p-1"
+            aria-label="Toggle menu"
+            onClick={() => setMobileOpen((open) => !open)}
           >
-            Start here
-          </a>
-          <a
-            href={`${BASE}/proclientguide/introduction/`}
-            className="inline-flex items-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-          >
-            Connect with an Expert
-          </a>
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
-        <button
-          type="button"
-          className="md:hidden text-[#0D1B3D] p-1"
-          aria-label="Toggle menu"
-          onClick={() => setMobileOpen((open) => !open)}
-        >
-          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-
         {mobileOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 mt-3 bg-white rounded-b-2xl border border-black/5 px-6 py-6 z-30">
+          <div className="md:hidden pt-4 pb-2">
             <nav className="flex flex-col gap-1">
               {navGroups.flatMap((group) =>
                 group.items
@@ -159,7 +146,7 @@ export default function Navbar() {
                     ),
               )}
             </nav>
-            <div className="flex flex-col gap-3 mt-6">
+            <div className="flex flex-col gap-3 mt-5">
               <a
                 href={`${BASE}/start-your-journey/`}
                 className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D]"
