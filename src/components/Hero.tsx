@@ -31,8 +31,10 @@ export default function Hero() {
 
       <div className="relative z-10 h-full px-6">
         <div className="relative max-w-[88rem] mx-auto h-full">
-          <div className="flex flex-col items-start h-full py-8 md:py-10 pt-28 md:pt-32">
-            <h1
+          <div className="flex flex-col items-start h-full py-8 md:py-10 pt-36 md:pt-44">
+            <div className="w-full flex items-start justify-between gap-8">
+              <div>
+                <h1
               className="text-[#0D1B3D] text-4xl md:text-6xl font-medium leading-[1.1] max-w-4xl mb-6"
               style={{ letterSpacing: '-0.04em' }}
             >
@@ -80,10 +82,30 @@ export default function Hero() {
                   <Star key={i} className="w-4 h-4 fill-current text-[#0D1B3D]" />
                 ))}
               </span>
-              <span className="text-sm text-[#0D1B3D]/60">
-                TrustScore 5.0 · 302 reviews · #1 of 23 in Life Insurance Agency
-              </span>
-            </a>
+                <span className="text-sm text-[#0D1B3D]/60">
+                  TrustScore 5.0 · 302 reviews · #1 of 23 in Life Insurance Agency
+                </span>
+              </a>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setVideoOpen(true)}
+                aria-label="Play video"
+                className="hidden lg:block relative w-72 xl:w-80 shrink-0 mt-2 rounded-2xl overflow-hidden group"
+              >
+                <img
+                  src={`https://img.youtube.com/vi/${VIDEO_ID}/hqdefault.jpg`}
+                  alt="Watch: Insurance & Estates"
+                  className="w-full aspect-video object-cover"
+                />
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <span className="w-12 h-12 rounded-full bg-white/80 backdrop-blur flex items-center justify-center group-hover:bg-white transition-colors duration-200">
+                    <Play className="w-5 h-5 fill-current text-[#0D1B3D] ml-0.5" />
+                  </span>
+                </span>
+              </button>
+            </div>
 
             <div className="mt-auto pt-10 w-full max-w-md overflow-hidden">
               <style>{`
@@ -107,24 +129,6 @@ export default function Hero() {
               </div>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setVideoOpen(true)}
-            aria-label="Play video"
-            className="hidden sm:block absolute right-0 bottom-8 md:bottom-10 w-60 md:w-72 rounded-2xl overflow-hidden group"
-          >
-            <img
-              src={`https://img.youtube.com/vi/${VIDEO_ID}/hqdefault.jpg`}
-              alt="Watch: Insurance & Estates"
-              className="w-full aspect-video object-cover"
-            />
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="w-12 h-12 rounded-full bg-white/80 backdrop-blur flex items-center justify-center group-hover:bg-white transition-colors duration-200">
-                <Play className="w-5 h-5 fill-current text-[#0D1B3D] ml-0.5" />
-              </span>
-            </span>
-          </button>
         </div>
       </div>
 
