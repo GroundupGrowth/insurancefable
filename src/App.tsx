@@ -98,7 +98,8 @@ function TrustedPartners() {
 export default function App() {
   return (
     <div className="flex flex-col bg-[#F5F5F5]">
-      <div className="relative h-screen flex flex-col overflow-hidden">
+      {/* ~85vh so the next section already peeks above the fold */}
+      <div className="relative h-[85vh] min-h-[560px] flex flex-col overflow-hidden">
         <Navbar />
         <Hero />
       </div>
