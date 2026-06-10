@@ -2,25 +2,18 @@ import { Star } from 'lucide-react';
 
 const BASE = 'https://www.insuranceandestates.com';
 
-/* ============================================================================
-   PASTE-VERBATIM TODO
-   The two client-journey graphics this section replaces
-   (CleanShot-2026-02-27-at-13.58.26@2x.webp and
-   CleanShot-2026-02-27-at-13.59.58@2x.webp) could not be read from this
-   build environment, so the review text and reviewer names below are
-   placeholders. Copy the quote and name from each graphic word-for-word.
-   Never invent or embellish testimonial copy.
-   ========================================================================== */
 const reviews = [
   {
     quote:
-      '[PASTE-VERBATIM TODO: Copy the review text word-for-word from the first client-journey graphic (CleanShot 13.58.26).]',
-    name: '[PASTE-VERBATIM TODO: reviewer name]',
+      "Barry Brooksby is the real deal. In a world full of salespeople, Barry stands out as a genuine educator, advisor, and steward of long-term wealth planning. His patience, integrity, and depth of knowledge immediately inspire confidence.\n\nEvery interaction has been professional, transparent, and educational. His team, especially his administrative assistant, has been fantastic to work with as well.\n\nI'm currently reading Barry's new book, Live Rich, Die Rich, and it reflects the same wisdom and practical guidance that he brings to his clients.\n\nWe trust Barry enough that we're already looking at similar planning strategies for our children. That's probably the strongest endorsement we can give.\n\nHighly recommended.",
+    name: 'Joey',
+    meta: 'June 5, 2026',
   },
   {
     quote:
-      '[PASTE-VERBATIM TODO: Copy the review text word-for-word from the second client-journey graphic (CleanShot 13.59.58).]',
-    name: '[PASTE-VERBATIM TODO: reviewer name]',
+      'Barry is one of a kind. During our one-to-one meetings, I found him to be as warm, personably, and diligent as he is portrayed in his dozens of YT videos. He patiently listened to my needs and offered thoughtful (not cookie-cutter) suggestions. He has tons of experience and loves to help others find their path to financial freedom. Highly, highly recommend him.',
+    name: null,
+    meta: 'Nov 16, 2025',
   },
 ];
 
@@ -47,11 +40,18 @@ export default function TestimonialsSection() {
                     <Star key={i} className="w-4 h-4 fill-current text-[#0D1B3D]" />
                   ))}
                 </div>
-                <p className="text-[#0D1B3D]/70 text-lg leading-relaxed">
-                  {review.quote}
-                </p>
+                <div className="text-[#0D1B3D]/70 text-lg leading-relaxed">
+                  {review.quote.split('\n\n').map((paragraph, i) => (
+                    <p key={i} className="mb-4 last:mb-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
               </div>
-              <p className="text-[#0D1B3D] font-medium mt-8">{review.name}</p>
+              <p className="text-[#0D1B3D] font-medium mt-8">
+                {review.name ? `${review.name} · ` : ''}
+                <span className="text-[#0D1B3D]/50 font-normal">{review.meta}</span>
+              </p>
             </div>
           ))}
         </div>
