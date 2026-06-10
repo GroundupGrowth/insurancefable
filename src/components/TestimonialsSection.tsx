@@ -18,11 +18,36 @@ const reviews = [
     name: null,
     meta: 'Nov 16, 2025',
   },
+  {
+    quote:
+      "I don't think I have ever met anyone more patient and professional than Barry Brooksby. It was very hard for me to understand some of the IBC concept, and I almost gave up on it. Every time I emailed or called Barry, he would patiently and calmly reiterate the information and go further to reference some of his videos or links.",
+    name: 'J.Canchola',
+    meta: 'Jun 12, 2025',
+  },
+  {
+    quote:
+      "After reading about the Infinite Banking Concept (IBC), I decided to adopt the concept. But I needed to find the right policy for my goal. Luckily I found Barry Brooksby. Mr. Brooksby created a whole life policy which complied with the concept and excelled at creating cash value in accordance with the IBC. He is knowledgeable and a patient explainer of how whole life works and how to make sure I was buying the best policy. He helped me with the application process. I couldn't have asked for a better guide. It was a great experience. If you are in the market for whole life, I highly recommend Mr. Brooksby and his team.",
+    name: 'James Mitchell',
+    meta: 'June 5, 2026',
+  },
+  {
+    quote:
+      "Barry Brooksby is a standout expert and a true advocate for anyone looking to master their finances. Between his incredible educational resources at InsuranceAndEstates.com and his leadership at Focus Wealth Group, Barry provides a level of clarity and service that is hard to find elsewhere.\n\nHe is a gifted communicator and a master teacher of the trade. Barry doesn't just provide a service; he ensures you understand the 'why' behind every strategy. He is accessible, honest, and deeply customer-oriented, always making sure you feel supported and informed.\n\nIf you want to work with an industry expert who operates with total integrity and treats your goals as his own, I highly recommend Barry Brooksby. Whether you are just starting to learn at Insurance and Estates or ready to take action with Focus Wealth Group, you are in the best possible hands.",
+    name: 'Todd Alexander',
+    meta: 'May 14, 2026',
+  },
+  {
+    quote:
+      "Barry was wonderful to deal with. Educational first! That's his goal and he definitely delivers as much education and support as is needed. Highly recommended for guidance and advising.",
+    name: 'CL',
+    meta: 'Apr 30, 2026',
+  },
 ];
 
-// Each marquee half repeats the set so the 50% loop is wide enough to fill
-// the viewport seamlessly.
-const sequence = [...reviews, ...reviews, ...reviews];
+// Each marquee half is wide enough to fill the viewport seamlessly; the
+// second row runs in a different order so the rows don't mirror each other.
+const rowOne = reviews;
+const rowTwo = [...reviews].reverse();
 
 function ReviewCard({ review }: { review: (typeof reviews)[number] }) {
   return (
@@ -72,7 +97,7 @@ export default function TestimonialsSection() {
           className="reviews-track flex w-max items-stretch"
           style={{ animation: 'reviews-marquee 60s linear infinite' }}
         >
-          {[...sequence, ...sequence].map((review, i) => (
+          {[...rowOne, ...rowOne].map((review, i) => (
             <ReviewCard key={i} review={review} />
           ))}
         </div>
@@ -86,7 +111,7 @@ export default function TestimonialsSection() {
             animationDirection: 'reverse',
           }}
         >
-          {[...sequence, ...sequence].map((review, i) => (
+          {[...rowTwo, ...rowTwo].map((review, i) => (
             <ReviewCard key={i} review={review} />
           ))}
         </div>

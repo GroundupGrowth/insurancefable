@@ -32,7 +32,7 @@ export default function Hero() {
       <div className="relative z-10 h-full px-6">
         <div className="relative max-w-[88rem] mx-auto h-full">
           <div className="flex flex-col items-start h-full py-8 md:py-10 pt-36 md:pt-44">
-            <div className="w-full flex items-start justify-between gap-8">
+            <div className="w-full flex items-center justify-between gap-8">
               <div>
                 <h1
               className="text-[#0D1B3D] text-4xl md:text-6xl font-medium leading-[1.1] max-w-4xl mb-6"
@@ -92,17 +92,20 @@ export default function Hero() {
                 type="button"
                 onClick={() => setVideoOpen(true)}
                 aria-label="Play video"
-                className="hidden lg:block relative w-72 xl:w-80 shrink-0 mt-2 rounded-2xl overflow-hidden group"
+                className="hidden lg:block relative w-[22rem] xl:w-[26rem] shrink-0 bg-white/80 backdrop-blur p-2 rounded-[1.75rem] group text-left"
               >
                 <img
                   src={`https://img.youtube.com/vi/${VIDEO_ID}/hqdefault.jpg`}
                   alt="Watch: Insurance & Estates"
-                  className="w-full aspect-video object-cover"
+                  className="w-full aspect-video object-cover rounded-3xl"
                 />
                 <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="w-12 h-12 rounded-full bg-white/80 backdrop-blur flex items-center justify-center group-hover:bg-white transition-colors duration-200">
-                    <Play className="w-5 h-5 fill-current text-[#0D1B3D] ml-0.5" />
+                  <span className="w-14 h-14 rounded-full bg-white/80 backdrop-blur flex items-center justify-center group-hover:bg-white transition-colors duration-200">
+                    <Play className="w-6 h-6 fill-current text-[#0D1B3D] ml-0.5" />
                   </span>
+                </span>
+                <span className="block px-3 py-2.5 text-sm font-medium text-[#0D1B3D]">
+                  Welcome to I&amp;E — Our Story and Mission
                 </span>
               </button>
             </div>
