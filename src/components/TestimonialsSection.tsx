@@ -2,6 +2,9 @@ import { Star } from 'lucide-react';
 
 const BASE = 'https://www.insuranceandestates.com';
 
+/* Real Trustpilot reviews — verbatim. To show more, paste additional reviews
+   word-for-word into this array (quote, name, meta). Never invent or edit
+   testimonial copy. */
 const reviews = [
   {
     quote:
@@ -17,48 +20,82 @@ const reviews = [
   },
 ];
 
+// Each marquee half repeats the set so the 50% loop is wide enough to fill
+// the viewport seamlessly.
+const sequence = [...reviews, ...reviews, ...reviews];
+
+function ReviewCard({ review }: { review: (typeof reviews)[number] }) {
+  return (
+    <div className="mx-3 w-[20rem] sm:w-[24rem] shrink-0 bg-[#F5F5F5] rounded-2xl p-6 flex flex-col justify-between whitespace-normal">
+      <div>
+        <div className="flex items-center gap-1 mb-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i} className="w-4 h-4 fill-current text-[#0D1B3D]" />
+          ))}
+        </div>
+        <p className="text-[#0D1B3D]/70 leading-relaxed line-clamp-5">
+          {review.quote.split('\n\n').join(' ')}
+        </p>
+      </div>
+      <p className="text-[#0D1B3D] font-medium mt-5 text-sm">
+        {review.name ? `${review.name} · ` : ''}
+        <span className="text-[#0D1B3D]/50 font-normal">{review.meta}</span>
+      </p>
+    </div>
+  );
+}
+
 export default function TestimonialsSection() {
   return (
-    <section className="px-6 pb-24">
-      <div className="max-w-[88rem] mx-auto">
+    <section className="bg-white py-24">
+      <div className="max-w-[88rem] mx-auto px-6">
         <h2
-          className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+          className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-12"
           style={{ letterSpacing: '-0.03em' }}
         >
           Our clients&rsquo; journeys.
         </h2>
+      </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
-          {reviews.map((review, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl p-7 min-h-80 flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center gap-1 mb-6">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current text-[#0D1B3D]" />
-                  ))}
-                </div>
-                <div className="text-[#0D1B3D]/70 text-lg leading-relaxed">
-                  {review.quote.split('\n\n').map((paragraph, i) => (
-                    <p key={i} className="mb-4 last:mb-0">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-              <p className="text-[#0D1B3D] font-medium mt-8">
-                {review.name ? `${review.name} · ` : ''}
-                <span className="text-[#0D1B3D]/50 font-normal">{review.meta}</span>
-              </p>
-            </div>
+      <style>{`
+        @keyframes reviews-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .reviews-row:hover .reviews-track {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <div className="reviews-row overflow-hidden">
+        <div
+          className="reviews-track flex w-max items-stretch"
+          style={{ animation: 'reviews-marquee 60s linear infinite' }}
+        >
+          {[...sequence, ...sequence].map((review, i) => (
+            <ReviewCard key={i} review={review} />
           ))}
         </div>
+      </div>
 
+      <div className="reviews-row overflow-hidden mt-6">
+        <div
+          className="reviews-track flex w-max items-stretch"
+          style={{
+            animation: 'reviews-marquee 75s linear infinite',
+            animationDirection: 'reverse',
+          }}
+        >
+          {[...sequence, ...sequence].map((review, i) => (
+            <ReviewCard key={i} review={review} />
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-[88rem] mx-auto px-6">
         <a
           href={`${BASE}/testimonials/`}
-          className="mt-8 inline-flex items-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+          className="mt-12 inline-flex items-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
         >
           Review More Testimonials
         </a>

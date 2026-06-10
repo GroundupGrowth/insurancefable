@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 const BASE = 'https://www.insuranceandestates.com';
 
 // SWAP-LATER
-const PHASE_1_BG =
+const ACTIVE_CARD_BG =
   'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260423_164207_f243351d-ed59-48ec-83a0-a5e996bdbe3c.png&w=1280&q=85';
 
 interface Phase {
@@ -42,7 +42,6 @@ const phases: Phase[] = [
 export default function ProcessSection() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (paused) return;
@@ -52,14 +51,6 @@ export default function ProcessSection() {
     );
     return () => clearInterval(id);
   }, [paused]);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    const card = track?.children[active] as HTMLElement | undefined;
-    if (track && card) {
-      track.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
-    }
-  }, [active]);
 
   return (
     <section className="px-6 py-24">
@@ -87,71 +78,63 @@ export default function ProcessSection() {
           </p>
         </div>
 
-        <style>{`
-          .process-track::-webkit-scrollbar { display: none; }
-        `}</style>
         <div
-          ref={trackRef}
-          className="process-track relative flex gap-4 overflow-x-auto snap-x snap-mandatory"
-          style={{ scrollbarWidth: 'none' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
           {phases.map((phase, index) => {
-            const isFirst = index === 0;
+            const isActive = active === index;
             return (
               <div
                 key={phase.phase}
-                className={`w-[85%] sm:w-[55%] lg:w-[40%] xl:w-[31%] shrink-0 snap-start rounded-2xl p-7 min-h-80 flex flex-col justify-between ${
-                  isFirst ? '' : 'bg-[#0D1B3D]'
-                }`}
-                style={
-                  isFirst
-                    ? {
-                        /* SWAP-LATER */
-                        backgroundImage: `url(${PHASE_1_BG})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }
-                    : undefined
-                }
+                className="relative overflow-hidden rounded-2xl bg-[#0D1B3D]"
               >
-                <span
-                  className={`text-xs uppercase tracking-wide ${
-                    isFirst ? 'text-[#0D1B3D]/50' : 'text-white/50'
+                {/* SWAP-LATER */}
+                <div
+                  className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
+                    isActive ? 'opacity-100' : 'opacity-0'
                   }`}
-                >
-                  {phase.phase}
-                </span>
-                <div>
-                  <h3
-                    className={`text-2xl font-medium mb-3 ${
-                      isFirst ? 'text-[#0D1B3D]' : 'text-white'
-                    }`}
-                    style={{ letterSpacing: '-0.02em' }}
-                  >
-                    {phase.title}
-                  </h3>
-                  <p
-                    className={`text-base leading-relaxed ${
-                      isFirst ? 'text-[#0D1B3D]/70' : 'text-white/60'
+                  style={{ backgroundImage: `url(${ACTIVE_CARD_BG})` }}
+                />
+                <div className="relative z-10 p-7 min-h-80 h-full flex flex-col justify-between">
+                  <span
+                    className={`text-xs uppercase tracking-wide transition-colors duration-700 ${
+                      isActive ? 'text-[#0D1B3D]/50' : 'text-white/50'
                     }`}
                   >
-                    {phase.body}
-                  </p>
-                  {phase.link && (
-                    <a
-                      href={phase.link.href}
-                      className={`mt-4 inline-flex items-center gap-2 font-medium ${
-                        isFirst
-                          ? 'text-[#0D1B3D] hover:text-[#1C2E55]'
-                          : 'text-white hover:text-white/80'
-                      } transition-colors duration-200`}
+                    {phase.phase}
+                  </span>
+                  <div>
+                    <h3
+                      className={`text-2xl font-medium mb-3 transition-colors duration-700 ${
+                        isActive ? 'text-[#0D1B3D]' : 'text-white'
+                      }`}
+                      style={{ letterSpacing: '-0.02em' }}
                     >
-                      {phase.link.label}
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
-                  )}
+                      {phase.title}
+                    </h3>
+                    <p
+                      className={`text-base leading-relaxed transition-colors duration-700 ${
+                        isActive ? 'text-[#0D1B3D]/70' : 'text-white/60'
+                      }`}
+                    >
+                      {phase.body}
+                    </p>
+                    {phase.link && (
+                      <a
+                        href={phase.link.href}
+                        className={`mt-4 inline-flex items-center gap-2 font-medium transition-colors duration-700 ${
+                          isActive
+                            ? 'text-[#0D1B3D] hover:text-[#1C2E55]'
+                            : 'text-white hover:text-white/80'
+                        }`}
+                      >
+                        {phase.link.label}
+                        <ArrowRight className="w-4 h-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             );
