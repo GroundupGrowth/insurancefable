@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 const BASE = 'https://www.insuranceandestates.com';
@@ -39,6 +40,27 @@ const phases: Phase[] = [
 ];
 
 export default function ProcessSection() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(
+      () => setActive((current) => (current + 1) % phases.length),
+      3000,
+    );
+    return () => clearInterval(id);
+  }, [paused]);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    const card = track?.children[active] as HTMLElement | undefined;
+    if (track && card) {
+      track.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+    }
+  }, [active]);
+
   return (
     <section className="px-6 py-24">
       <div className="max-w-[88rem] mx-auto">
@@ -65,13 +87,22 @@ export default function ProcessSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <style>{`
+          .process-track::-webkit-scrollbar { display: none; }
+        `}</style>
+        <div
+          ref={trackRef}
+          className="process-track relative flex gap-4 overflow-x-auto snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'none' }}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
           {phases.map((phase, index) => {
             const isFirst = index === 0;
             return (
               <div
                 key={phase.phase}
-                className={`rounded-2xl p-7 min-h-80 flex flex-col justify-between ${
+                className={`w-[85%] sm:w-[55%] lg:w-[40%] xl:w-[31%] shrink-0 snap-start rounded-2xl p-7 min-h-80 flex flex-col justify-between ${
                   isFirst ? '' : 'bg-[#0D1B3D]'
                 }`}
                 style={
@@ -125,6 +156,20 @@ export default function ProcessSection() {
               </div>
             );
           })}
+        </div>
+
+        <div className="flex gap-2 mt-6">
+          {phases.map((phase, index) => (
+            <button
+              key={phase.phase}
+              type="button"
+              aria-label={`Go to ${phase.phase}`}
+              onClick={() => setActive(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                active === index ? 'w-8 bg-[#0D1B3D]' : 'w-2 bg-[#0D1B3D]/20'
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

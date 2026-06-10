@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import LogoIcon from './LogoIcon';
 
@@ -49,9 +49,23 @@ const navGroups: NavGroup[] = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-20 px-6 py-5">
+    <header
+      className={`top-0 left-0 right-0 z-50 px-6 transition-colors duration-200 ${
+        scrolled
+          ? 'fixed bg-[#F5F5F5] border-b border-black/5 py-4'
+          : 'absolute py-5'
+      }`}
+    >
       <div className="relative max-w-[88rem] mx-auto flex items-center justify-between">
         <a href={`${BASE}/`} className="flex items-center gap-2.5">
           <LogoIcon className="w-7 h-7" />
