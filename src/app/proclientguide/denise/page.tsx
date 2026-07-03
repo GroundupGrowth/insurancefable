@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 const profile: AdvisorProfile = {
+  slug: 'denise',
   role: 'Pro Client Guide',
   name: 'Denise Boisvert',
   firstName: 'Denise',

@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, Calendar, Check, Mail, Phone, Star } from 'lucid
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
+import AdvisorBooking from '../../components/AdvisorBooking';
 
 /* Shared layout for the five Pro Client Guide profile pages. Each page
    provides an AdvisorProfile object; the structure stays identical. */
@@ -17,6 +18,8 @@ export interface Testimonial {
 }
 
 export interface AdvisorProfile {
+  /** Route segment, e.g. 'barry' — also keys the booking embed slot `advisor:<slug>:booking` */
+  slug: string;
   /** Role shown as the hero eyebrow, e.g. "Pro Client Guide" */
   role: string;
   /** Full display name, e.g. "Barry Brooksby" */
@@ -50,6 +53,7 @@ function Stars() {
 
 export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) {
   const {
+    slug,
     role,
     name,
     firstName,
@@ -138,6 +142,9 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
           </div>
         </div>
       </section>
+
+      {/* Inline booking calendar — appears once its embed code is saved at /admin */}
+      <AdvisorBooking slug={slug} firstName={firstName} />
 
       {/* Bio sections */}
       <section className="px-6 pb-24">

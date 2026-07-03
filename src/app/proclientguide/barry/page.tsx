@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 const profile: AdvisorProfile = {
+  slug: 'barry',
   role: 'IBC Pro Client Guide Practitioner',
   name: 'Barry Brooksby',
   firstName: 'Barry',

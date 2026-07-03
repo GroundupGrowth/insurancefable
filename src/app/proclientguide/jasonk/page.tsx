@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 const profile: AdvisorProfile = {
+  slug: 'jasonk',
   role: 'Chief Executive Officer',
   name: 'Jason Kenyon, Esq.',
   firstName: 'Jason',

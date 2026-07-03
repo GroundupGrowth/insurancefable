@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 const profile: AdvisorProfile = {
+  slug: 'steve',
   role: 'Chief Strategic Partnerships Officer',
   name: 'Steve Gibbs, JD, AEP®',
   firstName: 'Steve',

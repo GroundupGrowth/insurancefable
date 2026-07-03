@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import EmbedSlot from '../../components/EmbedSlot';
 
 export const freeResources = [
   'Money Secrets of the Wealthy',
@@ -52,6 +53,8 @@ export default function GuideRequestForm() {
             </div>
 
             <div className="flex flex-col justify-center">
+              {/* Replaced by the GHL form embed once it's saved under form:guide-request at /admin */}
+              <EmbedSlot slotKey="form:guide-request" className="bg-white rounded-2xl p-2">
               {submitted ? (
                 <p className="text-white text-2xl font-medium leading-relaxed">
                   Check your inbox — your copy is on the way.
@@ -127,6 +130,7 @@ export default function GuideRequestForm() {
                   </button>
                 </form>
               )}
+              </EmbedSlot>
             </div>
           </div>
         </div>

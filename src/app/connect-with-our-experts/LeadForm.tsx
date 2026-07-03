@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
+import EmbedSlot from '../../components/EmbedSlot';
 
 const callPoints = [
   'Map out your goals — where you are and where you want to be',
@@ -57,6 +58,8 @@ export default function LeadForm() {
             </div>
 
             <div className="flex flex-col justify-center">
+              {/* Replaced by the GHL form embed once it's saved under form:connect-with-our-experts at /admin */}
+              <EmbedSlot slotKey="form:connect-with-our-experts" className="bg-white rounded-2xl p-2">
               {submitted ? (
                 <p className="text-white text-2xl font-medium leading-relaxed">
                   Got it — one of our Pro Client Guides will reach out to schedule your
@@ -121,6 +124,7 @@ export default function LeadForm() {
                   </button>
                 </form>
               )}
+              </EmbedSlot>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { ArrowRight, ExternalLink, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import EmbedSlot from '../../components/EmbedSlot';
 
 export const metadata: Metadata = {
   title: 'Life Insurance Quotes',
@@ -93,10 +94,8 @@ export default function LifeInsuranceQuotesPage() {
         </div>
       </section>
 
-      {/* FOLLOW-UP: the live page embeds an interactive quote engine here
-          (Whole Life / Term Life / Whole Life - No Exam). We don't fake it —
-          these cards link to the same functionality on the live site until
-          the quoter is rebuilt or embedded. */}
+      {/* Quote engine: paste the embed under page:life-insurance-quotes:quote-engine
+          at /admin. Until then these cards link to the live quoting tool. */}
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
           <div className="bg-[#0D1B3D] rounded-3xl px-8 py-14 md:px-16 md:py-16">
@@ -107,32 +106,38 @@ export default function LifeInsuranceQuotesPage() {
             >
               Select your quote.
             </h2>
-            <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
-              Pick the coverage you want to price. Our quoting tool currently runs on
-              insuranceandestates.com — each option below opens it there.
-            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {quoteOptions.map((option) => (
-                <a
-                  key={option.title}
-                  href={LIVE_QUOTES_URL}
-                  className="group bg-white/5 hover:bg-white/10 rounded-2xl p-7 min-h-48 flex flex-col border border-white/10 transition-colors duration-200"
-                >
-                  <h3
-                    className="text-white text-xl md:text-2xl font-medium mb-3"
-                    style={{ letterSpacing: '-0.02em' }}
+            <EmbedSlot
+              slotKey="page:life-insurance-quotes:quote-engine"
+              className="bg-white rounded-2xl p-2"
+            >
+              <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
+                Pick the coverage you want to price. Our quoting tool currently runs on
+                insuranceandestates.com — each option below opens it there.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {quoteOptions.map((option) => (
+                  <a
+                    key={option.title}
+                    href={LIVE_QUOTES_URL}
+                    className="group bg-white/5 hover:bg-white/10 rounded-2xl p-7 min-h-48 flex flex-col border border-white/10 transition-colors duration-200"
                   >
-                    {option.title}
-                  </h3>
-                  <p className="text-white/60 text-base leading-relaxed">{option.text}</p>
-                  <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-white/60 group-hover:text-white transition-colors duration-200">
-                    Start This Quote
-                    <ExternalLink className="w-4 h-4" />
-                  </span>
-                </a>
-              ))}
-            </div>
+                    <h3
+                      className="text-white text-xl md:text-2xl font-medium mb-3"
+                      style={{ letterSpacing: '-0.02em' }}
+                    >
+                      {option.title}
+                    </h3>
+                    <p className="text-white/60 text-base leading-relaxed">{option.text}</p>
+                    <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-white/60 group-hover:text-white transition-colors duration-200">
+                      Start This Quote
+                      <ExternalLink className="w-4 h-4" />
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </EmbedSlot>
           </div>
         </div>
       </section>

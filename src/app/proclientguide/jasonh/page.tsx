@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 const profile: AdvisorProfile = {
+  slug: 'jasonh',
   role: 'Overfunded Life Specialist',
   name: 'Jason Herring',
   firstName: 'Jason',

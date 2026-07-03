@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
+import EmbedSlot from './EmbedSlot';
 
 const bookTopics = [
   'Risk in a Litigious Society',
@@ -55,6 +56,8 @@ export default function LeadMagnetSection() {
             </div>
 
             <div className="flex flex-col justify-center">
+              {/* Replaced by the GHL form embed once it's saved under form:generational-transfer at /admin */}
+              <EmbedSlot slotKey="form:generational-transfer" className="bg-white rounded-2xl p-2">
               {submitted ? (
                 <p className="text-white text-2xl font-medium leading-relaxed">
                   Check your inbox — your copy is on the way.
@@ -121,6 +124,7 @@ export default function LeadMagnetSection() {
                   </button>
                 </form>
               )}
+              </EmbedSlot>
             </div>
           </div>
         </div>

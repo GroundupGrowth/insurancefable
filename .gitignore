@@ -4,6 +4,9 @@ out
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store

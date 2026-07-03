@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import EmbedSlot from '../../components/EmbedSlot';
 
 /* Contact form stub following the LeadMagnetSection form pattern.
-   Lives inside the navy panel on /contact/. */
+   Lives inside the navy panel on /contact/. Replaced by the GHL form embed
+   once it's saved under form:contact at /admin. */
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +30,7 @@ export default function ContactForm() {
   }
 
   return (
+    <EmbedSlot slotKey="form:contact" className="bg-white rounded-2xl p-2">
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input
         type="text"
@@ -90,5 +93,6 @@ export default function ContactForm() {
         Submit
       </button>
     </form>
+    </EmbedSlot>
   );
 }
