@@ -21,41 +21,41 @@ Eight templates cover the entire site. T7 is the highest-leverage build: one tem
 ## Pages (26)
 
 ### T2 — Product / pillar
-- [ ] /life-insurance/
-- [ ] /long-term-care-insurance/
-- [ ] /annuities/
-- [ ] /infinite-banking-strategy/
-- [ ] /term-life-introduction/
-- [ ] /whole-life-introduction/
-- [ ] /iul-introduction/
-- [ ] /variable-life-introduction/
+- [x] /life-insurance/
+- [x] /long-term-care-insurance/
+- [x] /annuities/
+- [x] /infinite-banking-strategy/
+- [x] /term-life-introduction/
+- [x] /whole-life-introduction/
+- [x] /iul-introduction/
+- [x] /variable-life-introduction/
 
 ### T3 — Funnel / landing
-- [ ] /start-your-journey/
-- [ ] /connect-with-our-experts/
-- [ ] /life-insurance-quotes/
-- [ ] /ebooks-and-guides/
+- [x] /start-your-journey/
+- [x] /connect-with-our-experts/
+- [x] /life-insurance-quotes/
+- [x] /ebooks-and-guides/
 
 ### T4 — Pro Client Guide
-- [ ] /proclientguide/introduction/
-- [ ] /proclientguide/barry/
-- [ ] /proclientguide/jasonk/
-- [ ] /proclientguide/jasonh/
-- [ ] /proclientguide/steve/
-- [ ] /proclientguide/denise/
+- [x] /proclientguide/introduction/
+- [x] /proclientguide/barry/
+- [x] /proclientguide/jasonk/
+- [x] /proclientguide/jasonh/
+- [x] /proclientguide/steve/
+- [x] /proclientguide/denise/
 
 ### T5 — Trust / company
-- [ ] /about/
-- [ ] /testimonials/
-- [ ] /contact/
-- [ ] /editorial-standards/
+- [x] /about/
+- [x] /testimonials/
+- [x] /contact/
+- [x] /editorial-standards/
 
 ### T6 — Blog index
-- [ ] /blog/
+- [ ] /blog/ (stays on WordPress until Phase 3)
 
 ### T8 — Legal / utility
-- [ ] /privacytou/
-- [ ] /accessibility/
+- [x] /privacytou/
+- [x] /accessibility/
 
 ### T1 — Homepage
 - [x] / (rebuilt; this repo)
