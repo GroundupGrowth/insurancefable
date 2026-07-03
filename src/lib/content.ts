@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { pageDefaults, type PageDefaults } from '../data/pageContent';
 import { advisorDefaults } from '../data/advisors';
+import { ebookDefaults, type Ebook } from '../data/ebooks';
 import type { AdvisorProfile } from '../app/proclientguide/ProfileLayout';
 
 /* Server-side content layer. The code ships with default copy (src/data/*);
@@ -47,6 +48,28 @@ export async function getPageContent(slug: string): Promise<PageDefaults> {
     };
   } catch {
     return fallback;
+  }
+}
+
+/* Books are a collection, not per-field overrides: once the admin saves the
+   catalog, the site_ebooks rows replace the code defaults entirely. */
+export async function getEbooks(): Promise<Ebook[]> {
+  const supabase = serverClient();
+  if (!supabase) return ebookDefaults;
+  try {
+    const { data } = await supabase.from('site_ebooks').select('*').order('sort');
+    if (!data || data.length === 0) return ebookDefaults;
+    return data.map((row) => ({
+      slug: row.slug,
+      category: row.category,
+      eyebrow: row.eyebrow ?? '',
+      title: row.title ?? row.slug,
+      text: row.text ?? undefined,
+      href: row.href ?? '#request-a-guide',
+      sort: row.sort ?? 0,
+    }));
+  } catch {
+    return ebookDefaults;
   }
 }
 

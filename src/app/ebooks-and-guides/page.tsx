@@ -5,7 +5,7 @@ import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import EbookCard from '../../components/EbookCard';
 import GuideRequestForm from './GuideRequestForm';
-import { getPageContent } from '../../lib/content';
+import { getEbooks, getPageContent } from '../../lib/content';
 
 export const revalidate = 300;
 
@@ -14,64 +14,17 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: content.title, description: content.description };
 }
 
-// eBook landing pages stay on WordPress until they're migrated
-const BASE = 'https://www.insuranceandestates.com';
-
-/* Each book/guide has an embed slot (ebook:<slug>) manageable at /admin.
-   When an opt-in embed is saved there, the card opens it inline; until then
-   it falls back to the WordPress landing page or the generic request form. */
-const featuredBooks = [
-  {
-    slug: 'self-banking-blueprint',
-    eyebrow: 'The Ultimate Free Download',
-    title: 'The Self Banking Blueprint',
-    text: 'A Modern Approach to the Infinite Banking Concept.',
-    href: `${BASE}/self-banking-blueprint/`,
-  },
-  {
-    slug: 'kingdom-money',
-    eyebrow: 'Featured eBook',
-    title: 'Kingdom Money',
-    text: 'What wealthy families have quietly done for 100 years, and why your advisor never mentioned it.',
-    href: `${BASE}/kingdom-money/`,
-  },
-  {
-    slug: 'generational-transfer',
-    eyebrow: 'Featured eBook',
-    title: 'The Generational Transfer',
-    text: 'Why Most Family Wealth Disappears and How to Stop It.',
-    href: `${BASE}/generational-transfer/`,
-  },
-  {
-    slug: 'the-ultimate-asset',
-    eyebrow: 'Volume Based Infinite Banking',
-    title: 'The Ultimate Asset®',
-    text: 'Nash proved the concept. This is the system that scales it.',
-    href: `${BASE}/the-ultimate-asset-ebook/`,
-  },
-  {
-    slug: 'intentional-wealth-effect',
-    eyebrow: 'Featured eBook',
-    title: 'The Intentional Wealth Effect',
-    text: "Recapture your earnings and build wealth on purpose — principles inspired by Nelson Nash's Infinite Banking Concept.",
-    href: `${BASE}/intentional-wealth-effect/`,
-  },
-];
-
-const freeEbooks = [
-  { slug: 'money-secrets-of-the-wealthy', title: 'Money Secrets of the Wealthy' },
-  { slug: 'estate-planners-tactical-guide', title: "Estate Planner's Tactical Guide" },
-  { slug: 'financial-planning-has-failed', title: 'Financial Planning Has Failed' },
-];
-
-const freeGuides = [
-  { slug: '5-important-estate-planning-steps', title: '5 Important Estate Planning Steps' },
-  { slug: 'estate-planning-tactical-checklist', title: 'Estate Planning Tactical Checklist' },
-  { slug: 'life-insurance-essentials-report', title: 'Life Insurance Essentials Report' },
-];
+/* The catalog is managed in /admin → Books (site_ebooks in Supabase, code
+   defaults in src/data/ebooks.ts until first save). Each book's opt-in embed
+   lives in embed_slots under ebook:<slug>; when one is pasted, the card opens
+   it inline instead of linking out. */
 
 export default async function EbooksAndGuidesPage() {
   const content = await getPageContent('ebooks-and-guides');
+  const ebooks = await getEbooks();
+  const featuredBooks = ebooks.filter((book) => book.category === 'featured');
+  const freeEbooks = ebooks.filter((book) => book.category === 'free-ebook');
+  const freeGuides = ebooks.filter((book) => book.category === 'free-guide');
   return (
     <PageShell>
       <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
@@ -134,9 +87,10 @@ export default async function EbooksAndGuidesPage() {
               <EbookCard
                 key={book.slug}
                 slotKey={`ebook:${book.slug}`}
-                eyebrow="Free eBook"
+                eyebrow={book.eyebrow}
                 title={book.title}
-                fallbackHref="#request-a-guide"
+                text={book.text}
+                fallbackHref={book.href}
                 ctaLabel="Request This eBook"
               />
             ))}
@@ -157,9 +111,10 @@ export default async function EbooksAndGuidesPage() {
               <EbookCard
                 key={guide.slug}
                 slotKey={`ebook:${guide.slug}`}
-                eyebrow="Free Guide"
+                eyebrow={guide.eyebrow}
                 title={guide.title}
-                fallbackHref="#request-a-guide"
+                text={guide.text}
+                fallbackHref={guide.href}
                 ctaLabel="Request This Guide"
               />
             ))}

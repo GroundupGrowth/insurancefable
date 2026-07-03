@@ -52,11 +52,27 @@ create table if not exists public.site_pages (
 );
 
 -- ---------------------------------------------------------------------------
+-- Site ebooks: the eBook/guide catalog on /ebooks-and-guides/ (Books section
+-- in /admin). Replace-all semantics: any rows here replace the code defaults.
+-- ---------------------------------------------------------------------------
+create table if not exists public.site_ebooks (
+  slug text primary key,
+  category text not null check (category in ('featured', 'free-ebook', 'free-guide')),
+  eyebrow text,
+  title text not null,
+  text text,
+  href text,
+  sort integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------------
 -- Row level security: the site reads publicly, only admin users write.
 -- ---------------------------------------------------------------------------
 alter table public.embed_slots enable row level security;
 alter table public.advisors enable row level security;
 alter table public.site_pages enable row level security;
+alter table public.site_ebooks enable row level security;
 
 drop policy if exists "public read" on public.embed_slots;
 create policy "public read" on public.embed_slots for select using (true);
@@ -74,6 +90,12 @@ drop policy if exists "public read" on public.site_pages;
 create policy "public read" on public.site_pages for select using (true);
 drop policy if exists "authenticated write" on public.site_pages;
 create policy "authenticated write" on public.site_pages
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists "public read" on public.site_ebooks;
+create policy "public read" on public.site_ebooks for select using (true);
+drop policy if exists "authenticated write" on public.site_ebooks;
+create policy "authenticated write" on public.site_ebooks
   for all to authenticated using (true) with check (true);
 
 -- ---------------------------------------------------------------------------
