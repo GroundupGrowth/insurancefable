@@ -39,7 +39,7 @@ export default function PagesAdminPage() {
 
   const load = async () => {
     if (!supabase) return;
-    const { data } = await supabase.from('pages').select('*');
+    const { data } = await supabase.from('site_pages').select('*');
     const map: Record<string, PageRow> = {};
     (data as PageRow[] | null)?.forEach((row) => {
       map[row.slug] = row;
@@ -58,7 +58,7 @@ export default function PagesAdminPage() {
 
     const save = async () => {
       if (!supabase) return;
-      const { error } = await supabase.from('pages').upsert({
+      const { error } = await supabase.from('site_pages').upsert({
         slug: selected,
         title: editor.title,
         description: editor.description,
@@ -75,7 +75,7 @@ export default function PagesAdminPage() {
     const reset = async () => {
       if (!supabase) return;
       if (!window.confirm(`Reset "${fallback.label}" to the defaults shipped with the code?`)) return;
-      await supabase.from('pages').delete().eq('slug', selected);
+      await supabase.from('site_pages').delete().eq('slug', selected);
       await revalidatePaths([fallback.path]);
       await load();
       setEditor(toEditorState(fallback, null));

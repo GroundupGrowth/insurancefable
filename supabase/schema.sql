@@ -38,9 +38,10 @@ create table if not exists public.advisors (
 );
 
 -- ---------------------------------------------------------------------------
--- Pages: per-page text overrides (Pages section in /admin).
+-- Site pages: per-page text overrides (Pages section in /admin).
+-- Named site_pages because the Payload CMS in the same project owns `pages`.
 -- ---------------------------------------------------------------------------
-create table if not exists public.pages (
+create table if not exists public.site_pages (
   slug text primary key,      -- e.g. 'life-insurance', 'proclientguide/introduction'
   title text,                 -- SERP title (without the site suffix)
   description text,           -- meta description
@@ -55,7 +56,7 @@ create table if not exists public.pages (
 -- ---------------------------------------------------------------------------
 alter table public.embed_slots enable row level security;
 alter table public.advisors enable row level security;
-alter table public.pages enable row level security;
+alter table public.site_pages enable row level security;
 
 drop policy if exists "public read" on public.embed_slots;
 create policy "public read" on public.embed_slots for select using (true);
@@ -69,10 +70,10 @@ drop policy if exists "authenticated write" on public.advisors;
 create policy "authenticated write" on public.advisors
   for all to authenticated using (true) with check (true);
 
-drop policy if exists "public read" on public.pages;
-create policy "public read" on public.pages for select using (true);
-drop policy if exists "authenticated write" on public.pages;
-create policy "authenticated write" on public.pages
+drop policy if exists "public read" on public.site_pages;
+create policy "public read" on public.site_pages for select using (true);
+drop policy if exists "authenticated write" on public.site_pages;
+create policy "authenticated write" on public.site_pages
   for all to authenticated using (true) with check (true);
 
 -- ---------------------------------------------------------------------------

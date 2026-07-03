@@ -12,6 +12,7 @@ interface Stats {
   advisorOverrides: number;
   embedsLive: number;
   embedsTotal: number;
+  blogPosts: number | null;
   recent: { what: string; when: string }[];
 }
 
@@ -26,10 +27,12 @@ export default function DashboardPage() {
     if (!supabase) return;
     let cancelled = false;
     (async () => {
-      const [pages, advisors, embeds] = await Promise.all([
-        supabase.from('pages').select('slug, updated_at'),
+      const [pages, advisors, embeds, posts] = await Promise.all([
+        supabase.from('site_pages').select('slug, updated_at'),
         supabase.from('advisors').select('slug, updated_at'),
         supabase.from('embed_slots').select('slot_key, label, embed_code, updated_at'),
+        // Payload CMS posts table in the same project — the future blog content
+        supabase.from('posts').select('id', { count: 'exact', head: true }),
       ]);
       if (cancelled) return;
       const embedRows = embeds.data ?? [];
@@ -47,6 +50,7 @@ export default function DashboardPage() {
         advisorOverrides: advisors.data?.length ?? 0,
         embedsLive: embedRows.filter((r) => r.embed_code?.trim()).length,
         embedsTotal: embedRows.length,
+        blogPosts: posts.error ? null : (posts.count ?? null),
         recent,
       });
     })();
@@ -88,7 +92,13 @@ export default function DashboardPage() {
           }
           href="/admin/embeds/"
         />
-        <Kpi icon={Newspaper} label="Blog posts" value="0" sub="139 waiting on export" href="/admin/blog/" />
+        <Kpi
+          icon={Newspaper}
+          label="Blog posts"
+          value={stats?.blogPosts != null ? String(stats.blogPosts) : '—'}
+          sub="in Payload — migration pending"
+          href="/admin/blog/"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">

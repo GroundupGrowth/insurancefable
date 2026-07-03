@@ -35,7 +35,7 @@ export async function getPageContent(slug: string): Promise<PageDefaults> {
   const supabase = serverClient();
   if (!supabase) return fallback;
   try {
-    const { data } = await supabase.from('pages').select('*').eq('slug', slug).maybeSingle();
+    const { data } = await supabase.from('site_pages').select('*').eq('slug', slug).maybeSingle();
     if (!data) return fallback;
     return {
       ...fallback,
