@@ -3,12 +3,14 @@ import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Annuities',
-  description:
-    'Customized annuity solutions that provide the financial security and peace of mind you need for your retirement journey.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('annuities');
+  return { title: content.title, description: content.description };
+}
 
 const howItWorks = [
   {
@@ -25,13 +27,14 @@ const howItWorks = [
   },
 ];
 
-export default function AnnuitiesPage() {
+export default async function AnnuitiesPage() {
+  const content = await getPageContent('annuities');
   return (
     <PageShell>
       <PageHero
-        eyebrow="Products"
-        title="Annuities"
-        intro="Helping you answer life's big questions. Regardless of your age or health status, we have options for you. Our customized annuity solutions provide the financial security and peace of mind you need for your retirement journey."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       >
         <a
           href="/connect-with-our-experts/"

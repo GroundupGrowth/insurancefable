@@ -4,12 +4,14 @@ import PageShell from '../../../components/PageShell';
 import PageHero from '../../../components/PageHero';
 import LeadMagnetSection from '../../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../../components/CtaButtons';
+import { getPageContent } from '../../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Pro Client Guide Introduction',
-  description:
-    "Meet the I&E Pro Client Guides — strategic advisors who've been through this themselves. No pressure, just someone who knows the system and walks you through the exit.",
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('proclientguide/introduction');
+  return { title: content.title, description: content.description };
+}
 
 const steps = [
   {
@@ -117,20 +119,11 @@ function TeamCard({
   );
 }
 
-export default function ProClientGuideIntroductionPage() {
+export default async function ProClientGuideIntroductionPage() {
+  const content = await getPageContent('proclientguide/introduction');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Our Pro Team"
-        title={
-          <>
-            You Found the Exit.
-            <br />
-            Here&rsquo;s Who Walks You Through It.
-          </>
-        }
-        intro="A Pro Client Guide is a strategic advisor who's been through this themselves — someone who designs and uses these policies, not just sells them. No pressure, just someone who knows the system."
-      >
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
         <PrimaryCta href="/connect-with-our-experts/" label="Book a Fit Call" />
         <SecondaryCta href="/start-your-journey/" label="Start your Journey" />
       </PageHero>

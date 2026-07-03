@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Term Life Introduction',
-  description:
-    'An introduction to term life insurance from I&E — why status quo financial advice falls short, and how the right term policy keeps your options open.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('term-life-introduction');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles and off-build pages stay on WordPress until Phase 3
 const BASE = 'https://www.insuranceandestates.com';
@@ -32,13 +34,14 @@ const articles = [
   },
 ];
 
-export default function TermLifeIntroductionPage() {
+export default async function TermLifeIntroductionPage() {
+  const content = await getPageContent('term-life-introduction');
   return (
     <PageShell>
       <PageHero
-        eyebrow="Products"
-        title="Term Life Introduction"
-        intro="Hello, we at I&E are glad you took a moment to stop on by. You may be among the many that realize there is a problem with the status quo financial advice we have been given."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       >
         <PrimaryCta href="/proclientguide/jasonh/" label="Connect with an Expert" />
         <SecondaryCta href="/life-insurance-quotes/" label="Compare Quotes" />

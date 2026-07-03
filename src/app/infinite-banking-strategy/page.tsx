@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Something Is Wrong. You Feel It.',
-  description:
-    "You followed the rules. You're still not free. Infinite Banking is the financial infrastructure wealthy families have used for over a century.",
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('infinite-banking-strategy');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles and off-build pages stay on WordPress until Phase 3
 const BASE = 'https://www.insuranceandestates.com';
@@ -58,13 +60,14 @@ const articles = [
   },
 ];
 
-export default function InfiniteBankingStrategyPage() {
+export default async function InfiniteBankingStrategyPage() {
+  const content = await getPageContent('infinite-banking-strategy');
   return (
     <PageShell>
       <PageHero
-        eyebrow="The strategy"
-        title="Something Is Wrong. You Feel It."
-        intro="You followed the rules. You're still not free. Infinite Banking is the financial infrastructure wealthy families have used for over a century. Let us show you how it works."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       >
         <PrimaryCta href={`${BASE}/infinite-banking/`} label="Infinite Banking" />
         <SecondaryCta href="/start-your-journey/" label="Start your Journey" />

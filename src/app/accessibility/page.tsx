@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Accessibility',
-  description:
-    'InsuranceAndEstates.com strives to ensure its services are accessible to people with disabilities. Read our accessibility statement and how to reach us.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('accessibility');
+  return { title: content.title, description: content.description };
+}
 
 /* LEGAL/UTILITY PAGE — the text below is reproduced VERBATIM from the live
    page at insuranceandestates.com/accessibility/. Never summarize or
@@ -17,10 +19,11 @@ const h2Style = { letterSpacing: '-0.02em' } as const;
 const pClass = 'text-[#0D1B3D]/70 text-sm md:text-base leading-relaxed';
 const linkClass = 'underline underline-offset-2 hover:text-[#0D1B3D]';
 
-export default function AccessibilityPage() {
+export default async function AccessibilityPage() {
+  const content = await getPageContent('accessibility');
   return (
     <PageShell>
-      <PageHero align="left" title="Accessibility" />
+      <PageHero align="left" title={content.heroTitle} />
 
       <section className="px-6 pb-24">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-black/5 p-8 md:p-12">

@@ -3,12 +3,14 @@ import { ArrowUpRight, Star } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Testimonials',
-  description:
-    'Real customers, real reviews. See what I&E clients say about working with our team — collected through Trustpilot, published without alteration.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('testimonials');
+  return { title: content.title, description: content.description };
+}
 
 const TRUSTPILOT = 'https://www.trustpilot.com/review/insuranceandestates.com';
 
@@ -107,14 +109,11 @@ const reviews = [
   },
 ];
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const content = await getPageContent('testimonials');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Real customers, real reviews"
-        title="Testimonials"
-        intro="Our reviews are collected through Trustpilot, a third-party platform. We can't edit them or pick which ones get published — what you see is what our clients actually said."
-      >
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
         <a
           href={TRUSTPILOT}
           target="_blank"

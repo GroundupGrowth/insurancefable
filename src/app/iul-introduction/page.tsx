@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'IUL Introduction',
-  description:
-    'Indexed Universal Life protects you from market losses while growing your cash value with market indices — stability and growth in one package.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('iul-introduction');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles and off-build pages stay on WordPress until Phase 3
 const BASE = 'https://www.insuranceandestates.com';
@@ -48,13 +50,14 @@ const articles = [
   },
 ];
 
-export default function IulIntroductionPage() {
+export default async function IulIntroductionPage() {
+  const content = await getPageContent('iul-introduction');
   return (
     <PageShell>
       <PageHero
-        eyebrow="Market-linked growth"
-        title="IUL Introduction"
-        intro="A Smarter Way to Plan Your Financial Future."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       >
         <PrimaryCta href="/proclientguide/jasonh/" label="Connect with an Expert" />
         <SecondaryCta href="/life-insurance-quotes/" label="Compare Quotes" />

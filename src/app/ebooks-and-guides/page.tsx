@@ -5,12 +5,14 @@ import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import EbookCard from '../../components/EbookCard';
 import GuideRequestForm from './GuideRequestForm';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'eBooks and Guides',
-  description:
-    'Wealth protection strategies trusted by thousands — free eBooks and guides written by estate planning attorneys and IBC practitioners who use them themselves.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('ebooks-and-guides');
+  return { title: content.title, description: content.description };
+}
 
 // eBook landing pages stay on WordPress until they're migrated
 const BASE = 'https://www.insuranceandestates.com';
@@ -68,14 +70,11 @@ const freeGuides = [
   { slug: 'life-insurance-essentials-report', title: 'Life Insurance Essentials Report' },
 ];
 
-export default function EbooksAndGuidesPage() {
+export default async function EbooksAndGuidesPage() {
+  const content = await getPageContent('ebooks-and-guides');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Wealth Protection Strategies Trusted by Thousands"
-        title="eBooks and Guides"
-        intro="The financial system was designed for one generation — yours. Consume it, deplete it, pass on the debt. What it was never designed to do is transfer. These guides exist because that design is a choice, not a law. Every resource on this page was written by estate planning attorneys and IBC practitioners who use these strategies themselves. Browse the collection. Start where it resonates."
-      />
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
 
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">

@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import LeadForm from './LeadForm';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Connect with Our Experts',
-  description:
-    "Book a quick discovery call to map out your goals. We'll identify your needs and match you with the right specialist to design your custom wealth strategy.",
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('connect-with-our-experts');
+  return { title: content.title, description: content.description };
+}
 
 const steps = [
   {
@@ -29,14 +31,11 @@ const steps = [
   },
 ];
 
-export default function ConnectWithOurExpertsPage() {
+export default async function ConnectWithOurExpertsPage() {
+  const content = await getPageContent('connect-with-our-experts');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Discovery Call"
-        title="Connect with Our Experts"
-        intro="Book a quick discovery call to map out your goals. We'll identify your needs and match you with the right specialist to design your custom wealth strategy."
-      >
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
         <a
           href="#book-a-call"
           className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"

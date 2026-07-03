@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Whole Life Introduction',
-  description:
-    "Discover how I&E's high cash value whole life insurance builds wealth, protects your family, and grows tax-free — guaranteed.",
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('whole-life-introduction');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles and off-build pages stay on WordPress until Phase 3
 const BASE = 'https://www.insuranceandestates.com';
@@ -29,13 +31,14 @@ const articles = [
   },
 ];
 
-export default function WholeLifeIntroductionPage() {
+export default async function WholeLifeIntroductionPage() {
+  const content = await getPageContent('whole-life-introduction');
   return (
     <PageShell>
       <PageHero
-        eyebrow="The foundation"
-        title="Whole Life Introduction"
-        intro="Discover how I&E's high cash value whole life insurance builds wealth, protects your family, and grows tax-free — guaranteed."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       >
         <PrimaryCta
           href="/proclientguide/introduction/"

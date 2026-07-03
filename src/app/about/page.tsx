@@ -5,12 +5,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'About I&E',
-  description:
-    'Insurance & Estates was founded by estate planning attorneys who believe you deserve to know what the institutions know — and use it on your terms.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('about');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles stay on WordPress until the article migration (Phase 3)
 const BASE = 'https://www.insuranceandestates.com';
@@ -44,18 +46,11 @@ function StoryBlock({ title, children }: { title: string; children: ReactNode })
   );
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const content = await getPageContent('about');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Who we are"
-        title={
-          <>
-            About Insurance <span className="text-[#0D1B3D]/40">&amp;</span> Estates
-          </>
-        }
-        intro="The system is designed to keep you in the middle. We show you the exit."
-      />
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
 
       <section className="px-6 pb-24">
         <div className="max-w-3xl mx-auto text-center space-y-6">

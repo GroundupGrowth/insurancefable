@@ -3,12 +3,14 @@ import { ArrowUpRight, BadgeCheck, Facebook, Linkedin, MapPin, Phone, Youtube } 
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import ContactForm from './ContactForm';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Connect With Us',
-  description:
-    "Connect with Insurance & Estates for a complimentary consultation. Call 877-787-7558 or send us a message and we'll reach out as soon as possible.",
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('contact');
+  return { title: content.title, description: content.description };
+}
 
 const agencyDetails = [
   'Primary Agent: Steven Gibbs',
@@ -34,14 +36,11 @@ const socials = [
   },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const content = await getPageContent('contact');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Contact"
-        title="Connect With Us"
-        intro="Please fill out our contact form below and we will reach out to you as soon as possible for a complimentary consultation."
-      />
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
 
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto grid lg:grid-cols-5 gap-4 items-start">

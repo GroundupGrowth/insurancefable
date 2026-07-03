@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Privacy & Terms of Service',
-  description:
-    'The terms of use and privacy policy governing InsuranceandEstates.com, including how we collect, use, share, and protect your information.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('privacytou');
+  return { title: content.title, description: content.description };
+}
 
 /* LEGAL PAGE — the text below is reproduced VERBATIM from the live page at
    insuranceandestates.com/privacytou/. Never summarize, paraphrase, or
@@ -280,10 +282,11 @@ const blocks: Block[] = [
   { t: 'p', text: 'The Effective Date hereto shall be April 6, 2018.' },
 ];
 
-export default function PrivacyTouPage() {
+export default async function PrivacyTouPage() {
+  const content = await getPageContent('privacytou');
   return (
     <PageShell>
-      <PageHero align="left" title="Privacy & Terms of Service" />
+      <PageHero align="left" title={content.heroTitle} />
 
       <section className="px-6 pb-24">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-black/5 p-8 md:p-12">

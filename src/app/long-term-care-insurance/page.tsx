@@ -3,12 +3,14 @@ import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Long Term Care Insurance',
-  description:
-    'Comprehensive long-term care insurance plans that protect against future healthcare costs while preserving your assets and independence.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('long-term-care-insurance');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles stay on WordPress until the article migration (Phase 3)
 const BASE = 'https://www.insuranceandestates.com';
@@ -66,13 +68,14 @@ const relatedArticles = [
   },
 ];
 
-export default function LongTermCareInsurancePage() {
+export default async function LongTermCareInsurancePage() {
+  const content = await getPageContent('long-term-care-insurance');
   return (
     <PageShell>
       <PageHero
-        eyebrow="Products"
-        title="Long Term Care"
-        intro="Helping you answer life's big questions. Regardless of your age or health status, we have options for you. Our comprehensive long-term care insurance plans provide essential protection against future healthcare costs while preserving your assets and independence."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       />
 
       <section className="px-6 pb-24">

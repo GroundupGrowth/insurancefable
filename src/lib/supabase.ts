@@ -22,3 +22,30 @@ export interface EmbedSlotRow {
   notes: string | null;
   updated_at: string;
 }
+
+export interface AdvisorRow {
+  slug: string;
+  name: string | null;
+  first_name: string | null;
+  role: string | null;
+  intro: string | null;
+  photo_url: string | null;
+  email: string | null;
+  scheduler_url: string | null;
+  specialties: string[] | null;
+  bio_sections: { heading: string; paragraphs: string[] }[] | null;
+  credentials: string[] | null;
+  testimonials: { quote: string; attribution?: string }[] | null;
+  book: { eyebrow: string; title: string; text: string; href: string } | null;
+  updated_at: string;
+}
+
+export interface PageRow {
+  slug: string;
+  title: string | null;
+  description: string | null;
+  eyebrow: string | null;
+  hero_title: string | null;
+  hero_intro: string | null;
+  updated_at: string;
+}

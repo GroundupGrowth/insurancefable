@@ -3,12 +3,14 @@ import { ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Start Your Journey',
-  description:
-    'Conventional financial advice was built for the people managing your money, not the people earning it. This curriculum is where the unlearning starts.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('start-your-journey');
+  return { title: content.title, description: content.description };
+}
 
 // guide landing pages stay on WordPress until they're migrated
 const BASE = 'https://www.insuranceandestates.com';
@@ -94,13 +96,14 @@ const levels = [
   },
 ];
 
-export default function StartYourJourneyPage() {
+export default async function StartYourJourneyPage() {
+  const content = await getPageContent('start-your-journey');
   return (
     <PageShell>
       <PageHero
-        eyebrow="The Curriculum"
-        title="Build Your Own System. Start Here."
-        intro="Something isn't adding up. You followed the advice. You saved. You invested. You did the responsible thing. And yet the math still doesn't work the way they said it would."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       />
 
       <section className="px-6 pb-24">

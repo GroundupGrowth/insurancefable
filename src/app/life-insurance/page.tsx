@@ -3,12 +3,14 @@ import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Life Insurance',
-  description:
-    "Most people come here looking for life insurance. A few leave understanding it's the most powerful financial asset they've never been told about.",
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('life-insurance');
+  return { title: content.title, description: content.description };
+}
 
 const products = [
   {
@@ -80,13 +82,14 @@ const relatedArticles = [
   },
 ];
 
-export default function LifeInsurancePage() {
+export default async function LifeInsurancePage() {
+  const content = await getPageContent('life-insurance');
   return (
     <PageShell>
       <PageHero
-        eyebrow="Products"
-        title="Life Insurance"
-        intro="Most people come here looking for life insurance. A few leave understanding it's the most powerful financial asset they've never been told about."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       />
 
       <section className="px-6 pb-24">

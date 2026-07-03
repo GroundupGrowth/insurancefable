@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Variable Life Introduction',
-  description:
-    'Our information on variable universal life insurance — VUL guides, must-read articles, and direct access to our VUL expert for your questions.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('variable-life-introduction');
+  return { title: content.title, description: content.description };
+}
 
 // blog articles and off-build pages stay on WordPress until Phase 3
 const BASE = 'https://www.insuranceandestates.com';
@@ -25,13 +27,14 @@ const articles = [
   },
 ];
 
-export default function VariableLifeIntroductionPage() {
+export default async function VariableLifeIntroductionPage() {
+  const content = await getPageContent('variable-life-introduction');
   return (
     <PageShell>
       <PageHero
-        eyebrow="Investment-driven"
-        title="Variable Life Introduction"
-        intro="Hello, we at I&E are glad you took a moment to stop on by. Below we have put together our information on variable universal life. Please feel free to look around and reach out to us with any questions. Our VUL expert is also available if you have any questions and can be reached through the connect with an expert button below."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       >
         <PrimaryCta href="/proclientguide/jasonh/" label="Connect with an Expert" />
         <SecondaryCta href="/life-insurance-quotes/" label="Compare Quotes" />

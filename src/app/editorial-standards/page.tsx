@@ -1,26 +1,29 @@
 import type { Metadata } from 'next';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Insurance and Estates Editorial Standards',
-  description:
-    'How Insurance and Estates creates, reviews, and maintains its content — real education from licensed practitioners who use these strategies themselves.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('editorial-standards');
+  return { title: content.title, description: content.description };
+}
 
 const h2Class = 'text-xl font-medium text-[#0D1B3D] pt-4';
 const h2Style = { letterSpacing: '-0.02em' } as const;
 const pClass = 'text-[#0D1B3D]/70 text-sm md:text-base leading-relaxed';
 const liClass = 'text-[#0D1B3D]/70 text-sm md:text-base leading-relaxed pl-5 relative before:content-[\'\'] before:absolute before:left-0 before:top-[0.65em] before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#0D1B3D]/30';
 
-export default function EditorialStandardsPage() {
+export default async function EditorialStandardsPage() {
+  const content = await getPageContent('editorial-standards');
   return (
     <PageShell>
       <PageHero
         align="left"
-        eyebrow="Editorial standards"
-        title="Insurance and Estates Editorial Standards"
-        intro="At Insurance and Estates, we don't do conventional."
+        eyebrow={content.eyebrow}
+        title={content.heroTitle}
+        intro={content.heroIntro}
       />
 
       <section className="px-6 pb-24">

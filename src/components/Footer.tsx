@@ -1,5 +1,6 @@
 import { Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
 import LogoIcon from './LogoIcon';
+import TrustpilotWidget from './TrustpilotWidget';
 
 // Blog, calculator, and agent-partners stay on WordPress until their phases land
 const BASE = 'https://www.insuranceandestates.com';
@@ -46,6 +47,7 @@ export default function Footer() {
               resources on the web because we believe you deserve to know what the
               institutions know — and use it on your terms.
             </p>
+            <TrustpilotWidget theme="dark" className="mt-8 max-w-lg" />
           </div>
 
           <div>

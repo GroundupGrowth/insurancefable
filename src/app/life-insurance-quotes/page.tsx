@@ -4,12 +4,14 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import EmbedSlot from '../../components/EmbedSlot';
+import { getPageContent } from '../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Life Insurance Quotes',
-  description:
-    'Whole life, universal life and term life quotes vary with policy design. See how each policy type is structured, then select the quote that fits your goals.',
-};
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('life-insurance-quotes');
+  return { title: content.title, description: content.description };
+}
 
 // live quote engine stays on WordPress until it's rebuilt
 const LIVE_QUOTES_URL = 'https://www.insuranceandestates.com/life-insurance-quotes/';
@@ -47,14 +49,11 @@ const quoteOptions = [
   },
 ];
 
-export default function LifeInsuranceQuotesPage() {
+export default async function LifeInsuranceQuotesPage() {
+  const content = await getPageContent('life-insurance-quotes');
   return (
     <PageShell>
-      <PageHero
-        eyebrow="Get a Quote"
-        title="Life Insurance Quotes"
-        intro="A quote is only as good as the policy design behind it. Here's how each policy type is structured — and where to start yours."
-      />
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
 
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
