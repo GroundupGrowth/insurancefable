@@ -3,13 +3,13 @@ import { ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('start-your-journey');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 // guide landing pages stay on WordPress until they're migrated

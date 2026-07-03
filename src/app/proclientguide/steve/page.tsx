@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Steve Gibbs, Esq., Founder & CEO',
   description:
     'Steven Gibbs, JD, AEP® is Co-Founder and Chief Strategic Partnerships Officer of I&E — estate planning attorney turned strategist for wealth transfer and life insurance design.',
+  alternates: { canonical: '/proclientguide/steve/' },
 };
 
 export const revalidate = 300;

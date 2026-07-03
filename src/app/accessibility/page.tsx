@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('accessibility');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 /* LEGAL/UTILITY PAGE — the text below is reproduced VERBATIM from the live

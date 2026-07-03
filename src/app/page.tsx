@@ -95,20 +95,63 @@ function TrustedPartners() {
   );
 }
 
+/* Entity schema for search + AI engines: who this organization is, once,
+   on the homepage. */
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'InsuranceAgency',
+  name: 'Insurance & Estates',
+  legalName: 'Insurance and Estate Strategies LLC',
+  url: 'https://www.insuranceandestates.com/',
+  telephone: '+1-877-787-7558',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '4602 E Thomas Rd',
+    addressLocality: 'Phoenix',
+    addressRegion: 'AZ',
+    postalCode: '85018',
+    addressCountry: 'US',
+  },
+  sameAs: [
+    'https://www.facebook.com/insuranceandestates',
+    'https://x.com/IandE4Life',
+    'https://www.linkedin.com/company/insuranceandestates',
+    'https://www.youtube.com/@InsuranceandEstates',
+    'https://www.trustpilot.com/review/insuranceandestates.com',
+  ],
+};
+
+const webSiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Insurance & Estates',
+  url: 'https://www.insuranceandestates.com/',
+};
+
 export default function HomePage() {
   return (
     <div className="flex flex-col bg-[#F5F5F5]">
-      {/* ~85vh so the next section already peeks above the fold */}
-      <div className="relative h-[85vh] min-h-[560px] flex flex-col overflow-hidden">
-        <Navbar />
-        <Hero />
-      </div>
-      <TrustedPartners />
-      <ServicesSection />
-      <ProcessSection />
-      <TestimonialsSection />
-      <FaqSection />
-      <LeadMagnetSection />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+      />
+      <Navbar />
+      <main className="flex flex-col">
+        {/* ~85vh so the next section already peeks above the fold */}
+        <div className="relative h-[85vh] min-h-[560px] flex flex-col overflow-hidden">
+          <Hero />
+        </div>
+        <TrustedPartners />
+        <ServicesSection />
+        <ProcessSection />
+        <TestimonialsSection />
+        <FaqSection />
+        <LeadMagnetSection />
+      </main>
       <Footer />
     </div>
   );

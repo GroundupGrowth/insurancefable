@@ -4,13 +4,13 @@ import PageShell from '../../../components/PageShell';
 import PageHero from '../../../components/PageHero';
 import LeadMagnetSection from '../../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../../components/CtaButtons';
-import { getPageContent } from '../../../lib/content';
+import { getPageContent, pageMetadata } from '../../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('proclientguide/introduction');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 const steps = [
@@ -100,6 +100,9 @@ function TeamCard({
       <img
         src={image}
         alt={name}
+        width={600}
+        height={800}
+        loading="lazy"
         className="w-full aspect-[3/4] object-cover object-top rounded-xl mb-5"
       />
       <div className="px-3 pb-3 flex flex-col flex-1">

@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('privacytou');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 /* LEGAL PAGE — the text below is reproduced VERBATIM from the live page at

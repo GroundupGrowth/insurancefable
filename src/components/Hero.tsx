@@ -97,6 +97,8 @@ export default function Hero() {
                 <img
                   src={`https://img.youtube.com/vi/${VIDEO_ID}/hqdefault.jpg`}
                   alt="Watch: Insurance & Estates"
+                  width={480}
+                  height={360}
                   className="w-full aspect-video object-cover rounded-3xl"
                 />
                 <span className="absolute inset-0 flex items-center justify-center">

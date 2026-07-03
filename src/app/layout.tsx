@@ -6,6 +6,8 @@ import '@fontsource/figtree/600.css';
 import './globals.css';
 
 export const metadata: Metadata = {
+  // canonical host: cross-domain to the live site until cutover, self-referential after
+  metadataBase: new URL('https://www.insuranceandestates.com'),
   title: {
     default:
       'Insurance & Estates — Take Back Control, Gain Momentum, and Build a Multi-Generational Legacy',
@@ -14,6 +16,19 @@ export const metadata: Metadata = {
   },
   description:
     "The financial system was built to profit from your capital — not build it. We'll show you the exit.",
+  alternates: { canonical: '/' },
+  openGraph: {
+    siteName: 'Insurance & Estates',
+    locale: 'en_US',
+    type: 'website',
+    url: '/',
+  },
+  twitter: { card: 'summary_large_image', site: '@IandE4Life' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

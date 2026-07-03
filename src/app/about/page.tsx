@@ -5,13 +5,13 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('about');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 // blog articles stay on WordPress until the article migration (Phase 3)

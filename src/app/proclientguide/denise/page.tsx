@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Denise Boisvert, Pro Client Guide',
   description:
     'Denise Boisvert has 22 years in the life industry, teaching clients to leverage life insurance to get out of debt, protect family, and build tax-free lifetime income.',
+  alternates: { canonical: '/proclientguide/denise/' },
 };
 
 export const revalidate = 300;

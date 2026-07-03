@@ -4,13 +4,13 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('whole-life-introduction');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 // blog articles and off-build pages stay on WordPress until Phase 3

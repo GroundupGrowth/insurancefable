@@ -4,13 +4,13 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import EmbedSlot from '../../components/EmbedSlot';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('life-insurance-quotes');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 // live quote engine stays on WordPress until it's rebuilt

@@ -3,13 +3,13 @@ import { ArrowUpRight, Star } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('testimonials');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 const TRUSTPILOT = 'https://www.trustpilot.com/review/insuranceandestates.com';

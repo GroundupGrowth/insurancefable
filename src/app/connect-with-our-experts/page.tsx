@@ -4,13 +4,13 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import LeadForm from './LeadForm';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('connect-with-our-experts');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 const steps = [

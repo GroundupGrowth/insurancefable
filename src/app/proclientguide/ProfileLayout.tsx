@@ -69,8 +69,28 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     book,
   } = profile;
 
+  /* Person schema: entity clarity for search + AI engines (E-E-A-T). */
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name,
+    jobTitle: role,
+    url: `https://www.insuranceandestates.com/proclientguide/${slug}/`,
+    ...(photo ? { image: photo.src } : {}),
+    ...(email ? { email } : {}),
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Insurance & Estates',
+      url: 'https://www.insuranceandestates.com/',
+    },
+  };
+
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <PageHero eyebrow={role} title={name} intro={intro} />
 
       {/* Headshot + specialties / contact card */}
@@ -82,6 +102,8 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
               <img
                 src={photo.src}
                 alt={photo.alt}
+                width={690}
+                height={920}
                 className="w-full aspect-[3/4] object-cover object-top rounded-xl"
               />
             ) : (

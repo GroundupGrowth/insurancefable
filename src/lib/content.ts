@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { pageDefaults, type PageDefaults } from '../data/pageContent';
 import { advisorDefaults } from '../data/advisors';
@@ -21,6 +22,30 @@ function serverClient(): SupabaseClient | null {
       ? createClient(url, anonKey, { auth: { persistSession: false } })
       : null;
   return client;
+}
+
+/* Canonical host. Cross-domain canonicals point every page at the live domain
+   until cutover; because slugs are identical, they become self-referential the
+   moment the domain moves — and they stop the vercel.app copy from competing
+   with the live site in the meantime. */
+export const SITE_URL = 'https://www.insuranceandestates.com';
+
+/* Standard per-page metadata: title/description from the CMS content layer,
+   plus canonical + Open Graph. og:image comes from src/app/opengraph-image.tsx. */
+export function pageMetadata(content: PageDefaults): Metadata {
+  return {
+    title: content.title,
+    description: content.description,
+    alternates: { canonical: content.path },
+    openGraph: {
+      title: content.title,
+      description: content.description,
+      url: content.path,
+      type: 'website',
+      // page-level openGraph replaces the inherited file-convention image, so re-add it
+      images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    },
+  };
 }
 
 /* An override only wins when it's actually set — null/empty means "default". */

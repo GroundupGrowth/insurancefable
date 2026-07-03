@@ -3,13 +3,13 @@ import { ArrowUpRight, BadgeCheck, Facebook, Linkedin, MapPin, Phone, Youtube } 
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import ContactForm from './ContactForm';
-import { getPageContent } from '../../lib/content';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('contact');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 const agencyDetails = [

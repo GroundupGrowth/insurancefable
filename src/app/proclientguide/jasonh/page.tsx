@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Jason Herring, Pro Client Guide',
   description:
     'Jason Herring has spent 16 years in life insurance and financial services — illustrating IUL and whole life side by side so clients make a truly informed decision.',
+  alternates: { canonical: '/proclientguide/jasonh/' },
 };
 
 export const revalidate = 300;

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Barry Brooksby, IBC Pro Client Guide Practitioner',
   description:
     'Barry Brooksby is our resident Infinite Banking Practitioner and Real Estate Strategist, helping clients take control of their wealth for over 25 years.',
+  alternates: { canonical: '/proclientguide/barry/' },
 };
 
 export const revalidate = 300;

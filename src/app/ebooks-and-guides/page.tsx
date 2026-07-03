@@ -5,13 +5,13 @@ import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import EbookCard from '../../components/EbookCard';
 import GuideRequestForm from './GuideRequestForm';
-import { getEbooks, getPageContent } from '../../lib/content';
+import { getEbooks, getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('ebooks-and-guides');
-  return { title: content.title, description: content.description };
+  return pageMetadata(content);
 }
 
 /* The catalog is managed in /admin → Books (site_ebooks in Supabase, code
