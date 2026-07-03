@@ -1,12 +1,12 @@
 import type { CSSProperties } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import ProcessSection from './components/ProcessSection';
-import TestimonialsSection from './components/TestimonialsSection';
-import ServicesSection from './components/ServicesSection';
-import FaqSection from './components/FaqSection';
-import LeadMagnetSection from './components/LeadMagnetSection';
-import Footer from './components/Footer';
+import Navbar from '../components/Navbar';
+import Hero from '../components/Hero';
+import ProcessSection from '../components/ProcessSection';
+import TestimonialsSection from '../components/TestimonialsSection';
+import ServicesSection from '../components/ServicesSection';
+import FaqSection from '../components/FaqSection';
+import LeadMagnetSection from '../components/LeadMagnetSection';
+import Footer from '../components/Footer';
 
 const carriers: { name: string; style: CSSProperties }[] = [
   {
@@ -95,7 +95,7 @@ function TrustedPartners() {
   );
 }
 
-export default function App() {
+export default function HomePage() {
   return (
     <div className="flex flex-col bg-[#F5F5F5]">
       {/* ~85vh so the next section already peeks above the fold */}

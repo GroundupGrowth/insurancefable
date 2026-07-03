@@ -1,8 +1,7 @@
 /* Stand-in typeface until the TT Norms Pro woff2 files are dropped into public/fonts.
    Once /fonts/tt-norms-pro-regular.woff2 and /fonts/tt-norms-pro-semibold.woff2 exist,
-   the @font-face rules below take over automatically — no CSS changes needed. */
-@import '@fontsource/figtree/400.css';
-@import '@fontsource/figtree/600.css';
+   the @font-face rules below take over automatically — no CSS changes needed.
+   (Figtree fallback weights are imported in layout.tsx via @fontsource.) */
 
 @tailwind base;
 @tailwind components;
