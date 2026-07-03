@@ -5,7 +5,12 @@ import '@fontsource/figtree/600.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Insurance & Estates — Take Back Control, Gain Momentum, and Build a Multi-Generational Legacy',
+  title: {
+    default:
+      'Insurance & Estates — Take Back Control, Gain Momentum, and Build a Multi-Generational Legacy',
+    // matches the live WordPress title pattern so migrated pages keep their SERP titles
+    template: '%s – I&E | Whole Life & Infinite Banking Strategies',
+  },
   description:
     "The financial system was built to profit from your capital — not build it. We'll show you the exit.",
 };

@@ -1,7 +1,5 @@
 import { ArrowRight } from 'lucide-react';
 
-const BASE = 'https://www.insuranceandestates.com';
-
 export default function ServicesSection() {
   return (
     <section className="px-6 py-24">
@@ -49,7 +47,7 @@ export default function ServicesSection() {
                 designed for one purpose: to be your Private Banking System.
               </p>
               <a
-                href={`${BASE}/life-insurance/`}
+                href="/life-insurance/"
                 className="mt-auto self-start inline-flex items-center gap-2 bg-white/50 backdrop-blur-sm text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/80 transition-colors duration-200"
               >
                 More Info
@@ -75,7 +73,7 @@ export default function ServicesSection() {
               benefits, and still leave something behind for your heirs.
             </p>
             <a
-              href={`${BASE}/long-term-care-insurance/`}
+              href="/long-term-care-insurance/"
               className="mt-auto self-start inline-flex items-center gap-2 bg-white/[0.06] text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/15 transition-colors duration-200"
             >
               More Info
@@ -96,7 +94,7 @@ export default function ServicesSection() {
               assets can keep growing.
             </p>
             <a
-              href={`${BASE}/annuities/`}
+              href="/annuities/"
               className="mt-auto self-start inline-flex items-center gap-2 bg-white/[0.06] text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/15 transition-colors duration-200"
             >
               More Info

@@ -3,8 +3,6 @@
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
 
-const BASE = 'https://www.insuranceandestates.com';
-
 const bookTopics = [
   'Risk in a Litigious Society',
   'Tactics for Protecting Assets',
@@ -98,7 +96,7 @@ export default function LeadMagnetSection() {
                     <span>
                       By pressing Submit you agree to Insurance &amp; Estates&rsquo;{' '}
                       <a
-                        href={`${BASE}/privacytou/`}
+                        href="/privacytou/"
                         className="underline hover:text-white/70"
                       >
                         privacy policy and terms

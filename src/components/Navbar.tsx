@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
-const BASE = 'https://www.insuranceandestates.com';
-
 interface NavLink {
   label: string;
   href: string;
@@ -20,30 +18,31 @@ const navGroups: NavGroup[] = [
   {
     label: 'About',
     items: [
-      { label: 'About I&E', href: `${BASE}/about/` },
-      { label: 'Contact Us', href: `${BASE}/contact/` },
-      { label: 'Our Pro Team', href: `${BASE}/proclientguide/introduction/` },
-      { label: 'Testimonials', href: `${BASE}/testimonials/` },
+      { label: 'About I&E', href: '/about/' },
+      { label: 'Contact Us', href: '/contact/' },
+      { label: 'Our Pro Team', href: '/proclientguide/introduction/' },
+      { label: 'Testimonials', href: '/testimonials/' },
     ],
   },
   {
     label: 'Products',
     items: [
-      { label: 'Life Insurance', href: `${BASE}/life-insurance/` },
-      { label: 'Long Term Care Insurance', href: `${BASE}/long-term-care-insurance/` },
-      { label: 'Annuities', href: `${BASE}/annuities/` },
+      { label: 'Life Insurance', href: '/life-insurance/' },
+      { label: 'Long Term Care Insurance', href: '/long-term-care-insurance/' },
+      { label: 'Annuities', href: '/annuities/' },
     ],
   },
   {
     label: 'Blog',
-    href: `${BASE}/blog/`,
+    // stays on WordPress until the article migration (Phase 3)
+    href: 'https://www.insuranceandestates.com/blog/',
   },
   {
     label: 'Live Workshops',
     items: [
-      { label: "Congress's Secret Retirement Account", href: `${BASE}/start-your-journey/` },
-      { label: 'Infinite Banking Workshop', href: `${BASE}/start-your-journey/` },
-      { label: 'Will and Trust Workshop', href: `${BASE}/start-your-journey/` },
+      { label: "Congress's Secret Retirement Account", href: '/start-your-journey/' },
+      { label: 'Infinite Banking Workshop', href: '/start-your-journey/' },
+      { label: 'Will and Trust Workshop', href: '/start-your-journey/' },
     ],
   },
 ];
@@ -56,7 +55,7 @@ export default function Navbar() {
       <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-black/5 px-5 py-3">
         <div className="flex items-center justify-between gap-6">
           <a
-            href={`${BASE}/`}
+            href="/"
             className="text-xl font-medium tracking-tight text-[#0D1B3D]"
           >
             I&amp;E
@@ -100,13 +99,13 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-5">
             <a
-              href={`${BASE}/start-your-journey/`}
+              href="/start-your-journey/"
               className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D] transition-colors duration-200"
             >
               Start here
             </a>
             <a
-              href={`${BASE}/proclientguide/introduction/`}
+              href="/proclientguide/introduction/"
               className="inline-flex items-center bg-[#0D1B3D] text-white font-medium px-5 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
             >
               Connect with an Expert
@@ -150,13 +149,13 @@ export default function Navbar() {
             </nav>
             <div className="flex flex-col gap-3 mt-5">
               <a
-                href={`${BASE}/start-your-journey/`}
+                href="/start-your-journey/"
                 className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D]"
               >
                 Start here
               </a>
               <a
-                href={`${BASE}/proclientguide/introduction/`}
+                href="/proclientguide/introduction/"
                 className="inline-flex items-center justify-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
               >
                 Connect with an Expert

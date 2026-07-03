@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { ArrowRight, Play, Star, X } from 'lucide-react';
 
-const BASE = 'https://www.insuranceandestates.com';
-
 const credentials = [
   'Founded by estate planning attorneys',
   '1,000+ policies designed since 2017',
@@ -57,7 +55,7 @@ export default function Hero() {
 
             <div className="flex gap-4 flex-wrap">
               <a
-                href={`${BASE}/proclientguide/introduction/`}
+                href="/proclientguide/introduction/"
                 className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
               >
                 Connect with an Expert
@@ -66,7 +64,7 @@ export default function Hero() {
                 </span>
               </a>
               <a
-                href={`${BASE}/start-your-journey/`}
+                href="/start-your-journey/"
                 className="inline-flex items-center bg-white/80 backdrop-blur text-[#0D1B3D] font-medium px-7 py-2.5 rounded-full hover:bg-white transition-colors duration-200"
               >
                 Start your Journey
