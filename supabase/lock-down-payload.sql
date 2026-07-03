@@ -1,13 +1,17 @@
--- Lock down the Payload CMS tables (run in Supabase SQL editor, or ask Claude
--- to apply it). The site's anon key is public now, and these tables had no
--- row-level security — anyone with the key could read AND WRITE them,
--- including all 181 blog posts.
+-- Reclaim + lock down the Payload CMS tables.
+-- Run this in the Supabase SQL editor (it runs as postgres, which created the
+-- claude_app role and can therefore claim membership in it).
 --
--- Result: content tables (posts, categories, authors, media, redirects)
--- become read-only via the API — the future blog still reads them fine.
--- Everything else (payload internals, users, form submissions, versions)
--- becomes inaccessible via the API. A Payload app using a direct database
--- connection is unaffected.
+-- What it does — no data is modified:
+-- 1. Takes ownership of the 47 claude_app-owned Payload tables back to
+--    postgres, so they're manageable from the dashboard from now on.
+-- 2. Enables row-level security on all of them: the public anon key loses
+--    write access everywhere; content tables (posts, categories, authors,
+--    media, redirects) stay publicly READABLE for the future blog; Payload
+--    internals (users, sessions, form submissions, kv, versions) become
+--    inaccessible via the API.
+
+grant claude_app to postgres;
 
 do $$
 declare
@@ -15,16 +19,9 @@ declare
 begin
   for t in
     select tablename from pg_tables
-    where schemaname = 'public'
-      and (tablename like 'payload\_%'
-        or tablename like 'pages%'
-        or tablename like '\_pages\_v%'
-        or tablename like 'posts%'
-        or tablename like '\_posts\_v%'
-        or tablename like 'company\_reviews%'
-        or tablename like '\_company\_reviews\_v%'
-        or tablename in ('authors', 'categories', 'media', 'redirects', 'form_submissions', 'users', 'users_sessions'))
+    where schemaname = 'public' and tableowner = 'claude_app'
   loop
+    execute format('alter table public.%I owner to postgres', t);
     execute format('alter table public.%I enable row level security', t);
   end loop;
 end $$;
@@ -41,3 +38,7 @@ drop policy if exists "public read" on public.media;
 create policy "public read" on public.media for select using (true);
 drop policy if exists "public read" on public.redirects;
 create policy "public read" on public.redirects for select using (true);
+
+-- Sanity check: should return 0 rows once everything is locked down.
+select tablename from pg_tables
+where schemaname = 'public' and not rowsecurity;
