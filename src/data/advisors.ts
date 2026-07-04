@@ -51,6 +51,15 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     ],
     schedulerUrl: 'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/stevegibbs',
     email: 'steve@insuranceandestates.com',
+    // FILL IN: linkedinUrl (via /admin or here)
+    yearsExperience: 'Since 2008',
+    licenses: [
+      'State Bar admission in CA and FL',
+      'Licensed Life & Annuity Producer in all 50 states + DC',
+    ],
+    publications: [
+      { source: 'ThinkAdvisor', title: 'Contributor to national publications' },
+    ],
   },
   barry: {
     slug: 'barry',
@@ -118,6 +127,15 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     ],
     schedulerUrl: 'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/barrybrooksby',
     email: 'barry@insuranceandestates.com',
+    // FILL IN: linkedinUrl, licenses (via /admin or here)
+    yearsExperience: '30+ years',
+    publications: [
+      {
+        source: 'Book',
+        title: 'Live Rich, Die Rich',
+        href: 'https://lrdr.insuranceandestates.com/live-rich-die-rich-2025',
+      },
+    ],
     book: {
       eyebrow: "Barry's latest book",
       title: 'Live Rich, Die Rich',
@@ -208,6 +226,9 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     ],
     schedulerUrl: 'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/jasonherring',
     email: 'jason@insuranceandestates.com',
+    // FILL IN: linkedinUrl (via /admin or here)
+    yearsExperience: '16+ years',
+    licenses: ['Series 6, 63 and 65', 'Licensed producer in all 50 states + DC'],
   },
   jasonk: {
     slug: 'jasonk',
@@ -270,6 +291,10 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
       },
     ],
     // FOLLOW-UP: no booking widget or direct email surfaced on the live page — add if one exists.
+    // FILL IN: linkedinUrl (via /admin or here)
+    yearsExperience: '20+ years',
+    licenses: ['Life insurance licensed since 2010'],
+    education: ['JD, University of San Diego School of Law', "Master's in Business Leadership"],
   },
   denise: {
     slug: 'denise',
@@ -349,6 +374,18 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     schedulerUrl:
       'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/deniseboisvert',
     email: 'denise@insuranceandestates.com',
+    // FILL IN: linkedinUrl (via /admin or here)
+    yearsExperience: '22+ years',
+    licenses: ['Licensed producer in all 50 states + DC'],
+    publications: [
+      {
+        source: 'Book',
+        title: 'Designing a DEBT-FREE LIFE',
+        href: 'https://debtfreeibc.insuranceandestates.com/2025-5884',
+      },
+      { source: 'Book', title: "Prosperity Pals — children's financial literacy" },
+      { source: 'Book', title: 'Training Active Dogs' },
+    ],
     book: {
       eyebrow: "Denise's latest book",
       title: 'Designing a DEBT-FREE LIFE',

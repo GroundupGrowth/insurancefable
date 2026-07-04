@@ -34,8 +34,24 @@ create table if not exists public.advisors (
   credentials jsonb,   -- string[]
   testimonials jsonb,  -- { quote: string, attribution?: string }[]
   book jsonb,          -- { eyebrow, title, text, href } | null
+  -- E-E-A-T trust signals
+  linkedin_url text,
+  same_as jsonb,          -- string[] — extra verified profile URLs for schema sameAs
+  years_experience text,  -- e.g. "25+ years"
+  licenses jsonb,         -- string[]
+  education jsonb,        -- string[]
+  publications jsonb,     -- { source?, title, href? }[]
   updated_at timestamptz not null default now()
 );
+
+-- E-E-A-T columns for tables created before they existed (create table if not
+-- exists does not add columns).
+alter table public.advisors add column if not exists linkedin_url text;
+alter table public.advisors add column if not exists same_as jsonb;
+alter table public.advisors add column if not exists years_experience text;
+alter table public.advisors add column if not exists licenses jsonb;
+alter table public.advisors add column if not exists education jsonb;
+alter table public.advisors add column if not exists publications jsonb;
 
 -- ---------------------------------------------------------------------------
 -- Site pages: per-page text overrides (Pages section in /admin).

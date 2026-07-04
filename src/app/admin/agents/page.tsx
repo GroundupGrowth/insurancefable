@@ -24,6 +24,13 @@ interface EditorState {
   bioSections: { heading: string; paragraphs: string }[];     // paragraphs = blank-line separated
   testimonials: { quote: string; attribution: string }[];
   bookingEmbed: string;
+  /* Trust signals (E-E-A-T) */
+  linkedinUrl: string;
+  sameAs: string;                                             // one URL per line
+  yearsExperience: string;
+  licenses: string;                                           // one per line
+  education: string;                                          // one per line
+  publications: { source: string; title: string; href: string }[];
 }
 
 function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, bookingEmbed: string): EditorState {
@@ -52,6 +59,16 @@ function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, booking
       attribution: testimonial.attribution ?? '',
     })),
     bookingEmbed,
+    linkedinUrl: val(row?.linkedin_url, fallback.linkedinUrl ?? ''),
+    sameAs: val(row?.same_as, fallback.sameAs ?? []).join('\n'),
+    yearsExperience: val(row?.years_experience, fallback.yearsExperience ?? ''),
+    licenses: val(row?.licenses, fallback.licenses ?? []).join('\n'),
+    education: val(row?.education, fallback.education ?? []).join('\n'),
+    publications: val(row?.publications, fallback.publications ?? []).map((publication) => ({
+      source: publication.source ?? '',
+      title: publication.title,
+      href: publication.href ?? '',
+    })),
   };
 }
 
@@ -121,6 +138,18 @@ export default function AgentsPage() {
           .map((testimonial) => ({
             quote: testimonial.quote,
             ...(testimonial.attribution.trim() ? { attribution: testimonial.attribution.trim() } : {}),
+          })),
+        linkedin_url: editor.linkedinUrl.trim() || null,
+        same_as: editor.sameAs.split('\n').map((s) => s.trim()).filter(Boolean),
+        years_experience: editor.yearsExperience.trim() || null,
+        licenses: editor.licenses.split('\n').map((s) => s.trim()).filter(Boolean),
+        education: editor.education.split('\n').map((s) => s.trim()).filter(Boolean),
+        publications: editor.publications
+          .filter((publication) => publication.title.trim())
+          .map((publication) => ({
+            title: publication.title.trim(),
+            ...(publication.source.trim() ? { source: publication.source.trim() } : {}),
+            ...(publication.href.trim() ? { href: publication.href.trim() } : {}),
           })),
         updated_at: new Date().toISOString(),
       });
@@ -236,6 +265,109 @@ export default function AgentsPage() {
               <Field label="Credentials & achievements" hint="One per line — shown as a check list.">
                 <textarea rows={5} className={textareaClass} value={editor.credentials} onChange={(e) => set({ credentials: e.target.value })} />
               </Field>
+            </div>
+          </Card>
+
+          <Card>
+            <h2 className="text-[#0D1B3D] text-lg font-medium mb-1">Trust signals (E-E-A-T)</h2>
+            <p className="text-[#0D1B3D]/50 text-sm mb-4">
+              Feeds the at-a-glance band, the LinkedIn button, the publications section, and the
+              structured data search engines and AI assistants use to verify who this person is.
+              Every field is optional — sections appear once filled.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field label="LinkedIn URL" hint="Shown as a button on the profile + used for entity verification.">
+                <input
+                  className={inputClass}
+                  placeholder="https://www.linkedin.com/in/…"
+                  value={editor.linkedinUrl}
+                  onChange={(e) => set({ linkedinUrl: e.target.value })}
+                />
+              </Field>
+              <Field label="Years of experience" hint="Shown big on the profile, e.g. “25+ years” or “Since 2010”.">
+                <input
+                  className={inputClass}
+                  value={editor.yearsExperience}
+                  onChange={(e) => set({ yearsExperience: e.target.value })}
+                />
+              </Field>
+              <Field label="Licenses" hint="One per line, e.g. “Series 6, 63 and 65”.">
+                <textarea rows={4} className={textareaClass} value={editor.licenses} onChange={(e) => set({ licenses: e.target.value })} />
+              </Field>
+              <Field label="Education" hint="One per line, e.g. “JD, University of San Diego School of Law”.">
+                <textarea rows={4} className={textareaClass} value={editor.education} onChange={(e) => set({ education: e.target.value })} />
+              </Field>
+            </div>
+            <div className="mt-4">
+              <Field
+                label="Other verified profile URLs"
+                hint="One URL per line (X, YouTube, Amazon author page …) — structured data only, not shown on the page."
+              >
+                <textarea rows={3} className={textareaClass} value={editor.sameAs} onChange={(e) => set({ sameAs: e.target.value })} />
+              </Field>
+            </div>
+            <div className="mt-6">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[#0D1B3D] text-sm font-medium">Books, media &amp; publications</p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    set({ publications: [...editor.publications, { source: '', title: '', href: '' }] })
+                  }
+                  className="inline-flex items-center gap-1.5 text-[#0D1B3D]/60 hover:text-[#0D1B3D] text-sm font-medium"
+                >
+                  <Plus className="w-4 h-4" /> Add publication
+                </button>
+              </div>
+              <div className="flex flex-col gap-3">
+                {editor.publications.map((publication, index) => (
+                  <div key={index} className="border border-black/5 rounded-xl p-4 grid grid-cols-1 md:grid-cols-[10rem_1fr_1fr_auto] gap-3 items-start">
+                    <input
+                      className={inputClass}
+                      placeholder="Source, e.g. “Book”"
+                      value={publication.source}
+                      onChange={(e) => {
+                        const next = [...editor.publications];
+                        next[index] = { ...next[index], source: e.target.value };
+                        set({ publications: next });
+                      }}
+                    />
+                    <input
+                      className={inputClass}
+                      placeholder="Title"
+                      value={publication.title}
+                      onChange={(e) => {
+                        const next = [...editor.publications];
+                        next[index] = { ...next[index], title: e.target.value };
+                        set({ publications: next });
+                      }}
+                    />
+                    <input
+                      className={inputClass}
+                      placeholder="Link (optional)"
+                      value={publication.href}
+                      onChange={(e) => {
+                        const next = [...editor.publications];
+                        next[index] = { ...next[index], href: e.target.value };
+                        set({ publications: next });
+                      }}
+                    />
+                    <button
+                      type="button"
+                      aria-label="Remove publication"
+                      onClick={() => set({ publications: editor.publications.filter((_, i) => i !== index) })}
+                      className="text-[#0D1B3D]/30 hover:text-red-600 transition-colors duration-150 shrink-0 mt-2.5"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                {editor.publications.length === 0 && (
+                  <p className="text-[#0D1B3D]/40 text-sm">
+                    No publications yet — add books, articles, or podcast features.
+                  </p>
+                )}
+              </div>
             </div>
           </Card>
 

@@ -122,6 +122,12 @@ export async function getAdvisor(slug: string): Promise<AdvisorProfile> {
       credentials: pick(data.credentials, fallback.credentials),
       testimonials: pick(data.testimonials, fallback.testimonials),
       book: pick(data.book, fallback.book),
+      linkedinUrl: pick(data.linkedin_url, fallback.linkedinUrl),
+      sameAs: pick(data.same_as, fallback.sameAs),
+      yearsExperience: pick(data.years_experience, fallback.yearsExperience),
+      licenses: pick(data.licenses, fallback.licenses),
+      education: pick(data.education, fallback.education),
+      publications: pick(data.publications, fallback.publications),
     };
   } catch {
     return fallback;

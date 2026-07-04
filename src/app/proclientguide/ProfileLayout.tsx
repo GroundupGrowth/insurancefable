@@ -1,4 +1,17 @@
-import { ArrowLeft, ArrowRight, Calendar, Check, Mail, Phone, Star } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Award,
+  BadgeCheck,
+  Calendar,
+  Check,
+  GraduationCap,
+  Linkedin,
+  Mail,
+  Phone,
+  Star,
+} from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
@@ -15,6 +28,15 @@ export interface BioSection {
 export interface Testimonial {
   quote: string;
   attribution?: string;
+}
+
+/** A book, article, podcast, or media mention — the "Books & Media" E-E-A-T section. */
+export interface Publication {
+  /** e.g. "Book", "ThinkAdvisor", "Podcast guest" — shown as the card eyebrow */
+  source?: string;
+  title: string;
+  /** External link; the card becomes clickable when set */
+  href?: string;
 }
 
 export interface AdvisorProfile {
@@ -35,6 +57,19 @@ export interface AdvisorProfile {
   bioSections: BioSection[];
   credentials: string[];
   testimonials: Testimonial[];
+  /* --- E-E-A-T trust signals (all optional — sections appear once filled) --- */
+  /** LinkedIn profile URL — button on the page + schema sameAs */
+  linkedinUrl?: string;
+  /** Extra verified profile URLs for schema sameAs (X, YouTube, Amazon author page …) */
+  sameAs?: string[];
+  /** Shown big in the at-a-glance band, e.g. "25+ years" or "Since 2010" */
+  yearsExperience?: string;
+  /** State licenses / producer licenses / securities series, one per entry */
+  licenses?: string[];
+  /** Degrees and formal education, e.g. "JD, University of San Diego School of Law" */
+  education?: string[];
+  /** Books authored, articles, podcasts, media mentions */
+  publications?: Publication[];
   /** LeadConnector booking widget URL from the live page (linked directly; embed is a follow-up) */
   schedulerUrl?: string;
   email?: string;
@@ -67,23 +102,53 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     schedulerUrl,
     email,
     book,
+    linkedinUrl,
+    yearsExperience,
+    licenses = [],
+    education = [],
+    publications = [],
   } = profile;
 
-  /* Person schema: entity clarity for search + AI engines (E-E-A-T). */
+  const sameAs = [...(linkedinUrl ? [linkedinUrl] : []), ...(profile.sameAs ?? [])];
+
+  /* Person schema: entity clarity for search + AI engines (E-E-A-T). The
+     optional trust fields feed sameAs / alumniOf / hasCredential so engines
+     can verify the person against LinkedIn and their published work. */
   const personJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name,
     jobTitle: role,
+    description: intro,
     url: `https://www.insuranceandestates.com/proclientguide/${slug}/`,
     ...(photo ? { image: photo.src } : {}),
     ...(email ? { email } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+    ...(specialties.length > 0 ? { knowsAbout: specialties } : {}),
+    ...(education.length > 0
+      ? {
+          alumniOf: education.map((entry) => ({
+            '@type': 'EducationalOrganization',
+            name: entry,
+          })),
+        }
+      : {}),
+    ...(credentials.length > 0 || licenses.length > 0
+      ? {
+          hasCredential: [...licenses, ...credentials].map((entry) => ({
+            '@type': 'EducationalOccupationalCredential',
+            name: entry,
+          })),
+        }
+      : {}),
     worksFor: {
       '@type': 'Organization',
       name: 'Insurance & Estates',
       url: 'https://www.insuranceandestates.com/',
     },
   };
+
+  const hasGlanceBand = Boolean(yearsExperience) || licenses.length > 0 || education.length > 0;
 
   return (
     <PageShell>
@@ -160,10 +225,74 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                 <Phone className="w-4 h-4" />
                 877-787-7558
               </a>
+              {linkedinUrl && (
+                <a
+                  href={linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  LinkedIn
+                </a>
+              )}
             </div>
           </div>
         </div>
       </section>
+
+      {/* At-a-glance trust band: experience, licensing, education (E-E-A-T).
+          Renders only when at least one field is filled at /admin. */}
+      {hasGlanceBand && (
+        <section className="px-6 pb-24">
+          <div className="max-w-[88rem] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+            {yearsExperience && (
+              <div className="bg-white rounded-2xl p-7 border border-black/5">
+                <div className="flex items-center gap-2 mb-5">
+                  <Award className="w-4 h-4 text-[#0D1B3D]/40" />
+                  <p className="text-[#0D1B3D]/50 text-sm">Experience</p>
+                </div>
+                <p
+                  className="text-[#0D1B3D] text-3xl md:text-4xl font-medium"
+                  style={{ letterSpacing: '-0.03em' }}
+                >
+                  {yearsExperience}
+                </p>
+              </div>
+            )}
+            {licenses.length > 0 && (
+              <div className="bg-white rounded-2xl p-7 border border-black/5">
+                <div className="flex items-center gap-2 mb-5">
+                  <BadgeCheck className="w-4 h-4 text-[#0D1B3D]/40" />
+                  <p className="text-[#0D1B3D]/50 text-sm">Licenses</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {licenses.map((license) => (
+                    <li key={license} className="text-[#0D1B3D]/70 text-base leading-relaxed">
+                      {license}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {education.length > 0 && (
+              <div className="bg-white rounded-2xl p-7 border border-black/5">
+                <div className="flex items-center gap-2 mb-5">
+                  <GraduationCap className="w-4 h-4 text-[#0D1B3D]/40" />
+                  <p className="text-[#0D1B3D]/50 text-sm">Education</p>
+                </div>
+                <ul className="space-y-2.5">
+                  {education.map((entry) => (
+                    <li key={entry} className="text-[#0D1B3D]/70 text-base leading-relaxed">
+                      {entry}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Inline booking calendar — appears once its embed code is saved at /admin */}
       <AdvisorBooking slug={slug} firstName={firstName} />
@@ -214,6 +343,60 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
           </div>
         </div>
       </section>
+
+      {/* Books, articles & media mentions — verifiable published work (E-E-A-T) */}
+      {publications.length > 0 && (
+        <section className="px-6 pb-24">
+          <div className="max-w-[88rem] mx-auto">
+            <h2
+              className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+              style={{ letterSpacing: '-0.04em' }}
+            >
+              Books, Media &amp; Publications
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {publications.map((publication) => {
+                const inner = (
+                  <>
+                    <p className="text-[#0D1B3D]/50 text-sm mb-2">
+                      {publication.source ?? 'Publication'}
+                    </p>
+                    <h3
+                      className="text-[#0D1B3D] text-xl md:text-2xl font-medium leading-snug"
+                      style={{ letterSpacing: '-0.02em' }}
+                    >
+                      {publication.title}
+                    </h3>
+                    {publication.href && (
+                      <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm font-medium text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
+                        View
+                        <ArrowUpRight className="w-4 h-4" />
+                      </span>
+                    )}
+                  </>
+                );
+                const cardClass =
+                  'group bg-white rounded-2xl p-7 border border-black/5 flex flex-col';
+                return publication.href ? (
+                  <a
+                    key={publication.title}
+                    href={publication.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${cardClass} hover:border-black/15 transition-colors duration-200`}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={publication.title} className={cardClass}>
+                    {inner}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Featured book (optional) */}
       {book && (

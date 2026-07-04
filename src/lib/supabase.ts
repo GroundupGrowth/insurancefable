@@ -37,6 +37,13 @@ export interface AdvisorRow {
   credentials: string[] | null;
   testimonials: { quote: string; attribution?: string }[] | null;
   book: { eyebrow: string; title: string; text: string; href: string } | null;
+  /* E-E-A-T trust fields (see supabase/schema.sql) */
+  linkedin_url: string | null;
+  same_as: string[] | null;
+  years_experience: string | null;
+  licenses: string[] | null;
+  education: string[] | null;
+  publications: { source?: string; title: string; href?: string }[] | null;
   updated_at: string;
 }
 
