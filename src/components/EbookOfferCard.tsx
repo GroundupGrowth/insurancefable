@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ArrowRight, BookOpen, X } from 'lucide-react';
 import type { Ebook } from '../data/ebooks';
 import EmbedSlot from './EmbedSlot';
@@ -53,7 +54,10 @@ export default function EbookOfferCard({ ebook }: { ebook: Ebook }) {
         </button>
       </div>
 
-      {open && (
+      {/* Portal: the sticky sidebar creates a stacking context, so the fixed
+          overlay must escape to <body> to sit above the navbar. */}
+      {open &&
+        createPortal(
         <div
           className="fixed inset-0 z-[100] bg-[#0D1B3D]/80 flex items-center justify-center p-4 md:p-6"
           onClick={() => setOpen(false)}
@@ -96,7 +100,8 @@ export default function EbookOfferCard({ ebook }: { ebook: Ebook }) {
               </a>
             </EmbedSlot>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
