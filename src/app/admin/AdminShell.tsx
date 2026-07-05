@@ -9,6 +9,7 @@ import {
   ExternalLink,
   FileText,
   LayoutDashboard,
+  Library,
   LogOut,
   Menu,
   Newspaper,
@@ -25,6 +26,7 @@ const NAV = [
   { href: '/admin/pages/', label: 'Pages', icon: FileText },
   { href: '/admin/books/', label: 'Books', icon: BookOpen },
   { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
+  { href: '/admin/wiki/', label: 'Wiki', icon: Library },
   { href: '/admin/embeds/', label: 'Embeds', icon: Code2 },
 ];
 

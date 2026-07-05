@@ -100,6 +100,22 @@ create table if not exists public.site_post_tags (
 );
 
 -- ---------------------------------------------------------------------------
+-- Wiki terms: plain-English definitions at /wiki/<slug>/ (Wiki section in
+-- /admin). Rows override src/data/wiki.ts defaults per field; new slugs
+-- appear alongside the defaults.
+-- ---------------------------------------------------------------------------
+create table if not exists public.wiki_terms (
+  slug text primary key,
+  term text,              -- display name, e.g. 'Infinite Banking'
+  short text,             -- one-sentence definition
+  body text,              -- paragraphs split by blank lines; [[slug]] interlinks
+  related jsonb,          -- string[] of related term slugs
+  seo_title text,
+  seo_description text,
+  updated_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------------
 -- Row level security: the site reads publicly, only admin users write.
 -- ---------------------------------------------------------------------------
 alter table public.embed_slots enable row level security;
@@ -144,6 +160,14 @@ drop policy if exists "public read" on public.site_post_tags;
 create policy "public read" on public.site_post_tags for select using (true);
 drop policy if exists "authenticated write" on public.site_post_tags;
 create policy "authenticated write" on public.site_post_tags
+  for all to authenticated using (true) with check (true);
+
+alter table public.wiki_terms enable row level security;
+
+drop policy if exists "public read" on public.wiki_terms;
+create policy "public read" on public.wiki_terms for select using (true);
+drop policy if exists "authenticated write" on public.wiki_terms;
+create policy "authenticated write" on public.wiki_terms
   for all to authenticated using (true) with check (true);
 
 -- ---------------------------------------------------------------------------

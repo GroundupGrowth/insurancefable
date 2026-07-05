@@ -49,7 +49,7 @@ export function pageMetadata(content: PageDefaults): Metadata {
 }
 
 /* An override only wins when it's actually set — null/empty means "default". */
-function pick<T>(override: T | null | undefined, fallback: T): T {
+export function pick<T>(override: T | null | undefined, fallback: T): T {
   if (override === null || override === undefined) return fallback;
   if (typeof override === 'string' && override.trim() === '') return fallback;
   return override;

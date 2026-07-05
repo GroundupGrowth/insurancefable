@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { pageDefaults } from '../data/pageContent';
 import { SITE_URL } from '../lib/content';
+import { getWikiTerms } from '../lib/wiki';
 
-/* Canonical, indexable URLs only. Blog posts join at Phase 3. */
-export default function sitemap(): MetadataRoute.Sitemap {
+/* Canonical, indexable URLs only. Blog posts join with the full import. */
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
   const advisorPaths = [
     '/proclientguide/steve/',
@@ -12,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/proclientguide/jasonk/',
     '/proclientguide/denise/',
   ];
+  const wikiTerms = await getWikiTerms();
   return [
     { url: `${SITE_URL}/`, lastModified, changeFrequency: 'weekly', priority: 1 },
     ...Object.values(pageDefaults).map((page) => ({
@@ -25,6 +27,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
+    })),
+    { url: `${SITE_URL}/wiki/`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
+    ...wikiTerms.map((term) => ({
+      url: `${SITE_URL}/wiki/${term.slug}/`,
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     })),
   ];
 }
