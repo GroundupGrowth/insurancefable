@@ -110,10 +110,14 @@ create table if not exists public.wiki_terms (
   short text,             -- one-sentence definition
   body text,              -- paragraphs split by blank lines; [[slug]] interlinks
   related jsonb,          -- string[] of related term slugs
+  aliases jsonb,          -- string[] of extra phrases the blog auto-linker matches
   seo_title text,
   seo_description text,
   updated_at timestamptz not null default now()
 );
+
+-- For wiki_terms tables created before the aliases column existed.
+alter table public.wiki_terms add column if not exists aliases jsonb;
 
 -- ---------------------------------------------------------------------------
 -- Row level security: the site reads publicly, only admin users write.

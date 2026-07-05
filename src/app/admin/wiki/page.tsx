@@ -16,6 +16,7 @@ interface WikiRow {
   short: string | null;
   body: string | null;
   related: string[] | null;
+  aliases: string[] | null;
   seo_title: string | null;
   seo_description: string | null;
 }
@@ -26,6 +27,7 @@ interface EditorState {
   short: string;
   body: string;
   related: string;      // one slug per line
+  aliases: string;      // one phrase per line
   seoTitle: string;
   seoDescription: string;
   isDefault: boolean;
@@ -48,6 +50,7 @@ function toEditorState(fallback: WikiTerm | undefined, row: WikiRow | null): Edi
     short: val(row?.short, fallback?.short ?? ''),
     body: val(row?.body, fallback?.body ?? ''),
     related: (row?.related ?? fallback?.related ?? []).join('\n'),
+    aliases: (row?.aliases ?? fallback?.aliases ?? []).join('\n'),
     seoTitle: val(row?.seo_title, fallback?.seoTitle ?? ''),
     seoDescription: val(row?.seo_description, fallback?.seoDescription ?? ''),
     isDefault: Boolean(fallback),
@@ -137,6 +140,7 @@ export default function WikiAdminPage() {
       short: '',
       body: '',
       related: '',
+      aliases: '',
       seoTitle: '',
       seoDescription: '',
       isDefault: false,
@@ -157,6 +161,7 @@ export default function WikiAdminPage() {
         short: editor.short.trim() || null,
         body: editor.body.trim() || null,
         related: editor.related.split('\n').map((s) => s.trim()).filter(Boolean),
+        aliases: editor.aliases.split('\n').map((s) => s.trim()).filter(Boolean),
         seo_title: editor.seoTitle.trim() || null,
         seo_description: editor.seoDescription.trim() || null,
         updated_at: new Date().toISOString(),
@@ -249,9 +254,17 @@ export default function WikiAdminPage() {
 
           <Card>
             <h2 className="text-[#0D1B3D] text-lg font-medium mb-4">Linking &amp; SEO</h2>
-            <Field label="Related terms" hint="One slug per line — shown as cards under the definition.">
-              <textarea rows={4} className={`${textareaClass} font-mono text-xs`} value={editor.related} onChange={(e) => set({ related: e.target.value })} />
-            </Field>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field label="Related terms" hint="One slug per line — shown as cards under the definition.">
+                <textarea rows={4} className={`${textareaClass} font-mono text-xs`} value={editor.related} onChange={(e) => set({ related: e.target.value })} />
+              </Field>
+              <Field
+                label="Auto-link aliases"
+                hint="One phrase per line — blog articles link their first mention of the term name or any of these to this page."
+              >
+                <textarea rows={4} className={textareaClass} value={editor.aliases} onChange={(e) => set({ aliases: e.target.value })} />
+              </Field>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <Field label="SEO title (optional)" hint="Defaults to 'What Is <Term>? Definition & How It Works'.">
                 <input className={inputClass} value={editor.seoTitle} onChange={(e) => set({ seoTitle: e.target.value })} />

@@ -11,6 +11,7 @@ interface WikiRow {
   short: string | null;
   body: string | null;
   related: string[] | null;
+  aliases: string[] | null;
   seo_title: string | null;
   seo_description: string | null;
 }
@@ -29,6 +30,7 @@ function mergeRow(fallback: WikiTerm | undefined, row: WikiRow): WikiTerm {
     short: pick(row.short, base.short),
     body: pick(row.body, base.body),
     related: pick(row.related, base.related),
+    aliases: pick(row.aliases, base.aliases),
     seoTitle: pick(row.seo_title, base.seoTitle),
     seoDescription: pick(row.seo_description, base.seoDescription),
   };

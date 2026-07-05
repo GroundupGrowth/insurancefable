@@ -25,7 +25,8 @@ function renderInline(text: string, names: Record<string, string>): ReactNode[] 
         </a>
       );
     } else {
-      nodes.push(label ?? display ?? token);
+      // Unknown slug: degrade to readable text, never the raw token
+      nodes.push(label ?? names[slug] ?? slug.replace(/-/g, ' '));
     }
     lastIndex = match.index + token.length;
   }

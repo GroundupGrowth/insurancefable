@@ -6,6 +6,8 @@ import EbookOfferCard from '../../components/EbookOfferCard';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { getOfferForPost, getPost } from '../../lib/blog';
 import { SITE_URL } from '../../lib/content';
+import { getWikiTerms } from '../../lib/wiki';
+import { linkWikiTerms } from '../../lib/wikiLinker';
 
 /* Blog articles from the Payload import, served at the root path exactly like
    WordPress (zero redirects at cutover). Static routes always win over this
@@ -57,7 +59,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const offer = await getOfferForPost(post.slug, post.category?.slug ?? null);
+  const [offer, wikiTerms] = await Promise.all([
+    getOfferForPost(post.slug, post.category?.slug ?? null),
+    getWikiTerms(),
+  ]);
+  // First mention of each wiki term becomes a link to its /wiki/ page
+  const bodyHtml = linkWikiTerms(post.bodyHtml, wikiTerms);
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -121,7 +128,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         >
           <article
             className="article-body w-full max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12"
-            dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
+            dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
           {offer && (
             <aside className="lg:sticky lg:top-28">
