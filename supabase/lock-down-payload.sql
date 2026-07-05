@@ -10,6 +10,11 @@
 --    media, redirects) stay publicly READABLE for the future blog; Payload
 --    internals (users, sessions, form submissions, kv, versions) become
 --    inaccessible via the API.
+-- 3. Grants SELECT on the content tables to anon/authenticated. Tables
+--    created by claude_app never received Supabase's default API grants, so
+--    without this the REST API returns 401 "permission denied" — this grant
+--    is what lets the site render the blog. RLS (step 2) still blocks all
+--    writes and every non-content table.
 
 grant claude_app to postgres;
 
@@ -25,6 +30,15 @@ begin
     execute format('alter table public.%I enable row level security', t);
   end loop;
 end $$;
+
+grant select on
+  public.posts,
+  public.posts_rels,
+  public.categories,
+  public.authors,
+  public.media,
+  public.redirects
+to anon, authenticated;
 
 drop policy if exists "public read" on public.posts;
 create policy "public read" on public.posts for select using (true);
