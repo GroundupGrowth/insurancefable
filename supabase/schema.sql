@@ -83,6 +83,23 @@ create table if not exists public.site_ebooks (
 );
 
 -- ---------------------------------------------------------------------------
+-- Blog sidebar offers: tag → eBook rules + per-post tag overrides.
+-- A post's tag defaults to its Payload category slug; site_post_tags
+-- overrides it per post. site_offer_rules overrides src/data/offers.ts.
+-- ---------------------------------------------------------------------------
+create table if not exists public.site_offer_rules (
+  tag text primary key,        -- category slug or custom tag
+  ebook_slug text not null,    -- site_ebooks.slug / ebookDefaults slug
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.site_post_tags (
+  post_slug text primary key,  -- Payload posts.slug
+  tag text not null,
+  updated_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------------
 -- Row level security: the site reads publicly, only admin users write.
 -- ---------------------------------------------------------------------------
 alter table public.embed_slots enable row level security;
@@ -112,6 +129,21 @@ drop policy if exists "public read" on public.site_ebooks;
 create policy "public read" on public.site_ebooks for select using (true);
 drop policy if exists "authenticated write" on public.site_ebooks;
 create policy "authenticated write" on public.site_ebooks
+  for all to authenticated using (true) with check (true);
+
+alter table public.site_offer_rules enable row level security;
+alter table public.site_post_tags enable row level security;
+
+drop policy if exists "public read" on public.site_offer_rules;
+create policy "public read" on public.site_offer_rules for select using (true);
+drop policy if exists "authenticated write" on public.site_offer_rules;
+create policy "authenticated write" on public.site_offer_rules
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists "public read" on public.site_post_tags;
+create policy "public read" on public.site_post_tags for select using (true);
+drop policy if exists "authenticated write" on public.site_post_tags;
+create policy "authenticated write" on public.site_post_tags
   for all to authenticated using (true) with check (true);
 
 -- ---------------------------------------------------------------------------

@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import PageShell from '../../components/PageShell';
 import CtaBand from '../../components/CtaBand';
+import EbookOfferCard from '../../components/EbookOfferCard';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
-import { getPost } from '../../lib/blog';
+import { getOfferForPost, getPost } from '../../lib/blog';
 import { SITE_URL } from '../../lib/content';
 
 /* Blog articles from the Payload import, served at the root path exactly like
@@ -56,6 +57,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
+  const offer = await getOfferForPost(post.slug, post.category?.slug ?? null);
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -85,9 +87,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      {/* Article hero: category, title, byline row (freshness = E-E-A-T) */}
+      {/* Article hero: category, title, byline row (freshness = E-E-A-T).
+          Mirrors the body grid so the title lines up with the article column. */}
       <section className="px-6 pt-10 pb-12 md:pb-16">
-        <div className="max-w-[54rem] mx-auto flex flex-col items-start">
+        <div
+          className={`max-w-[54rem] ${offer ? 'lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_21rem] lg:gap-4' : ''} mx-auto`}
+        >
+          <div className="w-full max-w-[54rem] mx-auto flex flex-col items-start">
           {post.category && <p className="text-[#0D1B3D]/60 text-sm mb-3">{post.category.name}</p>}
           <h1
             className="text-[#0D1B3D] text-4xl md:text-5xl font-medium leading-[1.08] mb-6"
@@ -102,15 +108,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <span aria-hidden="true">·</span>
             <span>{post.readingMinutes} min read</span>
           </div>
+          </div>
         </div>
       </section>
 
-      {/* Body: imported WordPress HTML, styled by .article-body in globals.css */}
+      {/* Body: imported WordPress HTML, styled by .article-body in globals.css.
+          The right rail carries the tag-matched eBook offer (sticky on desktop,
+          below the article on mobile). */}
       <section className="px-6 pb-24">
-        <article
-          className="article-body max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12"
-          dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
-        />
+        <div
+          className={`max-w-[54rem] ${offer ? 'lg:max-w-[80rem]' : ''} mx-auto grid grid-cols-1 ${offer ? 'lg:grid-cols-[minmax(0,1fr)_21rem]' : ''} gap-4 lg:items-start`}
+        >
+          <article
+            className="article-body w-full max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12"
+            dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
+          />
+          {offer && (
+            <aside className="lg:sticky lg:top-28">
+              <EbookOfferCard ebook={offer.ebook} />
+            </aside>
+          )}
+        </div>
       </section>
 
       <CtaBand

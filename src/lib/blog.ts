@@ -1,4 +1,6 @@
-import { serverClient } from './content';
+import { getEbooks, serverClient } from './content';
+import { DEFAULT_OFFER_EBOOK, offerRuleDefaults } from '../data/offers';
+import type { Ebook } from '../data/ebooks';
 
 /* Blog data layer. The articles live in the Payload CMS tables (posts,
    categories, posts_rels) that an earlier session imported into the same
@@ -84,6 +86,44 @@ export async function getPost(slug: string): Promise<BlogPost | null> {
     category,
     readingMinutes: readingMinutes(post.body_html),
   };
+}
+
+/* The sidebar eBook offer for a post. Resolution: per-post tag override
+   (site_post_tags) → else the post's category slug; then tag → eBook via
+   site_offer_rules merged over offerRuleDefaults; then the eBook object from
+   the Books catalog. Falls back to DEFAULT_OFFER_EBOOK so every article
+   shows an offer. */
+export async function getOfferForPost(
+  postSlug: string,
+  categorySlug: string | null
+): Promise<{ tag: string | null; ebook: Ebook } | null> {
+  const supabase = serverClient();
+  const ebooks = await getEbooks();
+  if (ebooks.length === 0) return null;
+
+  let tag = categorySlug;
+  const rules: Record<string, string> = { ...offerRuleDefaults };
+  if (supabase) {
+    try {
+      const [tagRow, ruleRows] = await Promise.all([
+        supabase.from('site_post_tags').select('tag').eq('post_slug', postSlug).maybeSingle(),
+        supabase.from('site_offer_rules').select('tag, ebook_slug'),
+      ]);
+      if (tagRow.data?.tag?.trim()) tag = tagRow.data.tag.trim();
+      ruleRows.data?.forEach((row) => {
+        if (row.ebook_slug?.trim()) rules[row.tag] = row.ebook_slug.trim();
+      });
+    } catch {
+      /* offer stays on defaults */
+    }
+  }
+
+  const wantedSlug = (tag && rules[tag]) || DEFAULT_OFFER_EBOOK;
+  const ebook =
+    ebooks.find((book) => book.slug === wantedSlug) ??
+    ebooks.find((book) => book.slug === DEFAULT_OFFER_EBOOK) ??
+    ebooks[0];
+  return { tag, ebook };
 }
 
 /** Every published slug — used by generateStaticParams once the full import is on. */

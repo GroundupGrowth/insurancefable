@@ -8,6 +8,7 @@ export async function POST(request: Request) {
   const paths: string[] = Array.isArray(body.paths)
     ? body.paths.filter((p: unknown): p is string => typeof p === 'string' && p.startsWith('/'))
     : [];
-  paths.forEach((path) => revalidatePath(path));
+  // '/[slug]' busts every article rendered by the dynamic blog route at once
+  paths.forEach((path) => revalidatePath(path, path.includes('[') ? 'page' : undefined));
   return NextResponse.json({ revalidated: paths });
 }

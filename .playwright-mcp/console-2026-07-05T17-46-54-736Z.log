@@ -1,0 +1,3 @@
+[     523ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://insurancefable.vercel.app/fonts/tt-norms-pro-semibold.woff2:0
+[     523ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://insurancefable.vercel.app/fonts/tt-norms-pro-regular.woff2:0
+[    3018ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://insurancefable.vercel.app/favicon.ico:0
