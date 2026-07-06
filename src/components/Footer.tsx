@@ -7,7 +7,7 @@ const BASE = 'https://www.insuranceandestates.com';
 
 const freeResources = [
   { label: 'Get a Quote', href: '/life-insurance-quotes/' },
-  { label: 'Blog', href: `${BASE}/blog/` },
+  { label: 'Blog', href: '/blog/' },
   { label: 'Insurance Calculator', href: `${BASE}/life-insurance-needs-calculator/` },
   { label: 'The I&E Wiki', href: '/wiki/' },
   { label: 'eBooks & Guides', href: '/ebooks-and-guides/' },

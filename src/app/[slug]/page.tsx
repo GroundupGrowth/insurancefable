@@ -4,7 +4,7 @@ import PageShell from '../../components/PageShell';
 import CtaBand from '../../components/CtaBand';
 import EbookOfferCard from '../../components/EbookOfferCard';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
-import { getOfferForPost, getPost } from '../../lib/blog';
+import { getOfferForPost, getPost, getPublishedSlugs } from '../../lib/blog';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
@@ -13,16 +13,14 @@ import { linkWikiTerms } from '../../lib/wikiLinker';
    WordPress (zero redirects at cutover). Static routes always win over this
    dynamic segment, so /about etc. are unaffected.
 
-   PILOT: only the slugs below are live while we validate the template.
-   Full import = replace PILOT_SLUGS with `await getPublishedSlugs()` in
-   generateStaticParams and delete this list. */
-const PILOT_SLUGS = ['top-10-best-infinite-banking-companies'];
-
+   All published posts prerender at build; dynamicParams lets posts added to
+   Payload later go live via ISR without a redeploy (unknown slugs 404). */
 export const revalidate = 300;
-export const dynamicParams = false;
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return PILOT_SLUGS.map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getPublishedSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 const formatDate = (iso: string) =>

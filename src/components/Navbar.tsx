@@ -34,8 +34,7 @@ const navGroups: NavGroup[] = [
   },
   {
     label: 'Blog',
-    // stays on WordPress until the article migration (Phase 3)
-    href: 'https://www.insuranceandestates.com/blog/',
+    href: '/blog/',
   },
   {
     label: 'Live Workshops',

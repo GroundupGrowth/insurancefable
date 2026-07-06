@@ -126,7 +126,7 @@ export async function getOfferForPost(
   return { tag, ebook };
 }
 
-/** Every published slug — used by generateStaticParams once the full import is on. */
+/** Every published slug — drives generateStaticParams for the full import. */
 export async function getPublishedSlugs(): Promise<string[]> {
   const supabase = serverClient();
   if (!supabase) return [];
@@ -136,4 +136,43 @@ export async function getPublishedSlugs(): Promise<string[]> {
     .eq('_status', 'published')
     .order('slug');
   return data?.map((row) => row.slug) ?? [];
+}
+
+export interface BlogPostSummary {
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  publishedAt: string | null;
+  modifiedAt: string | null;
+  category: { name: string; slug: string } | null;
+}
+
+/** All published posts with their category — the /blog/ index and the sitemap. */
+export async function getAllPosts(): Promise<BlogPostSummary[]> {
+  const supabase = serverClient();
+  if (!supabase) return [];
+  const [posts, rels, cats] = await Promise.all([
+    supabase
+      .from('posts')
+      .select('id, slug, title, excerpt, published_at, legacy_modified_at')
+      .eq('_status', 'published')
+      .order('published_at', { ascending: false }),
+    supabase.from('posts_rels').select('parent_id, categories_id').not('categories_id', 'is', null),
+    supabase.from('categories').select('id, name, slug'),
+  ]);
+  if (!posts.data) return [];
+  const catById = new Map(cats.data?.map((cat) => [cat.id, { name: cat.name, slug: cat.slug }]));
+  const catByPost = new Map<number, { name: string; slug: string }>();
+  rels.data?.forEach((rel) => {
+    const category = catById.get(rel.categories_id);
+    if (category && !catByPost.has(rel.parent_id)) catByPost.set(rel.parent_id, category);
+  });
+  return posts.data.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    publishedAt: post.published_at,
+    modifiedAt: post.legacy_modified_at,
+    category: catByPost.get(post.id) ?? null,
+  }));
 }
