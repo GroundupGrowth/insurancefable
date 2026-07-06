@@ -4,7 +4,8 @@ import Hero from '../components/Hero';
 import ProcessSection from '../components/ProcessSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import ServicesSection from '../components/ServicesSection';
-import FaqSection from '../components/FaqSection';
+// FaqSection hidden: not on the live homepage, and its answers are still placeholders (Phase 2)
+// import FaqSection from '../components/FaqSection';
 import LeadMagnetSection from '../components/LeadMagnetSection';
 import Footer from '../components/Footer';
 
@@ -149,7 +150,7 @@ export default function HomePage() {
         <ServicesSection />
         <ProcessSection />
         <TestimonialsSection />
-        <FaqSection />
+        {/* <FaqSection /> — hidden until real FAQ copy exists (Phase 2); was placeholder text */}
         <LeadMagnetSection />
       </main>
       <Footer />

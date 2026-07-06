@@ -34,9 +34,18 @@ These were rebuilt, not copied verbatim. Each must be checked against the live p
 - Static-site performance (Core Web Vitals headroom)
 - The `/admin` CMS backend — infrastructure that powers everything
 
+## Decision (2026-07-06)
+
+**Keep everything already built and live — remove nothing.** The Wiki, bylines,
+eBook sidebars, related posts, calculator, structured data, and the rebuilt
+layouts all stay. Phase 1 is *only* about making each page's **content** match
+the live site one-to-one (body copy especially) — reproduce the original text,
+don't change it. The additions are fine because they add to, rather than
+replace, the original content.
+
 ## Phase 2 — improvements to apply AFTER positions are confirmed
 
-Net-new or redesigned; each is currently built and live on the preview. Decision per cutover: keep on, or feature-flag off for a stricter 1:1 and reintroduce here.
+Net-new or redesigned; each is currently built and live on the preview and **stays on** per the decision above. Listed here so we know what changed vs. the original when reading rankings.
 
 - **Redesigned page layouts** — homepage + product/intro pages (cleaner structure vs. the original).
 - **The Wiki** — `/wiki/` index + 49 plain-English term pages (net-new section).

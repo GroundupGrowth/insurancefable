@@ -9,13 +9,14 @@ export const metadata: Metadata = {
   // canonical host: cross-domain to the live site until cutover, self-referential after
   metadataBase: new URL('https://www.insuranceandestates.com'),
   title: {
+    // Homepage SERP title — matches the live site verbatim for migration parity
     default:
-      'Insurance & Estates — Take Back Control, Gain Momentum, and Build a Multi-Generational Legacy',
-    // matches the live WordPress title pattern so migrated pages keep their SERP titles
+      'I&E | Whole Life & Infinite Banking Strategies – Infinite Banking Using Dividend Paying Whole Life',
     template: '%s – I&E | Whole Life & Infinite Banking Strategies',
   },
+  // Homepage meta description — matches the live site
   description:
-    "The financial system was built to profit from your capital — not build it. We'll show you the exit.",
+    'We are here to educate, coach and partner with you, to equip you with properly designed Whole Life and Indexed Universal Life strategies that accomplish your specific goals.',
   alternates: { canonical: '/' },
   openGraph: {
     siteName: 'Insurance & Estates',
