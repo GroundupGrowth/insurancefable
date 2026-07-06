@@ -14,7 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // blog articles and off-build pages stay on WordPress until Phase 3
-const BASE = 'https://www.insuranceandestates.com';
+// Linked articles are now hosted here at the root, so links are internal.
+const BASE = '';
 
 const resources = [
   {
@@ -22,14 +23,14 @@ const resources = [
     title: 'New to Infinite Banking?',
     text: 'Kingdom Money explains why conventional financial wisdom fails — and what wealthy families have always done differently.',
     cta: 'Get Kingdom Money',
-    href: `${BASE}/kingdom-money/`,
+    href: '/ebooks-and-guides/',
   },
   {
     eyebrow: 'Go deeper',
     title: 'Ready to See How It Works?',
     text: 'You understand the concept. The Self Banking Blueprint walks you through policy design, deployment, and the infrastructure behind it.',
     cta: 'Get the Blueprint',
-    href: `${BASE}/self-banking-blueprint/`,
+    href: '/ebooks-and-guides/',
   },
 ];
 
@@ -140,7 +141,7 @@ export default async function InfiniteBankingStrategyPage() {
 
           <div className="mt-10">
             <a
-              href={`${BASE}/category/infinite-banking-concept/`}
+              href="/blog/#infinite-banking-concept"
               className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
             >
               View More Infinite Banking Articles

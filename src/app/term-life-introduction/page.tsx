@@ -14,7 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // blog articles and off-build pages stay on WordPress until Phase 3
-const BASE = 'https://www.insuranceandestates.com';
+// Linked articles are now hosted here at the root, so links are internal.
+const BASE = '';
 
 const problems = [
   'A volatile stock market and potential losses',

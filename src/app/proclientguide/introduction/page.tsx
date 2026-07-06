@@ -69,13 +69,15 @@ const leadership = [
   {
     name: 'Luke Dupin',
     role: 'Chief Technology Officer',
-    href: 'https://www.insuranceandestates.com/proclientguide/luke-dupin/',
+    // Full profile not yet migrated — route to contact rather than the old site
+    href: '/contact/',
     image: 'https://www.insuranceandestates.com/wp-content/uploads/luke-240x300.webp',
   },
   {
     name: 'Erik J. Hayton',
     role: 'Chief Marketing Officer',
-    href: 'https://www.insuranceandestates.com/proclientguide/erik-hayton/',
+    // Full profile not yet migrated — route to contact rather than the old site
+    href: '/contact/',
     image: 'https://www.insuranceandestates.com/wp-content/uploads/erik-hayton--230x300.webp',
   },
 ];

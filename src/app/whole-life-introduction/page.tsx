@@ -14,7 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // blog articles and off-build pages stay on WordPress until Phase 3
-const BASE = 'https://www.insuranceandestates.com';
+// Linked articles are now hosted here at the root, so links are internal.
+const BASE = '';
 
 const articles = [
   {
@@ -79,7 +80,7 @@ export default async function WholeLifeIntroductionPage() {
                 a call with one of our Pro Client Guides.
               </p>
               <a
-                href={`${BASE}/category/whole-life-insurance/`}
+                href="/blog/#whole-life-insurance"
                 className="inline-flex items-center gap-2 bg-[#F5F5F5] text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-[#0D1B3D] hover:text-white transition-colors duration-200"
               >
                 Learn More

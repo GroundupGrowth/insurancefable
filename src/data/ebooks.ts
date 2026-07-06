@@ -16,7 +16,9 @@ export interface Ebook {
   sort: number;
 }
 
-const BASE = 'https://www.insuranceandestates.com';
+/* Featured books fall back to the on-site request form until their opt-in
+   embed is pasted at /admin → Books (then the card opens the embed inline). */
+const REQUEST = '/ebooks-and-guides/#request-a-guide';
 
 export const ebookDefaults: Ebook[] = [
   {
@@ -25,7 +27,7 @@ export const ebookDefaults: Ebook[] = [
     eyebrow: 'The Ultimate Free Download',
     title: 'The Self Banking Blueprint',
     text: 'A Modern Approach to the Infinite Banking Concept.',
-    href: `${BASE}/self-banking-blueprint/`,
+    href: REQUEST,
     sort: 10,
   },
   {
@@ -34,7 +36,7 @@ export const ebookDefaults: Ebook[] = [
     eyebrow: 'Featured eBook',
     title: 'Kingdom Money',
     text: 'What wealthy families have quietly done for 100 years, and why your advisor never mentioned it.',
-    href: `${BASE}/kingdom-money/`,
+    href: REQUEST,
     sort: 20,
   },
   {
@@ -43,7 +45,7 @@ export const ebookDefaults: Ebook[] = [
     eyebrow: 'Featured eBook',
     title: 'The Generational Transfer',
     text: 'Why Most Family Wealth Disappears and How to Stop It.',
-    href: `${BASE}/generational-transfer/`,
+    href: REQUEST,
     sort: 30,
   },
   {
@@ -52,7 +54,7 @@ export const ebookDefaults: Ebook[] = [
     eyebrow: 'Volume Based Infinite Banking',
     title: 'The Ultimate Asset®',
     text: 'Nash proved the concept. This is the system that scales it.',
-    href: `${BASE}/the-ultimate-asset-ebook/`,
+    href: REQUEST,
     sort: 40,
   },
   {
@@ -61,7 +63,7 @@ export const ebookDefaults: Ebook[] = [
     eyebrow: 'Featured eBook',
     title: 'The Intentional Wealth Effect',
     text: "Recapture your earnings and build wealth on purpose — principles inspired by Nelson Nash's Infinite Banking Concept.",
-    href: `${BASE}/intentional-wealth-effect/`,
+    href: REQUEST,
     sort: 50,
   },
   {

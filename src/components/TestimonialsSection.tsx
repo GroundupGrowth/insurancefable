@@ -1,8 +1,6 @@
 import { Star } from 'lucide-react';
 import TrustpilotWidget from './TrustpilotWidget';
 
-const BASE = 'https://www.insuranceandestates.com';
-
 /* Real Trustpilot reviews — verbatim. To show more, paste additional reviews
    word-for-word into this array (quote, name, meta). Never invent or edit
    testimonial copy. */
@@ -121,7 +119,7 @@ export default function TestimonialsSection() {
       <div className="max-w-[88rem] mx-auto px-6">
         <TrustpilotWidget className="mt-12" />
         <a
-          href={`${BASE}/testimonials/`}
+          href="/testimonials/"
           className="mt-12 inline-flex items-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
         >
           Review More Testimonials

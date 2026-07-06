@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
-const BASE = 'https://www.insuranceandestates.com';
+// These pages are all hosted here now, so links are internal.
+const BASE = '';
 
 // SWAP-LATER
 const ACTIVE_CARD_BG =

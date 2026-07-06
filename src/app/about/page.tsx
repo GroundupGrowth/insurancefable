@@ -15,7 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // blog articles stay on WordPress until the article migration (Phase 3)
-const BASE = 'https://www.insuranceandestates.com';
+// Linked article is now hosted here at the root, so the link is internal.
+const BASE = '';
 
 const services = [
   'Infinite banking implementation and coaching',
@@ -84,7 +85,7 @@ export default async function AboutPage() {
             </p>
             <p>
               The vehicle they use? Properly designed cash value life insurance — what we call{' '}
-              <a href={`${BASE}/ultimate-asset/`} className={linkClass}>
+              <a href="/ebooks-and-guides/" className={linkClass}>
                 The Ultimate Asset
               </a>
               .

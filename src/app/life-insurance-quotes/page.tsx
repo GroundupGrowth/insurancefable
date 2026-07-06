@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ArrowRight, ExternalLink, Phone } from 'lucide-react';
+import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
@@ -12,9 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('life-insurance-quotes');
   return pageMetadata(content);
 }
-
-// live quote engine stays on WordPress until it's rebuilt
-const LIVE_QUOTES_URL = 'https://www.insuranceandestates.com/life-insurance-quotes/';
 
 const policyTypes = [
   {
@@ -94,7 +91,7 @@ export default async function LifeInsuranceQuotesPage() {
       </section>
 
       {/* Quote engine: paste the embed under page:life-insurance-quotes:quote-engine
-          at /admin. Until then these cards link to the live quoting tool. */}
+          at /admin. Until then these cards route to a personal quote with an expert. */}
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
           <div className="bg-[#0D1B3D] rounded-3xl px-8 py-14 md:px-16 md:py-16">
@@ -111,15 +108,15 @@ export default async function LifeInsuranceQuotesPage() {
               className="bg-white rounded-2xl p-2"
             >
               <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
-                Pick the coverage you want to price. Our quoting tool currently runs on
-                insuranceandestates.com — each option below opens it there.
+                Pick the coverage you want to price and we&rsquo;ll put a real number in front of
+                you — no bots, no spam, just an expert who quotes across every top carrier.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {quoteOptions.map((option) => (
                   <a
                     key={option.title}
-                    href={LIVE_QUOTES_URL}
+                    href="/connect-with-our-experts/"
                     className="group bg-white/5 hover:bg-white/10 rounded-2xl p-7 min-h-48 flex flex-col border border-white/10 transition-colors duration-200"
                   >
                     <h3
@@ -131,7 +128,7 @@ export default async function LifeInsuranceQuotesPage() {
                     <p className="text-white/60 text-base leading-relaxed">{option.text}</p>
                     <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-white/60 group-hover:text-white transition-colors duration-200">
                       Start This Quote
-                      <ExternalLink className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" />
                     </span>
                   </a>
                 ))}

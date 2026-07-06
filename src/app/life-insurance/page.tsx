@@ -61,7 +61,8 @@ const livingAssetBlocks = [
 ];
 
 // blog articles stay on WordPress until the article migration (Phase 3)
-const BASE = 'https://www.insuranceandestates.com';
+// Linked articles are now hosted here at the root, so links are internal.
+const BASE = '';
 
 const relatedArticles = [
   {

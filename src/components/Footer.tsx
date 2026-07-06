@@ -2,13 +2,10 @@ import { Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
 import LogoIcon from './LogoIcon';
 import TrustpilotWidget from './TrustpilotWidget';
 
-// Blog, calculator, and agent-partners stay on WordPress until their phases land
-const BASE = 'https://www.insuranceandestates.com';
-
 const freeResources = [
   { label: 'Get a Quote', href: '/life-insurance-quotes/' },
   { label: 'Blog', href: '/blog/' },
-  { label: 'Insurance Calculator', href: `${BASE}/life-insurance-needs-calculator/` },
+  { label: 'Insurance Calculator', href: '/life-insurance-needs-calculator/' },
   { label: 'The I&E Wiki', href: '/wiki/' },
   { label: 'eBooks & Guides', href: '/ebooks-and-guides/' },
   { label: 'Start here', href: '/start-your-journey/' },
@@ -18,7 +15,8 @@ const aboutUs = [
   { label: 'Contact Us', href: '/contact/' },
   { label: '877-787-7558', href: 'tel:1-877-787-7558' },
   { label: 'Meet the Team', href: '/proclientguide/introduction/' },
-  { label: 'Join The Team', href: `${BASE}/agent-partners/` },
+  // Recruiting page not yet built — route to contact until then
+  { label: 'Join The Team', href: '/contact/' },
 ];
 
 const socials = [

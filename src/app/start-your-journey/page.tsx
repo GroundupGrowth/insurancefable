@@ -12,8 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(content);
 }
 
-// guide landing pages stay on WordPress until they're migrated
-const BASE = 'https://www.insuranceandestates.com';
+// Guide downloads route to the on-site catalog until per-guide opt-ins are wired up.
+const GUIDES_HREF = '/ebooks-and-guides/';
 
 const levels = [
   {
@@ -26,31 +26,26 @@ const levels = [
         title: 'New to IBC? Start Here',
         text: "Stop financing your bank's empire and start building your own.",
         cta: 'Download Here',
-        href: `${BASE}/anti-banking-starter-guide/`,
       },
       {
         title: 'The Playbook They Never Handed You',
         text: 'Most Christians plan for retirement. The wealthy plan for what comes after them.',
         cta: 'Download Here',
-        href: `${BASE}/kingdom-money/`,
       },
       {
         title: 'Unlearn The Financial Myths',
         text: 'The habits keeping you dependent, and how to break them.',
         cta: 'Download Here',
-        href: `${BASE}/money-secrets/`,
       },
       {
         title: 'How to Eliminate Debt and Build Wealth',
         text: "You don't have to wait until the debt is gone to start building wealth.",
         cta: 'Download Here',
-        href: `${BASE}/debt-free-plan/`,
       },
       {
         title: 'The Guide to Tax Free Retirement Income',
         text: "You've outgrown the 'Honda Civic' of financial tools.",
         cta: 'Download Here',
-        href: `${BASE}/iul-retirement/`,
       },
     ],
   },
@@ -64,13 +59,11 @@ const levels = [
         title: 'Design and Deploy',
         text: 'Step-by-step video training to build your financial infrastructure correctly.',
         cta: 'Watch Them Here',
-        href: `${BASE}/ibc-modules/`,
       },
       {
         title: 'Master the Mechanics',
         text: 'The exact structure behind a properly designed personal banking system.',
         cta: 'Download Here',
-        href: `${BASE}/self-banking-blueprint/`,
       },
     ],
   },
@@ -84,13 +77,11 @@ const levels = [
         title: 'How the Whole System Works',
         text: 'Multiply your assets using whole life as your financial infrastructure.',
         cta: 'Download Here',
-        href: `${BASE}/the-ultimate-asset-ebook/`,
       },
       {
         title: 'Why Most Family Wealth Disappears',
         text: "Fewer than 3% of failures trace back to bad documents. Here's the real reason.",
         cta: 'Download Here',
-        href: `${BASE}/generational-transfer/`,
       },
     ],
   },
@@ -145,7 +136,7 @@ export default async function StartYourJourneyPage() {
               {level.guides.map((guide) => (
                 <a
                   key={guide.title}
-                  href={guide.href}
+                  href={GUIDES_HREF}
                   className="group bg-white rounded-2xl p-7 min-h-56 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
                 >
                   <h3

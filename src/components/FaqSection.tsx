@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
 
-const BASE = 'https://www.insuranceandestates.com';
+// The team page is hosted here now, so the link is internal.
+const BASE = '';
 
 /* ============================================================================
    PASTE-VERBATIM TODO
