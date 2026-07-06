@@ -4,7 +4,8 @@ import PageShell from '../../components/PageShell';
 import CtaBand from '../../components/CtaBand';
 import EbookOfferCard from '../../components/EbookOfferCard';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
-import { getOfferForPost, getPost, getPublishedSlugs } from '../../lib/blog';
+import BlogPostCard from '../../components/BlogPostCard';
+import { getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
@@ -57,9 +58,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const [offer, wikiTerms] = await Promise.all([
+  const [offer, wikiTerms, relatedPosts] = await Promise.all([
     getOfferForPost(post.slug, post.category?.slug ?? null),
     getWikiTerms(),
+    getRelatedPosts(post.slug, post.category?.slug ?? null),
   ]);
   // First mention of each wiki term becomes a link to its /wiki/ page
   const bodyHtml = linkWikiTerms(post.bodyHtml, wikiTerms);
@@ -135,6 +137,33 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           )}
         </div>
       </section>
+
+      {/* Recommended reading: same category first, newest first */}
+      {relatedPosts.length > 0 && (
+        <section className="px-6 pb-24">
+          <div className="max-w-[88rem] mx-auto">
+            <div className="flex items-end justify-between gap-4 mb-8 flex-wrap">
+              <h2
+                className="text-[#0D1B3D] text-3xl md:text-4xl font-medium"
+                style={{ letterSpacing: '-0.03em' }}
+              >
+                {post.category ? `More on ${post.category.name}` : 'Keep reading'}
+              </h2>
+              <a
+                href={post.category ? `/blog/#${post.category.slug}` : '/blog/'}
+                className="text-[#0D1B3D]/50 hover:text-[#0D1B3D] text-sm font-medium transition-colors duration-200"
+              >
+                Browse all articles →
+              </a>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {relatedPosts.map((relatedPost) => (
+                <BlogPostCard key={relatedPost.slug} post={relatedPost} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <CtaBand
         title="Ready to see how this applies to your situation?"

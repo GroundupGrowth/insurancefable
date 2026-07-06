@@ -88,6 +88,22 @@ export async function getPost(slug: string): Promise<BlogPost | null> {
   };
 }
 
+/* Recommended articles under a post: newest from the same category, filled
+   up with newest overall when the category runs short (or the post has none). */
+export async function getRelatedPosts(
+  postSlug: string,
+  categorySlug: string | null,
+  limit = 3
+): Promise<BlogPostSummary[]> {
+  const posts = await getAllPosts();
+  const others = posts.filter((post) => post.slug !== postSlug);
+  const sameCategory = categorySlug
+    ? others.filter((post) => post.category?.slug === categorySlug)
+    : [];
+  const fill = others.filter((post) => !sameCategory.includes(post));
+  return [...sameCategory, ...fill].slice(0, limit);
+}
+
 /* The sidebar eBook offer for a post. Resolution: per-post tag override
    (site_post_tags) → else the post's category slug; then tag → eBook via
    site_offer_rules merged over offerRuleDefaults; then the eBook object from

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
+import BlogPostCard from '../../components/BlogPostCard';
 import { getAllPosts, type BlogPostSummary } from '../../lib/blog';
 
 export const revalidate = 300;
@@ -23,36 +23,6 @@ export const metadata: Metadata = {
     images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 };
-
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-
-function PostCard({ post }: { post: BlogPostSummary }) {
-  const date = post.modifiedAt ?? post.publishedAt;
-  return (
-    <a
-      href={`/${post.slug}/`}
-      className="group bg-white rounded-2xl p-7 border border-black/5 hover:border-black/15 transition-colors duration-200 flex flex-col"
-    >
-      <h3
-        className="text-[#0D1B3D] text-xl font-medium leading-snug mb-3"
-        style={{ letterSpacing: '-0.02em' }}
-      >
-        {post.title}
-      </h3>
-      {post.excerpt && (
-        <p className="text-[#0D1B3D]/60 text-sm leading-relaxed line-clamp-3">{post.excerpt}</p>
-      )}
-      <span className="mt-auto pt-5 flex items-center justify-between text-sm">
-        <span className="text-[#0D1B3D]/40">{date ? formatDate(date) : ''}</span>
-        <span className="inline-flex items-center gap-2 font-medium text-[#0D1B3D]/50 group-hover:text-[#0D1B3D] transition-colors duration-200">
-          Read
-          <ArrowRight className="w-4 h-4" />
-        </span>
-      </span>
-    </a>
-  );
-}
 
 export default async function BlogIndexPage() {
   const posts = await getAllPosts();
@@ -104,7 +74,7 @@ export default async function BlogIndexPage() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {section.posts.map((post) => (
-                  <PostCard key={post.slug} post={post} />
+                  <BlogPostCard key={post.slug} post={post} />
                 ))}
               </div>
             </div>
