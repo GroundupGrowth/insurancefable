@@ -1,10 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { BookOpen, Newspaper, Plus, Trash2 } from 'lucide-react';
+import { BookOpen, Newspaper, Plus, Trash2, UserPen } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { ebookDefaults } from '../../../data/ebooks';
 import { DEFAULT_OFFER_EBOOK, offerRuleDefaults } from '../../../data/offers';
+import { AUTHOR_META } from '../../../data/authors';
 import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths } from '../ui';
 
 /* Blog: the sidebar eBook offer system. Every article shows an eBook in its
@@ -25,6 +26,12 @@ interface PostTagOverride {
   tag: string;
 }
 
+interface PostAuthorOverride {
+  postSlug: string;
+  authorSlug: string;
+  reviewerSlug: string; // '' = no reviewer
+}
+
 interface EbookOption {
   slug: string;
   title: string;
@@ -34,6 +41,7 @@ export default function BlogAdminPage() {
   const supabase = useMemo(() => getSupabase(), []);
   const [rules, setRules] = useState<OfferRule[]>([]);
   const [overrides, setOverrides] = useState<PostTagOverride[]>([]);
+  const [authors, setAuthors] = useState<PostAuthorOverride[]>([]);
   const [ebooks, setEbooks] = useState<EbookOption[]>([]);
   const [postSlugs, setPostSlugs] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
@@ -41,12 +49,13 @@ export default function BlogAdminPage() {
 
   const load = useCallback(async () => {
     if (!supabase) return;
-    const [cats, posts, ruleRows, tagRows, ebookRows] = await Promise.all([
+    const [cats, posts, ruleRows, tagRows, ebookRows, authorRows] = await Promise.all([
       supabase.from('categories').select('name, slug').order('name'),
       supabase.from('posts').select('slug').eq('_status', 'published').order('slug'),
       supabase.from('site_offer_rules').select('tag, ebook_slug'),
       supabase.from('site_post_tags').select('post_slug, tag').order('post_slug'),
       supabase.from('site_ebooks').select('slug, title').order('sort'),
+      supabase.from('site_post_authors').select('post_slug, author_slug, reviewer_slug').order('post_slug'),
     ]);
     if (ruleRows.error) {
       setError(ruleRows.error.message);
@@ -84,6 +93,13 @@ export default function BlogAdminPage() {
     );
     setOverrides(
       tagRows.data?.map((row) => ({ postSlug: row.post_slug, tag: row.tag })) ?? []
+    );
+    setAuthors(
+      authorRows.data?.map((row) => ({
+        postSlug: row.post_slug,
+        authorSlug: row.author_slug ?? '',
+        reviewerSlug: row.reviewer_slug ?? '',
+      })) ?? []
     );
   }, [supabase]);
 
@@ -136,6 +152,25 @@ export default function BlogAdminPage() {
       );
       if (insertTags) throw new Error(insertTags.message);
     }
+
+    const validAuthors = authors.filter((row) => row.postSlug.trim() && row.authorSlug);
+    const { error: clearAuthors } = await supabase
+      .from('site_post_authors')
+      .delete()
+      .neq('post_slug', '');
+    if (clearAuthors) throw new Error(clearAuthors.message);
+    if (validAuthors.length > 0) {
+      const { error: insertAuthors } = await supabase.from('site_post_authors').insert(
+        validAuthors.map((row) => ({
+          post_slug: row.postSlug.trim(),
+          author_slug: row.authorSlug,
+          reviewer_slug: row.reviewerSlug || null,
+          updated_at: now,
+        }))
+      );
+      if (insertAuthors) throw new Error(insertAuthors.message);
+    }
+
     await revalidatePaths(['/[slug]']);
     await load();
   };
@@ -144,7 +179,7 @@ export default function BlogAdminPage() {
     <>
       <PageHeader
         title="Blog"
-        text="Every article shows an eBook offer in its sidebar. Posts are tagged with their category automatically — map each tag to an eBook here, or override the tag for individual posts."
+        text="Control each article's eBook offer (by tag) and its author byline. Both are detected automatically per post; override individual posts below."
         actions={<SaveButton onSave={save} />}
       />
 
@@ -291,6 +326,96 @@ export default function BlogAdminPage() {
                   type="button"
                   aria-label="Remove override"
                   onClick={() => setOverrides((current) => current.filter((_, i) => i !== index))}
+                  className="text-[#0D1B3D]/30 hover:text-red-600 transition-colors duration-150 justify-self-end"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-3">
+              <UserPen className="w-4 h-4 text-[#0D1B3D]/40" />
+              <h2 className="text-[#0D1B3D] text-lg font-medium">Per-post author &amp; reviewer</h2>
+            </div>
+            <button
+              type="button"
+              onClick={() =>
+                setAuthors((current) => [
+                  ...current,
+                  { postSlug: '', authorSlug: AUTHOR_META[0].slug, reviewerSlug: '' },
+                ])
+              }
+              className="inline-flex items-center gap-1.5 text-[#0D1B3D]/60 hover:text-[#0D1B3D] text-sm font-medium"
+            >
+              <Plus className="w-4 h-4" /> Set author
+            </button>
+          </div>
+          <p className="text-[#0D1B3D]/50 text-sm mb-5">
+            Each article&rsquo;s byline is detected from the advisor it links, defaulting to the
+            founder. Set a specific author and reviewer here to override — the byline links to their
+            profile page.
+          </p>
+          <div className="flex flex-col gap-3">
+            {authors.length === 0 && (
+              <p className="text-[#0D1B3D]/40 text-sm">
+                No overrides — authors are detected automatically from each post.
+              </p>
+            )}
+            {authors.map((row, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-1 md:grid-cols-[1fr_13rem_13rem_auto] gap-3 items-center border border-black/5 rounded-xl p-4"
+              >
+                <input
+                  className={`${inputClass} font-mono text-xs`}
+                  list="post-slugs"
+                  placeholder="post slug"
+                  value={row.postSlug}
+                  onChange={(e) => {
+                    const next = [...authors];
+                    next[index] = { ...next[index], postSlug: e.target.value };
+                    setAuthors(next);
+                  }}
+                />
+                <select
+                  className={inputClass}
+                  value={row.authorSlug}
+                  onChange={(e) => {
+                    const next = [...authors];
+                    next[index] = { ...next[index], authorSlug: e.target.value };
+                    setAuthors(next);
+                  }}
+                >
+                  {AUTHOR_META.map((author) => (
+                    <option key={author.slug} value={author.slug}>
+                      {author.shortName}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className={inputClass}
+                  value={row.reviewerSlug}
+                  onChange={(e) => {
+                    const next = [...authors];
+                    next[index] = { ...next[index], reviewerSlug: e.target.value };
+                    setAuthors(next);
+                  }}
+                >
+                  <option value="">No reviewer</option>
+                  {AUTHOR_META.map((author) => (
+                    <option key={author.slug} value={author.slug}>
+                      Reviewed by {author.shortName}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  aria-label="Remove author override"
+                  onClick={() => setAuthors((current) => current.filter((_, i) => i !== index))}
                   className="text-[#0D1B3D]/30 hover:text-red-600 transition-colors duration-150 justify-self-end"
                 >
                   <Trash2 className="w-4 h-4" />

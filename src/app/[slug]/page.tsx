@@ -5,7 +5,10 @@ import CtaBand from '../../components/CtaBand';
 import EbookOfferCard from '../../components/EbookOfferCard';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import BlogPostCard from '../../components/BlogPostCard';
+import AuthorByline from '../../components/AuthorByline';
+import AuthorBioCard from '../../components/AuthorBioCard';
 import { getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
+import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
@@ -58,10 +61,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const [offer, wikiTerms, relatedPosts] = await Promise.all([
+  const [offer, wikiTerms, relatedPosts, authorship] = await Promise.all([
     getOfferForPost(post.slug, post.category?.slug ?? null),
     getWikiTerms(),
     getRelatedPosts(post.slug, post.category?.slug ?? null),
+    getPostAuthorship(post.slug, post.bodyHtml),
   ]);
   // First mention of each wiki term becomes a link to its /wiki/ page
   const bodyHtml = linkWikiTerms(post.bodyHtml, wikiTerms);
@@ -75,11 +79,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     ...(post.modifiedAt ? { dateModified: post.modifiedAt } : {}),
     ...(post.category ? { articleSection: post.category.name } : {}),
     mainEntityOfPage: `${SITE_URL}/${post.slug}/`,
-    author: {
-      '@type': 'Organization',
-      name: 'Insurance & Estates',
-      url: `${SITE_URL}/`,
-    },
+    author: authorship.author
+      ? { '@type': 'Person', name: authorship.author.name, url: `${SITE_URL}${authorship.author.href}` }
+      : { '@type': 'Organization', name: 'Insurance & Estates', url: `${SITE_URL}/` },
+    ...(authorship.reviewer
+      ? {
+          editor: {
+            '@type': 'Person',
+            name: authorship.reviewer.name,
+            url: `${SITE_URL}${authorship.reviewer.href}`,
+          },
+        }
+      : {}),
     publisher: {
       '@type': 'Organization',
       name: 'Insurance & Estates',
@@ -108,13 +119,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           >
             {post.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#0D1B3D]/50">
-            {post.publishedAt && <span>Published {formatDate(post.publishedAt)}</span>}
-            {post.publishedAt && post.modifiedAt && <span aria-hidden="true">·</span>}
-            {post.modifiedAt && <span>Updated {formatDate(post.modifiedAt)}</span>}
-            <span aria-hidden="true">·</span>
-            <span>{post.readingMinutes} min read</span>
-          </div>
+          {authorship.author ? (
+            <AuthorByline
+              author={authorship.author}
+              reviewer={authorship.reviewer}
+              publishedAt={post.publishedAt}
+              modifiedAt={post.modifiedAt}
+              readingMinutes={post.readingMinutes}
+            />
+          ) : (
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#0D1B3D]/50">
+              {post.publishedAt && <span>Published {formatDate(post.publishedAt)}</span>}
+              {post.publishedAt && post.modifiedAt && <span aria-hidden="true">·</span>}
+              {post.modifiedAt && <span>Updated {formatDate(post.modifiedAt)}</span>}
+              <span aria-hidden="true">·</span>
+              <span>{post.readingMinutes} min read</span>
+            </div>
+          )}
           </div>
         </div>
       </section>
@@ -137,6 +158,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           )}
         </div>
       </section>
+
+      {/* Author bio + reviewer note (E-E-A-T) */}
+      {authorship.author && (
+        <AuthorBioCard author={authorship.author} reviewer={authorship.reviewer} />
+      )}
 
       {/* Recommended reading: same category first, newest first */}
       {relatedPosts.length > 0 && (

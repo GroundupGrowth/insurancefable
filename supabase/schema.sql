@@ -99,6 +99,16 @@ create table if not exists public.site_post_tags (
   updated_at timestamptz not null default now()
 );
 
+-- Per-post author + reviewer overrides (Blog section in /admin). No row →
+-- author is detected from the advisor links in the post body (src/lib/authors.ts)
+-- and the reviewer defaults to a principal.
+create table if not exists public.site_post_authors (
+  post_slug text primary key,  -- Payload posts.slug
+  author_slug text,            -- advisor slug, e.g. 'steve'
+  reviewer_slug text,          -- advisor slug, or null for "no reviewer"
+  updated_at timestamptz not null default now()
+);
+
 -- ---------------------------------------------------------------------------
 -- Wiki terms: plain-English definitions at /wiki/<slug>/ (Wiki section in
 -- /admin). Rows override src/data/wiki.ts defaults per field; new slugs
@@ -153,6 +163,13 @@ create policy "authenticated write" on public.site_ebooks
 
 alter table public.site_offer_rules enable row level security;
 alter table public.site_post_tags enable row level security;
+alter table public.site_post_authors enable row level security;
+
+drop policy if exists "public read" on public.site_post_authors;
+create policy "public read" on public.site_post_authors for select using (true);
+drop policy if exists "authenticated write" on public.site_post_authors;
+create policy "authenticated write" on public.site_post_authors
+  for all to authenticated using (true) with check (true);
 
 drop policy if exists "public read" on public.site_offer_rules;
 create policy "public read" on public.site_offer_rules for select using (true);
