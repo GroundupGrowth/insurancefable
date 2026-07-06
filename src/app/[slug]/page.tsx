@@ -7,6 +7,7 @@ import LeadMagnetSection from '../../components/LeadMagnetSection';
 import BlogPostCard from '../../components/BlogPostCard';
 import AuthorByline from '../../components/AuthorByline';
 import AuthorBioCard from '../../components/AuthorBioCard';
+import TrustDisclosure from '../../components/TrustDisclosure';
 import { getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
 import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
@@ -112,7 +113,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           className={`max-w-[54rem] ${offer ? 'lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_21rem] lg:gap-4' : ''} mx-auto`}
         >
           <div className="w-full max-w-[54rem] mx-auto flex flex-col items-start">
-          {post.category && <p className="text-[#0D1B3D]/60 text-sm mb-3">{post.category.name}</p>}
+          {post.category && (
+            <p className="text-[#0D1B3D]/60 text-sm mb-3">
+              Category:{' '}
+              <a
+                href={`/blog/#${post.category.slug}`}
+                className="text-[#0D1B3D] font-medium underline decoration-[#0D1B3D]/30 underline-offset-2 hover:decoration-[#0D1B3D] transition-colors duration-150"
+              >
+                {post.category.name}
+              </a>
+            </p>
+          )}
           <h1
             className="text-[#0D1B3D] text-4xl md:text-5xl font-medium leading-[1.08] mb-6"
             style={{ letterSpacing: '-0.04em' }}
@@ -122,7 +133,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {authorship.author ? (
             <AuthorByline
               author={authorship.author}
-              reviewer={authorship.reviewer}
               publishedAt={post.publishedAt}
               modifiedAt={post.modifiedAt}
               readingMinutes={post.readingMinutes}
@@ -136,6 +146,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <span>{post.readingMinutes} min read</span>
             </div>
           )}
+          <TrustDisclosure reviewer={authorship.reviewer} />
           </div>
         </div>
       </section>

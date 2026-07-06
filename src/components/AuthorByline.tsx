@@ -19,13 +19,11 @@ function initials(name: string): string {
 
 export default function AuthorByline({
   author,
-  reviewer,
   publishedAt,
   modifiedAt,
   readingMinutes,
 }: {
   author: Author;
-  reviewer?: Author | null;
   publishedAt: string | null;
   modifiedAt: string | null;
   readingMinutes: number;
@@ -67,20 +65,6 @@ export default function AuthorByline({
           )}
           <span aria-hidden="true">·</span>
           <span>{readingMinutes} min read</span>
-          {reviewer && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>
-                Reviewed by{' '}
-                <a
-                  href={reviewer.href}
-                  className="underline decoration-[#0D1B3D]/30 underline-offset-2 hover:decoration-[#0D1B3D] transition-colors duration-150"
-                >
-                  {reviewer.shortName}
-                </a>
-              </span>
-            </>
-          )}
         </p>
       </div>
     </div>
