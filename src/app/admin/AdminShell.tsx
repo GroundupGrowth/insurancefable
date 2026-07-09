@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 're
 import { usePathname } from 'next/navigation';
 import type { Session } from '@supabase/supabase-js';
 import {
+  BarChart3,
   BookOpen,
   Code2,
   ExternalLink,
@@ -27,6 +28,7 @@ const NAV = [
   { href: '/admin/books/', label: 'Books', icon: BookOpen },
   { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
   { href: '/admin/wiki/', label: 'Wiki', icon: Library },
+  { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },
   { href: '/admin/embeds/', label: 'Embeds', icon: Code2 },
 ];
 

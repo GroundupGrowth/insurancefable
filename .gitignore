@@ -13,3 +13,7 @@ next-env.d.ts
 .vercel
 clipboard-*.png
 .playwright-mcp/
+
+# Raw Google Ads CSV exports — parsed into src/data/googleAdsData.ts by
+# scripts/build-google-ads.mjs; the generated module is what ships.
+/Google Ads/
