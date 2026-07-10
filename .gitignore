@@ -21,3 +21,7 @@ clipboard-*.png
 # Raw CRM leads export — contains PII (names, emails, phones). NEVER commit.
 # Parsed into aggregates-only src/data/leadsData.ts by scripts/build-leads.mjs.
 /I&E Leads*.csv
+
+# Full WordPress export of the live site (23 MB, includes unpublished drafts).
+# Source material for content sync — never ship it in the repo.
+*.WordPress.*.xml
