@@ -17,3 +17,7 @@ clipboard-*.png
 # Raw Google Ads CSV exports — parsed into src/data/googleAdsData.ts by
 # scripts/build-google-ads.mjs; the generated module is what ships.
 /Google Ads/
+
+# Raw CRM leads export — contains PII (names, emails, phones). NEVER commit.
+# Parsed into aggregates-only src/data/leadsData.ts by scripts/build-leads.mjs.
+/I&E Leads*.csv
