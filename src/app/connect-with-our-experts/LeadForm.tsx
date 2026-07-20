@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
 import EmbedSlot from '../../components/EmbedSlot';
 
@@ -11,22 +10,21 @@ const callPoints = [
   'No pitch, no pressure — just answers',
 ];
 
-/* Discovery-call request form. Stub for now: the live page captures the same
-   fields (name / email / phone + disclaimer consent) — wire the submit to the
-   CRM / scheduling backend when it exists. */
+/* Discovery-call booking. The default is the SAME live LeadConnector (GHL)
+   calendar the WordPress site uses — captured in
+   extraction/parsed/connect-with-our-experts.json — so bookings land in the
+   real CRM out of the box.
+
+   This deliberately replaced an earlier local form stub whose submit handler
+   only console.logged and then showed a "we'll reach out" message: it looked
+   functional but silently dropped every lead. Do not reintroduce a fake-submit
+   form here. If a different embed is wanted, paste it at /admin under
+   `form:connect-with-our-experts` and it overrides the calendar below. */
+
+const LIVE_BOOKING_CALENDAR =
+  'https://api.leadconnectorhq.com/widget/booking/twTnQVNTJJKOdulIBYDc';
+
 export default function LeadForm() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [agreed, setAgreed] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ name, email, phone, agreed });
-    setSubmitted(true);
-  };
-
   return (
     <section id="book-a-call" className="px-6 pb-24">
       <div className="max-w-[88rem] mx-auto">
@@ -58,72 +56,17 @@ export default function LeadForm() {
             </div>
 
             <div className="flex flex-col justify-center">
-              {/* Replaced by the GHL form embed once it's saved under form:connect-with-our-experts at /admin */}
+              {/* An embed saved at /admin under this slot overrides the live
+                  calendar; otherwise the live calendar renders. */}
               <EmbedSlot slotKey="form:connect-with-our-experts" className="bg-white rounded-2xl p-2">
-              {submitted ? (
-                <p className="text-white text-2xl font-medium leading-relaxed">
-                  Got it — one of our Pro Client Guides will reach out to schedule your
-                  call.
-                </p>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Name*"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+                <div className="bg-white rounded-2xl overflow-hidden">
+                  <iframe
+                    src={LIVE_BOOKING_CALENDAR}
+                    title="Book your discovery call"
+                    scrolling="no"
+                    className="block w-full min-h-[700px] border-0"
                   />
-                  <input
-                    type="email"
-                    required
-                    placeholder="Email*"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
-                  />
-                  <input
-                    type="tel"
-                    required
-                    placeholder="Phone*"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
-                  />
-                  <label className="flex items-start gap-3 text-xs text-white/50 leading-relaxed cursor-pointer">
-                    <input
-                      type="checkbox"
-                      required
-                      checked={agreed}
-                      onChange={(e) => setAgreed(e.target.checked)}
-                      className="mt-0.5 shrink-0"
-                    />
-                    <span>
-                      By pressing Submit you agree to Insurance &amp; Estates&rsquo;{' '}
-                      <a href="/privacytou/" className="underline hover:text-white/70">
-                        privacy policy and terms
-                      </a>
-                      . InsuranceandEstates may contact you at the number you entered
-                      using our automatic dialing system to market our life insurance
-                      products. Alternatively, call{' '}
-                      <a
-                        href="tel:1-877-787-7558"
-                        className="underline hover:text-white/70"
-                      >
-                        877-787-7558
-                      </a>
-                      . I read the disclaimer above.
-                    </span>
-                  </label>
-                  <button
-                    type="submit"
-                    className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
-                  >
-                    Book My Call
-                  </button>
-                </form>
-              )}
+                </div>
               </EmbedSlot>
             </div>
           </div>
