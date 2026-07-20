@@ -41,7 +41,8 @@ export type BioRun = string | { text: string; href?: string; bold?: boolean };
 export type BioBlock =
   | { t: 'h'; text: string; big?: boolean }
   | { t: 'p'; runs: BioRun[] }
-  | { t: 'ul'; items: BioRun[][] };
+  | { t: 'ul'; items: BioRun[][] }
+  | { t: 'img'; src: string; alt: string; width: number; height: number };
 
 export interface Testimonial {
   quote: string;
@@ -163,6 +164,18 @@ function BioBody({ profile }: { profile: AdvisorProfile }) {
             <p key={i} className="mt-6 mb-3 first:mt-0">
               <strong className="text-[#262626]">{block.text}</strong>
             </p>
+          );
+        }
+        if (block.t === 'img') {
+          return (
+            <img
+              key={i}
+              src={block.src}
+              alt={block.alt}
+              width={block.width}
+              height={block.height}
+              className="my-4 h-auto max-w-full"
+            />
           );
         }
         if (block.t === 'ul') {

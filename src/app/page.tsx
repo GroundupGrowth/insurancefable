@@ -89,7 +89,6 @@ const services: { title: string; tagline: string; text: string; href: string; im
     tagline: 'Whole Life Insurance & Infinite Banking',
     text: 'We specialize in High Cash Value Whole Life and Indexed Universal Life designed for one purpose: to be your Private Banking System. But we go beyond traditional Infinite Banking. Our proprietary Volume-Based Banking methodology repositions you on the winning side of the monetary system — not just recapturing interest from banks, but accessing and deploying capital the way institutions do. Through attorney-vetted policy designs that minimize death benefit costs and maximize early liquidity, you stop being extracted from and start operating like the bank itself.',
     href: '/life-insurance/',
-    // NOTE: 9495.webp is not present under public/wp-content/uploads (reported)
     img: '/wp-content/uploads/9495.webp',
     alt: '9495',
     imgFirst: false,
@@ -108,8 +107,7 @@ const services: { title: string; tagline: string; text: string; href: string; im
     tagline: 'Annuities',
     text: 'Our annuity strategies create a guaranteed income stream you cannot outlive — removing the fear of running out of money so the rest of your assets can keep growing. When integrated properly with your life insurance, they become a powerful tool for tax-efficient wealth transfer and lasting legacy creation.',
     href: '/annuities/',
-    // live is annuities.webp; only the 600x500 crop is localized
-    img: '/wp-content/uploads/annuities-600x500.webp',
+    img: '/wp-content/uploads/annuities.webp',
     alt: 'Annuities',
     imgFirst: false,
   },

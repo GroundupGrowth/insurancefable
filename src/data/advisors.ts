@@ -147,8 +147,13 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
           { text: 'AEP® Certification *.', bold: true },
         ],
       },
-      /* MISSING ASSET: the live Accredited Estate Planner badge
-         (wp-content/uploads/image-10.webp) is not in the localized image set. */
+      {
+        t: 'img',
+        src: '/wp-content/uploads/image-10.webp',
+        alt: 'AEP',
+        width: 388,
+        height: 200,
+      },
       {
         t: 'p',
         runs: [
