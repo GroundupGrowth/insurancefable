@@ -25,9 +25,7 @@ function ArrowRightLong({ className }: { className?: string }) {
   );
 }
 
-/* .life-blocks product icon cards, verbatim from the parsed JSON.
-   NOTE: whole_life.webp is not present locally (missing from the localized
-   uploads) — the live path is still referenced. */
+/* .life-blocks product icon cards, verbatim from the parsed JSON. */
 const productBlocks = [
   { href: '/whole-life-introduction/', img: '/wp-content/uploads/whole_life.webp', alt: 'Whole Life.webp', label: 'Whole Life', w: 130, h: 125 },
   { href: '/infinite-banking-strategy/', img: '/wp-content/uploads/infinite_banking.webp', alt: 'Infinite Banking.webp', label: 'Infinite Banking', w: 123, h: 125 },
