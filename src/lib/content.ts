@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { pageDefaults, type PageDefaults } from '../data/pageContent';
 import { advisorDefaults } from '../data/advisors';
-import { ebookDefaults, type Ebook } from '../data/ebooks';
+import { ebookCover, ebookDefaults, type Ebook } from '../data/ebooks';
 import type { AdvisorProfile } from '../app/proclientguide/ProfileLayout';
 
 /* Server-side content layer. The code ships with default copy (src/data/*);
@@ -92,6 +92,13 @@ export async function getEbooks(): Promise<Ebook[]> {
       text: row.text ?? undefined,
       href: row.href ?? '#request-a-guide',
       sort: row.sort ?? 0,
+      /* Covers are code-owned: site_ebooks has no image column, so a catalog
+         edited in /admin would otherwise render with no cover art. Re-attach
+         by slug. A book added in the admin that has no default simply has no
+         cover — the cards degrade gracefully. If covers ever need to be
+         editable in the admin, that is when site_ebooks needs an `image`
+         (jsonb) column; run that migration manually first. */
+      image: ebookCover(row.slug),
     }));
   } catch {
     return ebookDefaults;

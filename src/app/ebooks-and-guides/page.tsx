@@ -37,7 +37,7 @@ export default async function EbooksAndGuidesPage() {
           >
             Featured eBooks
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {featuredBooks.map((book) => (
               <EbookCard
                 key={book.slug}
@@ -45,12 +45,13 @@ export default async function EbooksAndGuidesPage() {
                 eyebrow={book.eyebrow}
                 title={book.title}
                 text={book.text}
+                image={book.image}
                 fallbackHref={book.href}
                 ctaLabel="Get the Book"
               />
             ))}
 
-            <div className="bg-[#0D1B3D] rounded-2xl p-7 min-h-64 flex flex-col">
+            <div className="bg-[#0D1B3D] rounded-2xl p-7 min-h-64 flex flex-col justify-center items-start">
               <p className="text-white/50 text-sm mb-2">Not sure where to start?</p>
               <h3
                 className="text-white text-2xl md:text-3xl font-medium mb-4"
@@ -64,7 +65,7 @@ export default async function EbooksAndGuidesPage() {
               </p>
               <a
                 href="/start-your-journey/"
-                className="mt-auto self-start inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200"
+                className="mt-8 inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200"
               >
                 Start Your Journey
                 <ArrowRight className="w-4 h-4" />
@@ -82,7 +83,7 @@ export default async function EbooksAndGuidesPage() {
           >
             Free eBooks
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {freeEbooks.map((book) => (
               <EbookCard
                 key={book.slug}
@@ -90,6 +91,7 @@ export default async function EbooksAndGuidesPage() {
                 eyebrow={book.eyebrow}
                 title={book.title}
                 text={book.text}
+                image={book.image}
                 fallbackHref={book.href}
                 ctaLabel="Request This eBook"
               />
@@ -106,7 +108,7 @@ export default async function EbooksAndGuidesPage() {
           >
             Free Guides
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {freeGuides.map((guide) => (
               <EbookCard
                 key={guide.slug}
@@ -114,6 +116,7 @@ export default async function EbooksAndGuidesPage() {
                 eyebrow={guide.eyebrow}
                 title={guide.title}
                 text={guide.text}
+                image={guide.image}
                 fallbackHref={guide.href}
                 ctaLabel="Request This Guide"
               />

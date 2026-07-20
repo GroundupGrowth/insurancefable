@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import JourneyLadder, { type JourneyLevel } from '../../components/JourneyLadder';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -12,10 +12,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(content);
 }
 
-// Guide downloads route to the on-site catalog until per-guide opt-ins are wired up.
+// Live gives each card its own funnel page (/anti-banking-starter-guide/,
+// /money-secrets/, /ibc-modules/, /the-ultimate-asset-ebook/, /generational-transfer/,
+// /debt-free-plan/, /iul-retirement/, /kingdom-money/, /self-banking-blueprint/).
+// None of those routes exist here yet — see docs/migration/phase-2-backlog.md — so
+// every card routes to the on-site catalog rather than a 404.
 const GUIDES_HREF = '/ebooks-and-guides/';
 
-const levels = [
+const UPLOADS = '/wp-content/uploads';
+
+const levels: JourneyLevel[] = [
   {
     step: '01',
     title: 'Beginner Guides',
@@ -26,26 +32,41 @@ const levels = [
         title: 'New to IBC? Start Here',
         text: "Stop financing your bank's empire and start building your own.",
         cta: 'Download Here',
+        image: `${UPLOADS}/Anti-Banking-Starter-Guide.webp`,
+        alt: 'Anti Banking Starter Guide',
+        href: GUIDES_HREF,
       },
       {
         title: 'The Playbook They Never Handed You',
         text: 'Most Christians plan for retirement. The wealthy plan for what comes after them.',
         cta: 'Download Here',
+        image: `${UPLOADS}/Kingdom-Money-1.webp`,
+        alt: 'Kingdom Money',
+        href: GUIDES_HREF,
       },
       {
         title: 'Unlearn The Financial Myths',
         text: 'The habits keeping you dependent, and how to break them.',
         cta: 'Download Here',
+        image: `${UPLOADS}/Money-Secrets-of-the-Wealthy.webp`,
+        alt: 'Money Secrets of the Wealthy',
+        href: GUIDES_HREF,
       },
       {
         title: 'How to Eliminate Debt and Build Wealth',
-        text: "You don't have to wait until the debt is gone to start building wealth.",
+        text: "You don't have to wait until the debt is gone to start Building Wealth",
         cta: 'Download Here',
+        image: `${UPLOADS}/Component-17.webp`,
+        alt: 'Wealth Plan',
+        href: GUIDES_HREF,
       },
       {
         title: 'The Guide to Tax Free Retirement Income',
-        text: "You've outgrown the 'Honda Civic' of financial tools.",
+        text: 'You’ve outgrown the “Honda Civic” of financial tools.',
         cta: 'Download Here',
+        image: `${UPLOADS}/Component-10.webp`,
+        alt: 'IUL Retirement',
+        href: GUIDES_HREF,
       },
     ],
   },
@@ -58,12 +79,18 @@ const levels = [
       {
         title: 'Design and Deploy',
         text: 'Step-by-step video training to build your financial infrastructure correctly.',
-        cta: 'Watch Them Here',
+        cta: 'Watch them here',
+        image: `${UPLOADS}/10-Modules-on-Infinite-Banking-.webp`,
+        alt: '10 Modules on Infinite Banking',
+        href: GUIDES_HREF,
       },
       {
         title: 'Master the Mechanics',
         text: 'The exact structure behind a properly designed personal banking system.',
         cta: 'Download Here',
+        image: `${UPLOADS}/The-Self-Banking-Blueprint.webp`,
+        alt: 'The Self Banking Blueprint',
+        href: GUIDES_HREF,
       },
     ],
   },
@@ -77,11 +104,17 @@ const levels = [
         title: 'How the Whole System Works',
         text: 'Multiply your assets using whole life as your financial infrastructure.',
         cta: 'Download Here',
+        image: `${UPLOADS}/The-Ultimate-Asset-2.webp`,
+        alt: 'The Ultimate Asset',
+        href: GUIDES_HREF,
       },
       {
         title: 'Why Most Family Wealth Disappears',
         text: "Fewer than 3% of failures trace back to bad documents. Here's the real reason.",
         cta: 'Download Here',
+        image: `${UPLOADS}/The-Generational-Transfer.webp`,
+        alt: 'The Generational Transfer',
+        href: GUIDES_HREF,
       },
     ],
   },
@@ -116,46 +149,7 @@ export default async function StartYourJourneyPage() {
         </div>
       </section>
 
-      {levels.map((level) => (
-        <section key={level.step} className="px-6 pb-24">
-          <div className="max-w-[88rem] mx-auto">
-            <div className="max-w-2xl mb-10">
-              <p className="text-[#0D1B3D]/50 text-sm mb-2">{level.step}</p>
-              <h2
-                className="text-[#0D1B3D] text-4xl md:text-5xl font-medium leading-[1.05] mb-5"
-                style={{ letterSpacing: '-0.04em' }}
-              >
-                {level.title}
-              </h2>
-              <p className="text-[#0D1B3D]/60 text-base md:text-lg leading-relaxed">
-                {level.intro}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {level.guides.map((guide) => (
-                <a
-                  key={guide.title}
-                  href={GUIDES_HREF}
-                  className="group bg-white rounded-2xl p-7 min-h-56 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
-                >
-                  <h3
-                    className="text-[#0D1B3D] text-xl md:text-2xl font-medium mb-3"
-                    style={{ letterSpacing: '-0.02em' }}
-                  >
-                    {guide.title}
-                  </h3>
-                  <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{guide.text}</p>
-                  <span className="mt-auto pt-6 self-start inline-flex items-center gap-2 bg-[#F5F5F5] text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full group-hover:bg-[#0D1B3D] group-hover:text-white transition-colors duration-200">
-                    {guide.cta}
-                    <ArrowRight className="w-4 h-4" />
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-      ))}
+      <JourneyLadder levels={levels} />
 
       <LeadMagnetSection />
     </PageShell>

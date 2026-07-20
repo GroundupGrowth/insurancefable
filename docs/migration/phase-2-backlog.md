@@ -66,15 +66,26 @@ Net-new or redesigned; each is currently built and live on the preview and **sta
 ## Phase 2 — live pages we link to but have NOT built (these 404 today)
 
 The 1:1 clone keeps live's internal hrefs verbatim, so these paths are linked
-from cloned pages but have no route in this repo. All four return 200 on live.
+from cloned pages but have no route in this repo. They all return 200 on live.
 They must be built (or the links repointed) before cutover.
+
+Rows marked *repointed* are not 404s today — the link exists on live but our page
+sends the reader to `/ebooks-and-guides/` instead. They still need building (or a
+permanent decision to keep the redirect) before cutover.
 
 | Path | Linked from | Live |
 |---|---|---|
-| `/kingdom-money/` | `/infinite-banking-strategy/` (book cover + CTA) | 200 |
-| `/self-banking-blueprint/` | `/infinite-banking-strategy/` (book cover + "Get the Blueprint") | 200 |
+| `/kingdom-money/` | `/infinite-banking-strategy/` (book cover + CTA); `/start-your-journey/` on live — *repointed* | 200 |
+| `/self-banking-blueprint/` | `/infinite-banking-strategy/` (book cover + "Get the Blueprint"); `/start-your-journey/` on live — *repointed* | 200 |
 | `/agent-partners/` | Footer "Join The Team" | 200 |
 | `/trust-workshop/` | (per BUILD-CONVENTIONS) | 200 |
+| `/anti-banking-starter-guide/` | `/start-your-journey/` on live ("New to IBC? Start Here") — *repointed* | 200 |
+| `/money-secrets/` | `/start-your-journey/` on live ("Unlearn The Financial Myths") — *repointed* | 200 |
+| `/ibc-modules/` | `/start-your-journey/` on live ("Design and Deploy", video training) — *repointed* | 200 |
+| `/the-ultimate-asset-ebook/` | `/start-your-journey/` on live ("How the Whole System Works") — *repointed* | 200 |
+| `/generational-transfer/` | `/start-your-journey/` on live ("Why Most Family Wealth Disappears") — *repointed* | 200 |
+| `/debt-free-plan/` | `/start-your-journey/` on live ("How to Eliminate Debt and Build Wealth") — *repointed* | 200 |
+| `/iul-retirement/` | `/start-your-journey/` on live ("The Guide to Tax Free Retirement Income") — *repointed* | 200 |
 
 Note: `/self-banking-blueprint/` is our substitute target for live's
 "Get the Blueprint →", which on live is a Popup Maker trigger (`popmake-8461`)

@@ -40,6 +40,14 @@ export default function LeadMagnetSection() {
               >
                 The Generational Transfer
               </h2>
+              {/* Cover art, localized from live. Kept in sync with the
+                  `generational-transfer` entry in src/data/ebooks.ts. */}
+              <img
+                src="/wp-content/uploads/generational-transfer-cover-146x200.webp"
+                alt="The Generational Transfer book cover"
+                loading="lazy"
+                className="w-36 h-auto rounded-sm shadow-[0_12px_32px_rgba(0,0,0,0.45)] mb-8"
+              />
               <p className="text-white/70 leading-relaxed mb-8">
                 70% of wealthy families lose everything by the second generation. Fewer
                 than 3% of those failures are caused by bad documents. This book is the

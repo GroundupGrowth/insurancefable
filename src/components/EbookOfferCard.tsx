@@ -33,9 +33,20 @@ export default function EbookOfferCard({ ebook }: { ebook: Ebook }) {
   return (
     <>
       <div className="bg-[#0D1B3D] rounded-2xl p-7 flex flex-col">
-        <span className="inline-flex w-11 h-11 rounded-xl bg-white/10 items-center justify-center mb-5">
-          <BookOpen className="w-5 h-5 text-white" />
-        </span>
+        {ebook.image ? (
+          <div className="mb-6 flex justify-center">
+            <img
+              src={ebook.image.src}
+              alt={ebook.image.alt}
+              loading="lazy"
+              className="max-h-56 w-auto object-contain rounded-sm shadow-[0_12px_32px_rgba(0,0,0,0.45)]"
+            />
+          </div>
+        ) : (
+          <span className="inline-flex w-11 h-11 rounded-xl bg-white/10 items-center justify-center mb-5">
+            <BookOpen className="w-5 h-5 text-white" />
+          </span>
+        )}
         <p className="text-white/50 text-sm mb-2">{ebook.eyebrow}</p>
         <h2
           className="text-white text-2xl font-medium leading-snug mb-3"
@@ -77,6 +88,13 @@ export default function EbookOfferCard({ ebook }: { ebook: Ebook }) {
             >
               <X className="w-6 h-6" />
             </button>
+            {ebook.image && (
+              <img
+                src={ebook.image.src}
+                alt={ebook.image.alt}
+                className="max-h-40 w-auto object-contain rounded-sm shadow-[0_10px_28px_rgba(13,27,61,0.22)] mb-6"
+              />
+            )}
             <p className="text-[#0D1B3D]/60 text-sm mb-2">{ebook.eyebrow}</p>
             <h2
               className="text-[#0D1B3D] text-2xl md:text-3xl font-medium leading-tight mb-6 pr-8"
