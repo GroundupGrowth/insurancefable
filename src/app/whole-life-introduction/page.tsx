@@ -4,6 +4,7 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -17,18 +18,24 @@ export async function generateMetadata(): Promise<Metadata> {
 // Linked articles are now hosted here at the root, so links are internal.
 const BASE = '';
 
-const articles = [
+const articles: ArticleThumb[] = [
   {
     title: 'Whole Life Insurance vs Roth IRA: Which Builds More Tax-Free Wealth?',
     href: `${BASE}/whole-life-vs-roth-ira/`,
+    image: 'WL-vs-Roth-IRA-300x225.jpg',
+    alt: 'Roth IRA compared with whole life insurance',
   },
   {
     title: 'Whole Life Insurance Rates by Age: A 2026 Cost Guide',
     href: `${BASE}/whole-life-insurance-rates-age-chart/`,
+    image: 'Whole-Life-Insurance-Rates-By-Age-300x300.webp',
+    alt: 'Whole life insurance rates by age shown as a chart',
   },
   {
     title: 'Top 10 Best Dividend Paying Whole Life Insurance Companies',
     href: `${BASE}/top-10-best-dividend-paying-whole-life-insurance-companies/`,
+    image: 'dividend-paying-whole-life-insurance-2-300x300.webp',
+    alt: 'Comparison of the top 10 best dividend paying whole life insurance companies for 2026',
   },
 ];
 
@@ -101,19 +108,7 @@ export default async function WholeLifeIntroductionPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {articles.map((article) => (
-              <a
-                key={article.title}
-                href={article.href}
-                className="group bg-white rounded-2xl p-7 flex flex-col min-h-48 border border-black/5 hover:border-black/10 transition-colors duration-200"
-              >
-                <h3 className="text-[#0D1B3D] text-lg font-medium leading-snug">
-                  {article.title}
-                </h3>
-                <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
-                  Read Article
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </a>
+              <ArticleThumbCard key={article.title} article={article} />
             ))}
           </div>
         </div>

@@ -127,6 +127,16 @@ export default async function TestimonialsPage() {
 
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
+          {/* Live's section heading. The "Cusotmers" misspelling is on the live
+              site and is reproduced verbatim per BUILD-CONVENTIONS.md — do not
+              "fix" it. */}
+          <h2
+            className="text-[#0D1B3D] text-3xl md:text-4xl font-medium mb-8"
+            style={{ letterSpacing: '-0.03em' }}
+          >
+            Real Cusotmers Real Reviews
+          </h2>
+
           <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
             {reviews.map((review, i) => (
               <div

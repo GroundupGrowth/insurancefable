@@ -3,6 +3,7 @@ import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -12,36 +13,48 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(content);
 }
 
+/* Icons are the same product icons the live /life-insurance/ page pairs with
+   each policy type, localized under /wp-content/uploads/. */
 const products = [
   {
     eyebrow: 'The foundation',
     title: 'Whole Life',
     text: 'Guaranteed growth, guaranteed premiums, and cash value you control. The chassis of a Private Banking System.',
     href: '/whole-life-introduction/',
+    icon: 'whole_life.webp',
+    iconAlt: 'Whole life insurance icon — an open umbrella',
   },
   {
     eyebrow: 'The strategy',
     title: 'Infinite Banking',
     text: 'Use a high cash value policy to become your own source of financing — and recapture the interest you pay others.',
     href: '/infinite-banking-strategy/',
+    icon: 'infinite_banking.webp',
+    iconAlt: 'Infinite banking icon',
   },
   {
     eyebrow: 'Market-linked growth',
     title: 'IUL Insurance',
     text: 'Indexed Universal Life captures a share of market upside with a floor against losses. Powerful — when designed honestly.',
     href: '/iul-introduction/',
+    icon: 'indexed_universal.webp',
+    iconAlt: 'Indexed universal life insurance icon',
   },
   {
     eyebrow: 'Pure protection',
     title: 'Term Life',
     text: 'The most coverage for the fewest dollars. We structure convertible term so the door to permanent coverage stays open.',
     href: '/term-life-introduction/',
+    icon: 'term_life.webp',
+    iconAlt: 'Term life insurance icon',
   },
   {
     eyebrow: 'Investment-driven',
     title: 'VUL Insurance',
     text: 'Variable Universal Life puts your cash value in the market — full upside, full risk. Know exactly what you own.',
     href: '/variable-life-introduction/',
+    icon: 'variable_universal.webp',
+    iconAlt: 'Variable universal life insurance icon',
   },
 ];
 
@@ -64,22 +77,30 @@ const livingAssetBlocks = [
 // Linked articles are now hosted here at the root, so links are internal.
 const BASE = '';
 
-const relatedArticles = [
+const relatedArticles: ArticleThumb[] = [
   {
     title: 'Top 25 Highest Rated Life Insurance Companies (2026 Comdex Rankings)',
     href: `${BASE}/top-25-highest-rated-insurance-companies/`,
+    image: 'life-insurance-company-ratings-1-300x200.jpg',
+    alt: "Comparison table showing the top 25 highest rated life insurance companies in 2026 ranked by A.M. Best, S&P, Moody's, Fitch ratings and COMDEX scores",
   },
   {
     title: 'Types of Life Insurance: A Practical Guide to Choosing the Right Policy',
     href: `${BASE}/different-types-of-life-insurance-policies/`,
+    image: 'Different-Types-of-Life-Insurance-Policies-150x113.jpg',
+    alt: 'The different types of life insurance policies compared',
   },
   {
     title: 'Top 10 Best Life Insurance Companies (2026 Independent Rankings)',
     href: `${BASE}/top-10-best-life-insurance-companies/`,
+    image: 'best-life-insurance-companies-1-150x100.jpg',
+    alt: 'Comparison table ranking the top 10 best life insurance companies for 2026 by A.M. Best rating, Comdex score, and distribution model',
   },
   {
     title: 'Life Insurance Underwriting Standards: The Data Behind Best Rates',
     href: `${BASE}/life-insurance-underwriting/`,
+    image: 'life-insurance-underwriting-1-150x100.jpg',
+    alt: 'Life insurance underwriting tips',
   },
 ];
 
@@ -93,6 +114,18 @@ export default async function LifeInsurancePage() {
         intro={content.heroIntro}
       />
 
+      <section className="px-6 pb-16">
+        <div className="max-w-[88rem] mx-auto flex justify-center">
+          <img
+            src="/wp-content/uploads/life-insurance1.webp"
+            alt="A young family sitting together in a field of wildflowers"
+            width={494}
+            height={494}
+            className="w-56 h-56 md:w-64 md:h-64 rounded-full object-cover"
+          />
+        </div>
+      </section>
+
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -102,6 +135,15 @@ export default async function LifeInsurancePage() {
                 href={product.href}
                 className="group bg-white rounded-2xl p-7 min-h-64 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
               >
+                <img
+                  src={`/wp-content/uploads/${product.icon}`}
+                  alt={product.iconAlt}
+                  width={64}
+                  height={64}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-16 h-16 object-contain mb-5"
+                />
                 <p className="text-sm text-[#0D1B3D]/60 mb-2">{product.eyebrow}</p>
                 <h3
                   className="text-[#0D1B3D] text-2xl md:text-3xl font-medium mb-4"
@@ -197,19 +239,7 @@ export default async function LifeInsurancePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {relatedArticles.map((article) => (
-              <a
-                key={article.title}
-                href={article.href}
-                className="group bg-white rounded-2xl p-7 flex flex-col min-h-48 border border-black/5 hover:border-black/10 transition-colors duration-200"
-              >
-                <h3 className="text-[#0D1B3D] text-lg font-medium leading-snug">
-                  {article.title}
-                </h3>
-                <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
-                  Read Article
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </a>
+              <ArticleThumbCard key={article.title} article={article} />
             ))}
           </div>
         </div>

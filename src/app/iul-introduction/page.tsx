@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -36,18 +36,24 @@ const intro = [
   },
 ];
 
-const articles = [
+const articles: ArticleThumb[] = [
   {
     title: 'Top 25 Highest Rated Life Insurance Companies (2026 Comdex Rankings)',
     href: `${BASE}/top-25-highest-rated-insurance-companies/`,
+    image: 'life-insurance-company-ratings-1-300x200.jpg',
+    alt: "Comparison table showing the top 25 highest rated life insurance companies in 2026 ranked by A.M. Best, S&P, Moody's, Fitch ratings and COMDEX scores",
   },
   {
     title: 'What Is a LIRP? Life Insurance Retirement Plans Explained (2026 Guide)',
     href: `${BASE}/lirp/`,
+    image: 'LIRP-Life-Insurance-Retirement-Plan-300x300.webp',
+    alt: 'Life insurance retirement plan explained',
   },
   {
     title: 'Best IUL Companies 2026: Complete Rankings & Benefits Guide',
     href: `${BASE}/indexed-universal-life-iul-insurance/`,
+    image: 'best-indexed-universal-life-insurance-300x300.webp',
+    alt: 'Comparison of the best indexed universal life insurance companies for 2026 including cap rates and fee structures',
   },
 ];
 
@@ -92,19 +98,7 @@ export default async function IulIntroductionPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {articles.map((article) => (
-              <a
-                key={article.title}
-                href={article.href}
-                className="group bg-white rounded-2xl p-7 flex flex-col min-h-48 border border-black/5 hover:border-black/10 transition-colors duration-200"
-              >
-                <h3 className="text-[#0D1B3D] text-lg font-medium leading-snug">
-                  {article.title}
-                </h3>
-                <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
-                  Read Article
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </a>
+              <ArticleThumbCard key={article.title} article={article} />
             ))}
           </div>
         </div>

@@ -53,11 +53,17 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-4">
       <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-black/5 px-5 py-3">
         <div className="flex items-center justify-between gap-6">
-          <a
-            href="/"
-            className="text-xl font-medium tracking-tight text-[#0D1B3D]"
-          >
-            I&amp;E
+          {/* Real I&E wordmark, localized from the live site. This was a plain
+              "I&E" text placeholder — the actual logo was sitting unused in
+              public/wp-content/uploads/. */}
+          <a href="/" className="shrink-0" aria-label="Insurance &amp; Estates — home">
+            <img
+              src="/wp-content/uploads/ie_logo_web.webp"
+              alt="Insurance &amp; Estates"
+              width={255}
+              height={29}
+              className="h-7 w-auto"
+            />
           </a>
 
           <nav className="hidden md:flex items-center gap-7">

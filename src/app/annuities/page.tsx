@@ -7,6 +7,9 @@ import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
+// Linked articles are hosted here at the root, so links are internal.
+const BASE = '';
+
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent('annuities');
   return pageMetadata(content);
@@ -53,6 +56,42 @@ export default async function AnnuitiesPage() {
           877-787-7558
         </a>
       </PageHero>
+
+      <section className="px-6 pb-16">
+        <div className="max-w-[88rem] mx-auto flex flex-col items-center gap-10">
+          <img
+            src="/wp-content/uploads/annuities-600x500.webp"
+            alt="An older man and a younger woman sitting arm in arm, smiling"
+            width={600}
+            height={500}
+            className="w-full max-w-md h-auto"
+          />
+          <a
+            href={`${BASE}/best-annuity-companies/`}
+            className="group bg-white rounded-2xl border border-black/5 hover:border-black/10 transition-colors duration-200 px-7 py-6 flex items-center gap-5 w-full max-w-md"
+          >
+            <img
+              src="/wp-content/uploads/time-is-money-270x200.webp"
+              alt="Illustration of money bags either side of a clock, one sprouting a plant"
+              width={270}
+              height={200}
+              loading="lazy"
+              decoding="async"
+              className="w-20 h-16 object-contain shrink-0"
+            />
+            <span className="flex flex-col">
+              <span className="text-sm text-[#0D1B3D]/60">Annuities</span>
+              <span
+                className="text-[#0D1B3D] text-xl md:text-2xl font-medium"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Best Annuity Companies
+              </span>
+            </span>
+            <ArrowRight className="w-5 h-5 ml-auto shrink-0 text-[#0D1B3D]/40 group-hover:text-[#0D1B3D] transition-colors duration-200" />
+          </a>
+        </div>
+      </section>
 
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">

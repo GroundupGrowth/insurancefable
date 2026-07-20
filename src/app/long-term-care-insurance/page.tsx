@@ -3,6 +3,7 @@ import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
+import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -22,12 +23,16 @@ const options = [
     title: 'Long Term Care Insurance',
     text: 'Dedicated coverage for the cost of extended care — compare the leading long-term care insurance companies and approaches.',
     href: `${BASE}/best-long-term-care-insurance-companies/`,
+    icon: 'long-term-care-med-1-153x200.webp',
+    iconAlt: 'Illustration of a carer standing beside an older person',
   },
   {
     eyebrow: 'Hybrid approach',
     title: 'Life Insurance with LTC/Chronic Illness Rider',
     text: 'Pair a life insurance policy with a long-term care or chronic illness rider — protection for care costs without use-it-or-lose-it premiums.',
     href: `${BASE}/long-term-care-rider-vs-chronic-illness-rider/`,
+    icon: 'Life-Insurance-policy-med-1-300x188.webp',
+    iconAlt: 'Illustration of a family sheltered by an umbrella beside a carer supporting an older person',
   },
 ];
 
@@ -46,26 +51,36 @@ const howItWorks = [
   },
 ];
 
-const relatedArticles = [
+const relatedArticles: ArticleThumb[] = [
   {
     title: "Filial Responsibility [Why You Could Be Held Responsible for Your Parent's Medical Bills]",
     href: `${BASE}/filial-responsibility-laws-am-i-responsible-for-my-parents-medical-bills/`,
+    image: 'filial-responsibility-laws-150x100.jpg',
+    alt: 'Map of filial responsibility states',
   },
   {
     title: 'Long Term Care Rider vs. Chronic Illness Rider: Which Actually Protects You?',
     href: `${BASE}/long-term-care-rider-vs-chronic-illness-rider/`,
+    image: 'Long-Term-Care-Rider-vs-Chronic-Illness-Rider-150x100.jpg',
+    alt: 'Comparison table of long-term care rider vs chronic illness rider showing differences in eligibility, benefits, consumer protections, and tax treatment',
   },
   {
     title: 'Best Long-Term Care Insurance Companies: 3 Approaches Compared (2026)',
     href: `${BASE}/best-long-term-care-insurance-companies/`,
+    image: 'long-term-care-insurance-companies-150x100.jpg',
+    alt: 'Comparison of standalone, hybrid, and life insurance approaches to long-term care coverage with top carriers for each',
   },
   {
     title: 'Asset-Based Long-Term Care Insurance: Hybrid LTC Pros, Cons & 2026 Guide',
     href: `${BASE}/asset-based-long-term-care/`,
+    image: 'asset-based-long-term-care-insurance-150x100.jpg',
+    alt: 'Reviewing asset-based long-term care insurance options with a financial advisor',
   },
   {
     title: 'Top 10 Best Life Insurance Companies (2026 Independent Rankings)',
     href: `${BASE}/top-10-best-life-insurance-companies/`,
+    image: 'best-life-insurance-companies-1-150x100.jpg',
+    alt: 'Comparison table ranking the top 10 best life insurance companies for 2026 by A.M. Best rating, Comdex score, and distribution model',
   },
 ];
 
@@ -79,6 +94,18 @@ export default async function LongTermCareInsurancePage() {
         intro={content.heroIntro}
       />
 
+      <section className="px-6 pb-16">
+        <div className="max-w-[88rem] mx-auto flex justify-center">
+          <img
+            src="/wp-content/uploads/life-insurance.webp"
+            alt="An older woman smiling with a younger woman who is holding her hand"
+            width={646}
+            height={500}
+            className="w-full max-w-md h-auto"
+          />
+        </div>
+      </section>
+
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -88,6 +115,15 @@ export default async function LongTermCareInsurancePage() {
                 href={option.href}
                 className="group bg-white rounded-2xl p-7 min-h-64 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
               >
+                <img
+                  src={`/wp-content/uploads/${option.icon}`}
+                  alt={option.iconAlt}
+                  width={64}
+                  height={64}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-16 h-16 object-contain mb-5"
+                />
                 <p className="text-sm text-[#0D1B3D]/60 mb-2">{option.eyebrow}</p>
                 <h3
                   className="text-[#0D1B3D] text-2xl md:text-3xl font-medium mb-4"
@@ -183,19 +219,7 @@ export default async function LongTermCareInsurancePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {relatedArticles.map((article) => (
-              <a
-                key={article.title}
-                href={article.href}
-                className="group bg-white rounded-2xl p-7 flex flex-col min-h-48 border border-black/5 hover:border-black/10 transition-colors duration-200"
-              >
-                <h3 className="text-[#0D1B3D] text-lg font-medium leading-snug">
-                  {article.title}
-                </h3>
-                <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
-                  Read Article
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </a>
+              <ArticleThumbCard key={article.title} article={article} />
             ))}
           </div>
         </div>

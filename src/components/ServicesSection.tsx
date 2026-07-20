@@ -22,17 +22,19 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
-          <div className="relative rounded-2xl overflow-hidden min-h-[28rem]">
-            {/* SWAP-LATER */}
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_183428_ab5e672a-f608-4dcb-b319-f3e040f02e2d.mp4"
-            />
-            <div className="relative z-10 p-7 h-full flex flex-col">
+          <div className="bg-white rounded-2xl overflow-hidden border border-black/5 flex flex-col">
+            <div className="aspect-[4/3] bg-[#F5F5F5] overflow-hidden">
+              <img
+                src="/wp-content/uploads/9495.webp"
+                alt="A hand placing a wooden block stamped with a heart on top of blocks showing a family, a home and a child"
+                width={1000}
+                height={667}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-7 flex flex-col flex-1">
               <p className="text-sm text-[#0D1B3D]/60 mb-2">
                 Whole Life Insurance &amp; Infinite Banking
               </p>
@@ -48,7 +50,7 @@ export default function ServicesSection() {
               </p>
               <a
                 href="/life-insurance/"
-                className="mt-auto self-start inline-flex items-center gap-2 bg-white/50 backdrop-blur-sm text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/80 transition-colors duration-200"
+                className="mt-auto pt-6 self-start inline-flex items-center gap-2 text-[#0D1B3D] font-medium text-sm hover:text-[#1C2E55] transition-colors duration-200"
               >
                 More Info
                 <ArrowRight className="w-4 h-4" />
@@ -56,50 +58,76 @@ export default function ServicesSection() {
             </div>
           </div>
 
-          <div className="bg-[#0D1B3D] rounded-2xl p-7 min-h-80 flex flex-col">
-            <p className="text-white/50 text-sm mb-2">
-              Life Insurance with LTC/Chronic Illness Rider
-            </p>
-            <h3
-              className="text-white text-2xl md:text-3xl font-medium mb-4"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              Long Term Care Insurance
-            </h3>
-            <p className="text-white/60 text-base leading-relaxed">
-              One extended health event can erase decades of wealth building. We move
-              beyond traditional use-it-or-lose-it policies, focusing on Hybrid
-              Long-Term Care solutions that protect your assets, provide living
-              benefits, and still leave something behind for your heirs.
-            </p>
-            <a
-              href="/long-term-care-insurance/"
-              className="mt-auto self-start inline-flex items-center gap-2 bg-white/[0.06] text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/15 transition-colors duration-200"
-            >
-              More Info
-              <ArrowRight className="w-4 h-4" />
-            </a>
+          <div className="bg-[#0D1B3D] rounded-2xl overflow-hidden flex flex-col">
+            <div className="aspect-[4/3] px-6 pt-6 overflow-hidden">
+              <img
+                src="/wp-content/uploads/life-insurance.webp"
+                alt="An older woman smiling with a younger woman who is holding her hand"
+                width={646}
+                height={500}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="p-7 flex flex-col flex-1">
+              <p className="text-white/50 text-sm mb-2">
+                Life Insurance with LTC/Chronic Illness Rider
+              </p>
+              <h3
+                className="text-white text-2xl md:text-3xl font-medium mb-4"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Long Term Care Insurance
+              </h3>
+              <p className="text-white/60 text-base leading-relaxed">
+                One extended health event can erase decades of wealth building. We move
+                beyond traditional use-it-or-lose-it policies, focusing on Hybrid
+                Long-Term Care solutions that protect your assets, provide living
+                benefits, and still leave something behind for your heirs.
+              </p>
+              <a
+                href="/long-term-care-insurance/"
+                className="mt-auto pt-6 self-start inline-flex items-center gap-2 text-white font-medium text-sm hover:text-white/70 transition-colors duration-200"
+              >
+                More Info
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
           </div>
 
-          <div className="bg-[#0D1B3D] rounded-2xl p-7 min-h-80 flex flex-col">
-            <h3
-              className="text-white text-2xl md:text-3xl font-medium mb-4"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              Annuities
-            </h3>
-            <p className="text-white/60 text-base leading-relaxed">
-              Our annuity strategies create a guaranteed income stream you cannot
-              outlive — removing the fear of running out of money so the rest of your
-              assets can keep growing.
-            </p>
-            <a
-              href="/annuities/"
-              className="mt-auto self-start inline-flex items-center gap-2 bg-white/[0.06] text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/15 transition-colors duration-200"
-            >
-              More Info
-              <ArrowRight className="w-4 h-4" />
-            </a>
+          <div className="bg-[#0D1B3D] rounded-2xl overflow-hidden flex flex-col">
+            <div className="aspect-[4/3] px-6 pt-6 overflow-hidden">
+              <img
+                src="/wp-content/uploads/annuities.webp"
+                alt="An older man and a younger woman sitting arm in arm, smiling"
+                width={724}
+                height={500}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="p-7 flex flex-col flex-1">
+              <h3
+                className="text-white text-2xl md:text-3xl font-medium mb-4"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                Annuities
+              </h3>
+              <p className="text-white/60 text-base leading-relaxed">
+                Our annuity strategies create a guaranteed income stream you cannot
+                outlive — removing the fear of running out of money so the rest of your
+                assets can keep growing.
+              </p>
+              <a
+                href="/annuities/"
+                className="mt-auto pt-6 self-start inline-flex items-center gap-2 text-white font-medium text-sm hover:text-white/70 transition-colors duration-200"
+              >
+                More Info
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </div>

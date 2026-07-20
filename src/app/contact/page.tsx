@@ -115,6 +115,14 @@ export default async function ContactPage() {
                 rel="noopener noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-sm text-[#0D1B3D]/60 hover:text-[#0D1B3D] transition-colors duration-200"
               >
+                {/* Live shows the Trustpilot badge here; we had text only. */}
+                <img
+                  src="/wp-content/uploads/trust-pilot.webp"
+                  alt="Trustpilot"
+                  width={104}
+                  height={26}
+                  className="h-5 w-auto"
+                />
                 Read our reviews on Trustpilot
                 <ArrowUpRight className="w-4 h-4" />
               </a>

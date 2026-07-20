@@ -4,6 +4,7 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -24,14 +25,18 @@ const problems = [
   'The fear of not having enough money for retirement',
 ];
 
-const articles = [
+const articles: ArticleThumb[] = [
   {
     title: 'Buy Term and Invest the Difference: Why BTID Fails and What Works Better',
     href: `${BASE}/buy-term-invest-the-difference-btid/`,
+    image: 'BTID-buy-term-invest-difference-150x150.webp',
+    alt: 'Buy term and invest the difference compared with a permanent policy',
   },
   {
     title: "Best Convertible Term Life Insurance Companies (2026): Ranked by What You're Actually Converting Into",
     href: `${BASE}/best-convertible-term-life-insurance-companies/`,
+    image: 'Best-Convertible-Term-Life-Insurance-Companies-1-150x150.webp',
+    alt: 'Convertible term life insurance comparison showing the traditional buy term invest the difference approach versus a strategic convertible approach',
   },
 ];
 
@@ -84,19 +89,7 @@ export default async function TermLifeIntroductionPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {articles.map((article) => (
-              <a
-                key={article.title}
-                href={article.href}
-                className="group bg-white rounded-2xl p-7 flex flex-col min-h-48 border border-black/5 hover:border-black/10 transition-colors duration-200"
-              >
-                <h3 className="text-[#0D1B3D] text-lg md:text-xl font-medium leading-snug">
-                  {article.title}
-                </h3>
-                <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
-                  Read Article
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </a>
+              <ArticleThumbCard key={article.title} article={article} />
             ))}
           </div>
         </div>
