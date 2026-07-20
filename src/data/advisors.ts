@@ -66,8 +66,10 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     role: 'IBC Pro Client Guide Practitioner',
     name: 'Barry Brooksby',
     firstName: 'Barry',
+    // Live subtitle really does read "Practioner" (missing 't') — verbatim, do not fix.
+    subtitle: 'Infinite Banking Practioner & Real Estate Strategist',
     intro:
-      'Barry Brooksby, Pro Client Guide, is our resident Infinite Banking Practitioner and Real Estate Strategist. He has been helping clients take control of their wealth for over 25 years and offers clients an extensive background in large scale real estate investing and financial services.',
+      'Barry Brooksby is our resident Infinite Banking Practitioner and Real Estate Strategist. He has been helping clients take control of their wealth for over 25 years and offers clients an extensive background in large scale real estate investing and financial services.',
     photo: {
       src: '/wp-content/uploads/Barry-1-1.webp',
       alt: 'Barry Brooksby',
@@ -79,22 +81,91 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
       'Infinite Banking Coaching',
       'Agent Training',
     ],
+    achievements: {
+      intro:
+        "From teaching and financial services to managing large-scale real estate investments, Barry's journey has been driven by one goal: helping families achieve financial control and generational wealth.",
+      items: [
+        'Awarded Top Performer for several Top Mutual WL Companies',
+        'Authorized Nelson Nash Infinite Banking Practitioner',
+        'Author of several books on infinite banking and creating tax free income',
+        'Creator of the Amazing Life Agent program',
+        'Featured on several national podcasts',
+      ],
+    },
     bioSections: [
       {
-        heading: 'Background',
+        heading: 'Background and Expertise',
+        wide: true,
         paragraphs: [
-          "Barry's 30-year career has been anything but conventional. He started out directing the guitar program at Southern Utah University before moving into financial services — building experience in large scale real estate investing and managing a trust-deed investment company along the way.",
-          'In 2010 he discovered the Infinite Banking Concept, and everything changed. Since then he has dedicated his practice to designing high cash value whole life policies and teaching clients — and other agents — how to become their own source of financing.',
+          'Nearly thirty years ago, Barry was the Director of the Guitar Education Program at Southern Utah University. His summers would slow down with the university schedule, and he was looking for more ways to help people and create additional income. A friend, who was a traditional financial advisor, introduced Barry to financial services.',
+          'Finances and investing resonated with Barry because he’d grown up in a household watching his parents, who were real estate investors, making very financially savvy decisions. So, he learned about real estate flips and buy and hold strategies at a young age and it wasn’t a stretch for Barry to dive into serving as a financial advisor.',
+          'It didn’t take long before Barry was working regularly with clients, setting up IRAs, mutual funds and variable life products. But within a year or two, these financial clients began approaching him and asking, “Why am I not making money?”, “Why am I losing money?”, “Where are the great returns we thought we’d get?”. He approached his mentor in financial services who told Barry to tell clients, “They’re in it for the long haul”. This didn’t sit well with Barry and he began to lose sleep at night over the shortcomings of the conventional planning options he’d been trained to provide.',
+          'Barry began to look for solutions and more solid investments. He became actively involved in large scale real estate ventures, co-founding a “trust-deed” investment company in Las Vegas and ultimately managing a portfolio in excess of 100 million dollars.',
+          'In those days, Barry’s “trust-deed” investor clients were getting an average of 12% returns on their loan proceeds. But, that boom didn’t last long and in 2008-2009, Las Vegas was among the worst impacted by the housing market crash. Barry quickly pivoted into buying foreclosures, but not without a few battle scars. As he recovered, Barry was involved in many rehabs and flips during those “down market” years.',
+          'In 2010, Barry and a colleague started a whole life insurance business, which was mainstream in nature, offering products and solutions that were designed toward goals like estate planning. But his clients started asking Barry about Nelson Nash and a concept called “infinite banking”.',
+          'Barry was intrigued and as he looked into Nash’s teaching, something clicked as he realized that this was an approach he could use for real estate investing that could deliver no lost opportunity costs for his money.',
+          'More specifically, Barry discovered that he could take the same money that he’d previously been investing in real estate and have it working in 2 places at the same time, both in his policy and his investments.',
+          'Barry’s knowledge and prior experiences taught him that the wealthy leverage their assets and this fueled his belief and exploration into Nash’s concept. Eventually, he knew he’d found a new and better financial vehicle for helping people leverage their own money and since that time, Barry has never looked back.',
+          'Barry is a big believer in aggressively funding the cash value inside of policies – even at the expense of reduced commissions. He often debates others in the industry on this issue of dividend paying whole life policy design and has held fast to his findings that aggressive cash value funding and term blending will deliver the best overall outcome for almost all clients.',
+          'Barry’s sole focus remains giving clients the “best of the best” policy to suit their goals.',
         ],
       },
       {
-        heading: 'Philosophy & Approach',
+        heading: 'Philosophy',
         paragraphs: [
-          'Barry believes clients should be in control of their own money, and his faith-based approach to decision making keeps the focus on what actually serves the client.',
-          'His priorities: delivering the right policy, proper strategy and clear training to empower every client to take control of his or her finances — and vetting and updating the best companies regularly to assure that clients are set up for success.',
+          'Barry has built his expertise and career on always doing what is best for the client. He is a person of strong faith in God, and his moral compass has guided Barry throughout his financial coaching journey.',
+          'Barry believes that people need to be in control of their money and that most people are led to relinquish that control to others. While he believes a team of experts is necessary, giving up total control to other “advisors” is unwise and makes others wealthy.',
+          'So he prioritizes:',
+        ],
+        bullets: [
+          'Delivering the right policy, proper strategy and clear training to empower every client to take control of his/her finances',
+          'Vetting and updating best companies regularly to assure that clients are set up for success',
+        ],
+      },
+      {
+        heading: 'Current Focus',
+        paragraphs: [],
+        bullets: [
+          'Creating amazing education programs and content to help consumers understand the benefits of properly designed whole life',
+          'Giving clients the best chance at a better future through advantages like tax free retirement income',
+        ],
+      },
+      {
+        heading: 'Unique Perspective',
+        paragraphs: [
+          'Barry believes in relieving suffering by giving people a financial alternative that offers control and peace of mind. Barry also advocates the power of shifting your mindset, when faced with confounding problems or patterns that simply aren’t working whether mental, physical, emotional or spiritual.',
+          'In his life endeavor of educating people in proper financial principles, Barry is relentless because he sees this as a spiritual endeavor. In Barry’s words, all truth, including financial truth is spiritual truth. He sees that people need a proper, secure foundation in financial wisdom and planning.',
         ],
       },
     ],
+    expertiseAreas: [
+      {
+        title: 'Infinite Banking',
+        text: 'Become your own banker and create tax-advantaged wealth that lasts for generations.',
+      },
+      {
+        // Live really does read "assests" — verbatim, do not fix.
+        title: 'Wealth Protection',
+        text: 'Protect your assests and create financial certainty for you and your loved ones.',
+      },
+      {
+        title: 'Real Estate Investing',
+        text: 'Proven strategies for acquiring, funding and growing real estate investments.',
+      },
+      {
+        title: 'Estate & Legacy Planning',
+        text: 'Leave a lasting legacy with strategies that reduce taxes and preserve wealth',
+      },
+    ],
+    /* FAQ intentionally UNSET. The live page shows five questions, but every
+       answer is still the client's placeholder "Insert anser to this question
+       here." Pending real answers from the client:
+         1. What is Infinite Banking?
+         2. How does Infinite Banking work with whole life insurance?
+         3. Is Infinite Banking right for everyone?
+         4. How can Infinite Banking help real estate investors?
+         5. How do I get started with Barry?
+       Fill `faq` (or the /admin override) once the client supplies them. */
     credentials: [
       'Awarded Top Performer for several Top Mutual WL Companies',
       'Authorized Nelson Nash Infinite Banking Practitioner',
@@ -104,30 +175,44 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     ],
     testimonials: [
       {
+        title: 'Barry is simply the best…',
         quote:
-          'Barry is hands down the best advisor in whole life insurance and provides unbiased advice for whole life insurance policies for Cash Value life insurance for IBC or infinite banking.',
+          'Barry is one of the best insurance agents by far. He is so professional and very knowledgeable – an expert. Barry has helped me and my husband with all our insurance needs. I trust him and he truly has become a part of my family and would definitely recommend him to anyone. Keep up the…',
       },
       {
+        title: 'Barry and his team are fantastic!',
         quote:
-          'Barry and his team are not only very knowledgeable, they are also attentive, responsive and very transparent in their dealings.',
+          'Barry and his team are fantastic. Barry is incredibly knowledgeable in all things insurance, and walked me through the process step by step and was very patient. Would highly recommend!!',
       },
       {
-        quote:
-          'Barry is one of the best insurance agents by far. He is so professional and very knowledgeable – an expert.',
-      },
-      {
-        quote:
-          'Barry and his team are fantastic. Barry is incredibly knowledgeable in all things insurance, and walked me through the process step by step.',
-      },
-      {
+        title: 'Perfect for business owners',
         quote:
           'Barry has expertise needed for business owners and found the best solutions for my situation. Professional and efficient.',
         attribution: 'Jerry M',
       },
+      {
+        title: 'I finally understand what it means to Be your own bank',
+        quote:
+          'When I heard about Being your own bank, Infinite Banking and the other terms used for this service I was intrigued. I watched Barry Brooksby’s videos, did some research and was really excited to learn more. Since most of us don’t know but about it there was skepticism from friends and family but with Barry’s…',
+      },
+      {
+        title: 'The Best…',
+        quote:
+          'Barry is hands down the best advisor in whole life insurance and provides unbiased advice for whole life insurance policies for Cash Value life insurance for IBC or infinite banking. He’s equally intelligible about creating a trust to protect your family and legacy. He’s someone that genuinely cares about protecting my family’s future and legacy…',
+      },
+      {
+        title: 'The Best!!!',
+        quote:
+          'Barry and his team are not only very knowledgeable, they are also attentive, responsive and very transparent in their dealings. I’m very satisfied with their communication, professionalism and overall service provided.',
+      },
     ],
     schedulerUrl: 'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/barrybrooksby',
     email: 'barry@insuranceandestates.com',
-    // FILL IN: linkedinUrl, licenses (via /admin or here)
+    linkedinUrl: 'https://www.linkedin.com/in/barrybrooksby/',
+    youtubeUrl: 'https://www.youtube.com/@wealthoptimized',
+    storyVideoUrl: 'https://www.youtube.com/watch?v=7xGv9_WNtmg&t=1664s',
+    sameAs: ['https://www.youtube.com/@wealthoptimized'],
+    // FILL IN: licenses (via /admin or here)
     yearsExperience: '30+ years',
     publications: [
       {

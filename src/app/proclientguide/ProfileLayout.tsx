@@ -10,7 +10,9 @@ import {
   Linkedin,
   Mail,
   Phone,
+  Play,
   Star,
+  Youtube,
 } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
@@ -23,11 +25,37 @@ import AdvisorBooking from '../../components/AdvisorBooking';
 export interface BioSection {
   heading: string;
   paragraphs: string[];
+  /** Rendered as a bulleted list after the paragraphs (live uses these under
+      "Philosophy" and "Current Focus"). */
+  bullets?: string[];
+  /** Let the card span the full grid width — for long narrative sections that
+      would otherwise leave a short neighbour card stretched to match. */
+  wide?: boolean;
+}
+
+/** "Professional Achievements" band: a lead-in sentence plus the award/credential list. */
+export interface Achievements {
+  intro: string;
+  items: string[];
+}
+
+/** One "Areas of Expertise" card. */
+export interface ExpertiseArea {
+  title: string;
+  text: string;
+}
+
+/** One FAQ entry. Only rendered when `answer` is filled. */
+export interface FaqItem {
+  question: string;
+  answer: string;
 }
 
 export interface Testimonial {
   quote: string;
   attribution?: string;
+  /** Review headline as shown on the live page, e.g. "Perfect for business owners" */
+  title?: string;
 }
 
 /** A book, article, podcast, or media mention — the "Books & Media" E-E-A-T section. */
@@ -74,6 +102,20 @@ export interface AdvisorProfile {
   schedulerUrl?: string;
   email?: string;
   book?: { eyebrow: string; title: string; text: string; href: string };
+
+  /* --- Sections from the redesigned live Pro Client Guide template
+         (2026-07-21). All optional: an advisor only shows a section once its
+         content exists, so the advisors still on the old live template render
+         exactly as before. --- */
+  /** Line under the name, e.g. "Infinite Banking Practioner & Real Estate Strategist" */
+  subtitle?: string;
+  /** Personal YouTube channel (distinct from the I&E channel) */
+  youtubeUrl?: string;
+  /** "Watch <First>'s Story" video */
+  storyVideoUrl?: string;
+  achievements?: Achievements;
+  expertiseAreas?: ExpertiseArea[];
+  faq?: FaqItem[];
 }
 
 function Stars() {
@@ -107,6 +149,12 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     licenses = [],
     education = [],
     publications = [],
+    subtitle,
+    youtubeUrl,
+    storyVideoUrl,
+    achievements,
+    expertiseAreas = [],
+    faq = [],
   } = profile;
 
   const sameAs = [...(linkedinUrl ? [linkedinUrl] : []), ...(profile.sameAs ?? [])];
@@ -156,7 +204,25 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <PageHero eyebrow={role} title={name} intro={intro} />
+      <PageHero
+        eyebrow={role}
+        title={name}
+        intro={
+          subtitle ? (
+            <>
+              <span
+                className="block text-[#0D1B3D] font-medium mb-4"
+                style={{ letterSpacing: '-0.02em' }}
+              >
+                {subtitle}
+              </span>
+              <span className="block">{intro}</span>
+            </>
+          ) : (
+            intro
+          )
+        }
+      />
 
       {/* Headshot + specialties / contact card */}
       <section className="px-6 pb-24">
@@ -209,6 +275,17 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                   Schedule a Call
                 </a>
               )}
+              {storyVideoUrl && (
+                <a
+                  href={storyVideoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
+                >
+                  <Play className="w-4 h-4" />
+                  Watch {firstName}&apos;s Story
+                </a>
+              )}
               {email && (
                 <a
                   href={`mailto:${email}`}
@@ -234,6 +311,17 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                 >
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
+                </a>
+              )}
+              {youtubeUrl && (
+                <a
+                  href={youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
+                >
+                  <Youtube className="w-4 h-4" />
+                  YouTube
                 </a>
               )}
             </div>
@@ -297,11 +385,45 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
       {/* Inline booking calendar — appears once its embed code is saved at /admin */}
       <AdvisorBooking slug={slug} firstName={firstName} />
 
+      {/* Professional Achievements — intro plus the award/credential list */}
+      {achievements && (
+        <section className="px-6 pb-24">
+          <div className="max-w-[88rem] mx-auto">
+            <h2
+              className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+              style={{ letterSpacing: '-0.04em' }}
+            >
+              Professional Achievements
+            </h2>
+            <div className="bg-white rounded-3xl p-8 md:p-12 border border-black/5 grid grid-cols-1 lg:grid-cols-5 gap-10">
+              <p className="lg:col-span-2 text-[#0D1B3D]/70 text-base md:text-lg leading-relaxed">
+                {achievements.intro}
+              </p>
+              <ul className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+                {achievements.items.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="bg-[#F5F5F5] rounded-full p-1.5 mt-0.5 shrink-0">
+                      <Award className="w-4 h-4 text-[#0D1B3D]" />
+                    </span>
+                    <span className="text-[#0D1B3D]/70 text-base leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Bio sections */}
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           {bioSections.map((block) => (
-            <div key={block.heading} className="bg-white rounded-2xl p-7 border border-black/5">
+            <div
+              key={block.heading}
+              className={`bg-white rounded-2xl p-7 border border-black/5${
+                block.wide ? ' md:col-span-2' : ''
+              }`}
+            >
               <h2
                 className="text-[#0D1B3D] text-xl md:text-2xl font-medium mb-4"
                 style={{ letterSpacing: '-0.02em' }}
@@ -315,10 +437,51 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                   </p>
                 ))}
               </div>
+              {block.bullets && block.bullets.length > 0 && (
+                <ul
+                  className={`space-y-3${block.paragraphs.length > 0 ? ' mt-6' : ''}`}
+                >
+                  {block.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-3">
+                      <span className="bg-[#F5F5F5] rounded-full p-1.5 mt-0.5 shrink-0">
+                        <Check className="w-4 h-4 text-[#0D1B3D]" />
+                      </span>
+                      <span className="text-[#0D1B3D]/70 text-base leading-relaxed">{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
       </section>
+
+      {/* Areas of Expertise */}
+      {expertiseAreas.length > 0 && (
+        <section className="px-6 pb-24">
+          <div className="max-w-[88rem] mx-auto">
+            <h2
+              className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+              style={{ letterSpacing: '-0.04em' }}
+            >
+              Areas of Expertise
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {expertiseAreas.map((area) => (
+                <div key={area.title} className="bg-white rounded-2xl p-7 border border-black/5">
+                  <h3
+                    className="text-[#0D1B3D] text-xl md:text-2xl font-medium leading-snug mb-3"
+                    style={{ letterSpacing: '-0.02em' }}
+                  >
+                    {area.title}
+                  </h3>
+                  <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{area.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Credentials */}
       <section className="px-6 pb-24">
@@ -440,12 +603,50 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                   className="bg-white rounded-2xl p-7 border border-black/5 flex flex-col"
                 >
                   <Stars />
+                  {testimonial.title && (
+                    <h3
+                      className="text-[#0D1B3D] text-lg font-medium leading-snug mb-3"
+                      style={{ letterSpacing: '-0.02em' }}
+                    >
+                      {testimonial.title}
+                    </h3>
+                  )}
                   <p className="text-[#0D1B3D]/70 text-base leading-relaxed">
                     &ldquo;{testimonial.quote}&rdquo;
                   </p>
                   <p className="mt-auto pt-6 text-sm text-[#0D1B3D]/50">
                     {testimonial.attribution ? `${testimonial.attribution} — ` : ''}Trustpilot review
                   </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQ — only rendered once real answers exist */}
+      {faq.length > 0 && (
+        <section className="px-6 pb-24">
+          <div className="max-w-[88rem] mx-auto">
+            <h2
+              className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+              style={{ letterSpacing: '-0.04em' }}
+            >
+              Frequently Asked Questions
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {faq.map((item) => (
+                <div
+                  key={item.question}
+                  className="bg-white rounded-2xl p-7 border border-black/5"
+                >
+                  <h3
+                    className="text-[#0D1B3D] text-xl font-medium leading-snug mb-3"
+                    style={{ letterSpacing: '-0.02em' }}
+                  >
+                    {item.question}
+                  </h3>
+                  <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
