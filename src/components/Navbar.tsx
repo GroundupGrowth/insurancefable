@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 interface NavLink {
@@ -11,8 +11,6 @@ interface NavLink {
 interface NavGroup {
   label: string;
   href?: string;
-  /* Live styles the "Blog" menu item in the coral accent color */
-  highlight?: boolean;
   items?: NavLink[];
 }
 
@@ -37,7 +35,6 @@ const navGroups: NavGroup[] = [
   {
     label: 'Blog',
     href: '/blog/',
-    highlight: true,
   },
   {
     label: 'Live Workshops',
@@ -49,81 +46,37 @@ const navGroups: NavGroup[] = [
   },
 ];
 
-/* Chevron used on live submenu toggles (viewBox and path taken from the live DOM) */
-function Chevron({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 12 12"
-      fill="none"
-      className={className}
-    >
-      <path d="M1.50002 4L6.00002 8L10.5 4" strokeWidth="1.5" stroke="currentcolor" />
-    </svg>
-  );
-}
-
-const pillButton =
-  'inline-flex items-center justify-center text-white text-[15px] leading-[1.7] tracking-[0.5px] rounded-[20px] px-[15px] py-[7.5px] transition-opacity duration-200 hover:opacity-90';
-
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  /* Live header: data-slide-up-after="250" — slides up after scrolling 250px
-     down, reappears as soon as the user scrolls up. */
-  const [slidUp, setSlidUp] = useState(false);
-
-  useEffect(() => {
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (y > lastY && y > 250) {
-        setSlidUp(true);
-      } else if (y < lastY) {
-        setSlidUp(false);
-      }
-      lastY = y;
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   return (
-    <header
-      className={`sticky top-0 left-0 right-0 z-50 bg-white transition-transform duration-300 ${
-        slidUp && !mobileOpen ? '-translate-y-full' : 'translate-y-0'
-      }`}
-    >
-      <div className="max-w-[1100px] mx-auto px-4 lg:px-0">
-        <div className="flex items-center justify-between gap-6 min-h-[71px]">
-          <a href="/" className="shrink-0">
-            <img
-              src="/wp-content/uploads/ie_logo_web.webp"
-              width={255}
-              height={29}
-              alt="Insurance &amp; Estates"
-              className="w-[255px] max-w-[60vw] h-auto"
-            />
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-4">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-black/5 px-5 py-3">
+        <div className="flex items-center justify-between gap-6">
+          <a
+            href="/"
+            className="text-xl font-medium tracking-tight text-[#0D1B3D]"
+          >
+            I&amp;E
           </a>
 
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-7">
             {navGroups.map((group) =>
               group.items ? (
                 <div key={group.label} className="relative group">
                   <button
                     type="button"
-                    className="flex items-center gap-1.5 text-[15px] text-[#363636] hover:text-[#FF6352] transition-colors duration-200"
+                    className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                   >
                     {group.label}
-                    <Chevron className="w-3 h-3 mt-px" />
                   </button>
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 hidden group-hover:block">
-                    <div className="bg-white rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.12)] py-2 min-w-[15rem]">
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 hidden group-hover:block">
+                    <div className="bg-white rounded-xl border border-black/5 py-2 min-w-[16rem]">
                       {group.items.map((item) => (
                         <a
                           key={item.label}
                           href={item.href}
-                          className="block px-5 py-2 text-[15px] text-[#363636] hover:text-[#FF6352] whitespace-nowrap transition-colors duration-200"
+                          className="block px-5 py-2.5 text-base text-gray-700 hover:text-[#0D1B3D] whitespace-nowrap"
                         >
                           {item.label}
                         </a>
@@ -135,11 +88,7 @@ export default function Navbar() {
                 <a
                   key={group.label}
                   href={group.href}
-                  className={`text-[15px] transition-colors duration-200 ${
-                    group.highlight
-                      ? 'text-[#FF6352] hover:text-[#363636]'
-                      : 'text-[#363636] hover:text-[#FF6352]'
-                  }`}
+                  className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                 >
                   {group.label}
                 </a>
@@ -147,18 +96,24 @@ export default function Navbar() {
             )}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
-            <a href="/start-your-journey/" className={`${pillButton} bg-[#185E99]`}>
+          <div className="hidden md:flex items-center gap-5">
+            <a
+              href="/start-your-journey/"
+              className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D] transition-colors duration-200"
+            >
               Start here
             </a>
-            <a href="/connect-with-our-experts/" className={`${pillButton} bg-[#7BBD44]`}>
+            <a
+              href="/proclientguide/introduction/"
+              className="inline-flex items-center bg-[#0D1B3D] text-white font-medium px-5 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+            >
               Connect with an Expert
             </a>
           </div>
 
           <button
             type="button"
-            className="lg:hidden text-[#363636] p-1"
+            className="md:hidden text-[#0D1B3D] p-1"
             aria-label="Toggle menu"
             onClick={() => setMobileOpen((open) => !open)}
           >
@@ -167,7 +122,7 @@ export default function Navbar() {
         </div>
 
         {mobileOpen && (
-          <div className="lg:hidden pt-2 pb-6">
+          <div className="md:hidden pt-4 pb-2">
             <nav className="flex flex-col gap-1">
               {navGroups.flatMap((group) =>
                 group.items
@@ -175,7 +130,7 @@ export default function Navbar() {
                       <a
                         key={`${group.label}-${item.label}`}
                         href={item.href}
-                        className="py-2 text-[15px] text-[#363636] hover:text-[#FF6352]"
+                        className="py-2 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                       >
                         {item.label}
                       </a>
@@ -184,20 +139,24 @@ export default function Navbar() {
                       <a
                         key={group.label}
                         href={group.href}
-                        className={`py-2 text-[15px] ${
-                          group.highlight ? 'text-[#FF6352]' : 'text-[#363636]'
-                        } hover:text-[#FF6352]`}
+                        className="py-2 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                       >
                         {group.label}
                       </a>
                     ),
               )}
             </nav>
-            <div className="flex flex-col items-start gap-3 mt-5">
-              <a href="/start-your-journey/" className={`${pillButton} bg-[#185E99]`}>
+            <div className="flex flex-col gap-3 mt-5">
+              <a
+                href="/start-your-journey/"
+                className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D]"
+              >
                 Start here
               </a>
-              <a href="/connect-with-our-experts/" className={`${pillButton} bg-[#7BBD44]`}>
+              <a
+                href="/proclientguide/introduction/"
+                className="inline-flex items-center justify-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+              >
                 Connect with an Expert
               </a>
             </div>

@@ -1,133 +1,144 @@
 import type { Metadata } from 'next';
+import { ArrowRight, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import TrustpilotBox from '../../components/TrustpilotBox';
-import GenerationalTransferBand from '../../components/GenerationalTransferBand';
-import QuoteTabs from './QuoteTabs';
+import PageHero from '../../components/PageHero';
+import LeadMagnetSection from '../../components/LeadMagnetSection';
+import EmbedSlot from '../../components/EmbedSlot';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
-/* 1:1 clone of the live /life-insurance-quotes/ page
-   (extraction/parsed/life-insurance-quotes.json + screenshot).
-   Live section order: tinted wave hero with the whole/universal/term quote
-   copy and CTA, "Select your quote." LeadConnector form tabs, Trustpilot
-   widget, Generational Transfer band. */
+export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: {
-    absolute:
-      'Life Insurance Quotes – I&E | Whole Life & Infinite Banking Strategies',
-  },
-  // Live meta description verbatim (it is cut off mid-word on live too)
-  description:
-    'Life Insurance Quotes Whole life insurance quotes will vary based on policy specifications. Your whole life policy can be focused on a death benefit, on cash va',
-  alternates: { canonical: '/life-insurance-quotes/' },
-};
-
-/* Exact live shape divider wave (#e9f3f2), as on /connect-with-our-experts/ */
-function HeroWave() {
-  return (
-    <div className="absolute inset-x-0 top-0 h-[400px] overflow-hidden pointer-events-none" aria-hidden>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="none"
-        viewBox="0 0 1200 133"
-        className="absolute left-1/2 top-0 h-full w-[220%]"
-        style={{ fill: '#e9f3f2', transform: 'translateX(-50%) rotate(180deg)' }}
-      >
-        <path
-          fillRule="evenodd"
-          d="M0,134 C66,66 121,33 165,35 C231,38 233,82 369,81 C505,80 495,2 589,1 C683,7.99360578e-15 695,49 795,49 C895,49 899,6 994,6 C1057.33333,6 1126,48.6666667 1200,134 L0,134 Z"
-          transform="translate(0 -1)"
-        />
-      </svg>
-    </div>
-  );
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent('life-insurance-quotes');
+  return pageMetadata(content);
 }
 
-const inlineLinkClass = 'text-[#FF6352] hover:underline';
+const policyTypes = [
+  {
+    eyebrow: 'Permanent coverage',
+    title: 'Whole Life',
+    text: 'Whole life insurance quotes will vary based on policy specifications. Your whole life policy can be focused on a death benefit, on cash value growth, or somewhere in between. You also have the option of choosing whole life to age 100 or age 65, or a limited pay whole life policy for 7, 10, 15 or 20 years.',
+  },
+  {
+    eyebrow: 'Flexible design',
+    title: 'Universal Life',
+    text: 'Universal life insurance quotes will vary based on policy specifications. Your UL policy can be designed for death benefit protection, cash value growth, or somewhere in between. You also have the option of an increasing or level death benefit. Finally, depending on your goals and objectives, guaranteed universal life, indexed universal life or variable universal life may be chosen.',
+  },
+  {
+    eyebrow: 'Pure protection',
+    title: 'Term Life',
+    text: 'Term life insurance quotes are relatively simple. A term policy can be designed so the death benefit remains level for 10, 15, 20, 25 or 30 years. Once the policy expires the term insurance premium will increase annually.',
+  },
+];
 
-export default function LifeInsuranceQuotesPage() {
+const quoteOptions = [
+  {
+    title: 'Whole Life',
+    text: 'Guaranteed premiums, guaranteed growth, and cash value you control.',
+  },
+  {
+    title: 'Term Life',
+    text: 'The most coverage for the fewest dollars — level for 10 to 30 years.',
+  },
+  {
+    title: 'Whole Life — No Exam',
+    text: 'Permanent coverage without the medical exam, when speed matters.',
+  },
+];
+
+export default async function LifeInsuranceQuotesPage() {
+  const content = await getPageContent('life-insurance-quotes');
   return (
     <PageShell>
-      <section className="relative">
-        <HeroWave />
+      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
 
-        <div className="relative max-w-[680px] mx-auto px-6 pt-16 md:pt-20 pb-12">
-          <h3 className="text-[#262626] font-medium text-[38px] md:text-[50px] leading-[1.2] text-center">
-            Life Insurance Quotes
-          </h3>
-
-          <div className="text-[#363636] text-[15px] leading-[1.7] mt-8 space-y-5">
-            <p>
-              Whole life insurance quotes will vary based on policy specifications.
-              Your whole life policy can be focused on a death benefit, on cash value
-              growth, or somewhere in between. You also have the option of choosing
-              whole life to age 100 or age 65, or a limited pay whole life policy for
-              7, 10, 15 or 20 years.
-            </p>
-            <p>
-              Universal life insurance quotes will vary based on policy
-              specifications. Your UL policy can be designed for death benefit
-              protection, cash value growth, or somewhere in between. You also have
-              the option of an increasing or level death benefit. Finally, depending
-              on your goals and objectives,{' '}
-              <a
-                href="/guaranteed-universal-life-insurance-pros-cons-and-overview/"
-                className={inlineLinkClass}
-              >
-                guaranteed universal life
-              </a>
-              ,{' '}
-              <a
-                href="/the-pros-and-cons-of-indexed-universal-life-insurance/"
-                className={inlineLinkClass}
-              >
-                indexed universal life
-              </a>{' '}
-              or{' '}
-              <a
-                href="/top-10-pros-cons-variable-universal-life-insurance/"
-                className={inlineLinkClass}
-              >
-                variable universal life
-              </a>{' '}
-              may be chosen.
-            </p>
-            <p>
-              Term life insurance quotes are relatively simple. A{' '}
-              <a href="/convertible-term-life-insurance/" className={inlineLinkClass}>
-                term policy
-              </a>{' '}
-              can be designed so the death benefit remains level for 10, 15, 20, 25
-              or 30 years. Once the policy expires the term insurance premium will
-              increase annually.
-            </p>
+      <section className="px-6 pb-24">
+        <div className="max-w-[88rem] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {policyTypes.map((policy) => (
+              <div key={policy.title} className="bg-white rounded-2xl p-7 border border-black/5">
+                <p className="text-sm text-[#0D1B3D]/60 mb-2">{policy.eyebrow}</p>
+                <h3
+                  className="text-[#0D1B3D] text-2xl md:text-3xl font-medium mb-4"
+                  style={{ letterSpacing: '-0.02em' }}
+                >
+                  {policy.title}
+                </h3>
+                <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{policy.text}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Live CTA — yellow variant on this page (color sampled from the
-              screenshot; the live rule sits in external theme CSS) */}
-          <div className="mt-8">
+          <div className="flex gap-4 flex-wrap mt-10">
             <a
               href="/connect-with-our-experts/"
-              className="inline-block bg-[#FFD34E] text-[#C1731F] text-[15px] leading-[1.7] tracking-[0.5px] rounded-[6px] px-[15px] py-[7.5px] transition-opacity duration-200 hover:opacity-90"
+              className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
             >
               Connect with an Expert
+              <span className="bg-white rounded-full p-2">
+                <ArrowRight className="w-5 h-5 text-[#0D1B3D]" />
+              </span>
+            </a>
+            <a
+              href="tel:1-877-787-7558"
+              className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium px-7 py-2.5 rounded-full border border-black/5 hover:bg-white/70 transition-colors duration-200"
+            >
+              <Phone className="w-4 h-4" />
+              877-787-7558
             </a>
           </div>
         </div>
       </section>
 
-      {/* Select your quote — LeadConnector form tabs */}
-      <section className="px-6 pb-10">
-        <div className="max-w-[1100px] mx-auto">
-          <QuoteTabs />
+      {/* Quote engine: paste the embed under page:life-insurance-quotes:quote-engine
+          at /admin. Until then these cards route to a personal quote with an expert. */}
+      <section className="px-6 pb-24">
+        <div className="max-w-[88rem] mx-auto">
+          <div className="bg-[#0D1B3D] rounded-3xl px-8 py-14 md:px-16 md:py-16">
+            <p className="text-white/50 text-sm uppercase tracking-wide mb-2">Quote Engine</p>
+            <h2
+              className="text-white text-3xl md:text-5xl font-medium leading-tight mb-4"
+              style={{ letterSpacing: '-0.03em' }}
+            >
+              Select your quote.
+            </h2>
+
+            <EmbedSlot
+              slotKey="page:life-insurance-quotes:quote-engine"
+              className="bg-white rounded-2xl p-2"
+            >
+              <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
+                Pick the coverage you want to price and we&rsquo;ll put a real number in front of
+                you — no bots, no spam, just an expert who quotes across every top carrier.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {quoteOptions.map((option) => (
+                  <a
+                    key={option.title}
+                    href="/connect-with-our-experts/"
+                    className="group bg-white/5 hover:bg-white/10 rounded-2xl p-7 min-h-48 flex flex-col border border-white/10 transition-colors duration-200"
+                  >
+                    <h3
+                      className="text-white text-xl md:text-2xl font-medium mb-3"
+                      style={{ letterSpacing: '-0.02em' }}
+                    >
+                      {option.title}
+                    </h3>
+                    <p className="text-white/60 text-base leading-relaxed">{option.text}</p>
+                    <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm text-white/60 group-hover:text-white transition-colors duration-200">
+                      Start This Quote
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </EmbedSlot>
+          </div>
         </div>
       </section>
 
-      {/* Trustpilot mini widget (live shortcode block after the forms) */}
-      <section className="px-6 pb-14">
-        <TrustpilotBox />
-      </section>
-
-      <GenerationalTransferBand />
+      <LeadMagnetSection />
     </PageShell>
   );
 }

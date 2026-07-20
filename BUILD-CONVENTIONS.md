@@ -1,74 +1,95 @@
-# BUILD-CONVENTIONS — 1:1 clone of insuranceandestates.com static pages
+# BUILD-CONVENTIONS — live content, our design
 
-Read this fully before touching any file. You are rebuilding pages of the live
-WordPress/Bricks site as 1:1 clones (same copy, same sections, same look) inside
-this existing Next.js 15 App Router repo. The blog-post template
-(`src/app/[slug]/page.tsx`) is NOT part of this effort — never touch it.
+Read this fully before touching any page.
 
-## Sources of truth (read these, in this order)
-1. `extraction/parsed/<page>.json` — ordered content blocks per top-level live
-   section: headings/p/li/text (verbatim copy), `a`/`button` (href + label),
-   `img` (src/alt), `iframe` (embed src). **All visible text, links and images
-   come from here, verbatim — typos included** (e.g. "Cusotmers" on
-   /testimonials/ stays). Fix nothing unless this doc says so.
-2. `extraction/screens/src/<page>.jpeg` — full-page screenshot of the live page
-   at 1440px. This is your layout/visual reference: section order, backgrounds,
-   column layout, spacing, colors.
-3. `extraction/site/pages/<page>.html` — rendered live DOM if you need detail
-   the JSON doesn't carry (exact classes, inline styles, srcset). Files are
-   ~360KB — grep for what you need, don't read whole files.
+## The rule that matters most
 
-File naming: URL path with `/` → `__`, home = `index` (e.g.
-`/proclientguide/barry/` → `proclientguide__barry.*`).
+**We keep the live site's CONTENT. We do NOT keep the live site's DESIGN.**
 
-## Live design tokens (from computed styles; also `extraction/design-tokens.json`)
-- Font: **system stack** — `-apple-system, "system-ui", "Segoe UI", roboto, helvetica, arial, sans-serif` (Tailwind's `font-sans` default ≈ fine). The live site does NOT load a webfont for text.
-- Body text `#363636` 15px/1.7; headings `#262626` weight 500; h1/h2 50px (clamp down for mobile).
-- Buttons: pill `border-radius: 20px`, padding `7.5px 15px`, 15px text, letter-spacing 0.5px, white text. Blue `#185E99` ("Start here"), green `#7BBD44` ("Connect with an Expert"). Red/coral CTA banners `#FF6352` (also the link-accent color).
-- Section background tints seen on live: soft green `#EAF4E4`-ish hero blobs, light blue-gray `#E9F0F5` footer/cards, navy `#2E5077`-ish "Generational Transfer" band. Match against the screenshots per page.
-- Use plain Tailwind arbitrary values (`text-[#363636]`) — do NOT invent a token system, this repo styles inline with Tailwind.
+This repo is a *redesign* of insuranceandestates.com, not a clone of it. Pages
+are built with our own design system (`docs/migration/design-system.md`) —
+navy `#0D1B3D`, `#F5F5F5` background, Figtree/TT Norms Pro, `PageShell` /
+`PageHero` / `CtaBand`, `rounded-2xl` cards. The copy inside them comes from
+the live site, verbatim.
+
+> **History / why this file was rewritten (2026-07-20).** An earlier version of
+> this document told agents to rebuild every page as a pixel-level 1:1 clone of
+> the live WordPress/Bricks site. Twenty-six pages were rebuilt that way before
+> we caught it, and the whole design had to be reverted from git. If you find
+> yourself matching live's fonts, section order, Bricks classes or shape
+> dividers, **stop — you are repeating that mistake.**
+
+## What to take from the extraction, and what to ignore
+
+`extraction/` is a capture of the live site. It is a **content** source, not a
+layout reference.
+
+| Source | Use it for | Do NOT use it for |
+|---|---|---|
+| `extraction/parsed/<page>.json` | Verbatim copy, headings, link targets, which images belong on the page | — |
+| `extraction/site/pages/<page>.html` | Detail the JSON flattened (paragraph breaks, list structure, an image the JSON missed). Files are ~360KB — grep, don't read whole. | Copying classes, inline styles or DOM order |
+| `extraction/screens/src/<page>.jpeg` | Understanding *what content exists* on a page and roughly how much | Layout, spacing, colours, section order |
+| `extraction/design-tokens.json` | Nothing, currently. These are LIVE's tokens. | Styling anything |
+
+File naming: URL path with `/` → `__`, home = `index`
+(`/proclientguide/barry/` → `proclientguide__barry.*`).
+
+## Copy policy
+
+Live copy is the source of truth and is reproduced **verbatim, including
+typos** (e.g. "Real Cusotmers" on /testimonials/ stays). Legal pages
+(`/privacytou/`, `/accessibility/`) are verbatim and never summarized,
+reworded or reformatted.
+
+You may tighten copy only where it is obvious WordPress boilerplate filler.
+Objective bugs you may fix (and MUST list in your report): broken hrefs,
+duplicate ids, template-leftover alt text.
+
+Where our design has a slot live has no copy for, write in the brand voice
+documented at the bottom of `design-system.md` — do not invent facts, figures,
+credentials or testimonials.
 
 ## Images
-All live images are localized under `public/wp-content/...` preserving the live
-path (e.g. live `https://www.insuranceandestates.com/wp-content/uploads/x.webp`
-→ `/wp-content/uploads/x.webp`). Reference the LOCAL path. Plain `<img>` tags
-are fine (this repo doesn't use next/image). If a parsed JSON references an
-image that's missing locally, note it in your final report — don't hotlink.
 
-## Shared components (in `src/components/`, built by the shell task)
-- `Navbar.tsx` / `Footer.tsx` — global, already cloned to live look. Never modify.
-- `TrustpilotBox.tsx` — live Trustpilot mini widget (`theme=light`). Props: none. Drop it wherever the live page shows the Trustpilot stars.
-- `GenerationalTransferBand.tsx` — the navy "Free Download / The Generational Transfer" band with the Name/Email/Phone form. Use on every page whose live screenshot ends with that band (that's nearly all of them).
-- `QuoteCtaBanner.tsx` — the red "Get Your Personalized Quote Today. Click Here to Connect with an Expert!" banner (links to `/connect-with-our-experts/`).
-- `YouTubeEmbed.tsx` — props `{ id: string; title: string }`; renders the same 16:9 iframe as live (`youtube.com/embed/<id>`).
-If one of these doesn't exist yet when you start, STOP and report — don't build your own copy.
+All live images are localized under `public/wp-content/...`, preserving the
+live path. **Reference the local path. Never hotlink `insuranceandestates.com`
+— the new site must not depend on the old server.**
 
-## Page rules
-- Each page is a server component at its existing route under `src/app/...` —
-  REPLACE the current page.tsx content in place. Keep the existing
-  `export const metadata` unless the live page's `<title>`/meta description
-  (in the parsed JSON) differs — then match live exactly.
-- Internal links: strip the domain — `https://www.insuranceandestates.com/x/` → `/x/`.
-  Keep `/trust-workshop/` and `/agent-partners/` as-is (live-only pages, noted in backlog).
-- External links (Trustpilot profile, YouTube channel, Amazon) keep full URLs,
-  `target="_blank" rel="noopener"`.
-- Forms: the live booking form on /connect-with-our-experts/ is a LeadConnector
-  iframe — embed the SAME src (`https://api.leadconnectorhq.com/widget/booking/twTnQVNTJJKOdulIBYDc`,
-  full-width, min-height 1100px). Other live forms (Gravity Forms) are rebuilt as
-  visual replicas wired to the repo's existing lead endpoints where one exists
-  (see `src/app/connect-with-our-experts/LeadForm.tsx`,
-  `src/app/ebooks-and-guides/GuideRequestForm.tsx` for the current handlers) —
-  otherwise no-op submit with a `{/* TODO: wire submissions */}` comment.
-- Accordions/tabs: render all items expanded-capable with a client `useState`
-  toggle; content verbatim from parsed JSON.
-- No new npm deps. `npx tsc --noEmit` must pass when you finish — run it.
+Audit script (run it before you report done):
 
-## Verbatim policy
-Copy is sacred: reproduce live text exactly, including typos and odd casing.
-Objective bugs you may fix (and MUST list in your report): broken hrefs,
-duplicate ids, alt text that's clearly template leftovers ("Reality - Real
-Estate Template" on the logo → use "Insurance & Estates").
+```
+node scripts/audit-images.mjs
+```
 
-## Report format
-End with: files changed, live sections implemented (count), anything skipped or
-approximated, tsc result.
+It reports local `/wp-content/` refs that resolve, refs that are missing, and
+any remaining hotlinks. Missing and hotlinks must both be **0**. If a live
+image genuinely isn't localized yet, download it into
+`public/wp-content/uploads/` from live rather than hotlinking it.
+
+Plain `<img>` is fine — this repo does not use `next/image`.
+
+## Design
+
+Everything visual is governed by `docs/migration/design-system.md`. Read it.
+Use the shared components (`PageShell`, `PageHero`, `PrimaryCta`/`SecondaryCta`,
+`CtaBand`, `LeadMagnetSection`) — never re-implement them, never build a
+page-local variant.
+
+Do not add npm dependencies. Icons are lucide-react.
+
+## Things that are NOT part of page work
+
+- `src/app/[slug]/page.tsx` — the blog post template. Never touch it.
+- `src/components/Navbar.tsx` / `Footer.tsx` — global shell.
+- `src/app/admin/**` — the CMS.
+- The Supabase override layer (`src/lib/content.ts`, `src/data/*.ts` shapes).
+  Pages read defaults through `getPageContent()` / `getAdvisor()`; keep that
+  plumbing and the JSON-LD/E-E-A-T layer intact.
+
+## Before you report done
+
+1. `npx tsc --noEmit` — must pass.
+2. `npx next build` — must pass.
+3. `node scripts/audit-images.mjs` — 0 missing, 0 hotlinks.
+4. Report: files changed, pages covered, anything skipped or approximated,
+   and the results of 1–3.

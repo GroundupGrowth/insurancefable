@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Script from 'next/script';
+import '@fontsource/figtree/400.css';
+import '@fontsource/figtree/600.css';
 import './globals.css';
 
 export const metadata: Metadata = {

@@ -1,22 +1,20 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { Check } from 'lucide-react';
 import EmbedSlot from '../../components/EmbedSlot';
 
-export const freeResources = [
-  'Money Secrets of the Wealthy',
-  "Estate Planner's Tactical Guide",
-  'Financial Planning Has Failed',
-  '5 Important Estate Planning Steps',
-  'Estate Planning Tactical Checklist',
-  'Life Insurance Essentials Report',
+const callPoints = [
+  'Map out your goals — where you are and where you want to be',
+  'Identify your needs before any product is on the table',
+  'Get matched with the right specialist for your situation',
+  'No pitch, no pressure — just answers',
 ];
 
-/* Shared download form for the free eBooks & guides above. Stub for now —
-   the live page has one lead form per resource with identical fields; wire
-   the submit to the email/CRM backend when it exists. */
-export default function GuideRequestForm() {
-  const [guide, setGuide] = useState(freeResources[0]);
+/* Discovery-call request form. Stub for now: the live page captures the same
+   fields (name / email / phone + disclaimer consent) — wire the submit to the
+   CRM / scheduling backend when it exists. */
+export default function LeadForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -25,54 +23,50 @@ export default function GuideRequestForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ guide, name, email, phone, agreed });
+    console.log({ name, email, phone, agreed });
     setSubmitted(true);
   };
 
   return (
-    <section id="request-a-guide" className="px-6 pb-24">
+    <section id="book-a-call" className="px-6 pb-24">
       <div className="max-w-[88rem] mx-auto">
         <div className="bg-[#0D1B3D] rounded-3xl">
           <div className="grid md:grid-cols-2 gap-12 p-10 md:p-14">
             <div>
               <p className="text-white/50 text-sm uppercase tracking-wide mb-2">
-                Free eBooks &amp; Guides
+                Discovery Call
               </p>
               <h2
                 className="text-white text-4xl md:text-5xl font-medium mb-6"
                 style={{ letterSpacing: '-0.03em' }}
               >
-                Pick a guide. We&rsquo;ll send it over.
+                Book Your Discovery Call
               </h2>
-              <p className="text-white/70 leading-relaxed">
-                Every resource is free, written by estate planning attorneys and IBC
-                practitioners who use these strategies themselves. Tell us which one
-                you want and where to send it — no strings, no drip campaign you
-                didn&rsquo;t ask for.
+              <p className="text-white/70 leading-relaxed mb-8">
+                A quick call to map out your goals. We&rsquo;ll identify your needs and
+                match you with the right specialist to design your custom wealth
+                strategy.
               </p>
+              <ul className="space-y-3">
+                {callPoints.map((point) => (
+                  <li key={point} className="flex items-center gap-3 text-white/60">
+                    <Check className="w-4 h-4 shrink-0" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="flex flex-col justify-center">
-              {/* Replaced by the GHL form embed once it's saved under form:guide-request at /admin */}
-              <EmbedSlot slotKey="form:guide-request" className="bg-white rounded-2xl p-2">
+              {/* Replaced by the GHL form embed once it's saved under form:connect-with-our-experts at /admin */}
+              <EmbedSlot slotKey="form:connect-with-our-experts" className="bg-white rounded-2xl p-2">
               {submitted ? (
                 <p className="text-white text-2xl font-medium leading-relaxed">
-                  Check your inbox — your copy is on the way.
+                  Got it — one of our Pro Client Guides will reach out to schedule your
+                  call.
                 </p>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                  <select
-                    required
-                    value={guide}
-                    onChange={(e) => setGuide(e.target.value)}
-                    className="bg-white/10 text-white rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none appearance-none cursor-pointer"
-                  >
-                    {freeResources.map((resource) => (
-                      <option key={resource} value={resource} className="text-[#0D1B3D]">
-                        {resource}
-                      </option>
-                    ))}
-                  </select>
                   <input
                     type="text"
                     required
@@ -126,7 +120,7 @@ export default function GuideRequestForm() {
                     type="submit"
                     className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
                   >
-                    Get Free Access
+                    Book My Call
                   </button>
                 </form>
               )}

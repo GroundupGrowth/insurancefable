@@ -24,11 +24,11 @@ Reference implementation: homepage (`src/app/page.tsx` + `src/components/*`) and
 
 - Every page: `export const metadata: Metadata = { title: '...', description: '...' }`. Title WITHOUT the suffix — the root layout template appends `– I&E | Whole Life & Infinite Banking Strategies`. Use the live page's title/description (see `docs/migration/inventory.md` phase notes; live titles were captured from the live site).
 - Routes use trailing slashes (`trailingSlash: true` is set). File: `src/app/<slug>/page.tsx`.
-- Internal links: relative paths with trailing slash (`/about/`, `/start-your-journey/`). Blog POSTS and anything not in our 24-page build (blog index, calculator, agent-partners) link absolute to `https://www.insuranceandestates.com/...` until Phase 3.
+- Internal links: relative paths with trailing slash (`/about/`, `/start-your-journey/`). All 181 blog posts, the blog index, the wiki and the calculator are now hosted HERE — link to them internally (`/whole-life-insurance/`, `/blog/#<category>`). Never link a reader to `insuranceandestates.com`. The only known exceptions are four live pages we have not built yet — see the table in `phase-2-backlog.md`.
 - Copy: use the live page's actual copy — this is a redesign, not a rewrite. Tighten only where the live copy is obviously boilerplate WordPress filler. Legal pages are VERBATIM, never summarized.
 - Phone: `877-787-7558`, `href="tel:1-877-787-7558"`.
 - Components with hooks/handlers need `'use client'` as the first line. Prefer server components (no directive) for static content.
-- No stock photos: no `<img>` unless hotlinking an existing live asset is explicitly wanted. Prefer typographic cards, navy/white contrast blocks.
+- No stock photos. Real live imagery IS available though: ~110 images from the live site are localized under `public/wp-content/uploads/` — reference them by local path, never hotlink (run `node scripts/audit-images.mjs`). Where no real asset fits, prefer typographic cards and navy/white contrast blocks over decorative filler.
 
 ## Brand voice
 

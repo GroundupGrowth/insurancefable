@@ -3,20 +3,9 @@
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
 
-/* Visual replica of the live Gravity Form 1 on /contact/ (light blue-gray card,
-   labeled Name/Email/Phone/Message fields, disclaimer + "Yes" consent, coral
-   Submit). Submission keeps the existing local handler pattern behind the
-   form:contact embed slot (replaced by the GHL embed once saved at /admin).
-   TODO: wire submissions */
-
-const labelClass = 'block text-[14px] font-medium text-[#363636] mb-1.5';
-const inputClass =
-  'w-full rounded border border-[#c8d0d6] bg-white px-3 py-2 text-[15px] text-[#363636] outline-none focus:border-[#185E99]';
-
-function RequiredMark() {
-  return <span className="text-[#FF6352]">*</span>;
-}
-
+/* Contact form stub following the LeadMagnetSection form pattern.
+   Lives inside the navy panel on /contact/. Replaced by the GHL form embed
+   once it's saved under form:contact at /admin. */
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,116 +20,79 @@ export default function ContactForm() {
     setSubmitted(true);
   };
 
+  if (submitted) {
+    return (
+      <p className="text-white text-2xl font-medium leading-relaxed">
+        Thank you — we&rsquo;ll reach out as soon as possible to schedule your complimentary
+        consultation.
+      </p>
+    );
+  }
+
   return (
-    <div className="bg-[#E5EFF2] rounded-lg p-6 md:p-8">
-      <EmbedSlot slotKey="form:contact">
-        {submitted ? (
-          <p className="text-[#363636] text-[17px] leading-[1.7]">
-            Thank you &mdash; we&rsquo;ll reach out as soon as possible to schedule your
-            complimentary consultation.
-          </p>
-        ) : (
-          <form onSubmit={handleSubmit} noValidate={false}>
-            <p className="text-[13px] text-[#363636] mb-5">
-              &quot;
-              <RequiredMark />
-              &quot; indicates required fields
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-x-6 gap-y-5">
-              <div>
-                <label htmlFor="contact-name" className={labelClass}>
-                  Name <RequiredMark />
-                </label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label htmlFor="contact-email" className={labelClass}>
-                  Email <RequiredMark />
-                </label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={inputClass}
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-x-6 mt-5">
-              <div>
-                <label htmlFor="contact-phone" className={labelClass}>
-                  Phone <RequiredMark />
-                </label>
-                <input
-                  id="contact-phone"
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className={inputClass}
-                />
-              </div>
-            </div>
-
-            <div className="mt-5">
-              <label htmlFor="contact-message" className={labelClass}>
-                Message <RequiredMark />
-              </label>
-              <textarea
-                id="contact-message"
-                required
-                rows={5}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className={`${inputClass} resize-y`}
-              />
-            </div>
-
-            <p className="text-[13px] leading-[1.6] text-[#363636] mt-7">
-              By pressing the Submit button, you agree to use InsuranceandEstates&rsquo;{' '}
-              <a href="/privacytou/" className="text-[#FF6352] underline">
-                privacy policy and terms
-              </a>
-              . InsuranceandEstates may contact you at the number you entered on this webpage using
-              our automatic dialing system to market our life insurance products. Alternatively,
-              you can contact us at 877-787-7558.
-            </p>
-
-            <div className="mt-5 text-[14px] text-[#363636]">
-              <p className="font-semibold">
-                I read the disclaimer above. <RequiredMark />
-              </p>
-              <label className="mt-1.5 flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  required
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
-                  className="shrink-0"
-                />
-                Yes
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              className="mt-7 bg-[#FF6352] text-white text-[15px] tracking-[0.5px] rounded-md px-7 py-2.5 hover:opacity-90 transition-opacity duration-200"
-            >
-              Submit
-            </button>
-          </form>
-        )}
-      </EmbedSlot>
-    </div>
+    <EmbedSlot slotKey="form:contact" className="bg-white rounded-2xl p-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <input
+        type="text"
+        required
+        placeholder="Name*"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+      />
+      <input
+        type="email"
+        required
+        placeholder="Email*"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+      />
+      <input
+        type="tel"
+        required
+        placeholder="Phone*"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+      />
+      <textarea
+        required
+        placeholder="Message*"
+        rows={5}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none resize-y"
+      />
+      <label className="flex items-start gap-3 text-xs text-white/50 leading-relaxed cursor-pointer">
+        <input
+          type="checkbox"
+          required
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          className="mt-0.5 shrink-0"
+        />
+        <span>
+          By pressing the Submit button, you agree to InsuranceandEstates&rsquo;{' '}
+          <a href="/privacytou/" className="underline hover:text-white/70">
+            privacy policy and terms
+          </a>
+          . InsuranceandEstates may contact you at the number you entered on this webpage using
+          our automatic dialing system to market our life insurance products. Alternatively, you
+          can contact us at{' '}
+          <a href="tel:1-877-787-7558" className="underline hover:text-white/70">
+            877-787-7558
+          </a>
+          . I read the disclaimer above.
+        </span>
+      </label>
+      <button
+        type="submit"
+        className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
+      >
+        Submit
+      </button>
+    </form>
+    </EmbedSlot>
   );
 }
