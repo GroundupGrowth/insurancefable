@@ -1,21 +1,22 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight, Star } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import PageHero from '../../components/PageHero';
-import CtaBand from '../../components/CtaBand';
-import { getPageContent, pageMetadata } from '../../lib/content';
+import TrustpilotBox from '../../components/TrustpilotBox';
+import GenerationalTransferBand from '../../components/GenerationalTransferBand';
 
-export const revalidate = 300;
+/* 1:1 clone of the live /testimonials/ page (extraction/parsed/testimonials.json
+   + extraction/screens/src/testimonials.jpeg). Heading typo "Cusotmers" is live
+   — keep verbatim. Both live trustboxes are the same Trustpilot "Mini" widget
+   (templateId 53aa8807dec7e10d38f59f32, 150px / 100%): one under the heading,
+   one after the review grid. */
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getPageContent('testimonials');
-  return pageMetadata(content);
-}
+export const metadata: Metadata = {
+  title: { absolute: 'Testimonials – I&E | Whole Life & Infinite Banking Strategies' },
+  description: 'Real Cusotmers Real Reviews',
+  alternates: { canonical: '/testimonials/' },
+};
 
-const TRUSTPILOT = 'https://www.trustpilot.com/review/insuranceandestates.com';
-
-/* Live Trustpilot reviews from the testimonials page — verbatim, including the
-   live page's excerpt ellipses. Never invent or edit testimonial copy. */
+/* Live static review cards — verbatim from the live page, including the
+   excerpt ellipses. Never invent or edit testimonial copy. */
 const reviews = [
   {
     title: 'Thank You Steve!',
@@ -109,67 +110,49 @@ const reviews = [
   },
 ];
 
-export default async function TestimonialsPage() {
-  const content = await getPageContent('testimonials');
+export default function TestimonialsPage() {
   return (
     <PageShell>
-      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
-        <a
-          href={TRUSTPILOT}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium px-7 py-2.5 rounded-full border border-black/5 hover:bg-white/70 transition-colors duration-200"
-        >
-          Read us on Trustpilot
-          <ArrowUpRight className="w-4 h-4" />
-        </a>
-      </PageHero>
-
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto">
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
-            {reviews.map((review, i) => (
-              <div
-                key={`${review.title}-${i}`}
-                className="break-inside-avoid mb-4 bg-white rounded-2xl p-7 border border-black/5"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {Array.from({ length: 5 }).map((_, star) => (
-                    <Star key={star} className="w-4 h-4 fill-current text-[#0D1B3D]" />
-                  ))}
-                </div>
-                <h3
-                  className="text-[#0D1B3D] text-lg font-medium leading-snug mb-3"
-                  style={{ letterSpacing: '-0.02em' }}
-                >
-                  {review.title}
-                </h3>
-                <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{review.quote}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 text-center">
-            <p className="text-[#0D1B3D]/60 text-sm mb-4">
-              Every review above was left by a real client on Trustpilot.
-            </p>
-            <a
-              href={TRUSTPILOT}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-            >
-              See all reviews on Trustpilot
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
+      {/* Heading + Trustpilot mini widget (live section brxe-3785b5) */}
+      <section className="px-6 pt-14 md:pt-16">
+        <div className="max-w-[1140px] mx-auto">
+          <h3 className="text-[#262626] text-[30px] md:text-[44px] leading-[1.2]">
+            <span className="font-normal">Real Cusotmers</span>
+            <br />
+            <span className="font-bold">Real Reviews</span>
+          </h3>
+          <div className="mt-4 mb-12">
+            <TrustpilotBox className="!mx-0" />
           </div>
         </div>
       </section>
 
-      <CtaBand
-        title="Ready to write your own review?"
-        text="Talk with one of our Pro Client Guides — real experts, no pitch, no pressure. Your first call is about your numbers and your goals, nothing else."
-      />
+      {/* Static review cards (live section brxe-9a477b, .tes-block loop) */}
+      <section className="px-6">
+        <div className="max-w-[1140px] mx-auto flex flex-wrap justify-between gap-y-8">
+          {reviews.map((review, i) => (
+            <div
+              key={`${review.title}-${i}`}
+              className="w-full md:w-[45%] bg-[#F5F5F5] rounded-2xl p-8 md:p-12 flex flex-col justify-center gap-[5px]"
+            >
+              <p className="text-[15px] leading-[1.7]">⭐⭐⭐⭐⭐</p>
+              <h4 className="text-[#262626] text-[20px] font-medium leading-snug">
+                {review.title}
+              </h4>
+              <p className="text-[#363636] text-[15px] leading-[1.7]">{review.quote}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Second Trustpilot mini widget (live block brxe-a481eb) */}
+      <section className="px-6">
+        <div className="max-w-[1140px] mx-auto mt-10 mb-12">
+          <TrustpilotBox />
+        </div>
+      </section>
+
+      <GenerationalTransferBand />
     </PageShell>
   );
 }

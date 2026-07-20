@@ -3,20 +3,26 @@
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
 
-export const freeResources = [
-  'Money Secrets of the Wealthy',
-  "Estate Planner's Tactical Guide",
-  'Financial Planning Has Failed',
-  '5 Important Estate Planning Steps',
-  'Estate Planning Tactical Checklist',
-  'Life Insurance Essentials Report',
-];
+/* Per-book "Free Access" accordion — clone of the live Gravity Forms opt-in
+   under each cover on /ebooks-and-guides/. Button is the mauve pill from the
+   live palette (.bg-ter-1 #8c82a4), the open panel is the live .eg-drop-btn
+   green rgba(223,244,220,0.95). Fields match the live form: Name* / Email* /
+   Phone* + disclaimer consent. Submission is the same visual-replica pattern
+   as GenerationalTransferBand, behind a per-book embed slot. */
 
-/* Shared download form for the free eBooks & guides above. Stub for now —
-   the live page has one lead form per resource with identical fields; wire
-   the submit to the email/CRM backend when it exists. */
-export default function GuideRequestForm() {
-  const [guide, setGuide] = useState(freeResources[0]);
+export interface GuideRequestFormProps {
+  /* Book title, used for the embed slot key + a11y labels */
+  title: string;
+}
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+export default function GuideRequestForm({ title }: GuideRequestFormProps) {
+  const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -25,116 +31,118 @@ export default function GuideRequestForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ guide, name, email, phone, agreed });
+    // Same submission pattern as GenerationalTransferBand {/* TODO: wire submissions */}
+    console.log({ guide: title, name, email, phone, agreed });
     setSubmitted(true);
   };
 
-  return (
-    <section id="request-a-guide" className="px-6 pb-24">
-      <div className="max-w-[88rem] mx-auto">
-        <div className="bg-[#0D1B3D] rounded-3xl">
-          <div className="grid md:grid-cols-2 gap-12 p-10 md:p-14">
-            <div>
-              <p className="text-white/50 text-sm uppercase tracking-wide mb-2">
-                Free eBooks &amp; Guides
-              </p>
-              <h2
-                className="text-white text-4xl md:text-5xl font-medium mb-6"
-                style={{ letterSpacing: '-0.03em' }}
-              >
-                Pick a guide. We&rsquo;ll send it over.
-              </h2>
-              <p className="text-white/70 leading-relaxed">
-                Every resource is free, written by estate planning attorneys and IBC
-                practitioners who use these strategies themselves. Tell us which one
-                you want and where to send it — no strings, no drip campaign you
-                didn&rsquo;t ask for.
-              </p>
-            </div>
+  const inputClass =
+    'w-full rounded-md border border-[#d5dbe1] bg-white px-3 py-2 text-[15px] text-[#363636] outline-none focus:border-[#185E99]';
 
-            <div className="flex flex-col justify-center">
-              {/* Replaced by the GHL form embed once it's saved under form:guide-request at /admin */}
-              <EmbedSlot slotKey="form:guide-request" className="bg-white rounded-2xl p-2">
-              {submitted ? (
-                <p className="text-white text-2xl font-medium leading-relaxed">
-                  Check your inbox — your copy is on the way.
+  return (
+    <div className="w-full">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        className="w-full flex items-center justify-center gap-2.5 bg-[#8C82A4] text-white text-[15px] rounded-lg px-5 py-2.5 hover:opacity-90 transition-opacity duration-200"
+      >
+        Free Access
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 12 12"
+          fill="none"
+          className={`w-3 h-3 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        >
+          <path d="M1.50002 4L6.00002 8L10.5 4" strokeWidth="1.5" stroke="currentcolor" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="-mt-3 pt-6 pb-5 px-5 rounded-b-lg bg-[rgba(223,244,220,0.95)] text-left">
+          <EmbedSlot slotKey={`form:guide-request:${slugify(title)}`}>
+            {submitted ? (
+              <p className="text-[#363636] text-[15px] leading-relaxed">
+                Check your inbox — your copy is on the way.
+              </p>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <p className="text-xs text-[#363636]">
+                  &quot;<span className="text-[#FF6352]">*</span>&quot; indicates
+                  required fields
                 </p>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                  <select
-                    required
-                    value={guide}
-                    onChange={(e) => setGuide(e.target.value)}
-                    className="bg-white/10 text-white rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none appearance-none cursor-pointer"
-                  >
-                    {freeResources.map((resource) => (
-                      <option key={resource} value={resource} className="text-[#0D1B3D]">
-                        {resource}
-                      </option>
-                    ))}
-                  </select>
+                <label className="block text-[13px] text-[#363636]">
+                  Name<span className="text-[#FF6352]">*</span>
                   <input
                     type="text"
                     required
-                    placeholder="Name*"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+                    className={`${inputClass} mt-1`}
                   />
+                </label>
+                <label className="block text-[13px] text-[#363636]">
+                  Email<span className="text-[#FF6352]">*</span>
                   <input
                     type="email"
                     required
-                    placeholder="Email*"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+                    className={`${inputClass} mt-1`}
                   />
+                </label>
+                <label className="block text-[13px] text-[#363636]">
+                  Phone<span className="text-[#FF6352]">*</span>
                   <input
                     type="tel"
                     required
-                    placeholder="Phone*"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none"
+                    className={`${inputClass} mt-1`}
                   />
-                  <label className="flex items-start gap-3 text-xs text-white/50 leading-relaxed cursor-pointer">
+                </label>
+                <hr className="border-[#c9d8c6]" />
+                <p className="text-xs leading-[1.5] text-[#363636]">
+                  By pressing the Submit button, you agree to use
+                  InsuranceandEstates&rsquo;{' '}
+                  <a href="/privacytou/" className="underline">
+                    privacy policy and terms
+                  </a>
+                  . InsuranceandEstates may contact you at the number you entered on
+                  this webpage using our automatic dialing system to market our life
+                  insurance products. Alternatively, you can contact us at{' '}
+                  <a href="tel:1-877-787-7558" className="underline">
+                    877-787-7558
+                  </a>
+                  .
+                </p>
+                <div className="text-[13px] text-[#363636]">
+                  <span className="font-medium">
+                    I read the disclaimer above.
+                    <span className="text-[#FF6352]">*</span>
+                  </span>
+                  <label className="flex items-center gap-2 mt-1.5 cursor-pointer">
                     <input
                       type="checkbox"
                       required
                       checked={agreed}
                       onChange={(e) => setAgreed(e.target.checked)}
-                      className="mt-0.5 shrink-0"
+                      className="shrink-0"
                     />
-                    <span>
-                      By pressing Submit you agree to Insurance &amp; Estates&rsquo;{' '}
-                      <a href="/privacytou/" className="underline hover:text-white/70">
-                        privacy policy and terms
-                      </a>
-                      . InsuranceandEstates may contact you at the number you entered
-                      using our automatic dialing system to market our life insurance
-                      products. Alternatively, call{' '}
-                      <a
-                        href="tel:1-877-787-7558"
-                        className="underline hover:text-white/70"
-                      >
-                        877-787-7558
-                      </a>
-                      . I read the disclaimer above.
-                    </span>
+                    Yes
                   </label>
-                  <button
-                    type="submit"
-                    className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
-                  >
-                    Get Free Access
-                  </button>
-                </form>
-              )}
-              </EmbedSlot>
-            </div>
-          </div>
+                </div>
+                <button
+                  type="submit"
+                  className="self-start bg-[#185E99] text-white text-[15px] tracking-[0.5px] rounded-[20px] px-[15px] py-[7.5px] hover:opacity-90 transition-opacity duration-200"
+                >
+                  Submit
+                </button>
+              </form>
+            )}
+          </EmbedSlot>
         </div>
-      </div>
-    </section>
+      )}
+    </div>
   );
 }
