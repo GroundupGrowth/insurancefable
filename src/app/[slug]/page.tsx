@@ -8,7 +8,8 @@ import BlogPostCard from '../../components/BlogPostCard';
 import AuthorByline from '../../components/AuthorByline';
 import AuthorBioCard from '../../components/AuthorBioCard';
 import TrustDisclosure from '../../components/TrustDisclosure';
-import { getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
+import CommentsSection from '../../components/CommentsSection';
+import { getComments, getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
 import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
@@ -62,11 +63,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const [offer, wikiTerms, relatedPosts, authorship] = await Promise.all([
+  const [offer, wikiTerms, relatedPosts, authorship, comments] = await Promise.all([
     getOfferForPost(post.slug, post.category?.slug ?? null),
     getWikiTerms(),
     getRelatedPosts(post.slug, post.category?.slug ?? null),
     getPostAuthorship(post.slug, post.bodyHtml),
+    getComments(post.slug),
   ]);
   // First mention of each wiki term becomes a link to its /wiki/ page
   const bodyHtml = linkWikiTerms(post.bodyHtml, wikiTerms);
@@ -201,6 +203,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </section>
       )}
+
+      {/* Read-only comment archive (parity with live WordPress; live shows it
+          after the related-articles widget) */}
+      <CommentsSection comments={comments} />
 
       <CtaBand
         title="Ready to see how this applies to your situation?"

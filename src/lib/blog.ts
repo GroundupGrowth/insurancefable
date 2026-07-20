@@ -154,6 +154,35 @@ export async function getPublishedSlugs(): Promise<string[]> {
   return data?.map((row) => row.slug) ?? [];
 }
 
+export interface PostComment {
+  id: number;
+  parentId: number | null;
+  authorName: string;
+  publishedAt: string;
+  body: string;
+}
+
+/* Read-only comment archive migrated from WordPress (post_comments table).
+   Returns [] until Xander has created the table — the section then simply
+   doesn't render, so shipping the UI ahead of the SQL is safe. */
+export async function getComments(postSlug: string): Promise<PostComment[]> {
+  const supabase = serverClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from('post_comments')
+    .select('id, parent_id, author_name, published_at, body')
+    .eq('post_slug', postSlug)
+    .order('published_at', { ascending: true });
+  if (error || !data) return [];
+  return data.map((row) => ({
+    id: row.id,
+    parentId: row.parent_id,
+    authorName: row.author_name,
+    publishedAt: row.published_at,
+    body: row.body,
+  }));
+}
+
 export interface BlogPostSummary {
   slug: string;
   title: string;
