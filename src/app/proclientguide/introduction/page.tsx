@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
-import { ArrowRight } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
-import PageHero from '../../../components/PageHero';
-import LeadMagnetSection from '../../../components/LeadMagnetSection';
-import { PrimaryCta, SecondaryCta } from '../../../components/CtaButtons';
+import TrustpilotBox from '../../../components/TrustpilotBox';
+import GenerationalTransferBand from '../../../components/GenerationalTransferBand';
 import { getPageContent, pageMetadata } from '../../../lib/content';
 
 export const revalidate = 300;
@@ -13,226 +11,182 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(content);
 }
 
-const steps = [
-  {
-    number: '01',
-    heading: 'Start with the education.',
-    text: 'Free resources, no forms. Read the guides, watch the videos, and understand the strategy before you ever talk to anyone.',
-  },
-  {
-    number: '02',
-    heading: "Book a Fit Call when you're ready.",
-    text: "A real conversation about your numbers and your goals — not a sales script. If the strategy fits, you'll know. If it doesn't, we'll tell you.",
-  },
-  {
-    number: '03',
-    heading: 'They stay with you.',
-    text: "This isn't a transaction. Your guide stays with you through policy design, funding, and every year the system compounds after that.",
-  },
-];
+/* 1:1 clone of the live /proclientguide/introduction/ page
+   (extraction/parsed/proclientguide__introduction.json +
+   extraction/screens/src/proclientguide__introduction.jpeg). */
 
-const guides = [
+const GUIDE_CARD = '#E8F2FC';
+const LEADER_CARD = '#E8F0E5';
+
+interface TeamMember {
+  name: string;
+  role: string;
+  href: string;
+  image: string;
+  alt: string;
+}
+
+const guides: TeamMember[] = [
   {
     name: 'Denise Boisvert',
-    role: 'IBC, Debt Elimination & College Funding Strategist',
+    role: 'Pro Client Guide – IBC, Debt Elimination & College Funding Strategist',
     href: '/proclientguide/denise/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/Denise-1.webp',
+    image: '/wp-content/uploads/Denise-1.webp',
+    alt: 'Denise',
   },
   {
     name: 'Barry Brooksby',
-    role: 'Lead IBC Educator, Practitioner & Real Estate Strategist',
+    role: 'Pro Client Guide – Lead IBC Educator, Practitioner & Real Estate Strategist',
     href: '/proclientguide/barry/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/Barry-1-1.webp',
+    image: '/wp-content/uploads/Barry-1-1.webp',
+    alt: 'Barry',
   },
   {
     name: 'Jason Herring',
-    role: 'Overfunded Life Insurance & Retirement Income Specialist',
+    role: 'Pro Client Guide – Overfunded Life Insurance & Retirement Income Specialist',
     href: '/proclientguide/jasonh/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/Jason-1.webp',
+    image: '/wp-content/uploads/Jason-1.webp',
+    alt: 'Jason',
   },
 ];
 
-// Luke and Erik have no page in this build — link absolute to the live site until migrated.
-const leadership = [
+// Luke and Erik have no profile page in this build yet — hrefs match the live
+// links (/proclientguide/luke-dupin/, /proclientguide/erik-hayton/); both are
+// on the migration backlog.
+const leadership: TeamMember[] = [
   {
     name: 'Jason Kenyon, Esq.',
     role: 'Chief Executive Officer',
     href: '/proclientguide/jasonk/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/jasonk-1-230x300.webp',
+    image: '/wp-content/uploads/jasonk-1-230x300.webp',
+    alt: 'Jasonk',
   },
   {
     name: 'Steve Gibbs, JD, AEP®',
     role: 'Chief Strategic Partnerships Officer',
     href: '/proclientguide/steve/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/steven_gibbs-230x300.webp',
+    image: '/wp-content/uploads/steven_gibbs-230x300.webp',
+    alt: 'Steven Gibbs',
   },
   {
     name: 'Luke Dupin',
     role: 'Chief Technology Officer',
-    // Full profile not yet migrated — route to contact rather than the old site
-    href: '/contact/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/luke-240x300.webp',
+    href: '/proclientguide/luke-dupin/',
+    image: '/wp-content/uploads/luke-240x300.webp',
+    alt: 'Luke',
   },
   {
     name: 'Erik J. Hayton',
     role: 'Chief Marketing Officer',
-    // Full profile not yet migrated — route to contact rather than the old site
-    href: '/contact/',
-    image: 'https://www.insuranceandestates.com/wp-content/uploads/erik-hayton--230x300.webp',
+    href: '/proclientguide/erik-hayton/',
+    image: '/wp-content/uploads/erik-hayton--230x300.webp',
+    alt: 'Erik J. Hayton',
   },
 ];
 
-function TeamCard({
-  name,
-  role,
-  href,
-  image,
-}: {
-  name: string;
-  role: string;
-  href: string;
-  image: string;
-}) {
+function TeamCard({ member, background }: { member: TeamMember; background: string }) {
   return (
     <a
-      href={href}
-      className="group bg-white rounded-2xl p-4 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
+      href={member.href}
+      className="w-full sm:w-[250px] rounded-xl p-4 flex flex-col hover:opacity-90 transition-opacity duration-200"
+      style={{ backgroundColor: background }}
     >
-      {/* Headshots hotlinked from the live WordPress site */}
       <img
-        src={image}
-        alt={name}
-        width={600}
-        height={800}
+        src={member.image}
+        alt={member.alt}
+        width={230}
+        height={300}
         loading="lazy"
-        className="w-full aspect-[3/4] object-cover object-top rounded-xl mb-5"
+        className="w-full object-cover rounded-md mb-4"
       />
-      <div className="px-3 pb-3 flex flex-col flex-1">
-        <h3
-          className="text-[#0D1B3D] text-xl md:text-2xl font-medium mb-1"
-          style={{ letterSpacing: '-0.02em' }}
-        >
-          {name}
-        </h3>
-        <p className="text-[#0D1B3D]/60 text-sm leading-relaxed">{role}</p>
-        <span className="mt-auto pt-5 inline-flex items-center gap-2 text-sm font-medium text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
-          View Profile
-          <ArrowRight className="w-4 h-4" />
-        </span>
-      </div>
+      <p className="text-center text-[#262626] text-[14px] font-bold leading-snug">{member.name}</p>
+      <p className="text-center text-[#363636] text-[14px] leading-[1.6] mt-1">{member.role}</p>
     </a>
   );
 }
 
-export default async function ProClientGuideIntroductionPage() {
-  const content = await getPageContent('proclientguide/introduction');
+export default function ProClientGuideIntroductionPage() {
   return (
     <PageShell>
-      <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
-        <PrimaryCta href="/connect-with-our-experts/" label="Book a Fit Call" />
-        <SecondaryCta href="/start-your-journey/" label="Start your Journey" />
-      </PageHero>
+      {/* Hero + how it works */}
+      <section className="px-4 pt-12 pb-10">
+        <div className="max-w-[1100px] mx-auto">
+          <h1 className="text-center text-[#262626] text-[40px] md:text-[56px] font-bold leading-tight">
+            Our Pro Team
+          </h1>
 
-      {/* How it works */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {steps.map((step) => (
-              <div key={step.number} className="bg-white rounded-2xl p-7 border border-black/5">
-                <p className="text-[#0D1B3D]/40 text-sm mb-6">{step.number}</p>
-                <h3
-                  className="text-[#0D1B3D] text-xl md:text-2xl font-medium mb-4"
-                  style={{ letterSpacing: '-0.02em' }}
-                >
-                  {step.heading}
-                </h3>
-                <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{step.text}</p>
-              </div>
-            ))}
+          <TrustpilotBox className="mt-8 mb-12" />
+
+          <div className="max-w-[430px] mx-auto text-[#363636] text-[15px] leading-[1.7]">
+            <h2 className="text-[#262626] text-[21px] font-bold leading-snug mb-4">
+              You Found the Exit. Here&apos;s Who Walks You Through It.
+            </h2>
+            <p>
+              Our Pro Client Guides aren’t salespeople. They’re strategic advisors who’ve been
+              through this themselves. No pressure,&nbsp; just someone who knows the system and
+              helps you figure out if it’s right for you.
+            </p>
+            <h2 className="text-[#262626] text-[17px] font-bold mt-6 mb-3">How It Works</h2>
+            <p className="mb-3">
+              <strong>Start with the education.</strong> Free resources, no forms. Read, watch, and
+              learn at your own pace until it clicks. Nobody will chase you.
+            </p>
+            <p className="mb-3">
+              <strong>Book a Fit Call when you’re ready.</strong> Your Pro Client Guide maps your
+              current situation, designs a strategy around your actual numbers, and shows you
+              exactly what’s possible.
+            </p>
+            <p className="mb-3">
+              <strong>They stay with you.</strong> This isn’t a transaction. Your guide partners
+              with you for the life of your policy, not just through the application.
+            </p>
+            <p>
+              Ready to take the next step?{' '}
+              <a href="/connect-with-our-experts/" className="text-[#FF6352] hover:underline">
+                Book a Fit Call
+              </a>{' '}
+              or click on a Pro Client Guide’s photo to schedule directly on their calendar.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Pro Client Guides */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto">
-          <h2
-            className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
-            style={{ letterSpacing: '-0.04em' }}
-          >
+      <section className="px-4 pb-8">
+        <div className="max-w-[1100px] mx-auto">
+          <h3 className="text-center text-[#262626] text-[28px] font-bold mb-8">
             Pro Client Guides
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          </h3>
+          <div className="flex flex-wrap gap-5 justify-center">
             {guides.map((guide) => (
-              <TeamCard key={guide.name} {...guide} />
+              <TeamCard key={guide.name} member={guide} background={GUIDE_CARD} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Leadership */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto">
-          <h2
-            className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
-            style={{ letterSpacing: '-0.04em' }}
-          >
-            Leadership Team
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Live divider between the two team blocks */}
+      <div className="px-4">
+        <hr className="max-w-[700px] mx-auto my-10 border-0 border-t-2 border-[#6B97BE]" />
+      </div>
+
+      {/* Leadership Team */}
+      <section className="px-4 pb-10">
+        <div className="max-w-[1100px] mx-auto">
+          <h3 className="text-center text-[#262626] text-[28px] font-bold mb-8">Leadership Team</h3>
+          <div className="flex flex-wrap gap-5 justify-center">
             {leadership.map((member) => (
-              <TeamCard key={member.name} {...member} />
+              <TeamCard key={member.name} member={member} background={LEADER_CARD} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Proof + contact */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-          <a
-            href="/testimonials/"
-            className="group bg-white rounded-2xl p-7 min-h-48 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
-          >
-            <p className="text-sm text-[#0D1B3D]/60 mb-2">Don&rsquo;t take our word for it</p>
-            <h3
-              className="text-[#0D1B3D] text-2xl md:text-3xl font-medium mb-4"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              Read Client Testimonials
-            </h3>
-            <p className="text-[#0D1B3D]/70 text-base leading-relaxed">
-              Hundreds of five-star reviews from people who found the exit — in their own words.
-            </p>
-            <span className="mt-auto pt-6 self-start inline-flex items-center gap-2 bg-[#F5F5F5] text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full group-hover:bg-[#0D1B3D] group-hover:text-white transition-colors duration-200">
-              Testimonials
-              <ArrowRight className="w-4 h-4" />
-            </span>
-          </a>
-
-          <div className="bg-[#0D1B3D] rounded-2xl p-7 min-h-48 flex flex-col">
-            <p className="text-white/50 text-sm mb-2">Have a question first?</p>
-            <h3
-              className="text-white text-2xl md:text-3xl font-medium mb-4"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              Get in Touch
-            </h3>
-            <p className="text-white/60 text-base leading-relaxed">
-              Reach the team directly — no forms funneling you to a sales queue, just answers.
-            </p>
-            <a
-              href="/contact/"
-              className="mt-auto self-start inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200"
-            >
-              Contact Us
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
+      <section className="px-4 pb-12">
+        <TrustpilotBox />
       </section>
 
-      <LeadMagnetSection />
+      <GenerationalTransferBand />
     </PageShell>
   );
 }

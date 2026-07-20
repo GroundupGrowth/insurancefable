@@ -1,33 +1,53 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  Award,
-  BadgeCheck,
-  Calendar,
-  Check,
-  GraduationCap,
-  Linkedin,
-  Mail,
-  Phone,
-  Star,
-} from 'lucide-react';
+import { ArrowUpRight, Clock, Linkedin, Mail } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import PageHero from '../../components/PageHero';
-import CtaBand from '../../components/CtaBand';
+import GenerationalTransferBand from '../../components/GenerationalTransferBand';
 import AdvisorBooking from '../../components/AdvisorBooking';
+import TestimonialCarousel from './TestimonialCarousel';
 
-/* Shared layout for the five Pro Client Guide profile pages. Each page
-   provides an AdvisorProfile object; the structure stays identical. */
+/* Shared layout for the five Pro Client Guide profile pages, cloned 1:1 from
+   the live Bricks template (extraction/screens/src/proclientguide__*.jpeg):
+
+     eyebrow (role) → name overlapping a soft-green bio card → optional
+     "<First>'s Latest Book" band → contact bar → review carousel →
+     "<First>'s Top Webinars" band → Recent Articles grid →
+     The Generational Transfer band.
+
+   Each page supplies an AdvisorProfile; the structure stays identical. The
+   E-E-A-T layer (Person JSON-LD built from credentials / licenses / education /
+   publications) rides along on the same data — see src/data/advisors.ts. */
+
+const SITE = 'https://www.insuranceandestates.com';
+
+/* Live design tokens sampled from the page screenshots */
+const GREEN_CARD = '#ECF4E7';
+const GREEN_PHOTO = '#C5DEB6';
+const BOOK_BAND = '#A5C3DD';
+const BOOK_BLUE = '#0860A0';
+const CONTACT_BAR = '#ECECEC';
+const WEBINAR_BAND = '#F5F5F5';
+const POST_CARD = '#EAF2F4';
+const CORAL = '#FF6352';
+const YELLOW = '#FCD552';
 
 export interface BioSection {
   heading: string;
   paragraphs: string[];
 }
 
+/** A span of bio copy — a plain string, or a linked and/or bold fragment. */
+export type BioRun = string | { text: string; href?: string; bold?: boolean };
+
+/** Verbatim live bio body: bold subheads, paragraphs, and bullet lists. */
+export type BioBlock =
+  | { t: 'h'; text: string; big?: boolean }
+  | { t: 'p'; runs: BioRun[] }
+  | { t: 'ul'; items: BioRun[][] };
+
 export interface Testimonial {
   quote: string;
   attribution?: string;
+  /** Review title shown above the quote on live */
+  heading?: string;
 }
 
 /** A book, article, podcast, or media mention — the "Books & Media" E-E-A-T section. */
@@ -37,6 +57,14 @@ export interface Publication {
   title: string;
   /** External link; the card becomes clickable when set */
   href?: string;
+}
+
+/** A card in the live "Recent Articles" grid. */
+export interface ArticleCard {
+  href: string;
+  img: string;
+  alt: string;
+  title: string;
 }
 
 export interface AdvisorProfile {
@@ -49,7 +77,7 @@ export interface AdvisorProfile {
   /** Used in CTA labels: "Email Barry", "Schedule a call with Barry" */
   firstName: string;
   intro: string;
-  /** Hotlinked headshot from the live WordPress site. Omit to fall back to the initials block. */
+  /** Headshot, localized under /wp-content/uploads. Omit to fall back to the initials block. */
   photo?: { src: string; alt: string };
   /** Fallback for the navy initials placeholder when no photo is available */
   initials: string;
@@ -62,7 +90,7 @@ export interface AdvisorProfile {
   linkedinUrl?: string;
   /** Extra verified profile URLs for schema sameAs (X, YouTube, Amazon author page …) */
   sameAs?: string[];
-  /** Shown big in the at-a-glance band, e.g. "25+ years" or "Since 2010" */
+  /** Feeds the Person schema; not shown on the live layout */
   yearsExperience?: string;
   /** State licenses / producer licenses / securities series, one per entry */
   licenses?: string[];
@@ -70,18 +98,90 @@ export interface AdvisorProfile {
   education?: string[];
   /** Books authored, articles, podcasts, media mentions */
   publications?: Publication[];
-  /** LeadConnector booking widget URL from the live page (linked directly; embed is a follow-up) */
+  /** LeadConnector booking widget URL from the live page */
   schedulerUrl?: string;
   email?: string;
-  book?: { eyebrow: string; title: string; text: string; href: string };
+  book?: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    href: string;
+    image?: { src: string; alt: string };
+  };
+  /* --- live clone fields --- */
+  /** Eyebrow colour used on the live page (blue for most, coral for Denise) */
+  accent?: string;
+  /** Verbatim live bio body. Falls back to `bioSections` when absent (CMS rows). */
+  bio?: BioBlock[];
+  /** Live office-hours line in the contact bar */
+  hours?: string;
+  /** Live pages repeat the Schedule a Call button under the headshot */
+  topScheduleButton?: boolean;
+  /** Live "<First>'s Top Webinars" heading — the section is empty on live */
+  webinarsHeading?: string;
+  /** Live "Recent Articles" / "<First>'s Recent Articles" heading */
+  articlesHeading?: string;
+  articles?: ArticleCard[];
 }
 
-function Stars() {
+function Runs({ runs }: { runs: BioRun[] }) {
   return (
-    <div className="flex gap-1 mb-4" aria-label="5 star review">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} className="w-4 h-4 text-[#0D1B3D] fill-[#0D1B3D]" />
-      ))}
+    <>
+      {runs.map((run, i) => {
+        if (typeof run === 'string') return <span key={i}>{run}</span>;
+        const label = run.bold ? <strong>{run.text}</strong> : run.text;
+        return run.href ? (
+          <a key={i} href={run.href} className="text-[#FF6352] hover:underline">
+            {label}
+          </a>
+        ) : (
+          <span key={i}>{label}</span>
+        );
+      })}
+    </>
+  );
+}
+
+function BioBody({ profile }: { profile: AdvisorProfile }) {
+  const blocks: BioBlock[] =
+    profile.bio ??
+    /* CMS rows that predate the live-clone fields still render readable prose */
+    profile.bioSections.flatMap<BioBlock>((section) => [
+      { t: 'h', text: section.heading },
+      ...section.paragraphs.map<BioBlock>((paragraph) => ({ t: 'p', runs: [paragraph] })),
+    ]);
+
+  return (
+    <div className="text-[#363636] text-[15px] leading-[1.75]">
+      {blocks.map((block, i) => {
+        if (block.t === 'h') {
+          return block.big ? (
+            <h2 key={i} className="text-[#262626] text-[21px] font-semibold mt-7 mb-3 first:mt-0">
+              {block.text}
+            </h2>
+          ) : (
+            <p key={i} className="mt-6 mb-3 first:mt-0">
+              <strong className="text-[#262626]">{block.text}</strong>
+            </p>
+          );
+        }
+        if (block.t === 'ul') {
+          return (
+            <ul key={i} className="list-disc pl-6 my-3 space-y-1.5">
+              {block.items.map((item, j) => (
+                <li key={j}>
+                  <Runs runs={item} />
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        return (
+          <p key={i} className="my-3 first:mt-0">
+            <Runs runs={block.runs} />
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -96,20 +196,26 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     photo,
     initials,
     specialties,
-    bioSections,
     credentials,
     testimonials,
     schedulerUrl,
     email,
     book,
     linkedinUrl,
-    yearsExperience,
     licenses = [],
     education = [],
     publications = [],
+    accent = '#98C4DF',
+    hours,
+    topScheduleButton = false,
+    webinarsHeading,
+    articlesHeading,
+    articles = [],
   } = profile;
 
   const sameAs = [...(linkedinUrl ? [linkedinUrl] : []), ...(profile.sameAs ?? [])];
+  const photoUrl = photo ? (photo.src.startsWith('/') ? `${SITE}${photo.src}` : photo.src) : undefined;
+  const hasContactBar = Boolean(hours || email || schedulerUrl || linkedinUrl);
 
   /* Person schema: entity clarity for search + AI engines (E-E-A-T). The
      optional trust fields feed sameAs / alumniOf / hasCredential so engines
@@ -120,8 +226,8 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     name,
     jobTitle: role,
     description: intro,
-    url: `https://www.insuranceandestates.com/proclientguide/${slug}/`,
-    ...(photo ? { image: photo.src } : {}),
+    url: `${SITE}/proclientguide/${slug}/`,
+    ...(photoUrl ? { image: photoUrl } : {}),
     ...(email ? { email } : {}),
     ...(sameAs.length > 0 ? { sameAs } : {}),
     ...(specialties.length > 0 ? { knowsAbout: specialties } : {}),
@@ -144,11 +250,9 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     worksFor: {
       '@type': 'Organization',
       name: 'Insurance & Estates',
-      url: 'https://www.insuranceandestates.com/',
+      url: `${SITE}/`,
     },
   };
-
-  const hasGlanceBand = Boolean(yearsExperience) || licenses.length > 0 || education.length > 0;
 
   return (
     <PageShell>
@@ -156,219 +260,247 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <PageHero eyebrow={role} title={name} intro={intro} />
 
-      {/* Headshot + specialties / contact card */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="bg-white rounded-2xl p-4 border border-black/5">
-            {photo ? (
-              /* Headshot hotlinked from the live WordPress site */
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                width={690}
-                height={920}
-                className="w-full aspect-[3/4] object-cover object-top rounded-xl"
-              />
-            ) : (
-              /* MISSING ASSET: no headshot surfaced on the live page — replace with a real photo */
-              <div className="w-full aspect-[3/4] rounded-xl bg-[#0D1B3D] flex items-center justify-center">
-                <span
-                  className="text-white text-6xl font-medium"
-                  style={{ letterSpacing: '-0.04em' }}
-                >
-                  {initials}
-                </span>
-              </div>
-            )}
-          </div>
+      {/* Hero: eyebrow, name overlapping the soft-green bio card */}
+      <section className="px-4 pt-10">
+        <div className="max-w-[880px] mx-auto">
+          <p
+            className="text-center uppercase font-extrabold text-[19px] leading-tight"
+            style={{ color: accent }}
+          >
+            {role}
+          </p>
 
-          <div className="lg:col-span-2 bg-[#0D1B3D] rounded-2xl p-8 md:p-10 flex flex-col">
-            <p className="text-white/50 text-sm mb-4">Specialties</p>
-            <div className="flex flex-wrap gap-2">
-              {specialties.map((specialty) => (
-                <span
-                  key={specialty}
-                  className="bg-white/10 text-white text-sm px-4 py-1.5 rounded-full"
-                >
-                  {specialty}
-                </span>
-              ))}
-            </div>
+          <div className="relative mt-7">
+            <h1
+              className="absolute inset-x-0 -top-[6px] z-10 text-center text-[#262626] text-[40px] md:text-[62px] font-light leading-[1.05] px-4"
+              style={{ letterSpacing: '-0.01em' }}
+            >
+              {name}
+            </h1>
 
-            <div className="mt-auto pt-10 flex gap-3 flex-wrap">
-              {schedulerUrl && (
-                /* FOLLOW-UP: live page embeds a LeadConnector booking widget — linked
-                   directly here until we decide whether to embed it. */
-                <a
-                  href={schedulerUrl}
-                  className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Schedule a Call
-                </a>
-              )}
-              {email && (
-                <a
-                  href={`mailto:${email}`}
-                  className="inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
-                >
-                  <Mail className="w-4 h-4" />
-                  Email {firstName}
-                </a>
-              )}
-              <a
-                href="tel:1-877-787-7558"
-                className="inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
+            <div className="rounded-2xl overflow-hidden">
+              {/* Green bio card */}
+              <div
+                className="px-5 md:px-9 pt-[72px] md:pt-[86px] pb-9"
+                style={{ backgroundColor: GREEN_CARD }}
               >
-                <Phone className="w-4 h-4" />
-                877-787-7558
-              </a>
-              {linkedinUrl && (
-                <a
-                  href={linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-white/10 text-white font-medium text-sm px-5 py-2.5 rounded-full hover:bg-white/20 transition-colors duration-200"
+                <div className="flex flex-col sm:flex-row gap-6 md:gap-8">
+                  <div className="w-full sm:w-[190px] shrink-0">
+                    {photo ? (
+                      <div
+                        className="rounded-2xl p-2.5"
+                        style={{ backgroundColor: GREEN_PHOTO }}
+                      >
+                        <img
+                          src={photo.src}
+                          alt={photo.alt}
+                          width={190}
+                          height={233}
+                          className="w-full rounded-xl object-cover"
+                        />
+                      </div>
+                    ) : (
+                      /* MISSING ASSET: no headshot on the live page — initials placeholder */
+                      <div className="rounded-2xl aspect-[3/4] bg-[#0D1B3D] flex items-center justify-center">
+                        <span className="text-white text-5xl font-medium">{initials}</span>
+                      </div>
+                    )}
+
+                    {topScheduleButton && schedulerUrl && (
+                      <div className="text-center mt-5">
+                        <a
+                          href={schedulerUrl}
+                          target="_blank"
+                          rel="noopener"
+                          className="inline-block text-[#FF6352] text-[14px] px-4 py-2 rounded-[4px] hover:opacity-90 transition-opacity duration-200"
+                          style={{ backgroundColor: YELLOW }}
+                        >
+                          Schedule a Call
+                        </a>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <BioBody profile={profile} />
+                  </div>
+                </div>
+              </div>
+
+              {/* "<First>'s Latest Book" band */}
+              {book && (
+                <div
+                  className="px-5 md:px-9 py-8"
+                  style={{ backgroundColor: BOOK_BAND }}
                 >
-                  <Linkedin className="w-4 h-4" />
-                  LinkedIn
-                </a>
+                  <h2 className="text-[#262626] text-[21px] font-semibold mb-6">{book.eyebrow}</h2>
+                  <div className="flex flex-col sm:flex-row gap-6 md:gap-8 items-start">
+                    {book.image && (
+                      <img
+                        src={book.image.src}
+                        alt={book.image.alt}
+                        width={160}
+                        height={200}
+                        className="w-[160px] shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        className="text-[30px] font-bold leading-tight"
+                        style={{ color: BOOK_BLUE }}
+                      >
+                        {book.title}
+                      </h3>
+                      <h4
+                        className="text-[19px] font-semibold leading-snug mt-2"
+                        style={{ color: BOOK_BLUE }}
+                      >
+                        {book.text}
+                      </h4>
+                      {/* Intentional external link — the live book funnel subdomain */}
+                      <a
+                        href={book.href}
+                        target="_blank"
+                        rel="noopener"
+                        className="inline-block mt-4 bg-[#CFEBC5] text-[#FF6352] text-[14px] px-4 py-2 rounded-[4px] hover:opacity-90 transition-opacity duration-200"
+                      >
+                        Learn More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Contact bar */}
+              {hasContactBar && (
+                <div
+                  className="px-5 md:px-9 py-4 flex flex-wrap items-center justify-between gap-4"
+                  style={{ backgroundColor: CONTACT_BAR }}
+                >
+                  {hours && (
+                    <p className="flex items-center gap-2.5 text-[#363636] text-[15px]">
+                      <Clock className="w-5 h-5 shrink-0" />
+                      {hours}
+                    </p>
+                  )}
+                  {email && (
+                    <a
+                      href={`mailto:${email}`}
+                      className="flex items-center gap-2.5 text-[15px] hover:underline"
+                      style={{ color: CORAL }}
+                    >
+                      <Mail className="w-5 h-5 shrink-0 text-[#363636]" />
+                      Email {firstName}
+                    </a>
+                  )}
+                  {linkedinUrl && (
+                    <a
+                      href={linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 text-[15px] hover:underline"
+                      style={{ color: CORAL }}
+                    >
+                      <Linkedin className="w-5 h-5 shrink-0 text-[#363636]" />
+                      LinkedIn
+                    </a>
+                  )}
+                  {schedulerUrl && (
+                    <a
+                      href={schedulerUrl}
+                      target="_blank"
+                      rel="noopener"
+                      className="text-[#FF6352] text-[14px] px-5 py-2 rounded-[4px] hover:opacity-90 transition-opacity duration-200"
+                      style={{ backgroundColor: YELLOW }}
+                    >
+                      Schedule a Call
+                    </a>
+                  )}
+                </div>
               )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* At-a-glance trust band: experience, licensing, education (E-E-A-T).
-          Renders only when at least one field is filled at /admin. */}
-      {hasGlanceBand && (
-        <section className="px-6 pb-24">
-          <div className="max-w-[88rem] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-            {yearsExperience && (
-              <div className="bg-white rounded-2xl p-7 border border-black/5">
-                <div className="flex items-center gap-2 mb-5">
-                  <Award className="w-4 h-4 text-[#0D1B3D]/40" />
-                  <p className="text-[#0D1B3D]/50 text-sm">Experience</p>
-                </div>
-                <p
-                  className="text-[#0D1B3D] text-3xl md:text-4xl font-medium"
-                  style={{ letterSpacing: '-0.03em' }}
-                >
-                  {yearsExperience}
-                </p>
-              </div>
-            )}
-            {licenses.length > 0 && (
-              <div className="bg-white rounded-2xl p-7 border border-black/5">
-                <div className="flex items-center gap-2 mb-5">
-                  <BadgeCheck className="w-4 h-4 text-[#0D1B3D]/40" />
-                  <p className="text-[#0D1B3D]/50 text-sm">Licenses</p>
-                </div>
-                <ul className="space-y-2.5">
-                  {licenses.map((license) => (
-                    <li key={license} className="text-[#0D1B3D]/70 text-base leading-relaxed">
-                      {license}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {education.length > 0 && (
-              <div className="bg-white rounded-2xl p-7 border border-black/5">
-                <div className="flex items-center gap-2 mb-5">
-                  <GraduationCap className="w-4 h-4 text-[#0D1B3D]/40" />
-                  <p className="text-[#0D1B3D]/50 text-sm">Education</p>
-                </div>
-                <ul className="space-y-2.5">
-                  {education.map((entry) => (
-                    <li key={entry} className="text-[#0D1B3D]/70 text-base leading-relaxed">
-                      {entry}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
+      {/* Client reviews carousel */}
+      <TestimonialCarousel testimonials={testimonials} />
 
       {/* Inline booking calendar — appears once its embed code is saved at /admin */}
       <AdvisorBooking slug={slug} firstName={firstName} />
 
-      {/* Bio sections */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-          {bioSections.map((block) => (
-            <div key={block.heading} className="bg-white rounded-2xl p-7 border border-black/5">
-              <h2
-                className="text-[#0D1B3D] text-xl md:text-2xl font-medium mb-4"
-                style={{ letterSpacing: '-0.02em' }}
-              >
-                {block.heading}
-              </h2>
-              <div className="space-y-4">
-                {block.paragraphs.map((paragraph) => (
-                  <p key={paragraph} className="text-[#0D1B3D]/70 text-base leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Credentials */}
-      <section className="px-6 pb-24">
-        <div className="max-w-[88rem] mx-auto">
-          <h2
-            className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
-            style={{ letterSpacing: '-0.04em' }}
-          >
-            Credentials &amp; Achievements
+      {/* "<First>'s Top Webinars" — the live band carries the heading only */}
+      {webinarsHeading && (
+        <section className="px-4 py-16" style={{ backgroundColor: WEBINAR_BAND }}>
+          <h2 className="text-center text-[#262626] text-[21px] font-semibold">
+            {webinarsHeading}
           </h2>
-          <div className="bg-white rounded-2xl p-7 md:p-10 border border-black/5">
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
-              {credentials.map((credential) => (
-                <li key={credential} className="flex items-start gap-3">
-                  <span className="bg-[#F5F5F5] rounded-full p-1.5 mt-0.5 shrink-0">
-                    <Check className="w-4 h-4 text-[#0D1B3D]" />
-                  </span>
-                  <span className="text-[#0D1B3D]/70 text-base leading-relaxed">{credential}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+          <div className="h-16" />
+        </section>
+      )}
 
-      {/* Books, articles & media mentions — verifiable published work (E-E-A-T) */}
+      {/* Recent Articles */}
+      {articles.length > 0 && (
+        <section className="px-4 pt-14 pb-10">
+          <div className="max-w-[1100px] mx-auto">
+            <h2 className="text-center text-[#262626] text-[22px] font-semibold mb-9">
+              {articlesHeading ?? 'Recent Articles'}
+            </h2>
+            <div className="flex flex-wrap gap-4 justify-center">
+              {articles.map((article) => (
+                <a
+                  key={article.href}
+                  href={article.href}
+                  className="w-full md:w-[calc(50%-0.5rem)] rounded-2xl p-6 md:p-8 flex items-center gap-5 hover:opacity-90 transition-opacity duration-200"
+                  style={{ backgroundColor: POST_CARD }}
+                >
+                  <span className="bg-white rounded-md p-1.5 shadow-sm shrink-0">
+                    <img
+                      src={article.img}
+                      alt={article.alt}
+                      width={96}
+                      height={96}
+                      loading="lazy"
+                      className="w-[96px] h-[96px] object-contain rounded"
+                    />
+                  </span>
+                  <span
+                    className="text-[19px] leading-snug"
+                    style={{ color: CORAL }}
+                  >
+                    {article.title}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Books, articles & media mentions — verifiable published work (E-E-A-T).
+          Not part of the live template; renders only for advisors with entries. */}
       {publications.length > 0 && (
-        <section className="px-6 pb-24">
-          <div className="max-w-[88rem] mx-auto">
-            <h2
-              className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
-              style={{ letterSpacing: '-0.04em' }}
-            >
+        <section className="px-4 pb-10">
+          <div className="max-w-[1100px] mx-auto">
+            <h2 className="text-center text-[#262626] text-[22px] font-semibold mb-9">
               Books, Media &amp; Publications
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex flex-wrap gap-4 justify-center">
               {publications.map((publication) => {
                 const inner = (
                   <>
-                    <p className="text-[#0D1B3D]/50 text-sm mb-2">
+                    <p className="text-[#363636]/60 text-[13px] mb-2">
                       {publication.source ?? 'Publication'}
                     </p>
-                    <h3
-                      className="text-[#0D1B3D] text-xl md:text-2xl font-medium leading-snug"
-                      style={{ letterSpacing: '-0.02em' }}
-                    >
+                    <h3 className="text-[#262626] text-[18px] font-semibold leading-snug">
                       {publication.title}
                     </h3>
                     {publication.href && (
-                      <span className="mt-auto pt-6 inline-flex items-center gap-2 text-sm font-medium text-[#0D1B3D]/60 group-hover:text-[#0D1B3D] transition-colors duration-200">
+                      <span
+                        className="mt-4 inline-flex items-center gap-1.5 text-[14px]"
+                        style={{ color: CORAL }}
+                      >
                         View
                         <ArrowUpRight className="w-4 h-4" />
                       </span>
@@ -376,19 +508,24 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                   </>
                 );
                 const cardClass =
-                  'group bg-white rounded-2xl p-7 border border-black/5 flex flex-col';
+                  'w-full md:w-[calc(33.333%-0.7rem)] rounded-2xl p-6 flex flex-col';
                 return publication.href ? (
                   <a
                     key={publication.title}
                     href={publication.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`${cardClass} hover:border-black/15 transition-colors duration-200`}
+                    className={`${cardClass} hover:opacity-90 transition-opacity duration-200`}
+                    style={{ backgroundColor: POST_CARD }}
                   >
                     {inner}
                   </a>
                 ) : (
-                  <div key={publication.title} className={cardClass}>
+                  <div
+                    key={publication.title}
+                    className={cardClass}
+                    style={{ backgroundColor: POST_CARD }}
+                  >
                     {inner}
                   </div>
                 );
@@ -398,78 +535,7 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
         </section>
       )}
 
-      {/* Featured book (optional) */}
-      {book && (
-        <section className="px-6 pb-24">
-          <div className="max-w-[88rem] mx-auto bg-white rounded-3xl p-8 md:p-14 border border-black/5">
-            <p className="text-[#0D1B3D]/60 text-sm mb-2">{book.eyebrow}</p>
-            <h2
-              className="text-[#0D1B3D] text-3xl md:text-4xl font-medium leading-tight max-w-3xl mb-4"
-              style={{ letterSpacing: '-0.03em' }}
-            >
-              {book.title}
-            </h2>
-            <p className="text-[#0D1B3D]/70 text-base leading-relaxed max-w-2xl mb-8">{book.text}</p>
-            <a
-              href={book.href}
-              className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-            >
-              Learn More
-              <span className="bg-white rounded-full p-2">
-                <ArrowRight className="w-5 h-5 text-[#0D1B3D]" />
-              </span>
-            </a>
-          </div>
-        </section>
-      )}
-
-      {/* Testimonials */}
-      {testimonials.length > 0 && (
-        <section className="px-6 pb-24">
-          <div className="max-w-[88rem] mx-auto">
-            <h2
-              className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
-              style={{ letterSpacing: '-0.04em' }}
-            >
-              What Clients Say
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {testimonials.map((testimonial) => (
-                <div
-                  key={testimonial.quote}
-                  className="bg-white rounded-2xl p-7 border border-black/5 flex flex-col"
-                >
-                  <Stars />
-                  <p className="text-[#0D1B3D]/70 text-base leading-relaxed">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </p>
-                  <p className="mt-auto pt-6 text-sm text-[#0D1B3D]/50">
-                    {testimonial.attribution ? `${testimonial.attribution} — ` : ''}Trustpilot review
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Back to the team hub */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[88rem] mx-auto">
-          <a
-            href="/proclientguide/introduction/"
-            className="inline-flex items-center gap-2 text-[#0D1B3D]/60 hover:text-[#0D1B3D] font-medium text-sm transition-colors duration-200"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Meet the rest of the Pro Client Guide team
-          </a>
-        </div>
-      </section>
-
-      <CtaBand
-        title={`Ready to talk it through with ${firstName}?`}
-        text="A Fit Call is a conversation, not a pitch. Bring your numbers and your questions — leave with a clear picture of whether this strategy fits your situation."
-      />
+      <GenerationalTransferBand />
     </PageShell>
   );
 }
