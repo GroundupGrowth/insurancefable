@@ -1,6 +1,7 @@
 import { getEbooks, serverClient } from './content';
 import { DEFAULT_OFFER_EBOOK, offerRuleDefaults } from '../data/offers';
 import type { Ebook } from '../data/ebooks';
+import { postThumbnails } from '../data/postThumbnails';
 
 /* Blog data layer. The articles live in the Payload CMS tables (posts,
    categories, posts_rels) that an earlier session imported into the same
@@ -190,6 +191,9 @@ export interface BlogPostSummary {
   publishedAt: string | null;
   modifiedAt: string | null;
   category: { name: string; slug: string } | null;
+  /** Featured image, recovered from the WordPress export (the Payload import
+      brought no media across). See src/data/postThumbnails.ts. */
+  image: string | null;
 }
 
 /** All published posts with their category — the /blog/ index and the sitemap. */
@@ -219,5 +223,6 @@ export async function getAllPosts(): Promise<BlogPostSummary[]> {
     publishedAt: post.published_at,
     modifiedAt: post.legacy_modified_at,
     category: catByPost.get(post.id) ?? null,
+    image: postThumbnails[post.slug] ?? null,
   }));
 }
