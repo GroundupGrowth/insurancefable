@@ -28,7 +28,11 @@ Reference implementation: homepage (`src/app/page.tsx` + `src/components/*`) and
 - Copy: use the live page's actual copy — this is a redesign, not a rewrite. Tighten only where the live copy is obviously boilerplate WordPress filler. Legal pages are VERBATIM, never summarized.
 - Phone: `877-787-7558`, `href="tel:1-877-787-7558"`.
 - Components with hooks/handlers need `'use client'` as the first line. Prefer server components (no directive) for static content.
-- No stock photos. Real live imagery IS available though: ~110 images from the live site are localized under `public/wp-content/uploads/` — reference them by local path, never hotlink (run `node scripts/audit-images.mjs`). Where no real asset fits, prefer typographic cards and navy/white contrast blocks over decorative filler.
+- **Use the real imagery — this is a correction.** An earlier version of this line said "no `<img>` unless…", and the result was a site referencing 8 of the ~290 live images we had localized: no ebook covers, no carrier logos, no blog thumbnails. Every live image is under `public/wp-content/uploads/` — if the live page shows an image there, ours should too. Reference local paths, never hotlink.
+  - `node scripts/audit-images.mjs` — 0 missing, 0 hotlinks (referenced paths resolve).
+  - `node scripts/audit-unused-images.mjs` — what we localized but never render. Treat a long list here as a bug, not a clean result.
+  - Still no *stock* photos: only real assets from the live site. Where none fits, typographic cards and navy/white contrast blocks beat decorative filler.
+- **Inline links in body copy are content, not decoration.** Live's long-form bios and articles link out mid-sentence; dropping those links loses real content. Model rich text as runs (see `BioRun` in `ProfileLayout.tsx`) rather than plain strings whenever the source has inline anchors.
 
 ## Brand voice
 
