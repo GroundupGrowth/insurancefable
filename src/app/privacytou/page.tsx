@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import PageShell from '../../components/PageShell';
-import PageHero from '../../components/PageHero';
+import GenerationalTransferBand from '../../components/GenerationalTransferBand';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -11,12 +11,19 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(content);
 }
 
-/* LEGAL PAGE — the text below is reproduced VERBATIM from the live page at
+/* 1:1 clone of the live /privacytou/ page (extraction/parsed/privacytou.json +
+   extraction/screens/src/privacytou.jpeg): centred .head-title-smaller h1 over
+   a single .p4-16 post-content column on white, then the Generational Transfer
+   band.
+
+   LEGAL PAGE — the text below is reproduced VERBATIM from the live page at
    insuranceandestates.com/privacytou/. Never summarize, paraphrase, or
-   modernize this copy. */
+   modernize this copy. Live marks the section headings as <p><strong>; they
+   are rendered here as <h2> at the same visual size (bold, body font size) so
+   the document has real structure without changing how it looks. */
 
 type Block =
-  | { t: 'h2'; text: string }
+  | { t: 'h2'; text: string; id?: string }
   | { t: 'p'; text: ReactNode }
   | { t: 'ul'; items: string[] };
 
@@ -29,7 +36,13 @@ const blocks: Block[] = [
   },
   {
     t: 'p',
-    text: 'These Terms of Use, together with I&E’s Privacy Policy, state the “Terms and Conditions” under which you, the website visitor (“You”) may use InsuranceandEstates.com (the “Site”).',
+    text: (
+      <>
+        These Terms of Use, together with I&amp;E’s <u>Privacy Policy</u>, state the “Terms and
+        Conditions” under which you, the website visitor (“You”) may use InsuranceandEstates.com
+        (the “Site”).
+      </>
+    ),
   },
   {
     t: 'p',
@@ -42,12 +55,14 @@ const blocks: Block[] = [
   {
     t: 'p',
     text: (
-      <em className="font-medium text-[#0D1B3D]">
-        Life insurance policies are not investments and should not be purchased as an investment.
+      <em>
+        <strong>
+          Life insurance policies are not investments and should not be purchased as an investment.
+        </strong>
       </em>
     ),
   },
-  { t: 'h2', text: 'AFFILIATE DISCLOSURE' },
+  { t: 'h2', text: 'AFFILIATE DISCLOSURE', id: 'affiliate_disclosure' },
   {
     t: 'p',
     text: 'Some of the links found on https://insuranceandestates.com are affiliate referral links. This means that if a reader clicks on text or an image, https://insuranceandestates.com may receive a commission from purchases. There is no additional cost to you, it simply helps pay for maintenance of our site.',
@@ -155,10 +170,7 @@ const blocks: Block[] = [
       <>
         The purpose of this Privacy Policy is to give you a summary of the ways in which I&amp;E
         collects, maintains, and uses your information. Please feel free to contact us by email at{' '}
-        <a
-          href="mailto:info@insuranceandestates.com"
-          className="underline underline-offset-2 hover:text-[#0D1B3D]"
-        >
+        <a href="mailto:info@insuranceandestates.com" className="text-[#FF6352] hover:underline">
           info@insuranceandestates.com
         </a>{' '}
         with any questions or concerns about this Privacy Policy or the information we gather
@@ -282,22 +294,26 @@ const blocks: Block[] = [
   { t: 'p', text: 'The Effective Date hereto shall be April 6, 2018.' },
 ];
 
+const pClass = 'text-[#363636] text-[15px] leading-[1.7]';
+
 export default async function PrivacyTouPage() {
   const content = await getPageContent('privacytou');
   return (
     <PageShell>
-      <PageHero align="left" title={content.heroTitle} />
+      <section className="px-6 pt-16 pb-20">
+        <div className="max-w-[1100px] mx-auto">
+          <h1 className="text-[#262626] text-[2.8rem] md:text-[3.5rem] font-bold leading-tight text-center">
+            {content.heroTitle}
+          </h1>
 
-      <section className="px-6 pb-24">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl border border-black/5 p-8 md:p-12">
-          <div className="space-y-4">
+          <div className="mt-12 lg:px-40 space-y-4">
             {blocks.map((block, i) => {
               if (block.t === 'h2') {
                 return (
                   <h2
                     key={i}
-                    className="text-xl font-medium text-[#0D1B3D] pt-4"
-                    style={{ letterSpacing: '-0.02em' }}
+                    id={block.id}
+                    className="text-[#262626] text-[15px] leading-[1.7] font-bold pt-3"
                   >
                     {block.text}
                   </h2>
@@ -305,20 +321,15 @@ export default async function PrivacyTouPage() {
               }
               if (block.t === 'ul') {
                 return (
-                  <ul key={i} className="space-y-2 pl-5 list-disc marker:text-[#0D1B3D]/40">
+                  <ul key={i} className={`${pClass} list-disc pl-8 space-y-1`}>
                     {block.items.map((item) => (
-                      <li
-                        key={item}
-                        className="text-[#0D1B3D]/70 text-sm md:text-base leading-relaxed"
-                      >
-                        {item}
-                      </li>
+                      <li key={item}>{item}</li>
                     ))}
                   </ul>
                 );
               }
               return (
-                <p key={i} className="text-[#0D1B3D]/70 text-sm md:text-base leading-relaxed">
+                <p key={i} className={pClass}>
                   {block.text}
                 </p>
               );
@@ -326,6 +337,8 @@ export default async function PrivacyTouPage() {
           </div>
         </div>
       </section>
+
+      <GenerationalTransferBand />
     </PageShell>
   );
 }
