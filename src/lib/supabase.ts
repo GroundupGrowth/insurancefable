@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { BioSection } from '../app/proclientguide/ProfileLayout';
 
 /* Browser Supabase client. Returns null until the env vars are configured
    (Vercel → Settings → Environment Variables), so the site builds and runs
@@ -33,7 +34,12 @@ export interface AdvisorRow {
   email: string | null;
   scheduler_url: string | null;
   specialties: string[] | null;
-  bio_sections: { heading: string; paragraphs: string[] }[] | null;
+  /* Full BioSection shape: `paragraphs`/`bullets` entries are plain strings, or
+     run arrays when they carry inline links / emphasis (see BioParagraph in
+     ProfileLayout), plus the optional `bullets`, `wide` and `image` fields. The
+     override row must be able to hold all of it — anything the /admin editor
+     cannot round-trip is written back unchanged rather than dropped. */
+  bio_sections: BioSection[] | null;
   credentials: string[] | null;
   testimonials: { quote: string; attribution?: string }[] | null;
   book: { eyebrow: string; title: string; text: string; href: string } | null;

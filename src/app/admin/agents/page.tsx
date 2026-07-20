@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { getSupabase, type AdvisorRow } from '../../../lib/supabase';
 import { advisorDefaults } from '../../../data/advisors';
-import type { AdvisorProfile } from '../../proclientguide/ProfileLayout';
+import type { AdvisorProfile, BioParagraph, BioSection } from '../../proclientguide/ProfileLayout';
 import { Card, Field, PageHeader, SaveButton, StatusPill, inputClass, revalidatePaths, textareaClass } from '../ui';
 
 /* Agents: one profile per advisor. The editor shows the merged view (override
@@ -21,7 +21,15 @@ interface EditorState {
   schedulerUrl: string;
   specialties: string;                                        // one per line
   credentials: string;                                        // one per line
-  bioSections: { heading: string; paragraphs: string }[];     // paragraphs = blank-line separated
+  /* `paragraphs` is the blank-line-separated plain-text view. `source` keeps the
+     original structured section so anything this editor cannot represent
+     (inline links, bullets, images) survives a save untouched. */
+  bioSections: {
+    heading: string;
+    paragraphs: string;
+    readOnly: boolean;
+    source: BioSection | null;
+  }[];
   testimonials: { quote: string; attribution: string }[];
   bookingEmbed: string;
   /* Trust signals (E-E-A-T) */
@@ -31,6 +39,24 @@ interface EditorState {
   licenses: string;                                           // one per line
   education: string;                                          // one per line
   publications: { source: string; title: string; href: string }[];
+}
+
+/* Bio paragraphs may be rich text (run arrays with inline links). This editor is
+   plain-text only, so a rich paragraph can only be SHOWN flattened — and saving
+   the flattened string would permanently drop its links into the override row.
+   So rich sections are read-only here (see `isRichSection` below) and are
+   written back to Supabase exactly as they came in. */
+function paragraphText(paragraph: BioParagraph): string {
+  if (typeof paragraph === 'string') return paragraph;
+  return paragraph.map((run) => (typeof run === 'string' ? run : run.text)).join('');
+}
+
+/* True when a section holds structure this plain-text editor cannot round-trip:
+   inline links / emphasis in a paragraph or bullet, or an embedded image. */
+function isRichSection(section: BioSection): boolean {
+  const hasRuns = (entries: BioParagraph[] = []) =>
+    entries.some((entry) => typeof entry !== 'string');
+  return hasRuns(section.paragraphs) || hasRuns(section.bullets) || Boolean(section.image);
 }
 
 function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, bookingEmbed: string): EditorState {
@@ -52,7 +78,9 @@ function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, booking
     credentials: val(row?.credentials, fallback.credentials).join('\n'),
     bioSections: bioSections.map((section) => ({
       heading: section.heading,
-      paragraphs: section.paragraphs.join('\n\n'),
+      paragraphs: section.paragraphs.map(paragraphText).join('\n\n'),
+      readOnly: isRichSection(section),
+      source: section,
     })),
     testimonials: testimonials.map((testimonial) => ({
       quote: testimonial.quote,
@@ -127,12 +155,23 @@ export default function AgentsPage() {
         scheduler_url: editor.schedulerUrl || null,
         specialties: editor.specialties.split('\n').map((s) => s.trim()).filter(Boolean),
         credentials: editor.credentials.split('\n').map((s) => s.trim()).filter(Boolean),
+        /* Non-destructive save: a rich section (inline links, rich bullets, an
+           image) goes back exactly as it arrived — the flattened plain text in
+           the textarea is a preview, never the thing we persist. Editable
+           sections keep their bullets/wide/image, which this form has no
+           controls for and must not silently discard either. */
         bio_sections: editor.bioSections
           .filter((section) => section.heading.trim())
-          .map((section) => ({
-            heading: section.heading,
-            paragraphs: section.paragraphs.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
-          })),
+          .map((section) => {
+            if (section.readOnly && section.source) return section.source;
+            return {
+              heading: section.heading,
+              paragraphs: section.paragraphs.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+              ...(section.source?.bullets ? { bullets: section.source.bullets } : {}),
+              ...(section.source?.wide ? { wide: section.source.wide } : {}),
+              ...(section.source?.image ? { image: section.source.image } : {}),
+            };
+          }),
         testimonials: editor.testimonials
           .filter((testimonial) => testimonial.quote.trim())
           .map((testimonial) => ({
@@ -376,7 +415,14 @@ export default function AgentsPage() {
               <h2 className="text-[#0D1B3D] text-lg font-medium">Bio sections</h2>
               <button
                 type="button"
-                onClick={() => set({ bioSections: [...editor.bioSections, { heading: '', paragraphs: '' }] })}
+                onClick={() =>
+                  set({
+                    bioSections: [
+                      ...editor.bioSections,
+                      { heading: '', paragraphs: '', readOnly: false, source: null },
+                    ],
+                  })
+                }
                 className="inline-flex items-center gap-1.5 text-[#0D1B3D]/60 hover:text-[#0D1B3D] text-sm font-medium"
               >
                 <Plus className="w-4 h-4" /> Add section
@@ -390,6 +436,8 @@ export default function AgentsPage() {
                       className={inputClass}
                       placeholder="Section heading"
                       value={section.heading}
+                      readOnly={section.readOnly}
+                      disabled={section.readOnly}
                       onChange={(e) => {
                         const next = [...editor.bioSections];
                         next[index] = { ...next[index], heading: e.target.value };
@@ -407,15 +455,30 @@ export default function AgentsPage() {
                   </div>
                   <textarea
                     rows={4}
-                    className={textareaClass}
+                    className={`${textareaClass}${
+                      section.readOnly ? ' bg-[#F5F5F5] text-[#0D1B3D]/60 cursor-not-allowed' : ''
+                    }`}
                     placeholder="Section text — separate paragraphs with a blank line."
                     value={section.paragraphs}
+                    readOnly={section.readOnly}
                     onChange={(e) => {
                       const next = [...editor.bioSections];
                       next[index] = { ...next[index], paragraphs: e.target.value };
                       set({ bioSections: next });
                     }}
                   />
+                  {section.readOnly && (
+                    /* Why this is locked: the text above is a flattened preview.
+                       Saving it as plain text would drop the inline links (and
+                       any bulleted or image content) for good. */
+                    <p className="mt-2 text-[#0D1B3D]/60 text-xs leading-relaxed">
+                      <span className="font-medium text-[#0D1B3D]">Read-only —</span> this section
+                      contains formatting this editor can&apos;t represent (inline links, bulleted
+                      lists or an image). The text shown is a flattened preview; saving would lose
+                      that formatting permanently, so the section is saved exactly as it is. To
+                      change it, edit <code>src/data/advisors.ts</code>.
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
