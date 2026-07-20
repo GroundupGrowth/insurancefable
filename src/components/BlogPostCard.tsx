@@ -1,11 +1,9 @@
 import { ArrowRight } from 'lucide-react';
 import type { BlogPostSummary } from '../lib/blog';
+import { formatPostDateShort as formatDate } from '../lib/dates';
 
 /* Article card used on the /blog/ index and in the related-posts section
    under each article. */
-
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
 export default function BlogPostCard({ post }: { post: BlogPostSummary }) {
   const date = post.modifiedAt ?? post.publishedAt;

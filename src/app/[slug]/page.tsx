@@ -29,8 +29,7 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+import { formatPostDate as formatDate, toSiteIso } from '../../lib/dates';
 
 export async function generateMetadata({
   params,
@@ -52,8 +51,8 @@ export async function generateMetadata({
       description,
       url: `/${post.slug}/`,
       type: 'article',
-      ...(post.publishedAt ? { publishedTime: post.publishedAt } : {}),
-      ...(post.modifiedAt ? { modifiedTime: post.modifiedAt } : {}),
+      ...(post.publishedAt ? { publishedTime: toSiteIso(post.publishedAt) } : {}),
+      ...(post.modifiedAt ? { modifiedTime: toSiteIso(post.modifiedAt) } : {}),
       images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
     },
   };
@@ -78,8 +77,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     '@type': 'Article',
     headline: post.title,
     ...(post.metaDescription ? { description: post.metaDescription } : {}),
-    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
-    ...(post.modifiedAt ? { dateModified: post.modifiedAt } : {}),
+    ...(post.publishedAt ? { datePublished: toSiteIso(post.publishedAt) } : {}),
+    ...(post.modifiedAt ? { dateModified: toSiteIso(post.modifiedAt) } : {}),
     ...(post.category ? { articleSection: post.category.name } : {}),
     mainEntityOfPage: `${SITE_URL}/${post.slug}/`,
     author: authorship.author

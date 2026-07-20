@@ -1,11 +1,9 @@
 import type { Author } from '../lib/authors';
+import { formatPostDate as formatDate } from '../lib/dates';
 
 /* Author byline at the top of a blog article: headshot, "Written by <name>",
    credentials, and a meta line with dates, reading time, and the reviewer
    (the fact-checked E-E-A-T signal). */
-
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
 function initials(name: string): string {
   return name
