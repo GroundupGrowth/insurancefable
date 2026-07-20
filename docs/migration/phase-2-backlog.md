@@ -63,6 +63,26 @@ Net-new or redesigned; each is currently built and live on the preview and **sta
 - Agent-partners / "Join the Team" recruiting page.
 - Quote-engine embed on `/life-insurance-quotes/`.
 
+## Phase 2 — live pages we link to but have NOT built (these 404 today)
+
+The 1:1 clone keeps live's internal hrefs verbatim, so these paths are linked
+from cloned pages but have no route in this repo. All four return 200 on live.
+They must be built (or the links repointed) before cutover.
+
+| Path | Linked from | Live |
+|---|---|---|
+| `/kingdom-money/` | `/infinite-banking-strategy/` (book cover + CTA) | 200 |
+| `/self-banking-blueprint/` | `/infinite-banking-strategy/` (book cover + "Get the Blueprint") | 200 |
+| `/agent-partners/` | Footer "Join The Team" | 200 |
+| `/trust-workshop/` | (per BUILD-CONVENTIONS) | 200 |
+
+Note: `/self-banking-blueprint/` is our substitute target for live's
+"Get the Blueprint →", which on live is a Popup Maker trigger (`popmake-8461`)
+with no href. The popup itself was not cloned.
+
+Also: this repo has no `/category/<slug>/` route. Live category links are
+rewritten to the blog-index jump anchor `/blog/#<category-slug>`.
+
 ## Phase 2 — infrastructure to finish before/at cutover
 
 - **Migrate hotlinked images off the old domain** — headshots, logo, and in-article images still load from `insuranceandestates.com/wp-content/...`. Not clickable links, but a live dependency on the old server; move to our own hosting/Supabase storage before the old site is retired.
