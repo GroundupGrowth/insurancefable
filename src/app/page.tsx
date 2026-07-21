@@ -2,7 +2,6 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import ProcessSection from '../components/ProcessSection';
 import TestimonialsSection from '../components/TestimonialsSection';
-import ClientJourneyProof from '../components/ClientJourneyProof';
 import CarrierLogoWall from '../components/CarrierLogoWall';
 import ServicesSection from '../components/ServicesSection';
 // FaqSection hidden: not on the live homepage, and its answers are still placeholders (Phase 2)
@@ -136,7 +135,6 @@ export default function HomePage() {
         <ServicesSection />
         <ProcessSection />
         <TestimonialsSection />
-        <ClientJourneyProof />
         {/* <FaqSection /> — hidden until real FAQ copy exists (Phase 2); was placeholder text */}
 
         {/* --- Common questions + closing CTA ---------------------------- */}
