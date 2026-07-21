@@ -39,7 +39,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  const title = post.metaTitle ?? post.title;
+  // Synced seo_meta_title values are complete SERP titles. When a post has no
+  // custom one, WordPress appends the site suffix — mirror that for parity.
+  const SERP_SUFFIX = ' – I&E | Whole Life & Infinite Banking Strategies';
+  const title =
+    post.metaTitle && post.metaTitle !== post.title
+      ? post.metaTitle
+      : `${post.title}${SERP_SUFFIX}`;
   const description = post.metaDescription ?? post.excerpt ?? undefined;
   return {
     // Payload meta titles are complete SERP titles — skip the layout template
