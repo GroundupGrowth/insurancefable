@@ -43,12 +43,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     })),
-    ...ebookDefaults.map((book) => ({
-      url: `${SITE_URL}${book.landingPath}`,
-      lastModified,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    })),
+    ...ebookDefaults
+      .filter((book) => !book.noindexLanding)
+      .map((book) => ({
+        url: `${SITE_URL}${book.landingPath}`,
+        lastModified,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      })),
     { url: `${SITE_URL}/blog/`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
     ...posts.map((post) => ({
       url: `${SITE_URL}/${post.slug}/`,

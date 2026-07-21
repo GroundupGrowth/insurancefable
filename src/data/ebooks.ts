@@ -27,6 +27,9 @@ export interface Ebook {
       for the same reason — it is never part of the site_ebooks round-trip;
       getEbooks() re-attaches it by slug, so catalogs from Supabase still have it. */
   landingPath?: string;
+  /** True when the landing page is noindexed (matching live) — keeps it out of
+      the sitemap, which must list indexable URLs only. */
+  noindexLanding?: boolean;
   sort: number;
   /* Cover art, localized under public/wp-content/uploads/. Covers are code-owned
      and deliberately NOT part of the site_ebooks round-trip: the admin editor
@@ -215,6 +218,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'anti-banking-starter-guide',
     landingPath: '/anti-banking-starter-guide/',
+    noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Download',
     title: 'The Anti-Banking Starter Guide',
@@ -229,6 +233,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'debt-free-plan',
     landingPath: '/debt-free-plan/',
+    noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Download',
     title: 'The Purpose-Driven Wealth Plan',
@@ -243,6 +248,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'iul-retirement',
     landingPath: '/iul-retirement/',
+    noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Download',
     title: 'Tax-Free Retirement Income Without Limits',
@@ -257,6 +263,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'ibc-modules',
     landingPath: '/ibc-modules/',
+    noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Video Training',
     title: '10 Modules on Infinite Banking',
