@@ -104,12 +104,14 @@ export default function AgeChartTabs({ group }: { group: DecadeGroup }) {
       >
         {group.heading}
       </h2>
-      <Pane
-        key={gender}
-        pane={gender === 'male' ? group.male : group.female}
-        groupHeading={group.heading}
-        gender={gender === 'male' ? 'Male' : 'Female'}
-      />
+      {/* Both panes stay in the DOM (CSS toggle) so every table is served in
+          the HTML — the live page ships all 60 tables, so must we. */}
+      <div className={gender === 'male' ? '' : 'hidden'}>
+        <Pane pane={group.male} groupHeading={group.heading} gender="Male" />
+      </div>
+      <div className={gender === 'female' ? '' : 'hidden'}>
+        <Pane pane={group.female} groupHeading={group.heading} gender="Female" />
+      </div>
     </div>
   );
 }
