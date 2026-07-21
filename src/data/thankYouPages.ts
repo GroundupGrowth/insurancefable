@@ -40,7 +40,7 @@ export interface ThankYouPageData {
 
 const GHL_DISCOVERY_CALL =
   'https://api.leadconnectorhq.com/widget/bookings/insurance_and_estates_discovery_call';
-const RESOURCES = '/ebooks-and-guides/'; // live links point at /resources/, remapped
+const RESOURCES = '/start-your-journey/'; // live's /resources/ 301 target
 
 export const thankYouPages: ThankYouPageData[] = [
   {

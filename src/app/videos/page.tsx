@@ -78,7 +78,7 @@ const videos: Video[] = [
   },
   {
     id: 'NczWdt1GUxs',
-    caption: [{ text: 'Universal Life [IUL vs VUL]', href: '/vul-vs-iul/' }],
+    caption: [{ text: 'Universal Life [IUL vs VUL]', href: '/top-10-pros-cons-variable-universal-life-insurance/' }],
   },
   {
     id: '29MGc59JCpc',
@@ -92,21 +92,21 @@ const videos: Video[] = [
   {
     id: 'd3SaVUh9mm0',
     caption: [
-      { text: 'Life Insurance for Young Adults', href: '/best-life-insurance-for-young-adults/' },
+      { text: 'Life Insurance for Young Adults', href: '/top-10-best-life-insurance-companies/' },
     ],
   },
-  { id: 'cjoTver6Iuk', caption: [{ text: 'What is an Annuity?', href: '/annuity/' }] },
+  { id: 'cjoTver6Iuk', caption: [{ text: 'What is an Annuity?', href: '/best-annuity-companies/' }] },
   {
     id: 'drOxf3vT7ko',
     caption: [
-      { text: '1035 Exchange for Life Insurance', href: '/1035-exchange-life-insurance/' },
+      { text: '1035 Exchange for Life Insurance', href: '/1035-exchange/' },
       { text: ' & ' },
-      { text: '1035 Exchange for Annuities', href: '/1035-exchange-annuity/' },
+      { text: '1035 Exchange for Annuities', href: '/1035-exchange/' },
     ],
   },
   {
     id: '3_CM49DhRBA',
-    caption: [{ text: 'Life Insurance and Annuity Review', href: '/annuity/' }],
+    caption: [{ text: 'Life Insurance and Annuity Review', href: '/best-annuity-companies/' }],
   },
   {
     id: 'mlnKPn8XhBk',
@@ -119,14 +119,14 @@ const videos: Video[] = [
     caption: [
       {
         text: 'Modified Endowment Contract (MEC)',
-        href: '/mec-modified-endowment-contract-the-good-the-bad-and-the-ugly/',
+        href: '/mec-modified-endowment-contract/',
       },
     ],
   },
   {
     id: 'hscppcU0mR8',
     caption: [
-      { text: 'What is Long Term Care Insurance', href: '/what-is-long-term-care-insurance/' },
+      { text: 'What is Long Term Care Insurance', href: '/long-term-care-insurance/' },
     ],
   },
   {
@@ -134,7 +134,7 @@ const videos: Video[] = [
     caption: [
       {
         text: 'Strategic Self-Banking with Life Insurance',
-        href: '/using-life-insurance-as-your-own-personal-bank/',
+        href: '/be-your-own-bank/',
       },
     ],
   },
@@ -150,16 +150,16 @@ const videos: Video[] = [
   {
     id: 'gvPEoHEEk4Q',
     caption: [
-      { text: 'Life Insurance and Estate Planning', href: '/estate-planning-life-insurance/' },
+      { text: 'Life Insurance and Estate Planning', href: '/estate-planning-life-insurance-guide/' },
     ],
   },
   {
     id: 'zo21IVFBMg4',
-    caption: [{ text: 'Living Trust Benefits', href: '/what-is-a-living-trust/' }],
+    caption: [{ text: 'Living Trust Benefits', href: '/high-net-worth-estate-planning/' }],
   },
   {
     id: '0byAX6PrVhM',
-    caption: [{ text: 'Good Estate Planning', href: '/estate-planning-protection/' }],
+    caption: [{ text: 'Good Estate Planning', href: '/estate-planning-life-insurance-guide/' }],
   },
   {
     id: 'NWqG1cpqg-w',
@@ -173,7 +173,7 @@ const videos: Video[] = [
   {
     id: 'J4X83qg4-Mw',
     caption: [
-      { text: 'Wealth Building with Cash Value Life Insurance', href: '/wealth-building/' },
+      { text: 'Wealth Building with Cash Value Life Insurance', href: '/wealth-building-using-life-insurance/' },
     ],
   },
   // Live's final five embeds carry no caption.

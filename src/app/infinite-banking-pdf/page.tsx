@@ -33,20 +33,20 @@ const inputClass =
 const ARTICLES: { title: string; href: string; image: string; alt: string }[] = [
   {
     title: 'Using Life Insurance as Your Own Bank [7 Steps]',
-    href: '/using-life-insurance-as-your-own-personal-bank/',
+    href: '/be-your-own-bank/',
     image: `${UPLOADS}/Steps-to-Becoming-Your-Own-Banker-150x100-1.jpg`,
     alt: '',
   },
   {
     title:
       'Infinite Banking Concept® [Top 10 Most Frequently Asked Questions for Infinite Banking]',
-    href: '/infinite-banking-concept-frequently-asked-questions-faq/',
+    href: '/whole-life-infinite-banking-objections-faqs/',
     image: `${UPLOADS}/infinite-banking-FAQ-150x100.jpg`,
     alt: 'infinite banking frequently asked questions',
   },
   {
     title: 'Infinite Banking Wiki [Your Comprehensive Guide To IBC]',
-    href: '/infinite-banking-wiki/',
+    href: '/infinite-banking/',
     image: `${UPLOADS}/infinite-banking-wiki-150x84.jpg`,
     alt: 'infinite banking reviews',
   },
@@ -59,7 +59,7 @@ const ARTICLES: { title: string; href: string; image: string; alt: string }[] = 
   },
   {
     title: 'How to Triple Your Real Estate Returns with Infinite Banking',
-    href: '/how-to-triple-your-real-estate-returns-with-infinite-banking/',
+    href: '/using-life-insurance-to-buy-real-estate/',
     image: `${UPLOADS}/Real-Estate-Wealth-Building-Strategies-150x100.jpg`,
     alt: 'real estate infinite banking',
   },

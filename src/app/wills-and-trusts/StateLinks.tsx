@@ -59,24 +59,20 @@ export const stateLinks: { name: string; href: string | null }[] = [
   { name: 'Washington DC', href: null },
 ];
 
+/* Live's US-map state links all 404 on the live site itself (verified
+   2026-07-21: every /<state>-wills-and-trust(s)-requirements/ URL is dead).
+   Rather than reproduce 51 broken links, states render as plain tiles; the
+   per-state hrefs are preserved in stateLinks above so they can be re-linked
+   the moment those pages exist again. */
 export default function StateLinks() {
   return (
     <nav aria-label="Will and trust laws by state">
       <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
         {stateLinks.map((state) => (
           <li key={state.name}>
-            {state.href ? (
-              <a
-                href={state.href}
-                className="block bg-[#F5F5F5] hover:bg-[#0D1B3D] hover:text-white text-[#0D1B3D] text-sm rounded-full px-4 py-2 text-center transition-colors duration-200"
-              >
-                {state.name}
-              </a>
-            ) : (
-              <span className="block bg-[#F5F5F5] text-[#0D1B3D]/40 text-sm rounded-full px-4 py-2 text-center">
-                {state.name}
-              </span>
-            )}
+            <span className="block bg-[#F5F5F5] text-[#0D1B3D] text-sm rounded-full px-4 py-2 text-center">
+              {state.name}
+            </span>
           </li>
         ))}
       </ul>

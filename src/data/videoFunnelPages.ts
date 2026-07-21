@@ -100,7 +100,7 @@ export const videoFunnelPages: VideoFunnelPageData[] = [
         'For more on this subject, please check out our article on ',
         {
           text: 'real estate wealth building using infinite banking',
-          href: '/real-estate-wealth-building-strategies-with-infinite-banking/',
+          href: '/using-life-insurance-to-buy-real-estate/',
         },
         '.',
       ],

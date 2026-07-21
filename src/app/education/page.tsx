@@ -49,7 +49,7 @@ export default function EducationPage() {
               </p>
               <p className={paragraph}>
                 One of the best ways to go about building knowledge is to check out{' '}
-                <a href="/resources/" className={inlineLink}>
+                <a href="/start-your-journey/" className={inlineLink}>
                   our resources page
                 </a>
                 , where you can view webinars and videos, as well as download ebooks.

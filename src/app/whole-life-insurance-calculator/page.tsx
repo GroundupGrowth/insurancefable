@@ -311,7 +311,7 @@ export default function WholeLifeInsuranceCalculatorPage() {
             A great term life insurance policy is one that comes with a conversion option, which
             allows you to convert all or a portion of the death benefit to a permanent life
             insurance policy before the term ends. A{' '}
-            <a href="/convertible-term-life-insurance/" className={linkClass}>
+            <a href="/best-convertible-term-life-insurance-companies/" className={linkClass}>
               convertible term life policy
             </a>{' '}
             is great for anyone who eventually wants permanent coverage or who wants the option

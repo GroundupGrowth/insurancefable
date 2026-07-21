@@ -63,7 +63,7 @@ export default function FaqPage() {
             Carefully tailored{' '}
             <strong>
               <a
-                href="/whole-life-insurance-why-you-should-forget-everything-youve-heard/"
+                href="/top-10-best-dividend-paying-whole-life-insurance-companies/"
                 className={linkClass}
               >
                 whole life insurance policies
@@ -87,7 +87,7 @@ export default function FaqPage() {
         </SalesProse>
 
         <SalesSubheading>
-          <a href="/is-whole-life-insurance-a-good-investment/" className={linkClass}>
+          <a href="/whole-life-insurance-pros-cons/" className={linkClass}>
             Is Whole Life Insurance&nbsp;a good investment?
           </a>
         </SalesSubheading>
@@ -105,7 +105,7 @@ export default function FaqPage() {
             . It is a highly stable and profitable investment for most people in the long term.
             Also, whole life insurance offers some{' '}
             <strong>
-              <a href="/asset-protection-strategies/" className={linkClass}>
+              <a href="/high-net-worth-estate-planning/" className={linkClass}>
                 top asset protection benefits
               </a>
             </strong>{' '}
@@ -114,7 +114,7 @@ export default function FaqPage() {
           <p>
             In addition, a properly structured policy used for{' '}
             <strong>
-              <a href="/infinite-banking-concept/" className={linkClass}>
+              <a href="/infinite-banking/" className={linkClass}>
                 infinite banking
               </a>
             </strong>{' '}

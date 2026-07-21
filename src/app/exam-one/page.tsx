@@ -109,7 +109,7 @@ export default function ExamOnePage() {
 
             <p className={`${paragraph} max-w-[75ch] mt-8`}>
               Not sure who the{' '}
-              <a href="/best-life-insurance-companies/" className={inlineLink}>
+              <a href="/top-10-best-life-insurance-companies/" className={inlineLink}>
                 best life insurance company
               </a>{' '}
               for you will be? Need help finding the right{' '}
