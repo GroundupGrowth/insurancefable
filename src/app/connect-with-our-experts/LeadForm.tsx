@@ -2,6 +2,7 @@
 
 import { Check } from 'lucide-react';
 import EmbedSlot from '../../components/EmbedSlot';
+import GhlResizeScript from '../../components/GhlResizeScript';
 
 const callPoints = [
   'Map out your goals — where you are and where you want to be',
@@ -60,11 +61,14 @@ export default function LeadForm() {
                   calendar; otherwise the live calendar renders. */}
               <EmbedSlot slotKey="form:connect-with-our-experts" className="bg-white rounded-2xl p-2">
                 <div className="bg-white rounded-2xl overflow-hidden">
+                  {/* form_embed.js resizes the calendar to its real height —
+                      the min-height only covers the moment before it loads */}
+                  <GhlResizeScript />
                   <iframe
                     src={LIVE_BOOKING_CALENDAR}
                     title="Book your discovery call"
                     scrolling="no"
-                    className="block w-full min-h-[700px] border-0"
+                    className="block w-full min-h-[1100px] border-0"
                   />
                 </div>
               </EmbedSlot>

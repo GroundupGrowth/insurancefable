@@ -64,6 +64,9 @@ export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
               <div className="flex gap-4 flex-wrap justify-center">
                 <a
                   href={primaryCta.href}
+                  {...(/^https?:\/\//.test(primaryCta.href)
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
                   className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
                 >
                   {primaryCta.label}
@@ -75,6 +78,9 @@ export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
                   <a
                     key={cta.href + cta.label}
                     href={cta.href}
+                    {...(/^https?:\/\//.test(cta.href)
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
                     className="inline-flex items-center bg-[#F5F5F5] text-[#0D1B3D] font-medium px-7 py-2.5 rounded-full border border-black/5 hover:bg-[#EDEDED] transition-colors duration-200"
                   >
                     {cta.label}

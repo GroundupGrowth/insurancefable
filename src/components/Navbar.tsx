@@ -36,14 +36,6 @@ const navGroups: NavGroup[] = [
     label: 'Blog',
     href: '/blog/',
   },
-  {
-    label: 'Live Workshops',
-    items: [
-      { label: "Congress's Secret Retirement Account", href: '/start-your-journey/' },
-      { label: 'Infinite Banking Workshop', href: '/start-your-journey/' },
-      { label: 'Will and Trust Workshop', href: '/start-your-journey/' },
-    ],
-  },
 ];
 
 export default function Navbar() {

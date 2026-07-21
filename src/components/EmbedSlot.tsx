@@ -27,6 +27,23 @@ export function injectEmbed(container: HTMLDivElement, html: string) {
     script.text = oldScript.text;
     oldScript.replaceWith(script);
   });
+
+  /* Pasted embeds sometimes carry fixed pixel widths (clipping on mobile) or
+     omit GHL's resize script (clipping the form's height). Normalize both so
+     an embed always shows whole, regardless of how it was pasted. */
+  const iframes = Array.from(container.querySelectorAll('iframe'));
+  iframes.forEach((frame) => {
+    frame.style.width = '100%';
+    frame.style.maxWidth = '100%';
+    frame.removeAttribute('width');
+    if (!frame.style.minHeight && !frame.getAttribute('height')) frame.style.minHeight = '420px';
+  });
+  const hasGhlFrame = iframes.some((frame) => /leadconnectorhq|msgsndr/.test(frame.src));
+  if (hasGhlFrame && !document.querySelector('script[src*="form_embed.js"]')) {
+    const resizer = document.createElement('script');
+    resizer.src = 'https://link.msgsndr.com/js/form_embed.js';
+    document.body.appendChild(resizer);
+  }
 }
 
 export default function EmbedSlot({ slotKey, children, className }: EmbedSlotProps) {
