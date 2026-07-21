@@ -15,6 +15,7 @@ const CATEGORY_LABELS: Record<EbookCategory, string> = {
   featured: 'Featured eBooks',
   'free-ebook': 'Free eBooks',
   'free-guide': 'Free Guides',
+  journey: 'Journey Guides (start-your-journey)',
 };
 
 const CATEGORY_ORDER: EbookCategory[] = ['featured', 'free-ebook', 'free-guide'];

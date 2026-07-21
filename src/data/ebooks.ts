@@ -3,7 +3,9 @@
    there, they replace this list entirely. Each book's opt-in embed lives in
    embed_slots under `ebook:<slug>`. */
 
-export type EbookCategory = 'featured' | 'free-ebook' | 'free-guide';
+/* 'journey' items are the /start-your-journey/ lead magnets — they get landing
+   pages like any book but stay off the /ebooks-and-guides/ catalog (as live). */
+export type EbookCategory = 'featured' | 'free-ebook' | 'free-guide' | 'journey';
 
 export interface EbookImage {
   src: string;
@@ -208,6 +210,62 @@ export const ebookDefaults: Ebook[] = [
     image: {
       src: '/wp-content/uploads/Life-Insurance-Essentials-Report-small-copy-165x200.jpg',
       alt: 'Life Insurance Essentials Report guide cover',
+    },
+  },
+  {
+    slug: 'anti-banking-starter-guide',
+    landingPath: '/anti-banking-starter-guide/',
+    category: 'journey',
+    eyebrow: 'Free Download',
+    title: 'The Anti-Banking Starter Guide',
+    text: "Stop financing your bank's empire and start building your own.",
+    href: REQUEST,
+    sort: 100,
+    image: {
+      src: '/wp-content/uploads/Anti-Banking-Starter-Guide.webp',
+      alt: 'Anti Banking Starter Guide cover',
+    },
+  },
+  {
+    slug: 'debt-free-plan',
+    landingPath: '/debt-free-plan/',
+    category: 'journey',
+    eyebrow: 'Free Download',
+    title: 'The Purpose-Driven Wealth Plan',
+    text: "You don't have to wait until the debt is gone to start building wealth.",
+    href: REQUEST,
+    sort: 101,
+    image: {
+      src: '/wp-content/uploads/Component-17.webp',
+      alt: 'The Purpose-Driven Wealth Plan cover',
+    },
+  },
+  {
+    slug: 'iul-retirement',
+    landingPath: '/iul-retirement/',
+    category: 'journey',
+    eyebrow: 'Free Download',
+    title: 'Tax-Free Retirement Income Without Limits',
+    text: 'The guide to tax free retirement income with IUL.',
+    href: REQUEST,
+    sort: 102,
+    image: {
+      src: '/wp-content/uploads/Component-10.webp',
+      alt: 'Tax-Free Retirement Income Without Limits cover',
+    },
+  },
+  {
+    slug: 'ibc-modules',
+    landingPath: '/ibc-modules/',
+    category: 'journey',
+    eyebrow: 'Free Video Training',
+    title: '10 Modules on Infinite Banking',
+    text: 'Step-by-step video training to build your financial infrastructure correctly.',
+    href: REQUEST,
+    sort: 103,
+    image: {
+      src: '/wp-content/uploads/10-Modules-on-Infinite-Banking-.webp',
+      alt: '10 Modules on Infinite Banking cover',
     },
   },
 ];

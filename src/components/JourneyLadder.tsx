@@ -90,9 +90,11 @@ export default function JourneyLadder({ levels }: { levels: JourneyLevel[] }) {
                       <p className="text-[#0D1B3D]/70 text-sm sm:text-base leading-relaxed">
                         {guide.text}
                       </p>
-                      <span className="mt-auto pt-6 self-start inline-flex items-center gap-2 bg-[#F5F5F5] text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full group-hover:bg-[#0D1B3D] group-hover:text-white transition-colors duration-200">
-                        {guide.cta}
-                        <ArrowRight className="w-4 h-4" />
+                      <span className="mt-auto self-start">
+                        <span className="mt-6 inline-flex items-center justify-center gap-2 bg-[#F5F5F5] text-[#0D1B3D] font-medium text-sm leading-none px-5 py-3 rounded-full group-hover:bg-[#0D1B3D] group-hover:text-white transition-colors duration-200">
+                          {guide.cta}
+                          <ArrowRight className="w-4 h-4 shrink-0" />
+                        </span>
                       </span>
                     </div>
                   </a>

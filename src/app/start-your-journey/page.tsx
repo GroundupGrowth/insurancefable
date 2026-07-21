@@ -17,8 +17,6 @@ export async function generateMetadata(): Promise<Metadata> {
 // /debt-free-plan/, /iul-retirement/, /kingdom-money/, /self-banking-blueprint/).
 // None of those routes exist here yet — see docs/migration/phase-2-backlog.md — so
 // every card routes to the on-site catalog rather than a 404.
-const GUIDES_HREF = '/ebooks-and-guides/';
-
 const UPLOADS = '/wp-content/uploads';
 
 const levels: JourneyLevel[] = [
@@ -34,7 +32,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/Anti-Banking-Starter-Guide.webp`,
         alt: 'Anti Banking Starter Guide',
-        href: GUIDES_HREF,
+        href: '/anti-banking-starter-guide/',
       },
       {
         title: 'The Playbook They Never Handed You',
@@ -42,7 +40,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/Kingdom-Money-1.webp`,
         alt: 'Kingdom Money',
-        href: GUIDES_HREF,
+        href: '/kingdom-money/',
       },
       {
         title: 'Unlearn The Financial Myths',
@@ -50,7 +48,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/Money-Secrets-of-the-Wealthy.webp`,
         alt: 'Money Secrets of the Wealthy',
-        href: GUIDES_HREF,
+        href: '/money-secrets/',
       },
       {
         title: 'How to Eliminate Debt and Build Wealth',
@@ -58,7 +56,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/Component-17.webp`,
         alt: 'Wealth Plan',
-        href: GUIDES_HREF,
+        href: '/debt-free-plan/',
       },
       {
         title: 'The Guide to Tax Free Retirement Income',
@@ -66,7 +64,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/Component-10.webp`,
         alt: 'IUL Retirement',
-        href: GUIDES_HREF,
+        href: '/iul-retirement/',
       },
     ],
   },
@@ -82,7 +80,7 @@ const levels: JourneyLevel[] = [
         cta: 'Watch them here',
         image: `${UPLOADS}/10-Modules-on-Infinite-Banking-.webp`,
         alt: '10 Modules on Infinite Banking',
-        href: GUIDES_HREF,
+        href: '/ibc-modules/',
       },
       {
         title: 'Master the Mechanics',
@@ -90,7 +88,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/The-Self-Banking-Blueprint.webp`,
         alt: 'The Self Banking Blueprint',
-        href: GUIDES_HREF,
+        href: '/self-banking-blueprint/',
       },
     ],
   },
@@ -106,7 +104,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/The-Ultimate-Asset-2.webp`,
         alt: 'The Ultimate Asset',
-        href: GUIDES_HREF,
+        href: '/the-ultimate-asset-ebook/',
       },
       {
         title: 'Why Most Family Wealth Disappears',
@@ -114,7 +112,7 @@ const levels: JourneyLevel[] = [
         cta: 'Download Here',
         image: `${UPLOADS}/The-Generational-Transfer.webp`,
         alt: 'The Generational Transfer',
-        href: GUIDES_HREF,
+        href: '/generational-transfer/',
       },
     ],
   },
