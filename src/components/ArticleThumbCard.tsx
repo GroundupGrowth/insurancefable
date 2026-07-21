@@ -18,7 +18,7 @@ export default function ArticleThumbCard({ article }: { article: ArticleThumb })
       href={article.href}
       className="group bg-white rounded-2xl p-7 flex flex-col min-h-48 border border-black/5 hover:border-black/10 transition-colors duration-200"
     >
-      <div className="mb-5 h-[88px] w-[88px] shrink-0 overflow-hidden rounded-xl bg-[#F5F5F5]">
+      <div className="mb-5 h-[88px] w-[88px] shrink-0 overflow-hidden rounded-xl bg-[#F5F5F5] p-1.5 flex items-center justify-center">
         <img
           src={`/wp-content/uploads/${article.image}`}
           alt={article.alt}
@@ -26,7 +26,7 @@ export default function ArticleThumbCard({ article }: { article: ArticleThumb })
           height={88}
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
       </div>
       <h3 className="text-[#0D1B3D] text-lg font-medium leading-snug">{article.title}</h3>

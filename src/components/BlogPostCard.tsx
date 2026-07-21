@@ -7,8 +7,9 @@ import { formatPostDateShort as formatDate } from '../lib/dates';
 
    The featured image comes from postThumbnails (recovered from the WordPress
    export — the Payload import brought no media across, which is why these
-   cards were text-only). Source images vary in size and aspect, so the
-   thumbnail sits in a fixed 16:9 box with object-cover; cards without one
+   cards were text-only). Source images are mostly typographic title graphics
+   in varying aspects, so the thumbnail sits letterboxed (object-contain) in a
+   fixed 16:9 box — cover-cropping sliced the text off. Cards without one
    degrade to the original text-only layout rather than showing a gap. */
 
 export default function BlogPostCard({ post }: { post: BlogPostSummary }) {
@@ -19,12 +20,12 @@ export default function BlogPostCard({ post }: { post: BlogPostSummary }) {
       className="group bg-white rounded-2xl border border-black/5 hover:border-black/15 transition-colors duration-200 flex flex-col overflow-hidden"
     >
       {post.image && (
-        <div className="aspect-[16/9] overflow-hidden bg-[#F5F5F5]">
+        <div className="aspect-[16/9] overflow-hidden bg-[#F5F5F5] p-4 flex items-center justify-center">
           <img
             src={post.image}
             alt=""
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </div>
       )}
