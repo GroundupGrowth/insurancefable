@@ -341,6 +341,10 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
       'Creator of the Amazing Life Agent program',
       'Featured on several national podcasts',
     ],
+    credentialLinks: {
+      'Authorized Nelson Nash Infinite Banking Practitioner':
+        'https://infinitebanking.org/practitioners/barry-brooksby/',
+    },
     testimonials: [
       {
         title: 'Barry is simply the best…',

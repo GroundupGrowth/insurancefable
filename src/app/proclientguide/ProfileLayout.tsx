@@ -112,6 +112,10 @@ export interface AdvisorProfile {
   specialties: string[];
   bioSections: BioSection[];
   credentials: string[];
+  /** Proof links for credential entries (exact text → URL, e.g. the Nelson Nash
+      practitioner directory). Matching entries render as a link and get a url
+      in the schema hasCredential. */
+  credentialLinks?: Record<string, string>;
   testimonials: Testimonial[];
   /* --- E-E-A-T trust signals (all optional — sections appear once filled) --- */
   /** LinkedIn profile URL — button on the page + schema sameAs */
@@ -264,6 +268,7 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     specialties,
     bioSections,
     credentials,
+    credentialLinks = {},
     testimonials,
     schedulerUrl,
     email,
@@ -311,6 +316,7 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
           hasCredential: [...licenses, ...credentials].map((entry) => ({
             '@type': 'EducationalOccupationalCredential',
             name: entry,
+            ...(credentialLinks[entry] ? { url: credentialLinks[entry] } : {}),
           })),
         }
       : {}),
@@ -513,7 +519,18 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                     <span className="bg-[#F5F5F5] rounded-full p-1.5 mt-0.5 shrink-0">
                       <Check className="w-4 h-4 text-[#0D1B3D]" />
                     </span>
-                    <span className="text-[#0D1B3D]/70 text-base leading-relaxed">{credential}</span>
+                    {credentialLinks[credential] ? (
+                      <a
+                        href={credentialLinks[credential]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#0D1B3D]/70 text-base leading-relaxed underline decoration-[#0D1B3D]/30 underline-offset-2 hover:text-[#0D1B3D] transition-colors duration-200"
+                      >
+                        {credential}
+                      </a>
+                    ) : (
+                      <span className="text-[#0D1B3D]/70 text-base leading-relaxed">{credential}</span>
+                    )}
                   </li>
                 ))}
               </ul>
