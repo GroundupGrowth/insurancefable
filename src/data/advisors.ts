@@ -78,6 +78,35 @@ const legacyRecentArticles: RecentArticle[] = [
    block in the capture, no videos, no links). Building it would add an empty
    band, so the section is omitted until live has content in it. */
 
+/* Live's luke-dupin and erik-hayton pages reuse the SAME four Trustpilot
+   reviews about Jason that the jasonh/jasonk pages carry (the review widget is
+   shared across the legacy profile template) — reproduced verbatim, Jason's
+   name and all. */
+const legacyJasonTestimonials: AdvisorProfile['testimonials'] = [
+  {
+    title: 'Excellent help, gave detailed explanation',
+    quote:
+      'Jason was very patient with all my questions (despite asking the same questions over and over!) and gave detailed explanation of everything he was sharing with me. He explained the whole process to me and simplified it for me to understand what I was signing up for. He was also very responsive via email and texts. Thank you.',
+    attribution: 'Mrinalini',
+  },
+  {
+    title: 'Great advice, great service, great experience',
+    quote:
+      'Jason was extremely helpful walking me through my options. He was quick to respond, very detailed and overall amazing to work with. I’m very pleased with the experience and happy to have my policy set up.',
+    attribution: 'David',
+  },
+  {
+    title: 'This was an amazing experience…',
+    quote:
+      'This was an amazing experience, when I first contacted Insurance and Estates, I barely knew anything about life insurance. Jason was very patient, informative and, clear in how he quickly educated me to make intelligent decisions on my financial future. I would definitely recommend Insurance and Estates to anyone.',
+  },
+  {
+    title: 'Jason helped me with a whole life…',
+    quote:
+      'Jason helped me with a whole life policy, protecting my daughter as well as go through the process without disrupting my over the road work as a trucker. Some times as a trucker it’s hard to get on site medical while going state to state, as a non smoker I qualified, Jason is awesome',
+  },
+];
+
 export const advisorDefaults: Record<string, AdvisorProfile> = {
   steve: {
     slug: 'steve',
@@ -752,5 +781,94 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
       href: 'https://debtfreeibc.insuranceandestates.com/2025-5884',
       image: { src: '/wp-content/uploads/denise_book-136x200.webp', alt: 'Denise book' },
     },
+  },
+  'luke-dupin': {
+    slug: 'luke-dupin',
+    role: 'Chief Technology Officer',
+    name: 'Luke Dupin',
+    firstName: 'Luke',
+    /* Hero intro = live's opening bio paragraph, verbatim. */
+    intro:
+      'Luke Dupin brings over 26 years of product development experience as a seasoned technology executive and entrepreneur. As a principal developer for seven successful startups and co-writer for four patents, Luke has established himself as an innovator who consistently brings cutting-edge products to market.',
+    /* Live serves luke-160x200.webp; the larger 240x300 rendition of the same
+       portrait is localized and fits the 3:4 hero slot. */
+    photo: {
+      src: '/wp-content/uploads/luke-240x300.webp',
+      alt: 'Luke',
+    },
+    initials: 'LD',
+    // Live shows no specialty tags, credentials or contact details for Luke.
+    specialties: [],
+    /* Live runs the bio as one unbroken block with no headings; reproduced
+       verbatim under a single "Background" heading (jasonk precedent). No
+       inline links or emphasis on live. */
+    bioSections: [
+      {
+        heading: 'Background',
+        wide: true,
+        paragraphs: [
+          'Luke’s entrepreneurial journey includes founding Radius.fit in 2019 and co-founding Volocore in 2015, a race technology company that delivered real-time positioning and post-race analysis to major racing series. During peak events, Volocore served over 350,000 concurrent spectators and collaborated with the Caselli Foundation and KTM to develop hardware safety systems that became standard in off-road racing.',
+          'Currently, Luke specializes in the strategic application of AI technologies into existing business operations, helping organizations leverage artificial intelligence to enhance their competitive advantage and operational efficiency. His expertise spans user experience innovation, platform development, and the integration of advanced technologies into traditional business models.',
+          'A University of Idaho graduate with degrees in Computer Science and Mathematics, Luke brings 30 years of software engineering expertise to his strategic technology initiatives. His analytical approach and deep technical knowledge make him invaluable in driving innovation and technological advancement.',
+          'Beyond his professional achievements, Luke is an accomplished endurance athlete who has completed the legendary Baja 250, 500, and 1000 races on dirt bikes, earned seven national amateur motocross championships over 15 years of racing, and finished over 40 endurance triathlon and running events.',
+          'Luke’s unique combination of technical innovation, entrepreneurial success, and competitive drive makes him an exceptional asset in developing strategic technology solutions and driving business growth.',
+        ],
+      },
+    ],
+    credentials: [],
+    testimonials: legacyJasonTestimonials,
+    recentArticles: legacyRecentArticles,
+    // FOLLOW-UP: no email, booking widget or LinkedIn surfaced on the live page.
+    /* Live: "brings over 26 years of product development experience". */
+    yearsExperience: '26+ years',
+    education: ['University of Idaho — Computer Science and Mathematics'],
+  },
+  'erik-hayton': {
+    slug: 'erik-hayton',
+    role: 'Chief Marketing Officer',
+    name: 'Erik J. Hayton',
+    firstName: 'Erik',
+    /* Hero intro = live's opening bio paragraph, verbatim. */
+    intro:
+      'Growth in regulated industries is notoriously messy. Teams get buried under fragmented technology stacks, siloed data, unclear attribution, and the constant weight of compliance exposure. Most marketing leaders treat compliance as an obstacle. Erik J. Hayton treats it as the operating system.',
+    /* Live serves erik-hayton--153x200.webp (double hyphen is live's own
+       filename); the larger 230x300 rendition is localized. */
+    photo: {
+      src: '/wp-content/uploads/erik-hayton--230x300.webp',
+      alt: 'Erik J. Hayton',
+    },
+    initials: 'EH',
+    // Live shows no specialty tags, credentials or contact details for Erik.
+    specialties: [],
+    /* Live runs the bio as one unbroken block with no headings; reproduced
+       verbatim under a single "Background" heading. The "Revenue Engineering /
+       Compliance Automation / Technology Orchestration" lines are plain
+       paragraphs on live (no bold, no bullets) — kept as paragraphs. */
+    bioSections: [
+      {
+        heading: 'Background',
+        wide: true,
+        paragraphs: [
+          'As Chief Marketing Officer of Insurance and Estates, Erik brings over a decade of experience building compliance-first revenue infrastructure for firms that serve ultra-high-net-worth families, high-income professionals, and independent investment advisors. Since 2012, he has designed and deployed growth systems that have generated multiple nine figures in real assets under management and distribution across family offices and businesses, alt investment funds, and advisory channels.',
+          'His role at Insurance and Estates reflects a deliberate philosophy: every growth initiative must be audit-ready before it is market-ready.',
+          'Erik operates as a Compliance-First Growth Architect - a discipline he developed at the intersection of performance marketing, regulatory governance, and applied artificial intelligence for over a decade. His methodology, which he calls Compliant Growth Operating Systems (CGOS), integrates three layers that most firms treat as separate functions:',
+          'Revenue Engineering - building attribution-clear pipelines where every touchpoint, from first impression to closed policy, is measurable and defensible under SEC Marketing Rule (Rule 206(4)-1) and Regulatory advertising standards.',
+          'Compliance Automation - replacing manual review bottlenecks with AI-assisted approval workflows, immutable audit trails, and pre-cleared content distribution engines that reduce compliance review time while eliminating common enforcement triggers.',
+          'Technology Orchestration - unifying CRM, marketing automation, and data systems into a single operating layer, eliminating the integration chaos that creates both operational drag and regulatory blind spots.',
+          'Because Erik actively writes production code - building proprietary AI integrations, engineering complex CRM automations, and deploying compliance-governed distribution infrastructure - he operates as a rare hybrid in the executive space. He speaks fluently to engineering teams, compliance officers, C-suite leadership, and marketing/sales teams, translating between disciplines that typically operate in silos.',
+          'Clients tend to retain him when the picture suddenly sharpens: when integration chaos disappears, compliance complaints fall to zero, and weekly reviews shift from reactive firefighting to clear, defensible strategic decisions.',
+          'Erik’s commitment to precision is not theoretical - it is personal. In 2018, a severe, stress-induced health crisis forced a complete reset of how he works and lives. He and his wife of 15+ years, Trista, dismantled the conventional playbook and rebuilt their life around an intentional, simplified operating cadence. Today, they raise their young daughter as a global citizen, splitting time between the beaches of Bali and Ko Samui, the mountains of Coeur d’Alene, Idaho, and wherever the work takes them - running their family businesses fully remote.',
+          'His lifestyle directly mirrors his professional method: fewer moving parts, absolute precision, calm and steady output. People who meet the Hayton family notice the exact same trait his clients do - a quiet confidence that makes complex, high-stakes situations feel entirely manageable.',
+          'Risk has never been abstract for Erik. A lifelong athlete who has survived extreme sports and broken more than 70 bones, he still snowboards, rides motorcycles, and actively embraces calculated physical risk whenever possible. It is exactly why he engineers growth and governance infrastructure the way he does: built for speed - but only after the safety systems are locked in.',
+          '"I don\'t build marketing campaigns. I build systems that buy back your time and protect your reputation." - Erik J. Hayton',
+        ],
+      },
+    ],
+    credentials: [],
+    testimonials: legacyJasonTestimonials,
+    recentArticles: legacyRecentArticles,
+    // FOLLOW-UP: no email, booking widget or LinkedIn surfaced on the live page.
+    /* Live: "Since 2012, he has designed and deployed growth systems…". */
+    yearsExperience: 'Since 2012',
   },
 };
