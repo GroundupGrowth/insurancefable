@@ -178,6 +178,16 @@ export default function SalesSections() {
             institutions do and what families are told. We help families build financial
             infrastructure aligned with God&rsquo;s design for generational flourishing.
           </p>
+          <p>
+            I&amp;E was founded by top estate attorneys with one goal, namely creating the most
+            complete arsenal of resources on the web and amassing a team of top professionals
+            to assist you in understanding and utilizing the ultimate asset. To that end,
+            I&amp;E exists to equip you with powerful strategies, utilizing properly designed
+            cash value life insurance contracts, to accomplish your specific defined goals
+            such as recapturing your money, gaining money momentum, pursuing intentional
+            wealth building, implementing tax and retirement planning, and delivering long
+            term legacy creation.
+          </p>
         </SalesProse>
       </SalesSection>
     </>
