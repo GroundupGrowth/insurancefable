@@ -125,11 +125,11 @@ export default function BooksAdminPage() {
     const { error: deleteError } = await supabase.from('site_ebooks').delete().neq('slug', '');
     if (deleteError) throw new Error(deleteError.message);
     const { error: insertError } = await supabase.from('site_ebooks').insert(
-      /* `image` is stripped deliberately: cover art lives in the code defaults
-         (src/data/ebooks.ts) and site_ebooks has no image column. getEbooks()
-         re-attaches covers by slug after loading, so admin edits never wipe
-         them and no migration is required. */
-      books.map(({ embed: _embed, image: _image, text, ...book }) => ({
+      /* `image` and `landingPath` are stripped deliberately: both live in the
+         code defaults (src/data/ebooks.ts) and site_ebooks has neither column.
+         getEbooks() re-attaches them by slug after loading, so admin edits never
+         wipe them and no migration is required. */
+      books.map(({ embed: _embed, image: _image, landingPath: _landingPath, text, ...book }) => ({
         ...book,
         text: text || null,
         updated_at: now,

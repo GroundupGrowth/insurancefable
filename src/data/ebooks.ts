@@ -18,6 +18,13 @@ export interface Ebook {
   text?: string;
   /** External landing page (WordPress) used until an embed is pasted; free items anchor to the request form. */
   href: string;
+  /** Internal landing-page route for this book (e.g. '/kingdom-money/'). The
+      catalog card links here; the landing page shows the book's opt-in form
+      (embed_slots `ebook:<slug>`) immediately. Matches the live URL where live
+      has one; a clean root slug otherwise. Code-owned like `image` and optional
+      for the same reason — it is never part of the site_ebooks round-trip;
+      getEbooks() re-attaches it by slug, so catalogs from Supabase still have it. */
+  landingPath?: string;
   sort: number;
   /* Cover art, localized under public/wp-content/uploads/. Covers are code-owned
      and deliberately NOT part of the site_ebooks round-trip: the admin editor
@@ -39,9 +46,23 @@ export function ebookCover(slug: string): EbookImage | undefined {
   return ebookDefaults.find((book) => book.slug === slug)?.image;
 }
 
+/** Landing-page route for a slug, from the code defaults. Re-attached to
+    catalogs loaded from Supabase (which does not store it), same as covers.
+    Falls back to a root-level slug for any book not in the defaults. */
+export function ebookLandingPath(slug: string): string {
+  return ebookDefaults.find((book) => book.slug === slug)?.landingPath ?? `/${slug}/`;
+}
+
+/** The book at a given landing route (or slug). Used by the landing pages and
+    their metadata. */
+export function ebookByLandingPath(path: string): Ebook | undefined {
+  return ebookDefaults.find((book) => book.landingPath === path);
+}
+
 export const ebookDefaults: Ebook[] = [
   {
     slug: 'self-banking-blueprint',
+    landingPath: '/self-banking-blueprint/',
     category: 'featured',
     eyebrow: 'The Ultimate Free Download',
     title: 'The Self Banking Blueprint',
@@ -55,6 +76,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'kingdom-money',
+    landingPath: '/kingdom-money/',
     category: 'featured',
     eyebrow: 'Featured eBook',
     title: 'Kingdom Money',
@@ -68,6 +90,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'generational-transfer',
+    landingPath: '/generational-transfer/',
     category: 'featured',
     eyebrow: 'Featured eBook',
     title: 'The Generational Transfer',
@@ -81,6 +104,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'the-ultimate-asset',
+    landingPath: '/the-ultimate-asset-ebook/',
     category: 'featured',
     eyebrow: 'Volume Based Infinite Banking',
     title: 'The Ultimate Asset®',
@@ -94,6 +118,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'intentional-wealth-effect',
+    landingPath: '/intentional-wealth-effect/',
     category: 'featured',
     eyebrow: 'Featured eBook',
     title: 'The Intentional Wealth Effect',
@@ -109,6 +134,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'money-secrets-of-the-wealthy',
+    landingPath: '/money-secrets/',
     category: 'free-ebook',
     eyebrow: 'Free eBook',
     title: 'Money Secrets of the Wealthy',
@@ -121,6 +147,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'estate-planners-tactical-guide',
+    landingPath: '/estate-planners-tactical-guide/',
     category: 'free-ebook',
     eyebrow: 'Free eBook',
     title: "Estate Planner's Tactical Guide",
@@ -133,6 +160,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'financial-planning-has-failed',
+    landingPath: '/financial-planning-has-failed/',
     category: 'free-ebook',
     eyebrow: 'Free eBook',
     title: 'Financial Planning Has Failed',
@@ -145,6 +173,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: '5-important-estate-planning-steps',
+    landingPath: '/5-important-estate-planning-steps/',
     category: 'free-guide',
     eyebrow: 'Free Guide',
     title: '5 Important Estate Planning Steps',
@@ -157,6 +186,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'estate-planning-tactical-checklist',
+    landingPath: '/estate-planning-tactical-checklist/',
     category: 'free-guide',
     eyebrow: 'Free Guide',
     title: 'Estate Planning Tactical Checklist',
@@ -169,6 +199,7 @@ export const ebookDefaults: Ebook[] = [
   },
   {
     slug: 'life-insurance-essentials-report',
+    landingPath: '/life-insurance-essentials-report/',
     category: 'free-guide',
     eyebrow: 'Free Guide',
     title: 'Life Insurance Essentials Report',

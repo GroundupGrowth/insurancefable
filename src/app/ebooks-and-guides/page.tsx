@@ -47,6 +47,7 @@ export default async function EbooksAndGuidesPage() {
                 text={book.text}
                 image={book.image}
                 fallbackHref={book.href}
+                landingHref={book.landingPath}
                 ctaLabel="Get the Book"
               />
             ))}
@@ -93,6 +94,7 @@ export default async function EbooksAndGuidesPage() {
                 text={book.text}
                 image={book.image}
                 fallbackHref={book.href}
+                landingHref={book.landingPath}
                 ctaLabel="Request This eBook"
               />
             ))}
@@ -118,6 +120,7 @@ export default async function EbooksAndGuidesPage() {
                 text={guide.text}
                 image={guide.image}
                 fallbackHref={guide.href}
+                landingHref={guide.landingPath}
                 ctaLabel="Request This Guide"
               />
             ))}

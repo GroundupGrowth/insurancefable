@@ -20,6 +20,10 @@ interface EbookCardProps {
   ctaLabel: string;
   /** Cover art. Optional — a book with no cover keeps the same card shape. */
   image?: EbookImage;
+  /** When set, the whole card links to this book's landing page (where the
+      opt-in form is shown immediately) instead of expanding the form inline.
+      This is the catalog's default now: click a book → go to its landing page. */
+  landingHref?: string;
 }
 
 export default function EbookCard({
@@ -30,11 +34,14 @@ export default function EbookCard({
   fallbackHref,
   ctaLabel,
   image,
+  landingHref,
 }: EbookCardProps) {
   const [hasEmbed, setHasEmbed] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    // The inline-expand path only runs when there's no landing page to link to.
+    if (landingHref) return;
     const supabase = getSupabase();
     if (!supabase) return;
     let cancelled = false;
@@ -49,7 +56,7 @@ export default function EbookCard({
     return () => {
       cancelled = true;
     };
-  }, [slotKey]);
+  }, [slotKey, landingHref]);
 
   const ctaClass =
     'mt-auto self-start inline-flex items-center gap-2 bg-[#F5F5F5] text-[#0D1B3D] font-medium text-sm px-5 py-2.5 rounded-full hover:bg-[#0D1B3D] hover:text-white transition-colors duration-200';
@@ -80,7 +87,14 @@ export default function EbookCard({
         </h3>
         {text && <p className="text-[#0D1B3D]/70 text-base leading-relaxed mb-6">{text}</p>}
 
-        {hasEmbed ? (
+        {landingHref ? (
+          /* Default: link to the book's landing page, where the opt-in form is
+             shown immediately. */
+          <a href={landingHref} className={ctaClass}>
+            {ctaLabel}
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        ) : hasEmbed ? (
           <>
             <button type="button" onClick={() => setExpanded((open) => !open)} className={ctaClass}>
               {expanded ? 'Hide Form' : ctaLabel}
