@@ -46,6 +46,12 @@ const DESIGN_ASSETS: DesignAsset[] = [
     usedIn: 'src/components/ServicesSection.tsx — Annuities card',
   },
   {
+    label: 'Bell jar',
+    type: 'image',
+    src: '/media/bell-jar.webp',
+    usedIn: 'src/components/ServicesSection.tsx — Long Term Care card',
+  },
+  {
     label: 'Mushroom & coin',
     type: 'image',
     src: '/media/mushroom.webp',

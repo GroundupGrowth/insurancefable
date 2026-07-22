@@ -59,15 +59,15 @@ export default function ServicesSection() {
           </div>
 
           <div className="bg-[#0D1B3D] rounded-2xl overflow-hidden flex flex-col">
-            <div className="aspect-[4/3] px-6 pt-6 overflow-hidden">
+            <div className="aspect-[4/3] bg-[#F5F5F5] overflow-hidden">
               <img
-                src="/wp-content/uploads/life-insurance.webp"
-                alt="An older woman smiling with a younger woman who is holding her hand"
-                width={646}
-                height={500}
+                src="/media/bell-jar.webp"
+                alt="A glass bell jar protecting a bouquet of blue and white flowers on an ornate silver base"
+                width={1600}
+                height={1073}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="p-7 flex flex-col flex-1">
@@ -97,7 +97,7 @@ export default function ServicesSection() {
           </div>
 
           <div className="bg-[#0D1B3D] rounded-2xl overflow-hidden flex flex-col">
-            <div className="aspect-[4/3] px-6 pt-6 overflow-hidden">
+            <div className="aspect-[4/3] bg-[#F5F5F5] overflow-hidden">
               <img
                 src="/media/scroll.webp"
                 alt="An engraved scroll sealed with a wax stamp, surrounded by blue flowers"
@@ -105,7 +105,7 @@ export default function ServicesSection() {
                 height={1073}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover rounded-xl"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="p-7 flex flex-col flex-1">
