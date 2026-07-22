@@ -6,7 +6,9 @@ import { ArrowRight } from 'lucide-react';
 // These pages are all hosted here now, so links are internal.
 const BASE = '';
 
-const ACTIVE_CARD_BG = '/media/bank.webp';
+/* Mushroom-and-coin render, anchored right so the engraved coin peeks out of
+   the active card; a navy gradient keeps the white text readable on top. */
+const ACTIVE_CARD_BG = '/media/mushroom.webp';
 
 interface Phase {
   phase: string;
@@ -91,45 +93,33 @@ export default function ProcessSection() {
                 key={phase.phase}
                 className="relative overflow-hidden rounded-2xl bg-[#0D1B3D]"
               >
-                {/* SWAP-LATER */}
                 <div
-                  className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
+                  className={`absolute inset-0 bg-cover transition-opacity duration-700 ${
                     isActive ? 'opacity-100' : 'opacity-0'
                   }`}
-                  style={{ backgroundImage: `url(${ACTIVE_CARD_BG})` }}
+                  style={{
+                    backgroundImage: `linear-gradient(90deg, rgba(13, 27, 61, 0.94) 35%, rgba(13, 27, 61, 0.55) 100%), url(${ACTIVE_CARD_BG})`,
+                    backgroundPosition: '80% center',
+                  }}
                 />
                 <div className="relative z-10 p-7 min-h-80 h-full flex flex-col justify-between">
-                  <span
-                    className={`text-xs uppercase tracking-wide transition-colors duration-700 ${
-                      isActive ? 'text-[#0D1B3D]/50' : 'text-white/50'
-                    }`}
-                  >
+                  <span className="text-xs uppercase tracking-wide text-white/50">
                     {phase.phase}
                   </span>
                   <div>
                     <h3
-                      className={`text-2xl font-medium mb-3 transition-colors duration-700 ${
-                        isActive ? 'text-[#0D1B3D]' : 'text-white'
-                      }`}
+                      className="text-2xl font-medium mb-3 text-white"
                       style={{ letterSpacing: '-0.02em' }}
                     >
                       {phase.title}
                     </h3>
-                    <p
-                      className={`text-base leading-relaxed transition-colors duration-700 ${
-                        isActive ? 'text-[#0D1B3D]/70' : 'text-white/60'
-                      }`}
-                    >
+                    <p className="text-base leading-relaxed text-white/70">
                       {phase.body}
                     </p>
                     {phase.link && (
                       <a
                         href={phase.link.href}
-                        className={`mt-4 inline-flex items-center gap-2 font-medium transition-colors duration-700 ${
-                          isActive
-                            ? 'text-[#0D1B3D] hover:text-[#1C2E55]'
-                            : 'text-white hover:text-white/80'
-                        }`}
+                        className="mt-4 inline-flex items-center gap-2 font-medium text-white hover:text-white/80 transition-colors duration-200"
                       >
                         {phase.link.label}
                         <ArrowRight className="w-4 h-4" />

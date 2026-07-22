@@ -28,10 +28,10 @@ const DESIGN_ASSETS: DesignAsset[] = [
     usedIn: 'src/components/Hero.tsx — the video behind the homepage hero (poster: /media/hero-coins-poster.webp)',
   },
   {
-    label: 'Bank temple — process card background',
+    label: 'Bank temple',
     type: 'image',
     src: '/media/bank.webp',
-    usedIn: 'src/components/ProcessSection.tsx — active phase card on the homepage',
+    usedIn: 'src/app/long-term-care-insurance/page.tsx — hero image on the LTC page',
   },
   {
     label: 'Infinity vault',
@@ -55,7 +55,7 @@ const DESIGN_ASSETS: DesignAsset[] = [
     label: 'Mushroom & coin',
     type: 'image',
     src: '/media/mushroom.webp',
-    usedIn: 'Unassigned — wide banner composition, free for a future section',
+    usedIn: 'src/components/ProcessSection.tsx — darkened background of the active phase card',
   },
 ];
 
