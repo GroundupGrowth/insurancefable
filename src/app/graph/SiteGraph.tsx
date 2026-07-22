@@ -1,13 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import graphData from './graph-data.json';
 
-/* Interactive force-directed map of every indexable page and its real internal
-   links (data extracted from the built HTML by scripts/gen-site-graph-data.mjs).
-   Plain canvas, no dependencies; physics run client-side. */
+/* Interactive force-directed map of a site's pages and their real internal
+   links. Plain canvas, no dependencies; physics run client-side. Used by
+   /graph/ (this site) and /graph-old-website/ (the live WordPress site),
+   each passing its own extracted data. */
 
-interface GraphNode {
+export interface GraphData {
+  nodes: GraphNode[];
+  links: [number, number][];
+}
+
+export interface GraphNode {
   id: string;
   t: string;
   k: string;
@@ -40,7 +45,14 @@ interface SimNode extends GraphNode {
   dragged?: boolean;
 }
 
-export default function SiteGraph() {
+interface SiteGraphProps {
+  data: GraphData;
+  subtitle: string;
+  /** Base for opening nodes on click; '' = same site */
+  linkBase?: string;
+}
+
+export default function SiteGraph({ data, subtitle, linkBase = '' }: SiteGraphProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const queryRef = useRef('');
@@ -58,7 +70,7 @@ export default function SiteGraph() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const N: SimNode[] = (graphData.nodes as GraphNode[]).map((n, i) => {
+    const N: SimNode[] = data.nodes.map((n, i) => {
       const golden = Math.PI * (3 - Math.sqrt(5));
       const r = 60 + Math.sqrt(i) * 26;
       return {
@@ -70,7 +82,7 @@ export default function SiteGraph() {
         r: 3.5 + Math.min(14, Math.sqrt(n.in) * 1.9),
       };
     });
-    const L = graphData.links as [number, number][];
+    const L = data.links;
     const adj: number[][] = N.map(() => []);
     for (const [s, t] of L) {
       adj[s].push(t);
@@ -237,7 +249,7 @@ export default function SiteGraph() {
     const onUp = (e: MouseEvent) => {
       if (dragNode && !dragNode.dragged) {
         const i = nodeAt(e.clientX, e.clientY);
-        if (i >= 0 && N[i] === dragNode) window.open(N[i].id, '_blank');
+        if (i >= 0 && N[i] === dragNode) window.open(linkBase + N[i].id, '_blank');
       }
       dragNode = null;
       panning = false;
@@ -294,7 +306,7 @@ export default function SiteGraph() {
     };
     const onTouchEnd = (e: TouchEvent) => {
       if (dragNode && !dragNode.dragged && e.changedTouches.length === 1) {
-        window.open(dragNode.id, '_blank');
+        window.open(linkBase + dragNode.id, '_blank');
       }
       dragNode = null;
       panning = false;
@@ -322,7 +334,7 @@ export default function SiteGraph() {
       canvas.removeEventListener('touchend', onTouchEnd);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
 
   return (
     <div className="fixed inset-0 bg-[#0D1B3D] overflow-hidden">
@@ -330,7 +342,7 @@ export default function SiteGraph() {
       <div className="fixed top-4 left-4 bg-[#0D1B3D]/85 backdrop-blur border border-white/10 rounded-2xl p-4 max-w-[300px]">
         <p className="text-white font-medium text-[15px]">Insurance Fable · Site Graph</p>
         <p className="text-white/50 text-[11.5px]">
-          {graphData.nodes.length} pages · {graphData.links.length} internal links
+          {subtitle} · {data.nodes.length} pages · {data.links.length} internal links
         </p>
         <input
           type="text"
