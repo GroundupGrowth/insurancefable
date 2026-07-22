@@ -63,9 +63,9 @@ export default function Hero() {
               className="text-[#0D1B3D] text-4xl md:text-6xl font-medium leading-[1.1] max-w-4xl mb-6"
               style={{ letterSpacing: '-0.04em' }}
             >
-              Take Back Control,
+              Take Back Control,{' '}
               <br className="hidden md:block" />
-              Gain Momentum, and Build
+              Gain Momentum, and Build{' '}
               <br className="hidden md:block" />
               a Multi-Generational Legacy.
             </h1>
