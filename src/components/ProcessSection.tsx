@@ -99,7 +99,7 @@ export default function ProcessSection() {
                   }`}
                   style={{
                     backgroundImage: `linear-gradient(90deg, rgba(13, 27, 61, 0.94) 35%, rgba(13, 27, 61, 0.55) 100%), url(${ACTIVE_CARD_BG})`,
-                    backgroundPosition: '80% center',
+                    backgroundPosition: '45% center',
                   }}
                 />
                 <div className="relative z-10 p-7 min-h-80 h-full flex flex-col justify-between">
