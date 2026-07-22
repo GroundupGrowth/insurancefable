@@ -33,7 +33,7 @@ export default function CarrierLogoWall() {
         <p className="text-[#0D1B3D]/70 text-base leading-relaxed">
           Our trusted partners.
           <br />
-          Top-rated carriers only — we work for you, not for them.
+          Top-rated carriers only. We work for you, not for them.
         </p>
         <div className="md:col-span-3 overflow-hidden">
           <style>{`

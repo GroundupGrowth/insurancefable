@@ -4,7 +4,7 @@ import { ImageResponse } from 'next/og';
    route; replace with page-specific opengraph-image files where wanted. */
 
 export const runtime = 'edge';
-export const alt = 'Insurance & Estates — Whole Life & Infinite Banking Strategies';
+export const alt = 'Insurance & Estates | Whole Life & Infinite Banking Strategies';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

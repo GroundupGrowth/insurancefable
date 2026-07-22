@@ -9,6 +9,7 @@ const freeResources = [
   { label: 'The I&E Wiki', href: '/wiki/' },
   { label: 'eBooks & Guides', href: '/ebooks-and-guides/' },
   { label: 'Start here', href: '/start-your-journey/' },
+  { label: 'Wealth Strategy Quiz', href: '/quiz/' },
 ];
 
 const aboutUs = [
@@ -33,7 +34,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-6">
-              <LogoIcon className="w-8 h-8 brightness-0 invert" />
+              <LogoIcon className="h-8 w-auto" />
               <span className="text-xl font-medium tracking-tight text-white">
                 Insurance &amp; Estates
               </span>
@@ -44,7 +45,7 @@ export default function Footer() {
               families lose wealth to the same conventional strategies everyone
               recommends. We built the most complete arsenal of Infinite Banking
               resources on the web because we believe you deserve to know what the
-              institutions know — and use it on your terms.
+              institutions know, and use it on your terms.
             </p>
             <TrustpilotWidget theme="dark" className="mt-8 max-w-lg" />
           </div>

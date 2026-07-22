@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import CtaBand from '../../components/CtaBand';
-import BlogPostCard from '../../components/BlogPostCard';
+import BlogSections from './BlogSections';
 import { getAllPosts, type BlogPostSummary } from '../../lib/blog';
 
 export const revalidate = 300;
 
 const TITLE = 'Blog – Whole Life Insurance, Infinite Banking & Wealth Strategy | I&E';
 const DESCRIPTION =
-  'The most complete library of whole life insurance, infinite banking, and estate planning articles on the web — written by the attorneys and practitioners at Insurance & Estates.';
+  'The most complete library of whole life insurance, infinite banking, and estate planning articles on the web, written by the attorneys and practitioners at Insurance & Estates.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -43,7 +43,7 @@ export default async function BlogIndexPage() {
       <PageHero
         eyebrow="The I&E Blog"
         title="The library the institutions hoped you'd never read."
-        intro={`${posts.length} in-depth articles on whole life insurance, infinite banking, estate planning, and wealth strategy — written by attorneys and practitioners, not content farms.`}
+        intro={`${posts.length} in-depth articles on whole life insurance, infinite banking, estate planning, and wealth strategy, written by attorneys and practitioners, not content farms.`}
       />
 
       {/* Category jump links */}
@@ -64,27 +64,15 @@ export default async function BlogIndexPage() {
 
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto flex flex-col gap-16">
-          {ordered.map(([slug, section]) => (
-            <div key={slug} id={slug} className="scroll-mt-28">
-              <h2
-                className="text-[#0D1B3D] text-3xl md:text-4xl font-medium mb-8"
-                style={{ letterSpacing: '-0.03em' }}
-              >
-                {section.name}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {section.posts.map((post) => (
-                  <BlogPostCard key={post.slug} post={post} />
-                ))}
-              </div>
-            </div>
-          ))}
+          <BlogSections
+            sections={ordered.map(([slug, section]) => ({ slug, ...section }))}
+          />
         </div>
       </section>
 
       <CtaBand
         title="Done reading? Talk it through."
-        text="A Fit Call maps what you've learned onto your actual numbers — a conversation with a practitioner, not a pitch."
+        text="A Fit Call maps what you've learned onto your actual numbers: a conversation with a practitioner, not a pitch."
       />
     </PageShell>
   );

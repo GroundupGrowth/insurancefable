@@ -1,34 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Play, Star, X } from 'lucide-react';
 
 const credentials = [
   'Founded by estate planning attorneys',
   '1,000+ policies designed since 2017',
   '#1 life insurance agency on Trustpilot',
-  'Independent — not captive to any carrier',
+  'Independent, not captive to any carrier',
   'Attorney-vetted policy design',
   'AZ License 17508301 · FL License W312971',
 ];
 
 const VIDEO_ID = 'Kk_WZfcTCiM';
 
+/* Slow connections (or data-saver) get the poster image instead of the 5MB
+   background video. Checked client-side; the poster is always the first paint
+   either way, so there is no flash. */
+function useBackgroundVideo() {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    type NetInfo = { effectiveType?: string; saveData?: boolean };
+    const connection = (navigator as Navigator & { connection?: NetInfo }).connection;
+    const slow =
+      connection?.saveData === true ||
+      ['slow-2g', '2g', '3g'].includes(connection?.effectiveType ?? '');
+    setEnabled(!slow);
+  }, []);
+  return enabled;
+}
+
 export default function Hero() {
   const [videoOpen, setVideoOpen] = useState(false);
+  const videoEnabled = useBackgroundVideo();
 
   return (
     <section className="relative flex-1">
-      {/* SWAP-LATER */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="/media/hero-coins-poster.webp"
-        className="absolute inset-0 w-full h-full object-cover"
-        src="/media/hero-coins.mp4"
-      />
+      {videoEnabled ? (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/media/hero-coins-poster.webp"
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/media/hero-coins.mp4"
+        />
+      ) : (
+        <img
+          src="/media/hero-coins-poster.webp"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
 
       <div className="relative z-10 h-full px-6">
         <div className="relative max-w-[88rem] mx-auto h-full">
@@ -50,7 +74,7 @@ export default function Hero() {
               className="text-[#0D1B3D]/70 text-base md:text-lg max-w-md mb-8 leading-relaxed"
               style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
             >
-              The financial system was built to profit from your capital — not build it.
+              The financial system was built to profit from your capital, not build it.
               We&rsquo;ll show you the exit.
             </p>
 
@@ -76,15 +100,16 @@ export default function Hero() {
               href="https://www.trustpilot.com/review/insuranceandestates.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 flex items-center gap-3 flex-wrap"
+              className="mt-6 inline-flex items-center gap-3 flex-wrap bg-white/90 backdrop-blur rounded-full pl-4 pr-5 py-2.5 hover:bg-white transition-colors duration-200"
             >
               <span className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current text-[#0D1B3D]" />
+                  <Star key={i} className="w-4 h-4 fill-current text-[#00B67A]" />
                 ))}
               </span>
-                <span className="text-sm text-[#0D1B3D]/60">
-                  TrustScore 5.0 · 302 reviews · #1 of 23 in Life Insurance Agency
+                <span className="text-sm text-[#0D1B3D]">
+                  <span className="font-medium">#1 Life Insurance Agency on Trustpilot</span>
+                  <span className="text-[#0D1B3D]/60"> · TrustScore 5.0 · 302 reviews</span>
                 </span>
               </a>
               </div>
@@ -108,7 +133,7 @@ export default function Hero() {
                   </span>
                 </span>
                 <span className="block px-3 py-2.5 text-sm font-medium text-[#0D1B3D]">
-                  Welcome to I&amp;E — Our Story and Mission
+                  Welcome to I&amp;E: Our Story and Mission
                 </span>
               </button>
             </div>
@@ -127,7 +152,7 @@ export default function Hero() {
                 {[...credentials, ...credentials].map((item, i) => (
                   <span
                     key={i}
-                    className="mx-7 shrink-0 text-[#0D1B3D]/60 whitespace-nowrap text-sm"
+                    className="mx-7 shrink-0 text-[#0D1B3D]/80 font-medium whitespace-nowrap text-sm"
                   >
                     {item}
                   </span>

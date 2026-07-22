@@ -8,7 +8,7 @@ interface CtaBandProps {
 /* Navy closing band used at the bottom of interior pages, above the footer. */
 export default function CtaBand({
   title = 'Ready to take back control?',
-  text = 'Talk with one of our Pro Client Guides — real experts, no pitch, no pressure. Your first call is about your numbers and your goals, nothing else.',
+  text = 'Talk with one of our Pro Client Guides: real experts, no pitch, no pressure. Your first call is about your numbers and your goals, nothing else.',
 }: CtaBandProps) {
   return (
     <section className="px-6 pb-16">

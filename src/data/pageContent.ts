@@ -64,7 +64,7 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/term-life-introduction/',
     title: 'Term Life Introduction',
     description:
-      'An introduction to term life insurance from I&E — why status quo financial advice falls short, and how the right term policy keeps your options open.',
+      'An introduction to term life insurance from I&E: why status quo financial advice falls short, and how the right term policy keeps your options open.',
     eyebrow: 'Products',
     heroTitle: 'Term Life Introduction',
     heroIntro:
@@ -76,11 +76,11 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/whole-life-introduction/',
     title: 'Whole Life Introduction',
     description:
-      "Discover how I&E's high cash value whole life insurance builds wealth, protects your family, and grows tax-free — guaranteed.",
+      "Discover how I&E's high cash value whole life insurance builds wealth, protects your family, and grows tax-free, guaranteed.",
     eyebrow: 'The foundation',
     heroTitle: 'Whole Life Introduction',
     heroIntro:
-      "Discover how I&E's high cash value whole life insurance builds wealth, protects your family, and grows tax-free — guaranteed.",
+      "Discover how I&E's high cash value whole life insurance builds wealth, protects your family, and grows tax-free, guaranteed.",
   },
   'iul-introduction': {
     slug: 'iul-introduction',
@@ -88,7 +88,7 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/iul-introduction/',
     title: 'IUL Introduction',
     description:
-      'Indexed Universal Life protects you from market losses while growing your cash value with market indices — stability and growth in one package.',
+      'Indexed Universal Life protects you from market losses while growing your cash value with market indices, stability and growth in one package.',
     eyebrow: 'Market-linked growth',
     heroTitle: 'IUL Introduction',
     heroIntro: 'A Smarter Way to Plan Your Financial Future.',
@@ -99,7 +99,7 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/variable-life-introduction/',
     title: 'Variable Life Introduction',
     description:
-      'Our information on variable universal life insurance — VUL guides, must-read articles, and direct access to our VUL expert for your questions.',
+      'Our information on variable universal life insurance: VUL guides, must-read articles, and direct access to our VUL expert for your questions.',
     eyebrow: 'Investment-driven',
     heroTitle: 'Variable Life Introduction',
     heroIntro:
@@ -139,7 +139,7 @@ export const pageDefaults: Record<string, PageDefaults> = {
     eyebrow: 'Get a Quote',
     heroTitle: 'Life Insurance Quotes',
     heroIntro:
-      "A quote is only as good as the policy design behind it. Here's how each policy type is structured — and where to start yours.",
+      "A quote is only as good as the policy design behind it. Here's how each policy type is structured, and where to start yours.",
   },
   'ebooks-and-guides': {
     slug: 'ebooks-and-guides',
@@ -147,11 +147,11 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/ebooks-and-guides/',
     title: 'eBooks and Guides',
     description:
-      'Wealth protection strategies trusted by thousands — free eBooks and guides written by estate planning attorneys and IBC practitioners who use them themselves.',
+      'Wealth protection strategies trusted by thousands: free eBooks and guides written by estate planning attorneys and IBC practitioners who use them themselves.',
     eyebrow: 'Wealth Protection Strategies Trusted by Thousands',
     heroTitle: 'eBooks and Guides',
     heroIntro:
-      'The financial system was designed for one generation — yours. Consume it, deplete it, pass on the debt. What it was never designed to do is transfer. These guides exist because that design is a choice, not a law. Every resource on this page was written by estate planning attorneys and IBC practitioners who use these strategies themselves. Browse the collection. Start where it resonates.',
+      'The financial system was designed for one generation: yours. Consume it, deplete it, pass on the debt. What it was never designed to do is transfer. These guides exist because that design is a choice, not a law. Every resource on this page was written by estate planning attorneys and IBC practitioners who use these strategies themselves. Browse the collection. Start where it resonates.',
   },
   about: {
     slug: 'about',
@@ -159,7 +159,7 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/about/',
     title: 'About I&E',
     description:
-      'Insurance & Estates was founded by estate planning attorneys who believe you deserve to know what the institutions know — and use it on your terms.',
+      'Insurance & Estates was founded by estate planning attorneys who believe you deserve to know what the institutions know, and use it on your terms.',
     eyebrow: 'Who we are',
     heroTitle: 'About Insurance & Estates',
     heroIntro:
@@ -171,11 +171,11 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/testimonials/',
     title: 'Testimonials',
     description:
-      'Real customers, real reviews. See what I&E clients say about working with our team — collected through Trustpilot, published without alteration.',
+      'Real customers, real reviews. See what I&E clients say about working with our team, collected through Trustpilot, published without alteration.',
     eyebrow: 'Real customers, real reviews',
     heroTitle: 'Testimonials',
     heroIntro:
-      "Our reviews are collected through Trustpilot, a third-party platform. We can't edit them or pick which ones get published — what you see is what our clients actually said.",
+      "Our reviews are collected through Trustpilot, a third-party platform. We can't edit them or pick which ones get published. What you see is what our clients actually said.",
   },
   contact: {
     slug: 'contact',
@@ -195,7 +195,7 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/editorial-standards/',
     title: 'Insurance and Estates Editorial Standards',
     description:
-      'How Insurance and Estates creates, reviews, and maintains its content — real education from licensed practitioners who use these strategies themselves.',
+      'How Insurance and Estates creates, reviews, and maintains its content: real education from licensed practitioners who use these strategies themselves.',
     eyebrow: 'Editorial standards',
     heroTitle: 'Insurance and Estates Editorial Standards',
     heroIntro: "At Insurance and Estates, we don't do conventional.",
@@ -224,10 +224,10 @@ export const pageDefaults: Record<string, PageDefaults> = {
     path: '/proclientguide/introduction/',
     title: 'Pro Client Guide Introduction',
     description:
-      "Meet the I&E Pro Client Guides — strategic advisors who've been through this themselves. No pressure, just someone who knows the system and walks you through the exit.",
+      "Meet the I&E Pro Client Guides: strategic advisors who've been through this themselves. No pressure, just someone who knows the system and walks you through the exit.",
     eyebrow: 'Our Pro Team',
     heroTitle: 'You Found the Exit. Here’s Who Walks You Through It.',
     heroIntro:
-      "A Pro Client Guide is a strategic advisor who's been through this themselves — someone who designs and uses these policies, not just sells them. No pressure, just someone who knows the system.",
+      "A Pro Client Guide is a strategic advisor who's been through this themselves, someone who designs and uses these policies, not just sells them. No pressure, just someone who knows the system.",
   },
 };

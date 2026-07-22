@@ -97,11 +97,11 @@ export default async function LongTermCareInsurancePage() {
       <section className="px-6 pb-16">
         <div className="max-w-[88rem] mx-auto flex justify-center">
           <img
-            src="/media/bank.webp"
-            alt="A classical bank building with ornate columns, surrounded by blue flowers"
-            width={1600}
-            height={1073}
-            className="w-full max-w-2xl h-auto rounded-2xl"
+            src="/wp-content/uploads/life-insurance.webp"
+            alt="An older woman smiling with a younger woman who is holding her hand"
+            width={646}
+            height={500}
+            className="w-full max-w-md h-auto"
           />
         </div>
       </section>

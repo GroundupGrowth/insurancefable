@@ -21,7 +21,7 @@ const phases: Phase[] = [
   {
     phase: 'Phase 1',
     title: 'The Library',
-    body: 'The financial system was built to extract your wealth. We built you a free library of targeted guides to show you the exit. Pick the exact playbook for your financial stage — before we ever run your numbers.',
+    body: 'The financial system was built to extract your wealth. We built you a free library of targeted guides to show you the exit. Pick the exact playbook for your financial stage before we ever run your numbers.',
     link: { label: 'Start Here', href: `${BASE}/start-your-journey/` },
   },
   {
@@ -33,12 +33,12 @@ const phases: Phase[] = [
   {
     phase: 'Phase 3',
     title: 'Custom Architecture',
-    body: 'Most agents trap you in "standard policies" (50/50) to maximize their commissions. We do the exact opposite — designing custom (90/10) policies for rapid cash-value growth and immediate liquidity.',
+    body: 'Most agents trap you in "standard policies" (50/50) to maximize their commissions. We do the exact opposite: designing custom (90/10) policies for rapid cash-value growth and immediate liquidity.',
   },
   {
     phase: 'Phase 4',
     title: 'Generational Wealth',
-    body: 'You are now the bank. Your capital compounds tax-free while simultaneously financing your real estate, business, and lifestyle. You control the velocity of your money — securing true financial sovereignty.',
+    body: 'You are now the bank. Your capital compounds tax-free while simultaneously financing your real estate, business, and lifestyle. You control the velocity of your money, securing true financial sovereignty.',
   },
 ];
 
