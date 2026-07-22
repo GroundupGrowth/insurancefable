@@ -3,15 +3,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Play, Star, X } from 'lucide-react';
 
-const credentials = [
-  'Founded by estate planning attorneys',
-  '1,000+ policies designed since 2017',
-  '#1 life insurance agency on Trustpilot',
-  'Independent, not captive to any carrier',
-  'Attorney-vetted policy design',
-  'AZ License 17508301 · FL License W312971',
-];
-
 const VIDEO_ID = 'Kk_WZfcTCiM';
 
 /* Slow connections (or data-saver) get the poster image instead of the 5MB
@@ -146,27 +137,6 @@ export default function Hero() {
               </button>
             </div>
 
-            <div className="mt-auto pt-10 w-full max-w-md overflow-hidden">
-              <style>{`
-                @keyframes hero-marquee {
-                  from { transform: translateX(0); }
-                  to { transform: translateX(-50%); }
-                }
-              `}</style>
-              <div
-                className="flex w-max"
-                style={{ animation: 'hero-marquee 22s linear infinite' }}
-              >
-                {[...credentials, ...credentials].map((item, i) => (
-                  <span
-                    key={i}
-                    className="mx-7 shrink-0 text-[#0D1B3D]/80 font-medium whitespace-nowrap text-sm"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
