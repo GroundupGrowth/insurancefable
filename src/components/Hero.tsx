@@ -64,9 +64,9 @@ export default function Hero() {
               style={{ letterSpacing: '-0.04em' }}
             >
               Take Back Control,
-              <br />
+              <br className="hidden md:block" />
               Gain Momentum, and Build
-              <br />
+              <br className="hidden md:block" />
               a Multi-Generational Legacy.
             </h1>
 
