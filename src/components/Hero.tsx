@@ -100,16 +100,24 @@ export default function Hero() {
               href="https://www.trustpilot.com/review/insuranceandestates.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-3 flex-wrap bg-white/90 backdrop-blur rounded-full pl-4 pr-5 py-2.5 hover:bg-white transition-colors duration-200"
+              className="mt-6 inline-flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-3 bg-white/90 backdrop-blur rounded-2xl sm:rounded-full px-4 py-3 sm:pl-4 sm:pr-5 sm:py-2.5 hover:bg-white transition-colors duration-200"
             >
-              <span className="flex items-center gap-1">
+              {/* Trustpilot-style stars: white star on a green tile */}
+              <span className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current text-[#00B67A]" />
+                  <span
+                    key={i}
+                    className="w-5 h-5 bg-[#00B67A] flex items-center justify-center"
+                  >
+                    <Star className="w-3.5 h-3.5 fill-white text-white" />
+                  </span>
                 ))}
               </span>
-                <span className="text-sm text-[#0D1B3D]">
+                <span className="text-sm text-[#0D1B3D] leading-snug">
                   <span className="font-medium">#1 Life Insurance Agency on Trustpilot</span>
-                  <span className="text-[#0D1B3D]/60"> · TrustScore 5.0 · 302 reviews</span>
+                  <span className="text-[#0D1B3D]/60 block sm:inline">
+                    <span className="hidden sm:inline"> · </span>TrustScore 5.0 · 302 reviews
+                  </span>
                 </span>
               </a>
               </div>
