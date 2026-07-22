@@ -25,8 +25,9 @@ export default function Hero() {
         muted
         loop
         playsInline
+        poster="/media/hero-coins-poster.webp"
         className="absolute inset-0 w-full h-full object-cover"
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_161253_c72b1869-400f-45ed-ac0c-52f68c2ed5bd.mp4"
+        src="/media/hero-coins.mp4"
       />
 
       <div className="relative z-10 h-full px-6">

@@ -27,3 +27,6 @@ clipboard-*.png
 *.WordPress.*.xml
 /sync-from-export.*.sql
 extraction/
+
+# Raw unoptimized uploads (optimized copies live in public/media/)
+/New Images/

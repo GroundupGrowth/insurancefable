@@ -22,16 +22,34 @@ export const metadata: Metadata = {
 
 const DESIGN_ASSETS: DesignAsset[] = [
   {
-    label: 'Homepage hero — background video',
+    label: 'Falling coins — hero background video',
     type: 'video',
-    src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_161253_c72b1869-400f-45ed-ac0c-52f68c2ed5bd.mp4',
-    usedIn: 'src/components/Hero.tsx — the video behind the homepage hero',
+    src: '/media/hero-coins.mp4',
+    usedIn: 'src/components/Hero.tsx — the video behind the homepage hero (poster: /media/hero-coins-poster.webp)',
   },
   {
-    label: 'Purple coins — process card background',
+    label: 'Bank temple — process card background',
     type: 'image',
-    src: 'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260423_164207_f243351d-ed59-48ec-83a0-a5e996bdbe3c.png&w=1280&q=85',
+    src: '/media/bank.webp',
     usedIn: 'src/components/ProcessSection.tsx — active phase card on the homepage',
+  },
+  {
+    label: 'Infinity vault',
+    type: 'image',
+    src: '/media/vault.webp',
+    usedIn: 'src/components/ServicesSection.tsx — Life Insurance / Infinite Banking card',
+  },
+  {
+    label: 'Sealed scroll',
+    type: 'image',
+    src: '/media/scroll.webp',
+    usedIn: 'src/components/ServicesSection.tsx — Annuities card',
+  },
+  {
+    label: 'Mushroom & coin',
+    type: 'image',
+    src: '/media/mushroom.webp',
+    usedIn: 'Unassigned — wide banner composition, free for a future section',
   },
 ];
 

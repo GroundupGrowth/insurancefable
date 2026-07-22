@@ -25,10 +25,10 @@ export default function ServicesSection() {
           <div className="bg-white rounded-2xl overflow-hidden border border-black/5 flex flex-col">
             <div className="aspect-[4/3] bg-[#F5F5F5] overflow-hidden">
               <img
-                src="/wp-content/uploads/9495.webp"
-                alt="A hand placing a wooden block stamped with a heart on top of blocks showing a family, a home and a child"
-                width={1000}
-                height={667}
+                src="/media/vault.webp"
+                alt="An ornate vault engraved with an infinity symbol, open to reveal a stack of coins"
+                width={1600}
+                height={1073}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
@@ -99,13 +99,13 @@ export default function ServicesSection() {
           <div className="bg-[#0D1B3D] rounded-2xl overflow-hidden flex flex-col">
             <div className="aspect-[4/3] px-6 pt-6 overflow-hidden">
               <img
-                src="/wp-content/uploads/annuities.webp"
-                alt="An older man and a younger woman sitting arm in arm, smiling"
-                width={724}
-                height={500}
+                src="/media/scroll.webp"
+                alt="An engraved scroll sealed with a wax stamp, surrounded by blue flowers"
+                width={1600}
+                height={1073}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover rounded-xl"
               />
             </div>
             <div className="p-7 flex flex-col flex-1">
