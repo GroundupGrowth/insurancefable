@@ -231,7 +231,7 @@ export default async function AboutPage() {
               </p>
             </div>
             <div className="flex gap-4 flex-wrap mt-8">
-              <PrimaryCta label="Meet our Pro Client Guides" />
+              <PrimaryCta href="/proclientguide/introduction/" label="Meet our Pro Client Guides" />
               <SecondaryCta href="/ebooks-and-guides/" label="Free Resources" />
             </div>
           </div>

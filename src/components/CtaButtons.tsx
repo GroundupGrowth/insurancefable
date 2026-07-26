@@ -7,7 +7,7 @@ import { ArrowRight } from 'lucide-react';
 const externalProps = (href: string) =>
   /^https?:\/\//.test(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 
-export function PrimaryCta({ href = '/proclientguide/introduction/', label = 'Connect with an Expert' }: { href?: string; label?: string }) {
+export function PrimaryCta({ href = '/connect-with-our-experts/', label = 'Connect with an Expert' }: { href?: string; label?: string }) {
   return (
     <a
       href={href}

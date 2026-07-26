@@ -102,7 +102,7 @@ export default function Navbar() {
               Start here
             </a>
             <a
-              href="/proclientguide/introduction/"
+              href="/connect-with-our-experts/"
               className="inline-flex items-center bg-[#0D1B3D] text-white font-medium px-5 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
             >
               Connect with an Expert
@@ -152,7 +152,7 @@ export default function Navbar() {
                 Start here
               </a>
               <a
-                href="/proclientguide/introduction/"
+                href="/connect-with-our-experts/"
                 className="inline-flex items-center justify-center bg-[#0D1B3D] text-white font-medium px-7 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
               >
                 Connect with an Expert

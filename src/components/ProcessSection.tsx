@@ -28,7 +28,7 @@ const phases: Phase[] = [
     phase: 'Phase 2',
     title: 'The Fit Call',
     body: 'Because our guides do the teaching, our experts never pitch. In this brief call, we simply run your actual numbers to see if these strategies mathematically work for your unique financial situation.',
-    link: { label: 'Connect with an Expert', href: `${BASE}/proclientguide/introduction/` },
+    link: { label: 'Connect with an Expert', href: `${BASE}/connect-with-our-experts/` },
   },
   {
     phase: 'Phase 3',
