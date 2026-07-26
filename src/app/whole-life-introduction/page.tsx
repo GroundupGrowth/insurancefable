@@ -5,6 +5,7 @@ import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
 import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
+import YouTubeEmbed from '../../components/YouTubeEmbed';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -49,7 +50,7 @@ export default async function WholeLifeIntroductionPage() {
         intro={content.heroIntro}
       >
         <PrimaryCta
-          href="/proclientguide/introduction/"
+          href="/connect-with-our-experts/"
           label="Get Your Personalized Quote — Connect with an Expert"
         />
         <SecondaryCta href={`${BASE}/whole-life-insurance/`} label="Start Here" />
@@ -94,6 +95,25 @@ export default async function WholeLifeIntroductionPage() {
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Free webinar — live embeds this video (q45lvNWYGYA) in the hero; the
+          intro card above references it ("Watch our free webinar"). */}
+      <section className="px-6 pb-24">
+        <div className="max-w-[88rem] mx-auto">
+          <h2
+            className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+            style={{ letterSpacing: '-0.04em' }}
+          >
+            Free Webinar: Top 5 Benefits of High Cash Value Whole Life
+          </h2>
+          <div className="max-w-4xl">
+            <YouTubeEmbed
+              id="q45lvNWYGYA"
+              title="Top 5 Benefits of High Cash Value Whole Life Insurance"
+            />
           </div>
         </div>
       </section>

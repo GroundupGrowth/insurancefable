@@ -52,33 +52,32 @@ const guides = [
   },
 ];
 
-// Luke and Erik have no page in this build — link absolute to the live site until migrated.
+/* Leadership headshots are the full-size originals fetched from live
+   2026-07-26 — the -230x300 thumbnails blurred at card size. */
 const leadership = [
   {
     name: 'Jason Kenyon, Esq.',
     role: 'Chief Executive Officer',
     href: '/proclientguide/jasonk/',
-    image: '/wp-content/uploads/jasonk-1-230x300.webp',
+    image: '/wp-content/uploads/jasonk-1.webp',
   },
   {
     name: 'Steve Gibbs, JD, AEP®',
     role: 'Chief Strategic Partnerships Officer',
     href: '/proclientguide/steve/',
-    image: '/wp-content/uploads/steven_gibbs-230x300.webp',
+    image: '/wp-content/uploads/steven_gibbs.webp',
   },
   {
     name: 'Luke Dupin',
     role: 'Chief Technology Officer',
-    // Full profile not yet migrated — route to contact rather than the old site
-    href: '/contact/',
-    image: '/wp-content/uploads/luke-240x300.webp',
+    href: '/proclientguide/luke-dupin/',
+    image: '/wp-content/uploads/luke.webp',
   },
   {
     name: 'Erik J. Hayton',
     role: 'Chief Marketing Officer',
-    // Full profile not yet migrated — route to contact rather than the old site
-    href: '/contact/',
-    image: '/wp-content/uploads/erik-hayton--230x300.webp',
+    href: '/proclientguide/erik-hayton/',
+    image: '/wp-content/uploads/erik-hayton-.webp',
   },
 ];
 
@@ -98,14 +97,15 @@ function TeamCard({
       href={href}
       className="group bg-white rounded-2xl p-4 flex flex-col border border-black/5 hover:border-black/10 transition-colors duration-200"
     >
-      {/* Headshots hotlinked from the live WordPress site */}
+      {/* Headshot kept small (13rem ≈ 208px): the guides' photos only exist at
+          ~230px wide on live, so full-card-width rendering blurred them. */}
       <img
         src={image}
         alt={name}
         width={600}
         height={800}
         loading="lazy"
-        className="w-full aspect-[3/4] object-cover object-top rounded-xl mb-5"
+        className="w-full max-w-[13rem] mx-auto aspect-[3/4] object-cover object-top rounded-xl mb-5"
       />
       <div className="px-3 pb-3 flex flex-col flex-1">
         <h3

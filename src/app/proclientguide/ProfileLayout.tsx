@@ -17,6 +17,7 @@ import PageShell from '../../components/PageShell';
 import CtaBand from '../../components/CtaBand';
 import { PrimaryCta } from '../../components/CtaButtons';
 import AdvisorBooking from '../../components/AdvisorBooking';
+import TrustpilotWidget from '../../components/TrustpilotWidget';
 
 /* Shared layout for the five Pro Client Guide profile pages. Each page
    provides an AdvisorProfile object; the structure stays identical.
@@ -351,20 +352,22 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
           rather than with a stack of boxes. */}
       <section className="px-6 pb-20 md:pb-24">
         <div className="max-w-[88rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-10 lg:p-12">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] gap-8 lg:gap-14">
+          {/* Photo column kept small (14rem ≈ 224px): several live headshots
+              only exist at ~230px wide, so anything bigger renders blurry. */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] gap-8 lg:gap-14">
             <div>
               {photo ? (
                 /* Headshot localized from the live WordPress site */
                 <img
                   src={photo.src}
                   alt={photo.alt}
-                  width={690}
-                  height={920}
-                  className="w-full max-w-[18rem] lg:max-w-none mx-auto aspect-[3/4] object-cover object-top rounded-2xl"
+                  width={600}
+                  height={800}
+                  className="w-full max-w-[14rem] lg:max-w-none mx-auto aspect-[3/4] object-cover object-top rounded-2xl"
                 />
               ) : (
                 /* MISSING ASSET: no headshot surfaced on the live page — replace with a real photo */
-                <div className="w-full max-w-[18rem] lg:max-w-none mx-auto aspect-[3/4] rounded-2xl bg-[#0D1B3D] flex items-center justify-center">
+                <div className="w-full max-w-[14rem] lg:max-w-none mx-auto aspect-[3/4] rounded-2xl bg-[#0D1B3D] flex items-center justify-center">
                   <span
                     className="text-white text-6xl font-medium"
                     style={{ letterSpacing: '-0.04em' }}
@@ -704,6 +707,11 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
             <h2 className={sectionHeading} style={{ letterSpacing: '-0.04em' }}>
               What Clients Say
             </h2>
+            {/* Live pairs every review with the official TrustBox mini widget —
+                the live rating/review-count is content, not decoration. */}
+            <div className="mb-8 max-w-sm">
+              <TrustpilotWidget />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {testimonials.map((testimonial) => (
                 <div

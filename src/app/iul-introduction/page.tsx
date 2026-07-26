@@ -4,6 +4,7 @@ import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
 import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
+import YouTubeEmbed from '../../components/YouTubeEmbed';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -84,6 +85,24 @@ export default async function IulIntroductionPage() {
                 <p className="text-[#0D1B3D]/70 text-base leading-relaxed">{block.text}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Live's "Our Current Best IUL Companies" video section (Rp31AbpMk9E). */}
+      <section className="px-6 pb-24">
+        <div className="max-w-[88rem] mx-auto">
+          <h2
+            className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-10"
+            style={{ letterSpacing: '-0.04em' }}
+          >
+            Our Current Best Indexed Universal Life Insurance Companies
+          </h2>
+          <div className="max-w-4xl">
+            <YouTubeEmbed
+              id="Rp31AbpMk9E"
+              title="Our Current Best Indexed Universal Life Insurance Companies"
+            />
           </div>
         </div>
       </section>

@@ -116,7 +116,9 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     intro:
       'Steven Gibbs is the CSPO, Co-Owner and Co-Founder of Insurance and Estate Strategies LLC (I&E), having recently pivoted after serving as CEO since 2018, to focus on building external strategic partnerships, and serving as a coach and mentor for our growing community of partners, clients and experts.',
     photo: {
-      src: '/wp-content/uploads/steven_gibbs-230x300.webp',
+      // Full-size original (600x782) fetched from live 2026-07-26 — the
+      // 230x300 thumbnail blurred when rendered larger than its pixels.
+      src: '/wp-content/uploads/steven_gibbs.webp',
       alt: 'Steve Gibbs, JD, AEP®',
     },
     initials: 'SG',
@@ -586,7 +588,8 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     intro:
       "Jason Kenyon spent 20 years watching the conventional financial system fail the people it was supposed to serve. That frustration built a business. He's the co-founder and CEO of Insurance & Estate Strategies, one of the most widely read independent education platforms in the life insurance and wealth strategy space.",
     photo: {
-      src: '/wp-content/uploads/jasonk-1-230x300.webp',
+      // Full-size original (600x784) fetched from live 2026-07-26.
+      src: '/wp-content/uploads/jasonk-1.webp',
       alt: 'Jason Kenyon, Esq.',
     },
     initials: 'JK',
@@ -794,10 +797,9 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     /* Hero intro = live's opening bio paragraph, verbatim. */
     intro:
       'Luke Dupin brings over 26 years of product development experience as a seasoned technology executive and entrepreneur. As a principal developer for seven successful startups and co-writer for four patents, Luke has established himself as an innovator who consistently brings cutting-edge products to market.',
-    /* Live serves luke-160x200.webp; the larger 240x300 rendition of the same
-       portrait is localized and fits the 3:4 hero slot. */
+    /* Full-size original (1536x1920) fetched from live 2026-07-26. */
     photo: {
-      src: '/wp-content/uploads/luke-240x300.webp',
+      src: '/wp-content/uploads/luke.webp',
       alt: 'Luke',
     },
     initials: 'LD',
@@ -835,10 +837,10 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     /* Hero intro = live's opening bio paragraph, verbatim. */
     intro:
       'Growth in regulated industries is notoriously messy. Teams get buried under fragmented technology stacks, siloed data, unclear attribution, and the constant weight of compliance exposure. Most marketing leaders treat compliance as an obstacle. Erik J. Hayton treats it as the operating system.',
-    /* Live serves erik-hayton--153x200.webp (double hyphen is live's own
-       filename); the larger 230x300 rendition is localized. */
+    /* Full-size original erik-hayton-.webp (600x782, live's own single-hyphen
+       filename) fetched from live 2026-07-26. */
     photo: {
-      src: '/wp-content/uploads/erik-hayton--230x300.webp',
+      src: '/wp-content/uploads/erik-hayton-.webp',
       alt: 'Erik J. Hayton',
     },
     initials: 'EH',
