@@ -64,6 +64,8 @@ export default function JourneyLadder({ levels }: { levels: JourneyLevel[] }) {
                   <a
                     key={guide.title}
                     href={guide.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group bg-white rounded-2xl border border-black/5 hover:border-black/10 transition-colors duration-200 p-4 sm:p-5 flex gap-5 sm:gap-6"
                   >
                     <div className="shrink-0 w-28 sm:w-36 lg:w-40">
