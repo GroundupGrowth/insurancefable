@@ -1,5 +1,6 @@
 import { ArrowRight, Download } from 'lucide-react';
 import PageShell from './PageShell';
+import LeadEvent from './LeadEvent';
 import type { ThankYouPageData } from '../data/thankYouPages';
 
 /* Shared layout for the 48 WordPress thank-you / form-confirmation pages
@@ -11,6 +12,9 @@ export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
 
   return (
     <PageShell>
+      {/* Landing here means a form was submitted, so every thank-you page is a
+          lead conversion (Meta `Lead` + GA4 `generate_lead`). */}
+      <LeadEvent />
       <section className="px-6 pb-24">
         <div className="max-w-3xl mx-auto bg-white rounded-3xl border border-black/5 p-8 md:p-14 text-center">
           <h1
