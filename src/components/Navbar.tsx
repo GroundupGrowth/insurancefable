@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 
 interface NavLink {
   label: string;
@@ -76,9 +76,14 @@ export default function Navbar() {
                     onClick={() =>
                       setOpenGroup((current) => (current === group.label ? null : group.label))
                     }
-                    className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
+                    className="inline-flex items-center gap-1 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                   >
                     {group.label}
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 group-hover:rotate-180 ${
+                        openGroup === group.label ? 'rotate-180' : ''
+                      }`}
+                    />
                   </button>
                   <div
                     className={`absolute left-1/2 -translate-x-1/2 top-full pt-4 ${
@@ -137,27 +142,51 @@ export default function Navbar() {
 
         {mobileOpen && (
           <div className="md:hidden pt-4 pb-2">
+            {/* Same grouping as the desktop nav: About/Products collapse, Blog
+                is a plain link. openGroup is shared with the desktop dropdowns;
+                only one nav is visible at a time so they never clash. */}
             <nav className="flex flex-col gap-1">
-              {navGroups.flatMap((group) =>
-                group.items
-                  ? group.items.map((item) => (
-                      <a
-                        key={`${group.label}-${item.label}`}
-                        href={item.href}
-                        className="py-2 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
-                      >
-                        {item.label}
-                      </a>
-                    ))
-                  : (
-                      <a
-                        key={group.label}
-                        href={group.href}
-                        className="py-2 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
-                      >
-                        {group.label}
-                      </a>
-                    ),
+              {navGroups.map((group) =>
+                group.items ? (
+                  <div key={group.label}>
+                    <button
+                      type="button"
+                      aria-expanded={openGroup === group.label}
+                      onClick={() =>
+                        setOpenGroup((current) => (current === group.label ? null : group.label))
+                      }
+                      className="w-full flex items-center justify-between py-2 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
+                    >
+                      {group.label}
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${
+                          openGroup === group.label ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    {openGroup === group.label && (
+                      <div className="flex flex-col pl-4 pb-1">
+                        {group.items.map((item) => (
+                          <a
+                            key={item.label}
+                            href={item.href}
+                            className="py-2 text-base text-gray-600 hover:text-[#0D1B3D]"
+                          >
+                            {item.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <a
+                    key={group.label}
+                    href={group.href}
+                    className="py-2 text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
+                  >
+                    {group.label}
+                  </a>
+                ),
               )}
             </nav>
             <div className="flex flex-col gap-3 mt-5">
