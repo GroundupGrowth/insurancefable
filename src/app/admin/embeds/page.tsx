@@ -129,6 +129,20 @@ export default function EmbedsAdminPage() {
                       <div>
                         <p className="text-[#0D1B3D] font-medium text-sm">{slot.label}</p>
                         <p className="text-[#0D1B3D]/40 text-xs font-mono">{slot.slot_key}</p>
+                        {/* For ebook slots, notes holds the thank-you page set at /admin → Books. */}
+                        {slot.notes &&
+                          (slot.notes.startsWith('/') || slot.notes.startsWith('http') ? (
+                            <a
+                              href={slot.notes}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#0D1B3D]/60 text-xs underline underline-offset-2 hover:text-[#0D1B3D] transition-colors duration-150"
+                            >
+                              Thank-you page: {slot.notes}
+                            </a>
+                          ) : (
+                            <p className="text-[#0D1B3D]/50 text-xs">{slot.notes}</p>
+                          ))}
                       </div>
                       <div className="flex items-center gap-3">
                         <span

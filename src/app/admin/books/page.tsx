@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
-import { ebookDefaults, type Ebook, type EbookCategory } from '../../../data/ebooks';
+import { ebookDefaults, ebookThankYouPath, type Ebook, type EbookCategory } from '../../../data/ebooks';
+import { thankYouPages } from '../../../data/thankYouPages';
 import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths, textareaClass } from '../ui';
 
 /* Books: the eBook/guide catalog on /ebooks-and-guides/, plus each book's
@@ -22,6 +23,9 @@ const CATEGORY_ORDER: EbookCategory[] = ['featured', 'free-ebook', 'free-guide']
 
 interface BookState extends Ebook {
   embed: string;
+  /** Thank-you page the book's GHL form redirects to. Reference only (the real
+      redirect is set on the form in GHL); stored in the embed slot's `notes`. */
+  thankYou: string;
 }
 
 function slugify(value: string) {
@@ -43,15 +47,18 @@ export default function BooksAdminPage() {
     if (!supabase) return;
     const [rows, slots] = await Promise.all([
       supabase.from('site_ebooks').select('*').order('sort'),
-      supabase.from('embed_slots').select('slot_key, embed_code').like('slot_key', 'ebook:%'),
+      supabase.from('embed_slots').select('slot_key, embed_code, notes').like('slot_key', 'ebook:%'),
     ]);
     if (rows.error) {
       setError(rows.error.message);
       return;
     }
     const embedMap: Record<string, string> = {};
+    const thankYouMap: Record<string, string> = {};
     slots.data?.forEach((slot) => {
-      embedMap[slot.slot_key.replace(/^ebook:/, '')] = slot.embed_code ?? '';
+      const slug = slot.slot_key.replace(/^ebook:/, '');
+      embedMap[slug] = slot.embed_code ?? '';
+      if (slot.notes) thankYouMap[slug] = slot.notes;
     });
     const fromSupabase: Ebook[] =
       rows.data && rows.data.length > 0
@@ -76,7 +83,13 @@ export default function BooksAdminPage() {
       ...ebookDefaults.filter((book) => !seen.has(book.slug)),
     ].sort((a, b) => a.sort - b.sort);
     setCustomized(Boolean(rows.data && rows.data.length > 0));
-    setBooks(source.map((book) => ({ ...book, embed: embedMap[book.slug] ?? '' })));
+    setBooks(
+      source.map((book) => ({
+        ...book,
+        embed: embedMap[book.slug] ?? '',
+        thankYou: thankYouMap[book.slug] ?? ebookThankYouPath(book.slug) ?? '',
+      })),
+    );
   }, [supabase]);
 
   useEffect(() => {
@@ -123,6 +136,7 @@ export default function BooksAdminPage() {
         href: '#request-a-guide',
         sort: maxSort + 10,
         embed: '',
+        thankYou: '',
       },
     ]);
     setNewTitle('');
@@ -136,15 +150,29 @@ export default function BooksAdminPage() {
     const { error: deleteError } = await supabase.from('site_ebooks').delete().neq('slug', '');
     if (deleteError) throw new Error(deleteError.message);
     const { error: insertError } = await supabase.from('site_ebooks').insert(
-      /* `image` and `landingPath` are stripped deliberately: both live in the
-         code defaults (src/data/ebooks.ts) and site_ebooks has neither column.
-         getEbooks() re-attaches them by slug after loading, so admin edits never
-         wipe them and no migration is required. */
-      books.map(({ embed: _embed, image: _image, landingPath: _landingPath, text, ...book }) => ({
-        ...book,
-        text: text || null,
-        updated_at: now,
-      })),
+      /* The code-owned fields (`image`, `landingPath`, `noindexLanding`,
+         `thankYouPath`) are stripped deliberately: they live in the code
+         defaults (src/data/ebooks.ts) and site_ebooks has no columns for them,
+         so inserting them would fail. getEbooks() re-attaches them by slug
+         after loading, so admin edits never wipe them and no migration is
+         required. The editable thank-you reference travels in the embed slot's
+         `notes` below instead. */
+      books.map(
+        ({
+          embed: _embed,
+          thankYou: _thankYou,
+          image: _image,
+          landingPath: _landingPath,
+          noindexLanding: _noindexLanding,
+          thankYouPath: _thankYouPath,
+          text,
+          ...book
+        }) => ({
+          ...book,
+          text: text || null,
+          updated_at: now,
+        }),
+      ),
     );
     if (insertError) throw new Error(insertError.message);
     // embeds: upsert one slot per book
@@ -154,6 +182,7 @@ export default function BooksAdminPage() {
         label: book.title,
         category: 'ebook' as const,
         embed_code: book.embed,
+        notes: book.thankYou.trim() || null,
         updated_at: now,
       })),
     );
@@ -194,6 +223,13 @@ export default function BooksAdminPage() {
       {error && (
         <p className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-6">{error}</p>
       )}
+
+      {/* Every migrated thank-you page, suggested in each book's thank-you input. */}
+      <datalist id="thank-you-pages">
+        {thankYouPages.map((page) => (
+          <option key={page.path} value={page.path} />
+        ))}
+      </datalist>
 
       {CATEGORY_ORDER.map((category) => {
         const list = books.filter((book) => book.category === category).sort((a, b) => a.sort - b.sort);
@@ -272,6 +308,32 @@ export default function BooksAdminPage() {
                         value={book.embed}
                         onChange={(e) => update(book.slug, { embed: e.target.value })}
                       />
+                    </Field>
+                  </div>
+                  <div className="mt-4">
+                    <Field
+                      label="Thank-you page"
+                      hint="Where the form sends people after submitting. Reference only: the actual redirect is set on the form in GHL, so keep this in sync when you change it there."
+                    >
+                      <div className="flex gap-2 items-center">
+                        <input
+                          className={inputClass}
+                          list="thank-you-pages"
+                          placeholder="e.g. /thank-you-main/…"
+                          value={book.thankYou}
+                          onChange={(e) => update(book.slug, { thankYou: e.target.value })}
+                        />
+                        {book.thankYou.trim() && (
+                          <a
+                            href={book.thankYou.trim()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 text-sm font-medium text-[#0D1B3D] underline underline-offset-4 hover:text-[#1C2E55] transition-colors duration-150"
+                          >
+                            Open
+                          </a>
+                        )}
+                      </div>
                     </Field>
                   </div>
                 </Card>

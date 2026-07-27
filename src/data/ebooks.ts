@@ -30,6 +30,13 @@ export interface Ebook {
   /** True when the landing page is noindexed (matching live) — keeps it out of
       the sitemap, which must list indexable URLs only. */
   noindexLanding?: boolean;
+  /** Thank-you page the book's GHL form redirects to after submit. The real
+      redirect lives in the GHL form settings, so this is a reference only,
+      shown in /admin → Books so the destination can be checked quickly. It is
+      a best-guess default matched by name; /admin can override it (stored in
+      the book's embed_slots row, `notes`). Code-owned like `image`, never part
+      of the site_ebooks round-trip. */
+  thankYouPath?: string;
   sort: number;
   /* Cover art, localized under public/wp-content/uploads/. Covers are code-owned
      and deliberately NOT part of the site_ebooks round-trip: the admin editor
@@ -58,6 +65,11 @@ export function ebookLandingPath(slug: string): string {
   return ebookDefaults.find((book) => book.slug === slug)?.landingPath ?? `/${slug}/`;
 }
 
+/** Default thank-you page for a slug, from the code defaults. */
+export function ebookThankYouPath(slug: string): string | undefined {
+  return ebookDefaults.find((book) => book.slug === slug)?.thankYouPath;
+}
+
 /** The book at a given landing route (or slug). Used by the landing pages and
     their metadata. */
 export function ebookByLandingPath(path: string): Ebook | undefined {
@@ -68,6 +80,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'self-banking-blueprint',
     landingPath: '/self-banking-blueprint/',
+    thankYouPath: '/thank-you-self-printing-blue-print-3-0/',
     category: 'featured',
     eyebrow: 'The Ultimate Free Download',
     title: 'The Self Banking Blueprint',
@@ -82,6 +95,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'kingdom-money',
     landingPath: '/kingdom-money/',
+    thankYouPath: '/thank-you-kingdom-money-2-0/',
     category: 'featured',
     eyebrow: 'Featured eBook',
     title: 'Kingdom Money',
@@ -110,6 +124,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'the-ultimate-asset',
     landingPath: '/the-ultimate-asset-ebook/',
+    thankYouPath: '/thank-you-the-ultimate-asset-2-0/',
     category: 'featured',
     eyebrow: 'Volume Based Infinite Banking',
     title: 'The Ultimate Asset®',
@@ -140,6 +155,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'money-secrets-of-the-wealthy',
     landingPath: '/money-secrets/',
+    thankYouPath: '/thank-you-money-secrets-2-0/',
     category: 'free-ebook',
     eyebrow: 'Free eBook',
     title: 'Money Secrets of the Wealthy',
@@ -153,6 +169,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'estate-planners-tactical-guide',
     landingPath: '/estate-planners-tactical-guide/',
+    thankYouPath: '/thank-you-estate-planners-2-0/',
     category: 'free-ebook',
     eyebrow: 'Free eBook',
     title: "Estate Planner's Tactical Guide",
@@ -166,6 +183,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'financial-planning-has-failed',
     landingPath: '/financial-planning-has-failed/',
+    thankYouPath: '/thank-you-main/thank-you-steve-ghl-ebook-financial-planning/',
     category: 'free-ebook',
     eyebrow: 'Free eBook',
     title: 'Financial Planning Has Failed',
@@ -179,6 +197,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: '5-important-estate-planning-steps',
     landingPath: '/5-important-estate-planning-steps/',
+    thankYouPath: '/thank-you-main/thank-you-jason-ghl-free-guide-ep-steps/',
     category: 'free-guide',
     eyebrow: 'Free Guide',
     title: '5 Important Estate Planning Steps',
@@ -192,6 +211,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'estate-planning-tactical-checklist',
     landingPath: '/estate-planning-tactical-checklist/',
+    thankYouPath: '/thank-you-main/thank-you-jason-ghl-free-guide-ep-checklist/',
     category: 'free-guide',
     eyebrow: 'Free Guide',
     title: 'Estate Planning Tactical Checklist',
@@ -205,6 +225,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'life-insurance-essentials-report',
     landingPath: '/life-insurance-essentials-report/',
+    thankYouPath: '/thank-you-main/thank-you-steve-ghl-ebook-optin-li-essentials/',
     category: 'free-guide',
     eyebrow: 'Free Guide',
     title: 'Life Insurance Essentials Report',
@@ -218,6 +239,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'anti-banking-starter-guide',
     landingPath: '/anti-banking-starter-guide/',
+    thankYouPath: '/thank-you-main/thank-you-anti-bank-starter-guide/',
     noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Download',
@@ -233,6 +255,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'debt-free-plan',
     landingPath: '/debt-free-plan/',
+    thankYouPath: '/thank-you-debt-free-plan-2-0/',
     noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Download',
@@ -248,6 +271,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'iul-retirement',
     landingPath: '/iul-retirement/',
+    thankYouPath: '/thank-you-iul-retirement-2-0/',
     noindexLanding: true,
     category: 'journey',
     eyebrow: 'Free Download',
