@@ -44,6 +44,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
           strategy="afterInteractive"
         />
+        {/* Google Analytics 4 (gtag.js, G-M1Z2R5LEKP) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-M1Z2R5LEKP"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M1Z2R5LEKP');`}
+        </Script>
         {/* Microsoft Clarity — session recordings + heatmaps (project xsy41k2l43) */}
         <Script id="ms-clarity" strategy="afterInteractive">
           {`(function(c,l,a,r,i,t,y){
