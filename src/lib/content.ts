@@ -84,7 +84,7 @@ export async function getEbooks(): Promise<Ebook[]> {
   try {
     const { data } = await supabase.from('site_ebooks').select('*').order('sort');
     if (!data || data.length === 0) return ebookDefaults;
-    return data.map((row) => ({
+    const fromSupabase = data.map((row) => ({
       slug: row.slug,
       category: row.category,
       eyebrow: row.eyebrow ?? '',
@@ -101,6 +101,13 @@ export async function getEbooks(): Promise<Ebook[]> {
       image: ebookCover(row.slug),
       landingPath: ebookLandingPath(row.slug),
     }));
+    /* Books added in code after the catalog was first saved in /admin must not
+       vanish: merge in any default slug Supabase doesn't have (matches the
+       admin Books loader, which heals site_ebooks on the next save). */
+    const seen = new Set(fromSupabase.map((book) => book.slug));
+    return [...fromSupabase, ...ebookDefaults.filter((book) => !seen.has(book.slug))].sort(
+      (a, b) => a.sort - b.sort,
+    );
   } catch {
     return ebookDefaults;
   }

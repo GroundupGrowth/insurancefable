@@ -53,7 +53,7 @@ export default function BooksAdminPage() {
     slots.data?.forEach((slot) => {
       embedMap[slot.slot_key.replace(/^ebook:/, '')] = slot.embed_code ?? '';
     });
-    const source: Ebook[] =
+    const fromSupabase: Ebook[] =
       rows.data && rows.data.length > 0
         ? rows.data.map((row) => ({
             slug: row.slug,
@@ -64,7 +64,17 @@ export default function BooksAdminPage() {
             href: row.href ?? '#request-a-guide',
             sort: row.sort ?? 0,
           }))
-        : ebookDefaults;
+        : [];
+    /* Merge in code defaults missing from Supabase. Without this, books added
+       in code AFTER the catalog was first saved (e.g. the four journey guides,
+       2026-07-21) were invisible here — the saved rows replaced the list
+       entirely, so their opt-in embeds could never be pasted. Saving upserts
+       the merged list, healing site_ebooks. */
+    const seen = new Set(fromSupabase.map((book) => book.slug));
+    const source: Ebook[] = [
+      ...fromSupabase,
+      ...ebookDefaults.filter((book) => !seen.has(book.slug)),
+    ].sort((a, b) => a.sort - b.sort);
     setCustomized(Boolean(rows.data && rows.data.length > 0));
     setBooks(source.map((book) => ({ ...book, embed: embedMap[book.slug] ?? '' })));
   }, [supabase]);
