@@ -30,3 +30,5 @@ extraction/
 
 # Raw unoptimized uploads (optimized copies live in public/media/)
 /New Images/
+
+scripts/verify-deploy.results.json
