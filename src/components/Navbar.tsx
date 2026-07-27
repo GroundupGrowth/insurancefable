@@ -40,6 +40,10 @@ const navGroups: NavGroup[] = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  /* Desktop dropdowns open on hover, but hover doesn't exist on touch — on
+     iPads/touch laptops (wide enough for the desktop nav) the About/Products
+     buttons did nothing. Click toggles them too; hover keeps working. */
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-4">
@@ -61,14 +65,26 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center gap-7">
             {navGroups.map((group) =>
               group.items ? (
-                <div key={group.label} className="relative group">
+                <div
+                  key={group.label}
+                  className="relative group"
+                  onMouseLeave={() => setOpenGroup(null)}
+                >
                   <button
                     type="button"
+                    aria-expanded={openGroup === group.label}
+                    onClick={() =>
+                      setOpenGroup((current) => (current === group.label ? null : group.label))
+                    }
                     className="text-base text-gray-700 hover:text-[#0D1B3D] font-medium"
                   >
                     {group.label}
                   </button>
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 hidden group-hover:block">
+                  <div
+                    className={`absolute left-1/2 -translate-x-1/2 top-full pt-4 ${
+                      openGroup === group.label ? 'block' : 'hidden group-hover:block'
+                    }`}
+                  >
                     <div className="bg-white rounded-xl border border-black/5 py-2 min-w-[16rem]">
                       {group.items.map((item) => (
                         <a

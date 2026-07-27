@@ -27,12 +27,17 @@ export default function CallButton() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    /* pointer-events-none on the wrapper is load-bearing: the fixed container
+       reserves space for the (hidden) card above the bubble, and a transparent
+       div still swallows every tap in its box — which made buttons under the
+       bottom-right ~288x312px of the viewport dead on all pages until
+       2026-07-27. Only the bubble and the open card may catch clicks. */
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-none">
       <div
         className={`transition-all duration-300 ease-out origin-bottom-right ${
           open
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-95 translate-y-2 pointer-events-none'
+            ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 scale-95 translate-y-2'
         }`}
       >
         <div className="bg-white rounded-2xl shadow-xl shadow-[#0D1B3D]/15 border border-black/5 w-72 overflow-hidden">
@@ -67,7 +72,7 @@ export default function CallButton() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? 'Close contact options' : 'Open contact options'}
         aria-expanded={open}
-        className="w-14 h-14 rounded-full bg-[#0D1B3D] text-white flex items-center justify-center shadow-lg shadow-[#0D1B3D]/25 hover:bg-[#1C2E55] transition-colors duration-200"
+        className="pointer-events-auto w-14 h-14 rounded-full bg-[#0D1B3D] text-white flex items-center justify-center shadow-lg shadow-[#0D1B3D]/25 hover:bg-[#1C2E55] transition-colors duration-200"
       >
         <span className="relative w-6 h-6">
           <MessageCircle
