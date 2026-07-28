@@ -21650,5 +21650,3578 @@ export const googleAdsMonths: AdMonth[] = [
         ]
       }
     }
+  },
+  {
+    "key": "2026-07",
+    "label": "July 2026",
+    "sortKey": 202607,
+    "kpis": {
+      "cost": 3526.63,
+      "clicks": 3219,
+      "conversions": 74.59,
+      "impressions": 160565,
+      "costPerConv": 47.28,
+      "cpc": 1.1,
+      "ctr": 2
+    },
+    "timeSeries": [
+      {
+        "date": "Wed, Jul 1, 2026",
+        "clicks": 99,
+        "cost": 138.03,
+        "conversions": 4
+      },
+      {
+        "date": "Thu, Jul 2, 2026",
+        "clicks": 113,
+        "cost": 125.96,
+        "conversions": 0
+      },
+      {
+        "date": "Fri, Jul 3, 2026",
+        "clicks": 100,
+        "cost": 147.95,
+        "conversions": 5
+      },
+      {
+        "date": "Sat, Jul 4, 2026",
+        "clicks": 85,
+        "cost": 84.17,
+        "conversions": 0.01
+      },
+      {
+        "date": "Sun, Jul 5, 2026",
+        "clicks": 103,
+        "cost": 94.99,
+        "conversions": 5.01
+      },
+      {
+        "date": "Mon, Jul 6, 2026",
+        "clicks": 141,
+        "cost": 205.05,
+        "conversions": 5.99
+      },
+      {
+        "date": "Tue, Jul 7, 2026",
+        "clicks": 109,
+        "cost": 136.48,
+        "conversions": 1
+      },
+      {
+        "date": "Wed, Jul 8, 2026",
+        "clicks": 118,
+        "cost": 133.82,
+        "conversions": 0
+      },
+      {
+        "date": "Thu, Jul 9, 2026",
+        "clicks": 119,
+        "cost": 123.68,
+        "conversions": 2
+      },
+      {
+        "date": "Fri, Jul 10, 2026",
+        "clicks": 137,
+        "cost": 130.88,
+        "conversions": 2
+      },
+      {
+        "date": "Sat, Jul 11, 2026",
+        "clicks": 129,
+        "cost": 123.89,
+        "conversions": 4
+      },
+      {
+        "date": "Sun, Jul 12, 2026",
+        "clicks": 105,
+        "cost": 132.64,
+        "conversions": 0
+      },
+      {
+        "date": "Mon, Jul 13, 2026",
+        "clicks": 72,
+        "cost": 126.11,
+        "conversions": 3
+      },
+      {
+        "date": "Tue, Jul 14, 2026",
+        "clicks": 110,
+        "cost": 104.38,
+        "conversions": 3
+      },
+      {
+        "date": "Wed, Jul 15, 2026",
+        "clicks": 103,
+        "cost": 99.9,
+        "conversions": 3.59
+      },
+      {
+        "date": "Thu, Jul 16, 2026",
+        "clicks": 94,
+        "cost": 105.38,
+        "conversions": 1
+      },
+      {
+        "date": "Fri, Jul 17, 2026",
+        "clicks": 87,
+        "cost": 150.77,
+        "conversions": 6.01
+      },
+      {
+        "date": "Sat, Jul 18, 2026",
+        "clicks": 115,
+        "cost": 120.01,
+        "conversions": 0.01
+      },
+      {
+        "date": "Sun, Jul 19, 2026",
+        "clicks": 96,
+        "cost": 174.74,
+        "conversions": 3.01
+      },
+      {
+        "date": "Mon, Jul 20, 2026",
+        "clicks": 117,
+        "cost": 155.98,
+        "conversions": 5.12
+      },
+      {
+        "date": "Tue, Jul 21, 2026",
+        "clicks": 109,
+        "cost": 138.14,
+        "conversions": 1.84
+      },
+      {
+        "date": "Wed, Jul 22, 2026",
+        "clicks": 114,
+        "cost": 119.1,
+        "conversions": 5
+      },
+      {
+        "date": "Thu, Jul 23, 2026",
+        "clicks": 124,
+        "cost": 107.22,
+        "conversions": 0
+      },
+      {
+        "date": "Fri, Jul 24, 2026",
+        "clicks": 164,
+        "cost": 136.76,
+        "conversions": 4
+      },
+      {
+        "date": "Sat, Jul 25, 2026",
+        "clicks": 198,
+        "cost": 112.59,
+        "conversions": 10
+      },
+      {
+        "date": "Sun, Jul 26, 2026",
+        "clicks": 158,
+        "cost": 137.88,
+        "conversions": 0
+      },
+      {
+        "date": "Mon, Jul 27, 2026",
+        "clicks": 163,
+        "cost": 126.77,
+        "conversions": 0
+      },
+      {
+        "date": "Tue, Jul 28, 2026",
+        "clicks": 37,
+        "cost": 33.36,
+        "conversions": 0
+      }
+    ],
+    "reports": {
+      "auction_compare": {
+        "columns": [
+          "Advertiser Name",
+          "Impression share",
+          "Impression share (Comparison)",
+          "Outranking share",
+          "Outranking share (Comparison)",
+          "Overlap rate",
+          "Overlap rate (Comparison)",
+          "Top of page rate",
+          "Top of page rate (Comparison)",
+          "Position above rate",
+          "Position above rate (Comparison)"
+        ],
+        "rows": [
+          [
+            "You",
+            "23.14%",
+            "23.14%",
+            "No data",
+            "No data",
+            "No data",
+            "No data",
+            "76.26%",
+            "76.26%",
+            "No data",
+            "No data"
+          ],
+          [
+            "ethos.com",
+            "18.87%",
+            "18.87%",
+            "21.61%",
+            "21.61%",
+            "12.38%",
+            "12.38%",
+            "78.52%",
+            "78.52%",
+            "53.61%",
+            "53.61%"
+          ],
+          [
+            "fisherinvestments.com",
+            "< 10%",
+            "< 10%",
+            "22.09%",
+            "22.09%",
+            "10.24%",
+            "10.24%",
+            "63.52%",
+            "63.52%",
+            "44.55%",
+            "44.55%"
+          ],
+          [
+            "paradigmlife.net",
+            "33.31%",
+            "33.31%",
+            "14.68%",
+            "14.68%",
+            "45.31%",
+            "45.31%",
+            "80.67%",
+            "80.67%",
+            "80.70%",
+            "80.70%"
+          ],
+          [
+            "northwesternmutual.com",
+            "< 10%",
+            "< 10%",
+            "22.64%",
+            "22.64%",
+            "4.72%",
+            "4.72%",
+            "79.07%",
+            "79.07%",
+            "45.95%",
+            "45.95%"
+          ],
+          [
+            "mcfieinsurance.com",
+            "27.04%",
+            "27.04%",
+            "18.87%",
+            "18.87%",
+            "30.31%",
+            "30.31%",
+            "83.86%",
+            "83.86%",
+            "60.84%",
+            "60.84%"
+          ],
+          [
+            "getamplifylife.com",
+            "10.26%",
+            "10.26%",
+            "22.32%",
+            "22.32%",
+            "7.79%",
+            "7.79%",
+            "79.34%",
+            "79.34%",
+            "45.90%",
+            "45.90%"
+          ],
+          [
+            "ascendantfinancial.com",
+            "< 10%",
+            "< 10%",
+            "21.20%",
+            "21.20%",
+            "16.05%",
+            "16.05%",
+            "68.51%",
+            "68.51%",
+            "52.29%",
+            "52.29%"
+          ],
+          [
+            "taxfreewealthplan.com",
+            "14.98%",
+            "14.98%",
+            "21.78%",
+            "21.78%",
+            "18.92%",
+            "18.92%",
+            "46.67%",
+            "46.67%",
+            "31.03%",
+            "31.03%"
+          ],
+          [
+            "beginibc.com",
+            "11.14%",
+            "11.14%",
+            "21.71%",
+            "21.71%",
+            "11.07%",
+            "11.07%",
+            "61.41%",
+            "61.41%",
+            "55.91%",
+            "55.91%"
+          ],
+          [
+            "forbes.com",
+            "< 10%",
+            "< 10%",
+            "22.55%",
+            "22.55%",
+            "5.97%",
+            "5.97%",
+            "88.72%",
+            "88.72%",
+            "42.78%",
+            "42.78%"
+          ],
+          [
+            "bankingtruths.com",
+            "31.81%",
+            "31.81%",
+            "17.52%",
+            "17.52%",
+            "37.24%",
+            "37.24%",
+            "85.17%",
+            "85.17%",
+            "65.21%",
+            "65.21%"
+          ],
+          [
+            "audible.com",
+            "< 10%",
+            "< 10%",
+            "21.14%",
+            "21.14%",
+            "16.08%",
+            "16.08%",
+            "85.28%",
+            "85.28%",
+            "53.77%",
+            "53.77%"
+          ]
+        ]
+      },
+      "auction_over_time": {
+        "columns": [
+          "Advertiser Name"
+        ],
+        "rows": [
+          [
+            "You"
+          ]
+        ]
+      },
+      "biggest_changes": {
+        "columns": [
+          "Ad Group Name",
+          "Campaign Name",
+          "Cost",
+          "Cost (Comparison)",
+          "Clicks",
+          "Clicks (Comparison)",
+          "Interactions",
+          "Interactions (Comparison)"
+        ],
+        "rows": [
+          [
+            "IBC",
+            "Sept 2024 - Keywords - Search",
+            "$1,215.63",
+            "$925.26",
+            "209",
+            "182",
+            "209",
+            "182"
+          ],
+          [
+            "",
+            "TRF | YOU | RTG | IB Journey #2",
+            "$1,348.66",
+            "$1,133.34",
+            "2,129",
+            "1,649",
+            "40,958",
+            "32,045"
+          ],
+          [
+            "How To",
+            "Sept 2024 - Keywords - Search",
+            "$692.67",
+            "$544.25",
+            "121",
+            "95",
+            "121",
+            "95"
+          ],
+          [
+            "",
+            "Leads-Performance Max-3",
+            "$269.67",
+            "$349.78",
+            "760",
+            "732",
+            "760",
+            "732"
+          ]
+        ]
+      },
+      "campaigns": {
+        "columns": [
+          "Campaign Name",
+          "Campaign Group Name",
+          "Campaign Status",
+          "Cost",
+          "Conversions",
+          "Cost / conv."
+        ],
+        "rows": [
+          [
+            "Sept 2024 - Keywords - Search",
+            "",
+            "Enabled",
+            "$1,908.30",
+            "33.61",
+            "$56.79"
+          ],
+          [
+            "TRF | YOU | RTG | IB Journey #2",
+            "",
+            "Enabled",
+            "$1,348.66",
+            "37.99",
+            "$35.50"
+          ],
+          [
+            "Leads-Performance Max-3",
+            "",
+            "Enabled",
+            "$269.67",
+            "3.00",
+            "$89.89"
+          ],
+          [
+            "Infinite banking",
+            "",
+            "Enabled",
+            "$0.00",
+            "0.00",
+            "$0.00"
+          ]
+        ]
+      },
+      "day": {
+        "columns": [
+          "Day",
+          "Impressions"
+        ],
+        "rows": [
+          [
+            "Sunday",
+            "23,985"
+          ],
+          [
+            "Monday",
+            "23,756"
+          ],
+          [
+            "Tuesday",
+            "16,017"
+          ],
+          [
+            "Wednesday",
+            "20,720"
+          ],
+          [
+            "Thursday",
+            "25,121"
+          ],
+          [
+            "Friday",
+            "25,740"
+          ],
+          [
+            "Saturday",
+            "25,226"
+          ]
+        ]
+      },
+      "day_hour": {
+        "columns": [
+          "Day",
+          "Start Hour",
+          "Impressions"
+        ],
+        "rows": [
+          [
+            "Sunday",
+            "12 AM",
+            "142"
+          ],
+          [
+            "Sunday",
+            "1 AM",
+            "71"
+          ],
+          [
+            "Sunday",
+            "2 AM",
+            "32"
+          ],
+          [
+            "Sunday",
+            "3 AM",
+            "65"
+          ],
+          [
+            "Sunday",
+            "4 AM",
+            "51"
+          ],
+          [
+            "Sunday",
+            "5 AM",
+            "90"
+          ],
+          [
+            "Sunday",
+            "6 AM",
+            "226"
+          ],
+          [
+            "Sunday",
+            "7 AM",
+            "383"
+          ],
+          [
+            "Sunday",
+            "8 AM",
+            "660"
+          ],
+          [
+            "Sunday",
+            "9 AM",
+            "1,189"
+          ],
+          [
+            "Sunday",
+            "10 AM",
+            "1,591"
+          ],
+          [
+            "Sunday",
+            "11 AM",
+            "2,099"
+          ],
+          [
+            "Sunday",
+            "12 PM",
+            "1,787"
+          ],
+          [
+            "Sunday",
+            "1 PM",
+            "1,525"
+          ],
+          [
+            "Sunday",
+            "2 PM",
+            "1,368"
+          ],
+          [
+            "Sunday",
+            "3 PM",
+            "1,544"
+          ],
+          [
+            "Sunday",
+            "4 PM",
+            "1,732"
+          ],
+          [
+            "Sunday",
+            "5 PM",
+            "1,841"
+          ],
+          [
+            "Sunday",
+            "6 PM",
+            "1,985"
+          ],
+          [
+            "Sunday",
+            "7 PM",
+            "2,033"
+          ],
+          [
+            "Sunday",
+            "8 PM",
+            "1,920"
+          ],
+          [
+            "Sunday",
+            "9 PM",
+            "1,311"
+          ],
+          [
+            "Sunday",
+            "10 PM",
+            "124"
+          ],
+          [
+            "Sunday",
+            "11 PM",
+            "216"
+          ],
+          [
+            "Monday",
+            "12 AM",
+            "356"
+          ],
+          [
+            "Monday",
+            "1 AM",
+            "225"
+          ],
+          [
+            "Monday",
+            "2 AM",
+            "93"
+          ],
+          [
+            "Monday",
+            "3 AM",
+            "105"
+          ],
+          [
+            "Monday",
+            "4 AM",
+            "131"
+          ],
+          [
+            "Monday",
+            "5 AM",
+            "188"
+          ],
+          [
+            "Monday",
+            "6 AM",
+            "295"
+          ],
+          [
+            "Monday",
+            "7 AM",
+            "434"
+          ],
+          [
+            "Monday",
+            "8 AM",
+            "727"
+          ],
+          [
+            "Monday",
+            "9 AM",
+            "1,066"
+          ],
+          [
+            "Monday",
+            "10 AM",
+            "1,823"
+          ],
+          [
+            "Monday",
+            "11 AM",
+            "2,154"
+          ],
+          [
+            "Monday",
+            "12 PM",
+            "1,543"
+          ],
+          [
+            "Monday",
+            "1 PM",
+            "1,221"
+          ],
+          [
+            "Monday",
+            "2 PM",
+            "1,253"
+          ],
+          [
+            "Monday",
+            "3 PM",
+            "1,541"
+          ],
+          [
+            "Monday",
+            "4 PM",
+            "1,973"
+          ],
+          [
+            "Monday",
+            "5 PM",
+            "2,150"
+          ],
+          [
+            "Monday",
+            "6 PM",
+            "2,127"
+          ],
+          [
+            "Monday",
+            "7 PM",
+            "1,825"
+          ],
+          [
+            "Monday",
+            "8 PM",
+            "1,329"
+          ],
+          [
+            "Monday",
+            "9 PM",
+            "1,165"
+          ],
+          [
+            "Monday",
+            "10 PM",
+            "21"
+          ],
+          [
+            "Monday",
+            "11 PM",
+            "11"
+          ],
+          [
+            "Tuesday",
+            "12 AM",
+            "181"
+          ],
+          [
+            "Tuesday",
+            "1 AM",
+            "77"
+          ],
+          [
+            "Tuesday",
+            "2 AM",
+            "64"
+          ],
+          [
+            "Tuesday",
+            "3 AM",
+            "93"
+          ],
+          [
+            "Tuesday",
+            "4 AM",
+            "124"
+          ],
+          [
+            "Tuesday",
+            "5 AM",
+            "131"
+          ],
+          [
+            "Tuesday",
+            "6 AM",
+            "222"
+          ],
+          [
+            "Tuesday",
+            "7 AM",
+            "372"
+          ],
+          [
+            "Tuesday",
+            "8 AM",
+            "656"
+          ],
+          [
+            "Tuesday",
+            "9 AM",
+            "953"
+          ],
+          [
+            "Tuesday",
+            "10 AM",
+            "1,191"
+          ],
+          [
+            "Tuesday",
+            "11 AM",
+            "1,058"
+          ],
+          [
+            "Tuesday",
+            "12 PM",
+            "1,002"
+          ],
+          [
+            "Tuesday",
+            "1 PM",
+            "1,004"
+          ],
+          [
+            "Tuesday",
+            "2 PM",
+            "1,059"
+          ],
+          [
+            "Tuesday",
+            "3 PM",
+            "1,070"
+          ],
+          [
+            "Tuesday",
+            "4 PM",
+            "1,273"
+          ],
+          [
+            "Tuesday",
+            "5 PM",
+            "1,100"
+          ],
+          [
+            "Tuesday",
+            "6 PM",
+            "1,303"
+          ],
+          [
+            "Tuesday",
+            "7 PM",
+            "1,269"
+          ],
+          [
+            "Tuesday",
+            "8 PM",
+            "1,011"
+          ],
+          [
+            "Tuesday",
+            "9 PM",
+            "705"
+          ],
+          [
+            "Tuesday",
+            "10 PM",
+            "56"
+          ],
+          [
+            "Tuesday",
+            "11 PM",
+            "43"
+          ],
+          [
+            "Wednesday",
+            "12 AM",
+            "78"
+          ],
+          [
+            "Wednesday",
+            "1 AM",
+            "82"
+          ],
+          [
+            "Wednesday",
+            "2 AM",
+            "69"
+          ],
+          [
+            "Wednesday",
+            "3 AM",
+            "86"
+          ],
+          [
+            "Wednesday",
+            "4 AM",
+            "114"
+          ],
+          [
+            "Wednesday",
+            "5 AM",
+            "91"
+          ],
+          [
+            "Wednesday",
+            "6 AM",
+            "305"
+          ],
+          [
+            "Wednesday",
+            "7 AM",
+            "441"
+          ],
+          [
+            "Wednesday",
+            "8 AM",
+            "682"
+          ],
+          [
+            "Wednesday",
+            "9 AM",
+            "955"
+          ],
+          [
+            "Wednesday",
+            "10 AM",
+            "1,593"
+          ],
+          [
+            "Wednesday",
+            "11 AM",
+            "1,819"
+          ],
+          [
+            "Wednesday",
+            "12 PM",
+            "1,580"
+          ],
+          [
+            "Wednesday",
+            "1 PM",
+            "1,354"
+          ],
+          [
+            "Wednesday",
+            "2 PM",
+            "1,627"
+          ],
+          [
+            "Wednesday",
+            "3 PM",
+            "1,318"
+          ],
+          [
+            "Wednesday",
+            "4 PM",
+            "1,322"
+          ],
+          [
+            "Wednesday",
+            "5 PM",
+            "1,612"
+          ],
+          [
+            "Wednesday",
+            "6 PM",
+            "1,531"
+          ],
+          [
+            "Wednesday",
+            "7 PM",
+            "1,612"
+          ],
+          [
+            "Wednesday",
+            "8 PM",
+            "1,574"
+          ],
+          [
+            "Wednesday",
+            "9 PM",
+            "705"
+          ],
+          [
+            "Wednesday",
+            "10 PM",
+            "106"
+          ],
+          [
+            "Wednesday",
+            "11 PM",
+            "64"
+          ],
+          [
+            "Thursday",
+            "12 AM",
+            "121"
+          ],
+          [
+            "Thursday",
+            "1 AM",
+            "88"
+          ],
+          [
+            "Thursday",
+            "2 AM",
+            "143"
+          ],
+          [
+            "Thursday",
+            "3 AM",
+            "79"
+          ],
+          [
+            "Thursday",
+            "4 AM",
+            "102"
+          ],
+          [
+            "Thursday",
+            "5 AM",
+            "109"
+          ],
+          [
+            "Thursday",
+            "6 AM",
+            "378"
+          ],
+          [
+            "Thursday",
+            "7 AM",
+            "599"
+          ],
+          [
+            "Thursday",
+            "8 AM",
+            "861"
+          ],
+          [
+            "Thursday",
+            "9 AM",
+            "1,241"
+          ],
+          [
+            "Thursday",
+            "10 AM",
+            "1,493"
+          ],
+          [
+            "Thursday",
+            "11 AM",
+            "1,774"
+          ],
+          [
+            "Thursday",
+            "12 PM",
+            "1,871"
+          ],
+          [
+            "Thursday",
+            "1 PM",
+            "1,791"
+          ],
+          [
+            "Thursday",
+            "2 PM",
+            "1,884"
+          ],
+          [
+            "Thursday",
+            "3 PM",
+            "2,116"
+          ],
+          [
+            "Thursday",
+            "4 PM",
+            "1,833"
+          ],
+          [
+            "Thursday",
+            "5 PM",
+            "1,894"
+          ],
+          [
+            "Thursday",
+            "6 PM",
+            "1,718"
+          ],
+          [
+            "Thursday",
+            "7 PM",
+            "1,652"
+          ],
+          [
+            "Thursday",
+            "8 PM",
+            "1,718"
+          ],
+          [
+            "Thursday",
+            "9 PM",
+            "1,525"
+          ],
+          [
+            "Thursday",
+            "10 PM",
+            "67"
+          ],
+          [
+            "Thursday",
+            "11 PM",
+            "64"
+          ],
+          [
+            "Friday",
+            "12 AM",
+            "70"
+          ],
+          [
+            "Friday",
+            "1 AM",
+            "60"
+          ],
+          [
+            "Friday",
+            "2 AM",
+            "50"
+          ],
+          [
+            "Friday",
+            "3 AM",
+            "66"
+          ],
+          [
+            "Friday",
+            "4 AM",
+            "87"
+          ],
+          [
+            "Friday",
+            "5 AM",
+            "96"
+          ],
+          [
+            "Friday",
+            "6 AM",
+            "338"
+          ],
+          [
+            "Friday",
+            "7 AM",
+            "603"
+          ],
+          [
+            "Friday",
+            "8 AM",
+            "1,023"
+          ],
+          [
+            "Friday",
+            "9 AM",
+            "1,551"
+          ],
+          [
+            "Friday",
+            "10 AM",
+            "2,144"
+          ],
+          [
+            "Friday",
+            "11 AM",
+            "1,919"
+          ],
+          [
+            "Friday",
+            "12 PM",
+            "1,698"
+          ],
+          [
+            "Friday",
+            "1 PM",
+            "1,428"
+          ],
+          [
+            "Friday",
+            "2 PM",
+            "1,601"
+          ],
+          [
+            "Friday",
+            "3 PM",
+            "1,729"
+          ],
+          [
+            "Friday",
+            "4 PM",
+            "1,882"
+          ],
+          [
+            "Friday",
+            "5 PM",
+            "1,938"
+          ],
+          [
+            "Friday",
+            "6 PM",
+            "2,044"
+          ],
+          [
+            "Friday",
+            "7 PM",
+            "1,782"
+          ],
+          [
+            "Friday",
+            "8 PM",
+            "1,670"
+          ],
+          [
+            "Friday",
+            "9 PM",
+            "1,794"
+          ],
+          [
+            "Friday",
+            "10 PM",
+            "103"
+          ],
+          [
+            "Friday",
+            "11 PM",
+            "64"
+          ],
+          [
+            "Saturday",
+            "12 AM",
+            "69"
+          ],
+          [
+            "Saturday",
+            "1 AM",
+            "63"
+          ],
+          [
+            "Saturday",
+            "2 AM",
+            "60"
+          ],
+          [
+            "Saturday",
+            "3 AM",
+            "50"
+          ],
+          [
+            "Saturday",
+            "4 AM",
+            "83"
+          ],
+          [
+            "Saturday",
+            "5 AM",
+            "122"
+          ],
+          [
+            "Saturday",
+            "6 AM",
+            "361"
+          ],
+          [
+            "Saturday",
+            "7 AM",
+            "650"
+          ],
+          [
+            "Saturday",
+            "8 AM",
+            "970"
+          ],
+          [
+            "Saturday",
+            "9 AM",
+            "1,438"
+          ],
+          [
+            "Saturday",
+            "10 AM",
+            "1,647"
+          ],
+          [
+            "Saturday",
+            "11 AM",
+            "2,040"
+          ],
+          [
+            "Saturday",
+            "12 PM",
+            "1,558"
+          ],
+          [
+            "Saturday",
+            "1 PM",
+            "1,586"
+          ],
+          [
+            "Saturday",
+            "2 PM",
+            "1,553"
+          ],
+          [
+            "Saturday",
+            "3 PM",
+            "1,621"
+          ],
+          [
+            "Saturday",
+            "4 PM",
+            "1,831"
+          ],
+          [
+            "Saturday",
+            "5 PM",
+            "1,838"
+          ],
+          [
+            "Saturday",
+            "6 PM",
+            "2,043"
+          ],
+          [
+            "Saturday",
+            "7 PM",
+            "2,009"
+          ],
+          [
+            "Saturday",
+            "8 PM",
+            "1,951"
+          ],
+          [
+            "Saturday",
+            "9 PM",
+            "1,542"
+          ],
+          [
+            "Saturday",
+            "10 PM",
+            "74"
+          ],
+          [
+            "Saturday",
+            "11 PM",
+            "67"
+          ]
+        ]
+      },
+      "hour": {
+        "columns": [
+          "Start Hour",
+          "Impressions"
+        ],
+        "rows": [
+          [
+            "12 AM",
+            "1,017"
+          ],
+          [
+            "1 AM",
+            "666"
+          ],
+          [
+            "2 AM",
+            "511"
+          ],
+          [
+            "3 AM",
+            "544"
+          ],
+          [
+            "4 AM",
+            "692"
+          ],
+          [
+            "5 AM",
+            "827"
+          ],
+          [
+            "6 AM",
+            "2,125"
+          ],
+          [
+            "7 AM",
+            "3,482"
+          ],
+          [
+            "8 AM",
+            "5,579"
+          ],
+          [
+            "9 AM",
+            "8,393"
+          ],
+          [
+            "10 AM",
+            "11,482"
+          ],
+          [
+            "11 AM",
+            "12,863"
+          ],
+          [
+            "12 PM",
+            "11,039"
+          ],
+          [
+            "1 PM",
+            "9,909"
+          ],
+          [
+            "2 PM",
+            "10,345"
+          ],
+          [
+            "3 PM",
+            "10,939"
+          ],
+          [
+            "4 PM",
+            "11,846"
+          ],
+          [
+            "5 PM",
+            "12,373"
+          ],
+          [
+            "6 PM",
+            "12,751"
+          ],
+          [
+            "7 PM",
+            "12,182"
+          ],
+          [
+            "8 PM",
+            "11,173"
+          ],
+          [
+            "9 PM",
+            "8,747"
+          ],
+          [
+            "10 PM",
+            "551"
+          ],
+          [
+            "11 PM",
+            "529"
+          ]
+        ]
+      },
+      "demographics_age": {
+        "columns": [
+          "Age Range",
+          "Impressions",
+          "Percent of known total"
+        ],
+        "rows": [
+          [
+            "18-24",
+            "184",
+            "0.13%"
+          ],
+          [
+            "25-34",
+            "12,753",
+            "9.33%"
+          ],
+          [
+            "35-44",
+            "48,278",
+            "35.33%"
+          ],
+          [
+            "45-54",
+            "75,831",
+            "55.50%"
+          ],
+          [
+            "55-64",
+            "849",
+            "0.62%"
+          ],
+          [
+            "65+",
+            "472",
+            "0.35%"
+          ]
+        ]
+      },
+      "demographics_gender": {
+        "columns": [
+          "Gender",
+          "Impressions",
+          "Percent of known total"
+        ],
+        "rows": [
+          [
+            "Male",
+            "110,516",
+            "80.88%"
+          ],
+          [
+            "Female",
+            "26,525",
+            "19.41%"
+          ]
+        ]
+      },
+      "demographics_gender_age": {
+        "columns": [
+          "Gender",
+          "Age Range",
+          "Impressions",
+          "Percent of known total"
+        ],
+        "rows": [
+          [
+            "Male",
+            "18-24",
+            "153",
+            "0.11%"
+          ],
+          [
+            "Male",
+            "25-34",
+            "10,516",
+            "7.70%"
+          ],
+          [
+            "Male",
+            "35-44",
+            "38,992",
+            "28.54%"
+          ],
+          [
+            "Male",
+            "45-54",
+            "59,619",
+            "43.63%"
+          ],
+          [
+            "Male",
+            "55-64",
+            "568",
+            "0.42%"
+          ],
+          [
+            "Male",
+            "65+",
+            "322",
+            "0.24%"
+          ],
+          [
+            "Female",
+            "18-24",
+            "31",
+            "0.02%"
+          ],
+          [
+            "Female",
+            "25-34",
+            "2,125",
+            "1.56%"
+          ],
+          [
+            "Female",
+            "35-44",
+            "8,631",
+            "6.32%"
+          ],
+          [
+            "Female",
+            "45-54",
+            "15,254",
+            "11.16%"
+          ],
+          [
+            "Female",
+            "55-64",
+            "280",
+            "0.20%"
+          ],
+          [
+            "Female",
+            "65+",
+            "150",
+            "0.11%"
+          ]
+        ]
+      },
+      "devices": {
+        "columns": [
+          "Device",
+          "Cost",
+          "Clicks",
+          "Conversions"
+        ],
+        "rows": [
+          [
+            "Computers",
+            "$841.98",
+            "298",
+            "18.01"
+          ],
+          [
+            "Mobile phones",
+            "$2,598.12",
+            "2,827",
+            "53.59"
+          ],
+          [
+            "Tablets",
+            "$86.53",
+            "94",
+            "2.99"
+          ],
+          [
+            "TV screens",
+            "$0.00",
+            "0",
+            "0.00"
+          ]
+        ]
+      },
+      "networks": {
+        "columns": [
+          "Network",
+          "Clicks",
+          "Cost",
+          "Avg. CPC"
+        ],
+        "rows": [
+          [
+            "Google search",
+            "297",
+            "$1,874.85",
+            "$6.31"
+          ],
+          [
+            "Search partners",
+            "33",
+            "$33.45",
+            "$1.01"
+          ],
+          [
+            "Cross-network",
+            "2,889",
+            "$1,618.33",
+            "$0.56"
+          ]
+        ]
+      },
+      "optimization_score": {
+        "columns": [
+          "Optimization Score",
+          "Campaign Name"
+        ],
+        "rows": [
+          [
+            "71.8%",
+            "TRF | YOU | RTG | IB Journey #2"
+          ],
+          [
+            "72.8%",
+            "Sept 2024 - Keywords - Search"
+          ],
+          [
+            "91.3%",
+            "Leads-Performance Max-3"
+          ]
+        ]
+      },
+      "searches_search": {
+        "columns": [
+          "Search",
+          "Cost",
+          "Clicks",
+          "Impressions",
+          "Conversions"
+        ],
+        "rows": [
+          [
+            "infinite banking",
+            "$93.34",
+            "13",
+            "275",
+            "0.00"
+          ],
+          [
+            "infinite banking concept",
+            "$21.89",
+            "4",
+            "158",
+            "0.00"
+          ],
+          [
+            "becoming your own banker",
+            "$70.90",
+            "14",
+            "147",
+            "0.00"
+          ],
+          [
+            "how to become your own bank",
+            "$6.63",
+            "1",
+            "49",
+            "0.00"
+          ],
+          [
+            "be your own bank",
+            "$13.75",
+            "2",
+            "46",
+            "0.00"
+          ],
+          [
+            "become your own bank",
+            "$21.84",
+            "7",
+            "42",
+            "0.00"
+          ],
+          [
+            "what is infinite banking",
+            "$0.51",
+            "1",
+            "42",
+            "0.00"
+          ],
+          [
+            "nelson nash infinite banking book pdf",
+            "$34.15",
+            "7",
+            "40",
+            "0.00"
+          ],
+          [
+            "becoming your own banker book",
+            "$0.00",
+            "0",
+            "33",
+            "0.00"
+          ],
+          [
+            "money wealth life insurance",
+            "$0.00",
+            "0",
+            "33",
+            "0.00"
+          ],
+          [
+            "how to be your own bank",
+            "$1.47",
+            "1",
+            "30",
+            "0.00"
+          ],
+          [
+            "becoming your own banker pdf",
+            "$6.12",
+            "3",
+            "26",
+            "0.00"
+          ],
+          [
+            "becoming your own banker pdf free",
+            "$13.42",
+            "4",
+            "23",
+            "0.00"
+          ],
+          [
+            "infinite banking system",
+            "$4.26",
+            "2",
+            "22",
+            "0.00"
+          ],
+          [
+            "how do i become my own bank",
+            "$3.06",
+            "1",
+            "20",
+            "0.00"
+          ],
+          [
+            "how to start your own private bank with no money",
+            "$20.99",
+            "3",
+            "20",
+            "0.00"
+          ],
+          [
+            "iul account",
+            "$12.13",
+            "1",
+            "20",
+            "0.00"
+          ],
+          [
+            "be your own banker",
+            "$14.96",
+            "2",
+            "18",
+            "0.00"
+          ],
+          [
+            "becoming your own banker nelson nash pdf",
+            "$7.93",
+            "2",
+            "18",
+            "0.00"
+          ],
+          [
+            "infinite bank",
+            "$9.02",
+            "1",
+            "18",
+            "0.00"
+          ],
+          [
+            "ac green show infinite banking",
+            "$23.11",
+            "4",
+            "17",
+            "0.00"
+          ],
+          [
+            "become your own banker",
+            "$32.27",
+            "3",
+            "17",
+            "0.00"
+          ],
+          [
+            "infinite banking book",
+            "$36.39",
+            "4",
+            "17",
+            "0.00"
+          ],
+          [
+            "how to become my own bank",
+            "$16.42",
+            "4",
+            "16",
+            "0.00"
+          ],
+          [
+            "infinite banking life insurance",
+            "$20.32",
+            "1",
+            "16",
+            "0.00"
+          ],
+          [
+            "infinite banking policy",
+            "$18.94",
+            "5",
+            "15",
+            "0.00"
+          ],
+          [
+            "how do you become your own bank",
+            "$17.65",
+            "2",
+            "12",
+            "0.00"
+          ],
+          [
+            "infinite banking explained",
+            "$2.93",
+            "1",
+            "12",
+            "0.00"
+          ],
+          [
+            "money wealth life insurance pdf",
+            "$6.89",
+            "1",
+            "12",
+            "0.00"
+          ],
+          [
+            "nelson nash becoming your own banker pdf",
+            "$4.63",
+            "1",
+            "12",
+            "0.00"
+          ],
+          [
+            "be your own banker book",
+            "$11.37",
+            "1",
+            "11",
+            "0.00"
+          ],
+          [
+            "vortex banking",
+            "$9.72",
+            "2",
+            "11",
+            "0.00"
+          ],
+          [
+            "bank on yourself concept",
+            "$0.00",
+            "0",
+            "10",
+            "0.00"
+          ],
+          [
+            "become your own banker nelson nash pdf",
+            "$5.04",
+            "2",
+            "10",
+            "0.00"
+          ],
+          [
+            "infinite banking concept ibc",
+            "$0.00",
+            "0",
+            "10",
+            "0.00"
+          ],
+          [
+            "be your own bank life insurance",
+            "$4.14",
+            "1",
+            "9",
+            "0.00"
+          ],
+          [
+            "becoming your own banker fifth edition r nelson nash",
+            "$0.00",
+            "0",
+            "9",
+            "0.00"
+          ],
+          [
+            "becoming your own banker nelson nash",
+            "$10.10",
+            "1",
+            "9",
+            "0.00"
+          ],
+          [
+            "chris naugle infinite banking",
+            "$6.63",
+            "1",
+            "9",
+            "0.00"
+          ],
+          [
+            "jake thompson life insurance",
+            "$0.00",
+            "0",
+            "9",
+            "0.00"
+          ],
+          [
+            "bank on yourself book",
+            "$1.76",
+            "1",
+            "8",
+            "0.00"
+          ],
+          [
+            "become your own bank book",
+            "$0.00",
+            "0",
+            "8",
+            "0.00"
+          ],
+          [
+            "become your own banker book",
+            "$6.02",
+            "1",
+            "8",
+            "0.00"
+          ],
+          [
+            "become your own banker pdf",
+            "$0.00",
+            "0",
+            "8",
+            "0.00"
+          ],
+          [
+            "becoming your own banker 6th edition",
+            "$0.00",
+            "0",
+            "8",
+            "0.00"
+          ],
+          [
+            "marvin mitchell become your own bank",
+            "$7.65",
+            "3",
+            "8",
+            "0.00"
+          ],
+          [
+            "money wealth life insurance book",
+            "$0.00",
+            "0",
+            "8",
+            "0.00"
+          ],
+          [
+            "private banking blueprint pdf",
+            "$12.21",
+            "3",
+            "8",
+            "0.00"
+          ],
+          [
+            "become my own bank",
+            "$0.00",
+            "0",
+            "7",
+            "0.00"
+          ],
+          [
+            "becoming your own bank",
+            "$0.00",
+            "0",
+            "7",
+            "0.00"
+          ],
+          [
+            "how to create my own bank",
+            "$5.00",
+            "2",
+            "7",
+            "0.00"
+          ],
+          [
+            "how to start infinite banking",
+            "$5.67",
+            "1",
+            "7",
+            "0.00"
+          ],
+          [
+            "infinite banking pdf",
+            "$0.00",
+            "0",
+            "7",
+            "0.00"
+          ],
+          [
+            "private banking blueprint",
+            "$0.00",
+            "0",
+            "7",
+            "0.00"
+          ],
+          [
+            "how can i become my own bank",
+            "$4.18",
+            "1",
+            "6",
+            "0.00"
+          ],
+          [
+            "how to use life insurance as a bank",
+            "$0.00",
+            "0",
+            "6",
+            "0.00"
+          ],
+          [
+            "infinite banking calculator",
+            "$0.00",
+            "0",
+            "6",
+            "0.00"
+          ],
+          [
+            "banco infinito",
+            "$1.57",
+            "1",
+            "5",
+            "0.00"
+          ],
+          [
+            "bankonyourself com nospin",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "be your own banker life insurance",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "becoming your own banker by r nelson nash",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "brent kesler infinite banking",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "create your own bank",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "how does infinite banking work",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "how to make your own bank",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "how to use life insurance to build wealth",
+            "$10.49",
+            "1",
+            "5",
+            "0.00"
+          ],
+          [
+            "infinite banking books",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "infinite banking concepts",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "private banking blueprint book",
+            "$6.42",
+            "1",
+            "5",
+            "0.00"
+          ],
+          [
+            "using life insurance as a bank",
+            "$3.21",
+            "1",
+            "5",
+            "0.00"
+          ],
+          [
+            "what is infinite banking concept",
+            "$0.00",
+            "0",
+            "5",
+            "0.00"
+          ],
+          [
+            "be your own bank concept",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "become the bank",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "becoming your own banker by nelson nash",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "being your own bank",
+            "$2.58",
+            "1",
+            "4",
+            "0.00"
+          ],
+          [
+            "how can i be my own bank",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "how to be my own bank",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "how to be your own banker",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "how to create your own banking system",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "how to start a private bank pdf",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "ibc be your own bank",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "ibc practitioner program",
+            "$5.57",
+            "1",
+            "4",
+            "0.00"
+          ],
+          [
+            "infinite banking concept book",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "infinite banking concept explained",
+            "$7.31",
+            "1",
+            "4",
+            "0.00"
+          ],
+          [
+            "infinite banking org",
+            "$3.12",
+            "1",
+            "4",
+            "0.00"
+          ],
+          [
+            "infinite banking strategy",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "infinitebanking org",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "iul infinite banking",
+            "$7.41",
+            "2",
+            "4",
+            "0.00"
+          ],
+          [
+            "iul strategy",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "pamela yellen bank on yourself",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "the infinite banking concept",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "vortex banking pros and cons",
+            "$0.00",
+            "0",
+            "4",
+            "0.00"
+          ],
+          [
+            "banking on yourself",
+            "$0.00",
+            "0",
+            "3",
+            "0.00"
+          ],
+          [
+            "bankonyourself com reviews",
+            "$6.01",
+            "1",
+            "3",
+            "0.00"
+          ],
+          [
+            "be your own banker nelson nash",
+            "$0.00",
+            "0",
+            "3",
+            "0.00"
+          ],
+          [
+            "become your own bank with life insurance",
+            "$2.44",
+            "1",
+            "3",
+            "0.00"
+          ],
+          [
+            "become your own banker audiobook",
+            "$15.07",
+            "1",
+            "3",
+            "0.00"
+          ],
+          [
+            "become your own banker nelson nash",
+            "$0.00",
+            "0",
+            "3",
+            "0.00"
+          ],
+          [
+            "becoming your own banker sixth edition r nelson nash",
+            "$0.00",
+            "0",
+            "3",
+            "0.00"
+          ],
+          [
+            "can i become my own bank",
+            "$0.00",
+            "0",
+            "3",
+            "0.00"
+          ]
+        ]
+      },
+      "searches_word": {
+        "columns": [
+          "Word",
+          "Cost",
+          "Clicks",
+          "Impressions",
+          "Conversions",
+          "Top Containing Queries"
+        ],
+        "rows": [
+          [
+            "banking",
+            "$314.33",
+            "54",
+            "744",
+            "0.00",
+            "(infinite banking, infinite banking concept, what is infinite banking)"
+          ],
+          [
+            "infinite",
+            "$295.00",
+            "49",
+            "720",
+            "0.00",
+            "(infinite banking, infinite banking concept, what is infinite banking)"
+          ],
+          [
+            "own",
+            "$325.63",
+            "65",
+            "714",
+            "0.00",
+            "(becoming your own banker, how to become your own bank, be your own bank)"
+          ],
+          [
+            "your own",
+            "$296.97",
+            "57",
+            "647",
+            "0.00",
+            "(becoming your own banker, how to become your own bank, be your own bank)"
+          ],
+          [
+            "own banker",
+            "$197.83",
+            "35",
+            "387",
+            "0.00",
+            "(becoming your own banker, becoming your own banker book, becoming your own banker pdf)"
+          ],
+          [
+            "bank",
+            "$141.79",
+            "33",
+            "382",
+            "0.00",
+            "(how to become your own bank, be your own bank, become your own bank)"
+          ],
+          [
+            "becoming",
+            "$113.10",
+            "25",
+            "304",
+            "0.00",
+            "(becoming your own banker, becoming your own banker book, becoming your own banker pdf)"
+          ],
+          [
+            "become",
+            "$138.27",
+            "27",
+            "227",
+            "0.00",
+            "(how to become your own bank, become your own bank, how do i become my own bank)"
+          ],
+          [
+            "how",
+            "$91.56",
+            "17",
+            "208",
+            "0.00",
+            "(how to become your own bank, how to be your own bank, how do i become my own bank)"
+          ],
+          [
+            "concept",
+            "$29.20",
+            "5",
+            "199",
+            "0.00",
+            "(infinite banking concept, bank on yourself concept, infinite banking concept ibc)"
+          ],
+          [
+            "pdf",
+            "$90.39",
+            "23",
+            "168",
+            "0.00",
+            "(nelson nash infinite banking book pdf, becoming your own banker pdf, becoming your own banker pdf free)"
+          ],
+          [
+            "how to",
+            "$66.67",
+            "13",
+            "161",
+            "0.00",
+            "(how to become your own bank, how to be your own bank, how to start your own private bank with no money)"
+          ],
+          [
+            "be",
+            "$45.69",
+            "7",
+            "142",
+            "0.00",
+            "(be your own bank, how to be your own bank, be your own banker)"
+          ],
+          [
+            "book",
+            "$96.11",
+            "15",
+            "142",
+            "0.00",
+            "(nelson nash infinite banking book pdf, becoming your own banker book, infinite banking book)"
+          ],
+          [
+            "nelson nash",
+            "$61.85",
+            "13",
+            "116",
+            "0.00",
+            "(nelson nash infinite banking book pdf, becoming your own banker nelson nash pdf, nelson nash becoming your own banker pdf)"
+          ],
+          [
+            "life insurance",
+            "$47.49",
+            "6",
+            "111",
+            "0.00",
+            "(money wealth life insurance, infinite banking life insurance, money wealth life insurance pdf)"
+          ],
+          [
+            "money",
+            "$27.88",
+            "4",
+            "73",
+            "0.00",
+            "(money wealth life insurance, how to start your own private bank with no money, money wealth life insurance pdf)"
+          ],
+          [
+            "my own",
+            "$28.66",
+            "8",
+            "67",
+            "0.00",
+            "(how do i become my own bank, how to become my own bank, become my own bank)"
+          ],
+          [
+            "wealth",
+            "$17.38",
+            "2",
+            "58",
+            "0.00",
+            "(money wealth life insurance, money wealth life insurance pdf, money wealth life insurance book)"
+          ],
+          [
+            "is infinite",
+            "$0.51",
+            "1",
+            "47",
+            "0.00",
+            "(what is infinite banking, what is infinite banking concept)"
+          ],
+          [
+            "what",
+            "$0.51",
+            "1",
+            "47",
+            "0.00",
+            "(what is infinite banking, what is infinite banking concept)"
+          ],
+          [
+            "private bank",
+            "$39.62",
+            "7",
+            "44",
+            "0.00",
+            "(how to start your own private bank with no money, private banking blueprint pdf, private banking blueprint)"
+          ],
+          [
+            "i",
+            "$7.24",
+            "2",
+            "33",
+            "0.00",
+            "(how do i become my own bank, how can i become my own bank, how can i be my own bank)"
+          ],
+          [
+            "how do",
+            "$20.71",
+            "3",
+            "32",
+            "0.00",
+            "(how do i become my own bank, how do you become your own bank)"
+          ],
+          [
+            "start",
+            "$26.66",
+            "4",
+            "31",
+            "0.00",
+            "(how to start your own private bank with no money, how to start infinite banking, how to start a private bank pdf)"
+          ],
+          [
+            "iul",
+            "$19.54",
+            "3",
+            "28",
+            "0.00",
+            "(iul account, iul infinite banking, iul strategy)"
+          ],
+          [
+            "banking system",
+            "$4.26",
+            "2",
+            "26",
+            "0.00",
+            "(infinite banking system, how to create your own banking system)"
+          ],
+          [
+            "on yourself",
+            "$1.76",
+            "1",
+            "25",
+            "0.00",
+            "(bank on yourself concept, bank on yourself book, pamela yellen bank on yourself)"
+          ],
+          [
+            "bank with",
+            "$23.43",
+            "4",
+            "23",
+            "0.00",
+            "(how to start your own private bank with no money, become your own bank with life insurance)"
+          ],
+          [
+            "free",
+            "$13.42",
+            "4",
+            "23",
+            "0.00",
+            "(becoming your own banker pdf free)"
+          ],
+          [
+            "banking blueprint",
+            "$18.63",
+            "4",
+            "20",
+            "0.00",
+            "(private banking blueprint pdf, private banking blueprint, private banking blueprint book)"
+          ],
+          [
+            "no",
+            "$20.99",
+            "3",
+            "20",
+            "0.00",
+            "(how to start your own private bank with no money)"
+          ],
+          [
+            "edition",
+            "$0.00",
+            "0",
+            "20",
+            "0.00",
+            "(becoming your own banker fifth edition r nelson nash, becoming your own banker 6th edition, becoming your own banker sixth edition r nelson nash)"
+          ],
+          [
+            "account",
+            "$12.13",
+            "1",
+            "20",
+            "0.00",
+            "(iul account)"
+          ],
+          [
+            "ibc",
+            "$5.57",
+            "1",
+            "18",
+            "0.00",
+            "(infinite banking concept ibc, ibc be your own bank, ibc practitioner program)"
+          ],
+          [
+            "r own",
+            "$0.00",
+            "0",
+            "17",
+            "0.00",
+            "(becoming your own banker fifth edition r nelson nash, becoming your own banker by r nelson nash, becoming your own banker sixth edition r nelson nash)"
+          ],
+          [
+            "ac",
+            "$23.11",
+            "4",
+            "17",
+            "0.00",
+            "(ac green show infinite banking)"
+          ],
+          [
+            "show",
+            "$23.11",
+            "4",
+            "17",
+            "0.00",
+            "(ac green show infinite banking)"
+          ],
+          [
+            "green",
+            "$23.11",
+            "4",
+            "17",
+            "0.00",
+            "(ac green show infinite banking)"
+          ],
+          [
+            "create",
+            "$5.00",
+            "2",
+            "16",
+            "0.00",
+            "(how to create my own bank, create your own bank, how to create your own banking system)"
+          ],
+          [
+            "explained",
+            "$10.24",
+            "2",
+            "16",
+            "0.00",
+            "(infinite banking explained, infinite banking concept explained)"
+          ],
+          [
+            "vortex banking",
+            "$9.72",
+            "2",
+            "15",
+            "0.00",
+            "(vortex banking, vortex banking pros and cons)"
+          ],
+          [
+            "policy",
+            "$18.94",
+            "5",
+            "15",
+            "0.00",
+            "(infinite banking policy)"
+          ],
+          [
+            "a",
+            "$3.21",
+            "1",
+            "15",
+            "0.00",
+            "(how to use life insurance as a bank, using life insurance as a bank, how to start a private bank pdf)"
+          ],
+          [
+            "can i",
+            "$4.18",
+            "1",
+            "13",
+            "0.00",
+            "(how can i become my own bank, how can i be my own bank, can i become my own bank)"
+          ],
+          [
+            "you",
+            "$17.65",
+            "2",
+            "12",
+            "0.00",
+            "(how do you become your own bank)"
+          ],
+          [
+            "use",
+            "$10.49",
+            "1",
+            "11",
+            "0.00",
+            "(how to use life insurance as a bank, how to use life insurance to build wealth)"
+          ],
+          [
+            "as a",
+            "$3.21",
+            "1",
+            "11",
+            "0.00",
+            "(how to use life insurance as a bank, using life insurance as a bank)"
+          ],
+          [
+            "banker by",
+            "$0.00",
+            "0",
+            "9",
+            "0.00",
+            "(becoming your own banker by r nelson nash, becoming your own banker by nelson nash)"
+          ],
+          [
+            "chris",
+            "$6.63",
+            "1",
+            "9",
+            "0.00",
+            "(chris naugle infinite banking)"
+          ],
+          [
+            "thompson",
+            "$0.00",
+            "0",
+            "9",
+            "0.00",
+            "(jake thompson life insurance)"
+          ],
+          [
+            "jake",
+            "$0.00",
+            "0",
+            "9",
+            "0.00",
+            "(jake thompson life insurance)"
+          ],
+          [
+            "fifth",
+            "$0.00",
+            "0",
+            "9",
+            "0.00",
+            "(becoming your own banker fifth edition r nelson nash)"
+          ],
+          [
+            "naugle",
+            "$6.63",
+            "1",
+            "9",
+            "0.00",
+            "(chris naugle infinite banking)"
+          ],
+          [
+            "6th",
+            "$0.00",
+            "0",
+            "8",
+            "0.00",
+            "(becoming your own banker 6th edition)"
+          ],
+          [
+            "mitchell",
+            "$7.65",
+            "3",
+            "8",
+            "0.00",
+            "(marvin mitchell become your own bank)"
+          ],
+          [
+            "banking org",
+            "$3.12",
+            "1",
+            "8",
+            "0.00",
+            "(infinite banking org, infinitebanking org)"
+          ],
+          [
+            "bankonyourself com",
+            "$6.01",
+            "1",
+            "8",
+            "0.00",
+            "(bankonyourself com nospin, bankonyourself com reviews)"
+          ],
+          [
+            "the",
+            "$0.00",
+            "0",
+            "8",
+            "0.00",
+            "(become the bank, the infinite banking concept)"
+          ],
+          [
+            "marvin",
+            "$7.65",
+            "3",
+            "8",
+            "0.00",
+            "(marvin mitchell become your own bank)"
+          ],
+          [
+            "strategy",
+            "$0.00",
+            "0",
+            "8",
+            "0.00",
+            "(infinite banking strategy, iul strategy)"
+          ],
+          [
+            "calculator",
+            "$0.00",
+            "0",
+            "6",
+            "0.00",
+            "(infinite banking calculator)"
+          ],
+          [
+            "brent",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(brent kesler infinite banking)"
+          ],
+          [
+            "nospin",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(bankonyourself com nospin)"
+          ],
+          [
+            "using",
+            "$3.21",
+            "1",
+            "5",
+            "0.00",
+            "(using life insurance as a bank)"
+          ],
+          [
+            "work",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(how does infinite banking work)"
+          ],
+          [
+            "banco",
+            "$1.57",
+            "1",
+            "5",
+            "0.00",
+            "(banco infinito)"
+          ],
+          [
+            "books",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(infinite banking books)"
+          ],
+          [
+            "concepts",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(infinite banking concepts)"
+          ],
+          [
+            "infinito",
+            "$1.57",
+            "1",
+            "5",
+            "0.00",
+            "(banco infinito)"
+          ],
+          [
+            "does",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(how does infinite banking work)"
+          ],
+          [
+            "make",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(how to make your own bank)"
+          ],
+          [
+            "build",
+            "$10.49",
+            "1",
+            "5",
+            "0.00",
+            "(how to use life insurance to build wealth)"
+          ],
+          [
+            "kesler",
+            "$0.00",
+            "0",
+            "5",
+            "0.00",
+            "(brent kesler infinite banking)"
+          ],
+          [
+            "yellen",
+            "$0.00",
+            "0",
+            "4",
+            "0.00",
+            "(pamela yellen bank on yourself)"
+          ],
+          [
+            "program",
+            "$5.57",
+            "1",
+            "4",
+            "0.00",
+            "(ibc practitioner program)"
+          ],
+          [
+            "infinitebanking",
+            "$0.00",
+            "0",
+            "4",
+            "0.00",
+            "(infinitebanking org)"
+          ],
+          [
+            "cons",
+            "$0.00",
+            "0",
+            "4",
+            "0.00",
+            "(vortex banking pros and cons)"
+          ],
+          [
+            "practitioner",
+            "$5.57",
+            "1",
+            "4",
+            "0.00",
+            "(ibc practitioner program)"
+          ],
+          [
+            "being",
+            "$2.58",
+            "1",
+            "4",
+            "0.00",
+            "(being your own bank)"
+          ],
+          [
+            "pros",
+            "$0.00",
+            "0",
+            "4",
+            "0.00",
+            "(vortex banking pros and cons)"
+          ],
+          [
+            "pamela",
+            "$0.00",
+            "0",
+            "4",
+            "0.00",
+            "(pamela yellen bank on yourself)"
+          ],
+          [
+            "and",
+            "$0.00",
+            "0",
+            "4",
+            "0.00",
+            "(vortex banking pros and cons)"
+          ],
+          [
+            "audiobook",
+            "$15.07",
+            "1",
+            "3",
+            "0.00",
+            "(become your own banker audiobook)"
+          ],
+          [
+            "reviews",
+            "$6.01",
+            "1",
+            "3",
+            "0.00",
+            "(bankonyourself com reviews)"
+          ],
+          [
+            "sixth",
+            "$0.00",
+            "0",
+            "3",
+            "0.00",
+            "(becoming your own banker sixth edition r nelson nash)"
+          ]
+        ]
+      },
+      "search_keywords": {
+        "columns": [
+          "Search Keyword",
+          "Match type",
+          "Criterion Status",
+          "Campaign Status",
+          "Ad Group Status",
+          "Cost",
+          "Clicks",
+          "CTR"
+        ],
+        "rows": [
+          [
+            "infinite banking",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$583.46",
+            "92",
+            "4.09%"
+          ],
+          [
+            "how to use life insurance to build wealth",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$285.13",
+            "42",
+            "4.33%"
+          ],
+          [
+            "how to become your own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$227.71",
+            "41",
+            "6.58%"
+          ],
+          [
+            "becoming your own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$210.83",
+            "36",
+            "5.43%"
+          ],
+          [
+            "whole life insurance as an investment",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$76.65",
+            "13",
+            "5.99%"
+          ],
+          [
+            "be your own banker life insurance",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$69.16",
+            "4",
+            "4.08%"
+          ],
+          [
+            "infinite banking life insurance",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$66.59",
+            "8",
+            "4.55%"
+          ],
+          [
+            "become your own banker pdf",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$58.13",
+            "15",
+            "14.71%"
+          ],
+          [
+            "how to become my own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$44.60",
+            "7",
+            "9.33%"
+          ],
+          [
+            "be your own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$42.90",
+            "10",
+            "1.86%"
+          ],
+          [
+            "become your own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$40.37",
+            "12",
+            "6.00%"
+          ],
+          [
+            "how do you become your own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$33.33",
+            "6",
+            "9.38%"
+          ],
+          [
+            "infinite banking concept",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$33.23",
+            "6",
+            "1.01%"
+          ],
+          [
+            "how to invest in life insurance like banks",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$26.06",
+            "5",
+            "9.26%"
+          ],
+          [
+            "how to use life insurance as a bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$24.60",
+            "6",
+            "2.23%"
+          ],
+          [
+            "how to be your own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$24.58",
+            "8",
+            "3.03%"
+          ],
+          [
+            "how do i become my own bank",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$23.03",
+            "5",
+            "5.68%"
+          ],
+          [
+            "becoming your own banker free pdf",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$13.42",
+            "4",
+            "11.76%"
+          ],
+          [
+            "money wealth life insurance",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$12.61",
+            "2",
+            "1.42%"
+          ],
+          [
+            "infiniti banking",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$7.86",
+            "5",
+            "7.58%"
+          ],
+          [
+            "how to use life insurance while alive",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$3.64",
+            "1",
+            "3.57%"
+          ],
+          [
+            "infinate banking",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$0.41",
+            "2",
+            "0.86%"
+          ],
+          [
+            "infinite banking whole life insurance",
+            "Phrase match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$0.00",
+            "0",
+            "0.00%"
+          ],
+          [
+            "life insurance",
+            "Broad match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$0.00",
+            "0",
+            "0.00%"
+          ],
+          [
+            "whole life insurance companies",
+            "Broad match",
+            "Enabled",
+            "Enabled",
+            "Enabled",
+            "$0.00",
+            "0",
+            "0.00%"
+          ]
+        ]
+      },
+      "time_series": {
+        "columns": [
+          "Date",
+          "Clicks",
+          "Conversions",
+          "Cost / conv.",
+          "Cost"
+        ],
+        "rows": [
+          [
+            "Wed, Jul 1, 2026",
+            "99",
+            "4.00",
+            "$34.51",
+            "$138.03"
+          ],
+          [
+            "Thu, Jul 2, 2026",
+            "113",
+            "0.00",
+            "$0.00",
+            "$125.96"
+          ],
+          [
+            "Fri, Jul 3, 2026",
+            "100",
+            "5.00",
+            "$29.59",
+            "$147.95"
+          ],
+          [
+            "Sat, Jul 4, 2026",
+            "85",
+            "0.01",
+            "$8,002.69",
+            "$84.17"
+          ],
+          [
+            "Sun, Jul 5, 2026",
+            "103",
+            "5.01",
+            "$18.95",
+            "$94.99"
+          ],
+          [
+            "Mon, Jul 6, 2026",
+            "141",
+            "5.99",
+            "$34.24",
+            "$205.05"
+          ],
+          [
+            "Tue, Jul 7, 2026",
+            "109",
+            "1.00",
+            "$136.48",
+            "$136.48"
+          ],
+          [
+            "Wed, Jul 8, 2026",
+            "118",
+            "0.00",
+            "$0.00",
+            "$133.82"
+          ],
+          [
+            "Thu, Jul 9, 2026",
+            "119",
+            "2.00",
+            "$61.84",
+            "$123.68"
+          ],
+          [
+            "Fri, Jul 10, 2026",
+            "137",
+            "2.00",
+            "$65.44",
+            "$130.88"
+          ],
+          [
+            "Sat, Jul 11, 2026",
+            "129",
+            "4.00",
+            "$30.99",
+            "$123.89"
+          ],
+          [
+            "Sun, Jul 12, 2026",
+            "105",
+            "0.00",
+            "$0.00",
+            "$132.64"
+          ],
+          [
+            "Mon, Jul 13, 2026",
+            "72",
+            "3.00",
+            "$42.04",
+            "$126.11"
+          ],
+          [
+            "Tue, Jul 14, 2026",
+            "110",
+            "3.00",
+            "$34.79",
+            "$104.38"
+          ],
+          [
+            "Wed, Jul 15, 2026",
+            "103",
+            "3.59",
+            "$27.80",
+            "$99.90"
+          ],
+          [
+            "Thu, Jul 16, 2026",
+            "94",
+            "1.00",
+            "$105.38",
+            "$105.38"
+          ],
+          [
+            "Fri, Jul 17, 2026",
+            "87",
+            "6.01",
+            "$25.10",
+            "$150.77"
+          ],
+          [
+            "Sat, Jul 18, 2026",
+            "115",
+            "0.01",
+            "$14,931.84",
+            "$120.01"
+          ],
+          [
+            "Sun, Jul 19, 2026",
+            "96",
+            "3.01",
+            "$58.05",
+            "$174.74"
+          ],
+          [
+            "Mon, Jul 20, 2026",
+            "117",
+            "5.12",
+            "$30.44",
+            "$155.98"
+          ],
+          [
+            "Tue, Jul 21, 2026",
+            "109",
+            "1.84",
+            "$75.04",
+            "$138.14"
+          ],
+          [
+            "Wed, Jul 22, 2026",
+            "114",
+            "5.00",
+            "$23.82",
+            "$119.10"
+          ],
+          [
+            "Thu, Jul 23, 2026",
+            "124",
+            "0.00",
+            "$0.00",
+            "$107.22"
+          ],
+          [
+            "Fri, Jul 24, 2026",
+            "164",
+            "4.00",
+            "$34.19",
+            "$136.76"
+          ],
+          [
+            "Sat, Jul 25, 2026",
+            "198",
+            "10.00",
+            "$11.26",
+            "$112.59"
+          ],
+          [
+            "Sun, Jul 26, 2026",
+            "158",
+            "0.00",
+            "$0.00",
+            "$137.88"
+          ],
+          [
+            "Mon, Jul 27, 2026",
+            "163",
+            "0.00",
+            "$0.00",
+            "$126.77"
+          ],
+          [
+            "Tue, Jul 28, 2026",
+            "37",
+            "0.00",
+            "$0.00",
+            "$33.36"
+          ]
+        ]
+      }
+    }
   }
 ];
