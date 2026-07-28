@@ -5,8 +5,9 @@ import { useState, type FormEvent } from 'react';
 /* Custom lead form for /infinite-banking-journey/ — same fields, options and
    disclaimer as the GHL form it replaces (Xander, 2026-07-28). Submits to
    /api/lead, which relays to the GHL inbound webhook (GHL_LEAD_WEBHOOK_URL);
-   on success the visitor is sent to /thank-you-ibj/, which fires the Meta/GA4
-   Lead events. This is a REAL form — the API route errors loudly if the
+   on success the visitor is sent to the Self Banking Blueprint thank-you page
+   (download button + on-page PDF reader; picked by Xander 2026-07-28 because
+   /thank-you-ibj/ had nothing to offer), which fires the Meta/GA4 Lead events. This is a REAL form — the API route errors loudly if the
    webhook is missing, and the page only renders this component when the
    webhook env var is set. */
 
@@ -94,7 +95,7 @@ export default function JourneyLeadForm() {
         }),
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
-      window.location.href = '/thank-you-ibj/';
+      window.location.href = '/thank-you-self-printing-blue-print-3-0/';
     } catch {
       setSending(false);
       setError(
