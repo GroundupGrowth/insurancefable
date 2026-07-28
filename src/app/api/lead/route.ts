@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 
 /* Lead relay: receives the custom lead form (see
    src/app/infinite-banking-journey/JourneyLeadForm.tsx) and forwards it to the
-   GoHighLevel inbound-webhook trigger (Xander's workflow, provided
-   2026-07-28). The URL only lives server-side; the GHL_LEAD_WEBHOOK_URL env
-   var overrides the default if the webhook is ever rotated. */
+   GoHighLevel inbound-webhook trigger for the Self Banking workflow
+   (Xander, 2026-07-28 — replaced the earlier trigger, which received posts
+   but activated no flow). The URL only lives server-side; the
+   GHL_LEAD_WEBHOOK_URL env var overrides the default if the webhook is
+   ever rotated. */
 
 const DEFAULT_WEBHOOK =
-  'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/828aff36-fd33-40cd-b3ba-2c7606d7728e';
+  'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/3830bebf-7046-41c5-902a-06ca4934d191';
 
 const REQUIRED = ['first_name', 'last_name', 'email', 'phone', 'age_range', 'annual_income'] as const;
 
