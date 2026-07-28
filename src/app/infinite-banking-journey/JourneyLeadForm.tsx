@@ -76,7 +76,8 @@ export default function JourneyLeadForm() {
     setError(null);
     setSending(true);
     try {
-      const response = await fetch('/api/lead', {
+      /* Trailing slash required: next.config redirects /api/lead -> /api/lead/ (308). */
+      const response = await fetch('/api/lead/', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
