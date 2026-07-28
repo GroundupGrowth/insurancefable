@@ -5,4 +5,4 @@ unsigned git clients are CANCELED by Vercel. Until commit signing is set up or
 the team setting is relaxed, trigger production builds with a commit made via
 the GitHub API (automatically signed by GitHub), e.g. updating this file.
 
-Last trigger: 2026-07-28 (restore GHL-linked WordPress PDFs).
+Last trigger: 2026-07-28 (tab behavior + thank-you PDF viewer).
