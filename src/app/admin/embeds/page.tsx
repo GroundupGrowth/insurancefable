@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { getSupabase, type EmbedSlotRow } from '../../../lib/supabase';
+import { parseSlotNotes } from '../../../lib/slotNotes';
 import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths, textareaClass } from '../ui';
 
 /* Embeds: every GHL/LeadConnector embed slot on the site, grouped by type.
@@ -129,20 +130,28 @@ export default function EmbedsAdminPage() {
                       <div>
                         <p className="text-[#0D1B3D] font-medium text-sm">{slot.label}</p>
                         <p className="text-[#0D1B3D]/40 text-xs font-mono">{slot.slot_key}</p>
-                        {/* For ebook slots, notes holds the thank-you page set at /admin → Books. */}
-                        {slot.notes &&
-                          (slot.notes.startsWith('/') || slot.notes.startsWith('http') ? (
-                            <a
-                              href={slot.notes}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[#0D1B3D]/60 text-xs underline underline-offset-2 hover:text-[#0D1B3D] transition-colors duration-150"
-                            >
-                              Thank-you page: {slot.notes}
-                            </a>
-                          ) : (
-                            <p className="text-[#0D1B3D]/50 text-xs">{slot.notes}</p>
-                          ))}
+                        {/* For ebook slots, notes holds the thank-you page and
+                            lead webhook set at /admin → Books. */}
+                        {(() => {
+                          const meta = parseSlotNotes(slot.notes);
+                          return (
+                            <>
+                              {meta.thankYou && (
+                                <a
+                                  href={meta.thankYou}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="block text-[#0D1B3D]/60 text-xs underline underline-offset-2 hover:text-[#0D1B3D] transition-colors duration-150"
+                                >
+                                  Thank-you page: {meta.thankYou}
+                                </a>
+                              )}
+                              {meta.webhook && (
+                                <p className="text-[#0D1B3D]/50 text-xs">Lead webhook set</p>
+                              )}
+                            </>
+                          );
+                        })()}
                       </div>
                       <div className="flex items-center gap-3">
                         <span

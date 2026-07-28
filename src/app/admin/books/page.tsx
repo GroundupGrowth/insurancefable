@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
+import { parseSlotNotes, serializeSlotNotes } from '../../../lib/slotNotes';
 import { ebookDefaults, ebookThankYouPath, type Ebook, type EbookCategory } from '../../../data/ebooks';
 import { thankYouPages } from '../../../data/thankYouPages';
 import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths, textareaClass } from '../ui';
@@ -26,6 +27,10 @@ interface BookState extends Ebook {
   /** Thank-you page the book's GHL form redirects to. Reference only (the real
       redirect is set on the form in GHL); stored in the embed slot's `notes`. */
   thankYou: string;
+  /** GHL inbound-webhook URL for this book's custom lead form. Leads posted to
+      /api/lead with source `ebook:<slug>` are forwarded here. Stored in the
+      embed slot's `notes` (see src/lib/slotNotes.ts). */
+  webhook: string;
 }
 
 function slugify(value: string) {
@@ -55,10 +60,13 @@ export default function BooksAdminPage() {
     }
     const embedMap: Record<string, string> = {};
     const thankYouMap: Record<string, string> = {};
+    const webhookMap: Record<string, string> = {};
     slots.data?.forEach((slot) => {
       const slug = slot.slot_key.replace(/^ebook:/, '');
       embedMap[slug] = slot.embed_code ?? '';
-      if (slot.notes) thankYouMap[slug] = slot.notes;
+      const meta = parseSlotNotes(slot.notes);
+      if (meta.thankYou) thankYouMap[slug] = meta.thankYou;
+      if (meta.webhook) webhookMap[slug] = meta.webhook;
     });
     const fromSupabase: Ebook[] =
       rows.data && rows.data.length > 0
@@ -88,6 +96,7 @@ export default function BooksAdminPage() {
         ...book,
         embed: embedMap[book.slug] ?? '',
         thankYou: thankYouMap[book.slug] ?? ebookThankYouPath(book.slug) ?? '',
+        webhook: webhookMap[book.slug] ?? '',
       })),
     );
   }, [supabase]);
@@ -137,6 +146,7 @@ export default function BooksAdminPage() {
         sort: maxSort + 10,
         embed: '',
         thankYou: '',
+        webhook: '',
       },
     ]);
     setNewTitle('');
@@ -161,6 +171,7 @@ export default function BooksAdminPage() {
         ({
           embed: _embed,
           thankYou: _thankYou,
+          webhook: _webhook,
           image: _image,
           landingPath: _landingPath,
           noindexLanding: _noindexLanding,
@@ -182,7 +193,7 @@ export default function BooksAdminPage() {
         label: book.title,
         category: 'ebook' as const,
         embed_code: book.embed,
-        notes: book.thankYou.trim() || null,
+        notes: serializeSlotNotes({ thankYou: book.thankYou, webhook: book.webhook }),
         updated_at: now,
       })),
     );
@@ -334,6 +345,19 @@ export default function BooksAdminPage() {
                           </a>
                         )}
                       </div>
+                    </Field>
+                  </div>
+                  <div className="mt-4">
+                    <Field
+                      label="Lead webhook"
+                      hint="GHL inbound webhook URL for this book's custom form. Leads submitted with this book's form are forwarded here (create the webhook trigger in a GHL workflow and paste its URL)."
+                    >
+                      <input
+                        className={`${inputClass} font-mono text-xs`}
+                        placeholder="https://services.leadconnectorhq.com/hooks/…"
+                        value={book.webhook}
+                        onChange={(e) => update(book.slug, { webhook: e.target.value })}
+                      />
                     </Field>
                   </div>
                 </Card>

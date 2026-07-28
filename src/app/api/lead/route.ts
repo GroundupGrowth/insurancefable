@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { serverClient } from '../../../lib/content';
+import { parseSlotNotes } from '../../../lib/slotNotes';
 
 /* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
    and forwards them to the GoHighLevel inbound-webhook trigger matched to the
@@ -36,7 +38,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const webhook = typeof body.source === 'string' ? WEBHOOKS[body.source] : undefined;
+  const source = typeof body.source === 'string' ? body.source : '';
+  let webhook: string | undefined = WEBHOOKS[source];
+  /* Per-book webhooks come from /admin -> Books ("Lead webhook" field, stored
+     in the ebook:<slug> embed slot's notes). Only leadconnectorhq hook URLs
+     are accepted so a bad admin value can't turn this into an open relay. */
+  if (!webhook && /^ebook:[a-z0-9-]+$/.test(source)) {
+    const supabase = serverClient();
+    if (supabase) {
+      const { data } = await supabase
+        .from('embed_slots')
+        .select('notes')
+        .eq('slot_key', source)
+        .maybeSingle();
+      const candidate = parseSlotNotes(data?.notes).webhook;
+      if (candidate && /^https:\/\/services\.leadconnectorhq\.com\/hooks\//.test(candidate)) {
+        webhook = candidate;
+      }
+    }
+  }
   if (!webhook) {
     return NextResponse.json({ error: 'Unknown lead source.' }, { status: 400 });
   }
