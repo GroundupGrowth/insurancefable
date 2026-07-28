@@ -132,7 +132,9 @@ export default function Page() {
           Your numbers are waiting. Let&rsquo;s look at them.
         </p>
         <div className="mb-6">
-          <LeadFormPopup />
+          {/* Custom native form once GHL_LEAD_WEBHOOK_URL is set in Vercel
+              (read at build time); until then the GHL iframe keeps working. */}
+          <LeadFormPopup customForm={Boolean(process.env.GHL_LEAD_WEBHOOK_URL)} />
         </div>
         {/* The Mini TrustBox centers itself inside its 100%-wide iframe; the
             narrow wrapper keeps the stars left-aligned under the button. */}

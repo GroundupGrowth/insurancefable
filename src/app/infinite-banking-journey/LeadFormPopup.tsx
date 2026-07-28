@@ -5,17 +5,22 @@ import { createPortal } from 'react-dom';
 import { ArrowRight, X } from 'lucide-react';
 import EmbedSlot from '../../components/EmbedSlot';
 import GhlResizeScript from '../../components/GhlResizeScript';
+import JourneyLeadForm from './JourneyLeadForm';
 
 /* Hero CTA for /infinite-banking-journey/: opens the opt-in form in a popup
    (same portal pattern as EbookOfferCard). Chosen 2026-07-28 because the
-   inline GHL form dominated the hero. The form is the real GHL lead form
-   (khfcpWkj2xd8sIf67E1t, same as the homepage band), so submissions land in
-   the CRM; an embed saved at /admin under `page:infinite-banking-journey:form`
-   overrides it. Do not replace this with a fake-submit form. */
+   inline GHL form dominated the hero.
+
+   `customForm` (from the page, true when GHL_LEAD_WEBHOOK_URL is set) picks
+   between our native form (JourneyLeadForm -> /api/lead -> GHL inbound
+   webhook) and the GHL iframe fallback (khfcpWkj2xd8sIf67E1t, same form as
+   the homepage band). Either way submissions land in the CRM — do not replace
+   this with a fake-submit form. An embed saved at /admin under
+   `page:infinite-banking-journey:form` overrides the iframe branch. */
 
 const LIVE_LEAD_FORM = 'https://api.leadconnectorhq.com/widget/form/khfcpWkj2xd8sIf67E1t';
 
-export default function LeadFormPopup() {
+export default function LeadFormPopup({ customForm = false }: { customForm?: boolean }) {
   const [open, setOpen] = useState(false);
 
   // Close on Escape; lock page scroll while the popup is open.
@@ -74,15 +79,19 @@ export default function LeadFormPopup() {
               >
                 Let&rsquo;s look at them.
               </h2>
-              <EmbedSlot slotKey="page:infinite-banking-journey:form">
-                <GhlResizeScript />
-                <iframe
-                  src={LIVE_LEAD_FORM}
-                  title="Start your infinite banking journey"
-                  scrolling="no"
-                  className="block w-full min-h-[650px] border-0"
-                />
-              </EmbedSlot>
+              {customForm ? (
+                <JourneyLeadForm />
+              ) : (
+                <EmbedSlot slotKey="page:infinite-banking-journey:form">
+                  <GhlResizeScript />
+                  <iframe
+                    src={LIVE_LEAD_FORM}
+                    title="Start your infinite banking journey"
+                    scrolling="no"
+                    className="block w-full min-h-[650px] border-0"
+                  />
+                </EmbedSlot>
+              )}
             </div>
           </div>,
           document.body,
