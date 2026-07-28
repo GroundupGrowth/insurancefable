@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { serverClient } from '../../../lib/content';
 import { parseSlotNotes } from '../../../lib/slotNotes';
+import { ebookLeadWebhook } from '../../../data/ebooks';
 
 /* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
    and forwards them to the GoHighLevel inbound-webhook trigger matched to the
@@ -9,17 +10,14 @@ import { parseSlotNotes } from '../../../lib/slotNotes';
    relay. Phone is optional at this layer — the forms enforce it where the
    original GHL form required it. */
 
-/* Both sources currently share the Self Banking workflow trigger. The
-   journey's original trigger (…/webhook-trigger/828aff36-…) accepted posts
-   but activated no GHL flow (Xander, 2026-07-28) — do not point anything back
-   at it. The workflow can branch on `source` if the two funnels ever need
-   different handling. */
-const SELF_BANKING_WEBHOOK =
-  'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/3830bebf-7046-41c5-902a-06ca4934d191';
-
-const WEBHOOKS: Record<string, string> = {
-  'infinite-banking-journey': SELF_BANKING_WEBHOOK,
-  'generational-transfer': SELF_BANKING_WEBHOOK,
+/* Each form has its OWN webhook (Xander, 2026-07-28: two forms, two
+   workflows). The per-book URLs live in src/data/ebooks.ts (`leadWebhook`)
+   and can be overridden per book at /admin -> Books; forms post with source
+   `ebook:<slug>`. The legacy page-named sources below keep already-cached
+   pages working — they map to the same books. */
+const LEGACY_SOURCES: Record<string, string> = {
+  'infinite-banking-journey': 'ebook:self-banking-blueprint',
+  'generational-transfer': 'ebook:generational-transfer',
 };
 
 const REQUIRED = ['first_name', 'last_name', 'email', 'age_range', 'annual_income'] as const;
@@ -38,12 +36,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const source = typeof body.source === 'string' ? body.source : '';
-  let webhook: string | undefined = WEBHOOKS[source];
-  /* Per-book webhooks come from /admin -> Books ("Lead webhook" field, stored
-     in the ebook:<slug> embed slot's notes). Only leadconnectorhq hook URLs
-     are accepted so a bad admin value can't turn this into an open relay. */
-  if (!webhook && /^ebook:[a-z0-9-]+$/.test(source)) {
+  const rawSource = typeof body.source === 'string' ? body.source : '';
+  const source = LEGACY_SOURCES[rawSource] ?? rawSource;
+  let webhook: string | undefined;
+  /* Per-book webhooks: the admin-saved value (/admin -> Books "Lead webhook",
+     stored in the ebook:<slug> embed slot's notes) wins; the code default in
+     src/data/ebooks.ts covers books before their first catalog save. Only
+     leadconnectorhq hook URLs are accepted so a bad admin value can't turn
+     this into an open relay. */
+  if (/^ebook:[a-z0-9-]+$/.test(source)) {
+    const slug = source.slice('ebook:'.length);
     const supabase = serverClient();
     if (supabase) {
       const { data } = await supabase
@@ -56,6 +58,7 @@ export async function POST(request: Request) {
         webhook = candidate;
       }
     }
+    if (!webhook) webhook = ebookLeadWebhook(slug);
   }
   if (!webhook) {
     return NextResponse.json({ error: 'Unknown lead source.' }, { status: 400 });
@@ -78,7 +81,7 @@ export async function POST(request: Request) {
     age_range: (body.age_range as string).trim(),
     annual_income: (body.annual_income as string).trim(),
     consent: true,
-    source: body.source as string,
+    source,
     page: typeof body.page === 'string' ? body.page : '',
     submitted_at: new Date().toISOString(),
   };

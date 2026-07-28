@@ -37,6 +37,11 @@ export interface Ebook {
       the book's embed_slots row, `notes`). Code-owned like `image`, never part
       of the site_ebooks round-trip. */
   thankYouPath?: string;
+  /** Default GHL inbound-webhook URL for this book's custom lead form
+      (Xander's workflow triggers). Shown prefilled in /admin → Books ("Lead
+      webhook"); an admin-saved value (embed slot notes) overrides it. Used by
+      /api/lead for `ebook:<slug>` sources. Code-owned like `thankYouPath`. */
+  leadWebhook?: string;
   sort: number;
   /* Cover art, localized under public/wp-content/uploads/. Covers are code-owned
      and deliberately NOT part of the site_ebooks round-trip: the admin editor
@@ -70,6 +75,11 @@ export function ebookThankYouPath(slug: string): string | undefined {
   return ebookDefaults.find((book) => book.slug === slug)?.thankYouPath;
 }
 
+/** Default lead webhook for a slug, from the code defaults. */
+export function ebookLeadWebhook(slug: string): string | undefined {
+  return ebookDefaults.find((book) => book.slug === slug)?.leadWebhook;
+}
+
 /** The book at a given landing route (or slug). Used by the landing pages and
     their metadata. */
 export function ebookByLandingPath(path: string): Ebook | undefined {
@@ -81,6 +91,8 @@ export const ebookDefaults: Ebook[] = [
     slug: 'self-banking-blueprint',
     landingPath: '/self-banking-blueprint/',
     thankYouPath: '/thank-you-self-printing-blue-print-3-0/',
+    leadWebhook:
+      'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/828aff36-fd33-40cd-b3ba-2c7606d7728e',
     category: 'featured',
     eyebrow: 'The Ultimate Free Download',
     title: 'The Self Banking Blueprint',
@@ -110,6 +122,8 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'generational-transfer',
     landingPath: '/generational-transfer/',
+    leadWebhook:
+      'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/3830bebf-7046-41c5-902a-06ca4934d191',
     category: 'featured',
     eyebrow: 'Featured eBook',
     title: 'The Generational Transfer',

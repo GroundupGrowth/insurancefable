@@ -67,8 +67,10 @@ export default function LeadMagnetSection() {
               <p className="text-[#0D1B3D]/70 text-sm leading-relaxed mb-6">
                 Fill this in and we&rsquo;ll send the ebook straight to your inbox.
               </p>
+              {/* Webhook managed per book at /admin -> Books ("Lead webhook"
+                  on generational-transfer). */}
               <LeadCaptureForm
-                source="generational-transfer"
+                source="ebook:generational-transfer"
                 submitLabel="Get Free Access"
                 successMessage="Thank you! The Generational Transfer is on its way to your inbox."
               />

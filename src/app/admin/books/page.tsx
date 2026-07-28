@@ -4,7 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { parseSlotNotes, serializeSlotNotes } from '../../../lib/slotNotes';
-import { ebookDefaults, ebookThankYouPath, type Ebook, type EbookCategory } from '../../../data/ebooks';
+import {
+  ebookDefaults,
+  ebookLeadWebhook,
+  ebookThankYouPath,
+  type Ebook,
+  type EbookCategory,
+} from '../../../data/ebooks';
 import { thankYouPages } from '../../../data/thankYouPages';
 import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths, textareaClass } from '../ui';
 
@@ -96,7 +102,7 @@ export default function BooksAdminPage() {
         ...book,
         embed: embedMap[book.slug] ?? '',
         thankYou: thankYouMap[book.slug] ?? ebookThankYouPath(book.slug) ?? '',
-        webhook: webhookMap[book.slug] ?? '',
+        webhook: webhookMap[book.slug] ?? ebookLeadWebhook(book.slug) ?? '',
       })),
     );
   }, [supabase]);
@@ -176,6 +182,7 @@ export default function BooksAdminPage() {
           landingPath: _landingPath,
           noindexLanding: _noindexLanding,
           thankYouPath: _thankYouPath,
+          leadWebhook: _leadWebhook,
           text,
           ...book
         }) => ({

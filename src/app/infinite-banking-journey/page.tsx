@@ -163,8 +163,10 @@ export default function Page() {
             <p className="text-[#0D1B3D]/70 text-sm leading-relaxed mb-6">
               Fill this in and we&rsquo;ll send the ebook straight to your inbox.
             </p>
+            {/* Delivers the Self Banking Blueprint — webhook managed per book
+                at /admin -> Books ("Lead webhook" on self-banking-blueprint). */}
             <LeadCaptureForm
-              source="infinite-banking-journey"
+              source="ebook:self-banking-blueprint"
               phoneRequired
               redirectTo="/thank-you-self-printing-blue-print-3-0/"
             />
