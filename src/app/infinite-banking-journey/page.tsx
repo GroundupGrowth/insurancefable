@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import JourneyLeadForm from './JourneyLeadForm';
+import LeadCaptureForm from '../../components/LeadCaptureForm';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
 import YouTubeEmbed from '../../components/YouTubeEmbed';
 import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
@@ -24,7 +24,7 @@ import {
    content below the hero. Body copy is verbatim from the old page — don't
    "improve" it.
 
-   The hero opt-in is the custom ebook form (JourneyLeadForm -> /api/lead/ ->
+   The hero opt-in is the custom ebook form (LeadCaptureForm -> /api/lead/ ->
    GHL inbound webhook), embedded beside the headline (Xander, 2026-07-28:
    embed instead of popup, present it clearly as an ebook, and add a Connect
    with an Expert button on top). Noindexed on live. */
@@ -163,7 +163,11 @@ export default function Page() {
             <p className="text-[#0D1B3D]/70 text-sm leading-relaxed mb-6">
               Fill this in and we&rsquo;ll send the ebook straight to your inbox.
             </p>
-            <JourneyLeadForm />
+            <LeadCaptureForm
+              source="infinite-banking-journey"
+              phoneRequired
+              redirectTo="/thank-you-self-printing-blue-print-3-0/"
+            />
           </div>
         </div>
       </SalesSection>

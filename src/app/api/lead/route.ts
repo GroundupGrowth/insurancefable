@@ -1,20 +1,28 @@
 import { NextResponse } from 'next/server';
 
-/* Lead relay: receives the custom lead form (see
-   src/app/infinite-banking-journey/JourneyLeadForm.tsx) and forwards it to the
-   GoHighLevel inbound-webhook trigger for the Self Banking workflow
-   (Xander, 2026-07-28 — replaced the earlier trigger, which received posts
-   but activated no flow). The URL only lives server-side; the
-   GHL_LEAD_WEBHOOK_URL env var overrides the default if the webhook is
-   ever rotated. */
+/* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
+   and forwards them to the GoHighLevel inbound-webhook trigger matched to the
+   form's `source`. URLs only live server-side (Xander's workflows, provided
+   2026-07-28). Unknown sources are rejected so this never becomes an open
+   relay. Phone is optional at this layer — the forms enforce it where the
+   original GHL form required it. */
 
-const DEFAULT_WEBHOOK =
+/* Both sources currently share the Self Banking workflow trigger. The
+   journey's original trigger (…/webhook-trigger/828aff36-…) accepted posts
+   but activated no GHL flow (Xander, 2026-07-28) — do not point anything back
+   at it. The workflow can branch on `source` if the two funnels ever need
+   different handling. */
+const SELF_BANKING_WEBHOOK =
   'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/3830bebf-7046-41c5-902a-06ca4934d191';
 
-const REQUIRED = ['first_name', 'last_name', 'email', 'phone', 'age_range', 'annual_income'] as const;
+const WEBHOOKS: Record<string, string> = {
+  'infinite-banking-journey': SELF_BANKING_WEBHOOK,
+  'generational-transfer': SELF_BANKING_WEBHOOK,
+};
+
+const REQUIRED = ['first_name', 'last_name', 'email', 'age_range', 'annual_income'] as const;
 
 export async function POST(request: Request) {
-  const webhook = process.env.GHL_LEAD_WEBHOOK_URL || DEFAULT_WEBHOOK;
 
   let body: Record<string, unknown>;
   try {
@@ -26,6 +34,11 @@ export async function POST(request: Request) {
   /* Honeypot: bots fill the hidden "website" field. Pretend success. */
   if (typeof body.website === 'string' && body.website.trim() !== '') {
     return NextResponse.json({ ok: true });
+  }
+
+  const webhook = typeof body.source === 'string' ? WEBHOOKS[body.source] : undefined;
+  if (!webhook) {
+    return NextResponse.json({ error: 'Unknown lead source.' }, { status: 400 });
   }
 
   for (const field of REQUIRED) {
@@ -41,11 +54,11 @@ export async function POST(request: Request) {
     first_name: (body.first_name as string).trim(),
     last_name: (body.last_name as string).trim(),
     email: (body.email as string).trim(),
-    phone: (body.phone as string).trim(),
+    phone: typeof body.phone === 'string' ? body.phone.trim() : '',
     age_range: (body.age_range as string).trim(),
     annual_income: (body.annual_income as string).trim(),
     consent: true,
-    source: typeof body.source === 'string' ? body.source : 'website',
+    source: body.source as string,
     page: typeof body.page === 'string' ? body.page : '',
     submitted_at: new Date().toISOString(),
   };

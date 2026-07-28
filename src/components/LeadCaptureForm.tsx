@@ -2,14 +2,23 @@
 
 import { useState, type FormEvent } from 'react';
 
-/* Custom lead form for /infinite-banking-journey/ — same fields, options and
-   disclaimer as the GHL form it replaces (Xander, 2026-07-28). Submits to
-   /api/lead, which relays to the GHL inbound webhook (GHL_LEAD_WEBHOOK_URL);
-   on success the visitor is sent to the Self Banking Blueprint thank-you page
-   (download button + on-page PDF reader; picked by Xander 2026-07-28 because
-   /thank-you-ibj/ had nothing to offer), which fires the Meta/GA4 Lead events. This is a REAL form — the API route errors loudly if the
-   webhook is missing, and the page only renders this component when the
-   webhook env var is set. */
+/* Shared native lead-capture form (Xander, 2026-07-28) — replicates the GHL
+   form fields: name, email, phone, age + income pill selectors, disclaimer
+   with required consent. Submits to /api/lead/, which relays to the GHL
+   inbound webhook matched to `source` (see src/app/api/lead/route.ts — a new
+   source needs a webhook entry there first).
+
+   On success: with `redirectTo` the visitor is sent there (thank-you pages
+   fire the Meta/GA4 Lead events via <LeadEvent />); without it an inline
+   thank-you replaces the form and the events fire here directly. These are
+   REAL forms — never replace one with a fake-submit stub. */
+
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 const AGE_OPTIONS = ['18 - 22', '23 - 27', '28-50', '51-65', '66+'];
 const INCOME_OPTIONS = ['25k to 59k', '60k to 99k', '100k to 250k', '250k to 500k', '500k to 1M', '1M+'];
@@ -60,7 +69,26 @@ function RadioGroup({
   );
 }
 
-export default function JourneyLeadForm() {
+export interface LeadCaptureFormProps {
+  /** Routing key — must have a webhook entry in /api/lead. Also sent to GHL. */
+  source: string;
+  /** The GHL generational-transfer form has Phone optional; journey requires it. */
+  phoneRequired?: boolean;
+  /** On success, navigate here (a thank-you page). Omit for an inline thank-you. */
+  redirectTo?: string;
+  /** Inline thank-you copy (only used when no redirectTo). */
+  successMessage?: string;
+  /** Submit button label — the GHL forms differ ("Submit" vs "Get Free Access"). */
+  submitLabel?: string;
+}
+
+export default function LeadCaptureForm({
+  source,
+  phoneRequired = false,
+  redirectTo,
+  successMessage = 'Thank you! Check your inbox.',
+  submitLabel = 'Submit',
+}: LeadCaptureFormProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -70,6 +98,7 @@ export default function JourneyLeadForm() {
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState(''); // honeypot
   const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
@@ -90,12 +119,18 @@ export default function JourneyLeadForm() {
           annual_income: income,
           consent,
           website,
-          source: 'infinite-banking-journey',
+          source,
           page: window.location.href,
         }),
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
-      window.location.href = '/thank-you-self-printing-blue-print-3-0/';
+      if (redirectTo) {
+        window.location.href = redirectTo;
+        return;
+      }
+      window.fbq?.('track', 'Lead');
+      window.gtag?.('event', 'generate_lead');
+      setDone(true);
     } catch {
       setSending(false);
       setError(
@@ -103,6 +138,14 @@ export default function JourneyLeadForm() {
       );
     }
   };
+
+  if (done) {
+    return (
+      <p className="text-[#0D1B3D] text-xl font-medium leading-relaxed" role="status">
+        {successMessage}
+      </p>
+    );
+  }
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
@@ -144,10 +187,12 @@ export default function JourneyLeadForm() {
           />
         </label>
         <label className="block">
-          <span className="text-[#0D1B3D] text-sm font-medium mb-1.5 block">Phone *</span>
+          <span className="text-[#0D1B3D] text-sm font-medium mb-1.5 block">
+            Phone {phoneRequired ? '*' : ''}
+          </span>
           <input
             type="tel"
-            required
+            required={phoneRequired}
             autoComplete="tel"
             placeholder="Phone"
             value={phone}
@@ -159,14 +204,14 @@ export default function JourneyLeadForm() {
 
       <RadioGroup
         legend="What's Your Age? *"
-        name="age_range"
+        name={`${source}-age_range`}
         options={AGE_OPTIONS}
         value={age}
         onChange={setAge}
       />
       <RadioGroup
         legend="Annual Income: *"
-        name="annual_income"
+        name={`${source}-annual_income`}
         options={INCOME_OPTIONS}
         value={income}
         onChange={setIncome}
@@ -218,7 +263,7 @@ export default function JourneyLeadForm() {
         disabled={sending}
         className="bg-[#0D1B3D] text-white font-medium px-8 py-3 rounded-full hover:bg-[#1C2E55] transition-colors duration-200 self-start disabled:opacity-60"
       >
-        {sending ? 'Sending…' : 'Submit'}
+        {sending ? 'Sending…' : submitLabel}
       </button>
     </form>
   );
