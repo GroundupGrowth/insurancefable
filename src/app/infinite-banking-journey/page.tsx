@@ -69,10 +69,14 @@ export default function Page() {
         <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
           Your numbers are waiting. Let&rsquo;s look at them.
         </p>
-        <div className="mb-10">
+        <div className="mb-6">
           <LeadFormPopup />
         </div>
-        <TrustpilotWidget theme="dark" />
+        {/* The Mini TrustBox centers itself inside its 100%-wide iframe; the
+            narrow wrapper keeps the stars left-aligned under the button. */}
+        <div className="max-w-[300px]">
+          <TrustpilotWidget theme="dark" />
+        </div>
       </SalesSection>
 
       {/* Why banks get rich and you don't. */}
