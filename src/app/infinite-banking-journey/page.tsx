@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import LeadFormPopup from './LeadFormPopup';
+import JourneyLeadForm from './JourneyLeadForm';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
 import YouTubeEmbed from '../../components/YouTubeEmbed';
 import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
@@ -21,11 +21,13 @@ import {
    first build mirrored that short version. Xander wants the ORIGINAL page
    (webinars, resources, personas — captured in the 2026-01-14 Wayback snapshot
    and pasted by him verbatim on 2026-07-28), so this file now restores that
-   content below the hero he already refined (popup CTA + Trustpilot stars).
-   Body copy is verbatim from the old page — don't "improve" it.
+   content below the hero. Body copy is verbatim from the old page — don't
+   "improve" it.
 
-   The hero opt-in is a real GHL form opened in a popup (see LeadFormPopup.tsx).
-   Noindexed on live. */
+   The hero opt-in is the custom ebook form (JourneyLeadForm -> /api/lead/ ->
+   GHL inbound webhook), embedded beside the headline (Xander, 2026-07-28:
+   embed instead of popup, present it clearly as an ebook, and add a Connect
+   with an Expert button on top). Noindexed on live. */
 
 export const metadata: Metadata = {
   title: {
@@ -113,32 +115,56 @@ const articles: ArticleThumb[] = [
 export default function Page() {
   return (
     <PageShell>
-      {/* Hero: headlines, the popup CTA, Trustpilot stars under the button
-          (Xander, 2026-07-28). */}
+      {/* Hero: headline + Connect CTA + Trustpilot on the left, the ebook
+          opt-in form embedded in a card on the right. */}
       <SalesSection tone="navy">
-        <h1
-          className="text-white text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-6"
-          style={{ letterSpacing: '-0.03em' }}
-        >
-          Stop Banking for Them. Start Banking for Yourself.
-        </h1>
-        <p
-          className="text-white text-xl md:text-2xl font-medium leading-snug mb-6"
-          style={{ letterSpacing: '-0.02em' }}
-        >
-          The system is designed to keep you in the middle. We show you the exit.
-        </p>
-        <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
-          Your numbers are waiting. Let&rsquo;s look at them.
-        </p>
-        <div className="mb-6">
-          {/* Native form -> /api/lead -> GHL inbound webhook (wired 2026-07-28). */}
-          <LeadFormPopup customForm />
-        </div>
-        {/* The Mini TrustBox centers itself inside its 100%-wide iframe; the
-            narrow wrapper keeps the stars left-aligned under the button. */}
-        <div className="max-w-[300px]">
-          <TrustpilotWidget theme="dark" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+          <div>
+            <h1
+              className="text-white text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-6"
+              style={{ letterSpacing: '-0.03em' }}
+            >
+              Stop Banking for Them. Start Banking for Yourself.
+            </h1>
+            <p
+              className="text-white text-xl md:text-2xl font-medium leading-snug mb-6"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              The system is designed to keep you in the middle. We show you the exit.
+            </p>
+            <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
+              Your numbers are waiting. Let&rsquo;s look at them.
+            </p>
+            <div className="mb-6">
+              <a
+                href="/connect-with-our-experts/"
+                className="inline-flex items-center gap-3 bg-white text-[#0D1B3D] font-medium text-lg pl-8 pr-2 py-2 rounded-full hover:bg-white/90 transition-colors duration-200"
+              >
+                Connect with an Expert
+                <span className="bg-[#0D1B3D] rounded-full p-2">
+                  <ArrowRight className="w-5 h-5 text-white" />
+                </span>
+              </a>
+            </div>
+            {/* The Mini TrustBox centers itself inside its 100%-wide iframe;
+                the narrow wrapper keeps the stars left-aligned. */}
+            <div className="max-w-[300px]">
+              <TrustpilotWidget theme="dark" />
+            </div>
+          </div>
+          <div className="bg-white rounded-3xl border border-black/5 p-6 md:p-8">
+            <p className="text-[#0D1B3D]/60 text-sm mb-1">Free eBook</p>
+            <h2
+              className="text-[#0D1B3D] text-2xl md:text-3xl font-medium leading-tight mb-2"
+              style={{ letterSpacing: '-0.03em' }}
+            >
+              Get the Free Infinite Banking eBook
+            </h2>
+            <p className="text-[#0D1B3D]/70 text-sm leading-relaxed mb-6">
+              Fill this in and we&rsquo;ll send the ebook straight to your inbox.
+            </p>
+            <JourneyLeadForm />
+          </div>
         </div>
       </SalesSection>
 
