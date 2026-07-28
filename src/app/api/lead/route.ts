@@ -1,19 +1,18 @@
 import { NextResponse } from 'next/server';
 
 /* Lead relay: receives the custom lead form (see
-   src/app/infinite-banking-journey/JourneyLeadForm.tsx) and forwards it to a
-   GoHighLevel inbound-webhook trigger. The webhook URL is the Vercel env var
-   GHL_LEAD_WEBHOOK_URL (kept server-side on purpose). While it's unset this
-   returns 503 — and the journey page keeps rendering the GHL iframe instead of
-   the custom form, so no visitor ever hits an unconfigured endpoint. */
+   src/app/infinite-banking-journey/JourneyLeadForm.tsx) and forwards it to the
+   GoHighLevel inbound-webhook trigger (Xander's workflow, provided
+   2026-07-28). The URL only lives server-side; the GHL_LEAD_WEBHOOK_URL env
+   var overrides the default if the webhook is ever rotated. */
+
+const DEFAULT_WEBHOOK =
+  'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/828aff36-fd33-40cd-b3ba-2c7606d7728e';
 
 const REQUIRED = ['first_name', 'last_name', 'email', 'phone', 'age_range', 'annual_income'] as const;
 
 export async function POST(request: Request) {
-  const webhook = process.env.GHL_LEAD_WEBHOOK_URL;
-  if (!webhook) {
-    return NextResponse.json({ error: 'Lead webhook is not configured.' }, { status: 503 });
-  }
+  const webhook = process.env.GHL_LEAD_WEBHOOK_URL || DEFAULT_WEBHOOK;
 
   let body: Record<string, unknown>;
   try {
