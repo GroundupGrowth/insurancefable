@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ArrowLeft } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import EmbedSlot from '../../components/EmbedSlot';
+import GhlResizeScript from '../../components/GhlResizeScript';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
 import {
   SalesSection,
@@ -15,11 +16,14 @@ import {
 /* Volume-Based Banking journey landing page. Route: /infinite-banking-journey/.
    Copy reproduced verbatim from extraction/parsed/infinite-banking-journey.json
    (one long live section, presented here as the site's card bands; the footer
-   is covered by PageShell). Live's hero opt-in form (a Gravity Form: Name,
-   Phone, Email, Date of Birth + disclaimer) is served by the embed
-   pasted at /admin under `page:infinite-banking-journey:form`; until then a
-   visual replica renders as fallback. The "Start Here" buttons keep live's
-   internal /start-your-journey/ link. Noindexed on live. */
+   is covered by PageShell). The hero opt-in is a real GHL form: an embed
+   pasted at /admin under `page:infinite-banking-journey:form` wins; the
+   fallback is the live GHL lead form (khfcpWkj2xd8sIf67E1t, the same one the
+   homepage band uses), so submissions land in the CRM out of the box. This
+   replaced a dead visual replica of live's Gravity Form on 2026-07-28 — live
+   itself no longer renders any form there, and the replica silently dropped
+   every lead. Do not reintroduce a fake-submit form. The "Start Here" buttons
+   keep live's internal /start-your-journey/ link. Noindexed on live. */
 
 export const metadata: Metadata = {
   title: {
@@ -32,8 +36,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/infinite-banking-journey/' },
 };
 
-const inputClass =
-  'bg-[#F5F5F5] text-[#0D1B3D] placeholder-[#0D1B3D]/40 rounded-xl px-5 py-4 w-full border border-black/5 outline-none focus:border-[#0D1B3D]/30';
+const LIVE_LEAD_FORM = 'https://api.leadconnectorhq.com/widget/form/khfcpWkj2xd8sIf67E1t';
 
 function StartHereButton({ light = false }: { light?: boolean }) {
   return (
@@ -75,42 +78,17 @@ export default function Page() {
             </p>
             <TrustpilotWidget theme="dark" />
           </div>
-          <div className="bg-white rounded-3xl border border-black/5 p-6 md:p-8">
+          <div className="bg-white rounded-3xl border border-black/5 p-4 md:p-6">
             <EmbedSlot slotKey="page:infinite-banking-journey:form">
-              {/* Visual replica of live's Gravity Form until the GHL embed is
-                  pasted at /admin under page:infinite-banking-journey:form. */}
-              <div className="flex flex-col gap-4">
-                <p className="text-[#0D1B3D]/50 text-xs">&quot;*&quot; indicates required fields</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input type="text" placeholder="Name*" className={inputClass} />
-                  <input type="tel" placeholder="Phone*" className={inputClass} />
-                  <input type="email" placeholder="Email*" className={inputClass} />
-                  <input type="text" placeholder="Date of Birth (mm/dd/yyyy)" className={inputClass} />
-                </div>
-                <p className="text-[#0D1B3D]/50 text-xs leading-relaxed">
-                  By pressing the Submit button, you agree to use InsuranceandEstates&rsquo;{' '}
-                  <a href="/privacytou/" className="underline hover:text-[#0D1B3D]">
-                    privacy policy and terms
-                  </a>
-                  . InsuranceandEstates may contact you at the number you entered on this webpage
-                  using our automatic dialing system to market our life insurance products.
-                  Alternatively, you can contact us at{' '}
-                  <a href="tel:1-877-787-7558" className="underline hover:text-[#0D1B3D]">
-                    877-787-7558
-                  </a>
-                  .
-                </p>
-                <label className="flex items-start gap-3 text-sm text-[#0D1B3D]/70 leading-relaxed">
-                  <input type="checkbox" className="mt-1 shrink-0" />
-                  <span>I read the disclaimer above.* Yes</span>
-                </label>
-                <button
-                  type="button"
-                  className="bg-[#0D1B3D] text-white font-medium px-8 py-3 rounded-full hover:bg-[#1C2E55] transition-colors duration-200 self-start"
-                >
-                  Submit
-                </button>
-              </div>
+              {/* Real GHL lead form — same one as the homepage band. An embed
+                  saved at /admin under this slot overrides it. */}
+              <GhlResizeScript />
+              <iframe
+                src={LIVE_LEAD_FORM}
+                title="Start your infinite banking journey"
+                scrolling="no"
+                className="block w-full min-h-[900px] border-0"
+              />
             </EmbedSlot>
           </div>
         </div>
