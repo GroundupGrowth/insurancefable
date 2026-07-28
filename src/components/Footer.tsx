@@ -9,7 +9,8 @@ const freeResources = [
   { label: 'The I&E Wiki', href: '/wiki/' },
   { label: 'eBooks & Guides', href: '/ebooks-and-guides/' },
   { label: 'Start here', href: '/start-your-journey/' },
-  { label: 'Wealth Strategy Quiz', href: '/quiz/' },
+  /* Wealth Strategy Quiz (/quiz/) removed from the footer 2026-07-28 at
+     Xander's request — the page still exists, just unlinked for now. */
 ];
 
 const aboutUs = [

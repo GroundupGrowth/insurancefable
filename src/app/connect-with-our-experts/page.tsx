@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ArrowRight, Phone } from 'lucide-react';
+import { ArrowRight, Mail, Phone } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadForm from './LeadForm';
@@ -33,6 +33,13 @@ export default async function ConnectWithOurExpertsPage() {
         >
           <Phone className="w-4 h-4" />
           877-787-7558
+        </a>
+        <a
+          href="mailto:info@insuranceandestates.com"
+          className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium px-7 py-2.5 rounded-full border border-black/5 hover:bg-white/70 transition-colors duration-200"
+        >
+          <Mail className="w-4 h-4" />
+          info@insuranceandestates.com
         </a>
       </PageHero>
 
