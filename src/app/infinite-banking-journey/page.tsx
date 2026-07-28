@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { ArrowLeft } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import EmbedSlot from '../../components/EmbedSlot';
-import GhlResizeScript from '../../components/GhlResizeScript';
+import LeadFormPopup from './LeadFormPopup';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
 import {
   SalesSection,
@@ -16,14 +15,10 @@ import {
 /* Volume-Based Banking journey landing page. Route: /infinite-banking-journey/.
    Copy reproduced verbatim from extraction/parsed/infinite-banking-journey.json
    (one long live section, presented here as the site's card bands; the footer
-   is covered by PageShell). The hero opt-in is a real GHL form: an embed
-   pasted at /admin under `page:infinite-banking-journey:form` wins; the
-   fallback is the live GHL lead form (khfcpWkj2xd8sIf67E1t, the same one the
-   homepage band uses), so submissions land in the CRM out of the box. This
-   replaced a dead visual replica of live's Gravity Form on 2026-07-28 — live
-   itself no longer renders any form there, and the replica silently dropped
-   every lead. Do not reintroduce a fake-submit form. The "Start Here" buttons
-   keep live's internal /start-your-journey/ link. Noindexed on live. */
+   is covered by PageShell). The hero opt-in is a real GHL form opened in a
+   popup (see LeadFormPopup.tsx) — inline it dominated the hero. The "Start
+   Here" buttons keep live's internal /start-your-journey/ link. Noindexed on
+   live. */
 
 export const metadata: Metadata = {
   title: {
@@ -35,8 +30,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
   alternates: { canonical: '/infinite-banking-journey/' },
 };
-
-const LIVE_LEAD_FORM = 'https://api.leadconnectorhq.com/widget/form/khfcpWkj2xd8sIf67E1t';
 
 function StartHereButton({ light = false }: { light?: boolean }) {
   return (
@@ -57,41 +50,29 @@ function StartHereButton({ light = false }: { light?: boolean }) {
 export default function Page() {
   return (
     <PageShell>
-      {/* Live hero: headlines + Trustpilot on top, the opt-in form below at
-          full width. Stacked on purpose (Xander, 2026-07-28): a half-width
-          side column made the GHL form run super long — wide, not tall. */}
+      {/* Live hero: headlines, the popup CTA, then Trustpilot. The form opens
+          in a popup (Xander, 2026-07-28) — inline it was huge, whether beside
+          or below the title. */}
       <SalesSection tone="navy">
+        <h1
+          className="text-white text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-6"
+          style={{ letterSpacing: '-0.03em' }}
+        >
+          Stop Banking for Them. Start Banking for Yourself.
+        </h1>
+        <p
+          className="text-white text-xl md:text-2xl font-medium leading-snug mb-6"
+          style={{ letterSpacing: '-0.02em' }}
+        >
+          The system is designed to keep you in the middle. We show you the exit.
+        </p>
+        <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
+          Your numbers are waiting. Let&rsquo;s look at them.
+        </p>
         <div className="mb-10">
-          <h1
-            className="text-white text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-6"
-            style={{ letterSpacing: '-0.03em' }}
-          >
-            Stop Banking for Them. Start Banking for Yourself.
-          </h1>
-          <p
-            className="text-white text-xl md:text-2xl font-medium leading-snug mb-6"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            The system is designed to keep you in the middle. We show you the exit.
-          </p>
-          <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
-            Your numbers are waiting. Let&rsquo;s look at them.
-          </p>
-          <TrustpilotWidget theme="dark" />
+          <LeadFormPopup />
         </div>
-        <div className="bg-white rounded-3xl border border-black/5 p-4 md:p-6">
-          <EmbedSlot slotKey="page:infinite-banking-journey:form">
-            {/* Real GHL lead form — same one as the homepage band. An embed
-                saved at /admin under this slot overrides it. */}
-            <GhlResizeScript />
-            <iframe
-              src={LIVE_LEAD_FORM}
-              title="Start your infinite banking journey"
-              scrolling="no"
-              className="block w-full min-h-[700px] border-0"
-            />
-          </EmbedSlot>
-        </div>
+        <TrustpilotWidget theme="dark" />
       </SalesSection>
 
       {/* Why banks get rich and you don't. */}
