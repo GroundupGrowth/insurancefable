@@ -182,11 +182,16 @@ export const thankYouPages: ThankYouPageData[] = [
     path: '/thank-you-main/thank-you-anti-bank-starter-guide/',
     title: 'Thank You – Anti-Bank Starter Guide – I&E | Whole Life & Infinite Banking Strategies',
     heading: 'Thank You – Anti-Bank Starter Guide',
-    // Live page ends "You can also read it below." above an inline flip-book embed
-    // that did not migrate — sentence dropped so it doesn't dangle.
+    // Live's inline flip-book is replaced by the PDF viewer in ThankYouPage,
+    // so the "read it below" sentence is back (restored 2026-07-28; the PDF
+    // itself was recovered from Wayback the same day).
     body: [
-      'Thank you for your interest in The Anti-Bank Starter Guide. Your guide will be sent to your email.',
+      'Thank you for your interest in The Anti-Bank Starter Guide. Your guide will be sent to your email. You can also read it below.',
     ],
+    download: {
+      label: 'Download The Guide',
+      href: '/wp-content/uploads/The-Anti-Bank-Starter-Guide.pdf',
+    },
     ctas: [],
   },
   {
@@ -345,11 +350,15 @@ export const thankYouPages: ThankYouPageData[] = [
     path: '/thank-you-main/thank-you-kingdom-money/',
     title: 'Thank You – Kingdom Money – I&E | Whole Life & Infinite Banking Strategies',
     heading: 'Thank You – Kingdom Money',
-    // Live page ends "You can also read it below." above an inline flip-book embed
-    // that did not migrate — sentence dropped so it doesn't dangle.
+    // Live's inline flip-book is replaced by the PDF viewer in ThankYouPage,
+    // so the "read it below" sentence is back (restored 2026-07-28).
     body: [
-      'Thank you for your interest in Kingdom Money. Your ebook will be sent to your email.',
+      'Thank you for your interest in Kingdom Money. Your ebook will be sent to your email. You can also read it below.',
     ],
+    download: {
+      label: 'Download The eBook',
+      href: '/wp-content/uploads/Kingdom-Money-Book-1.pdf',
+    },
     ctas: [],
   },
   {

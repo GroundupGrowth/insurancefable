@@ -9,6 +9,10 @@ import type { ThankYouPageData } from '../data/thankYouPages';
 
 export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
   const [primaryCta, ...secondaryCtas] = page.ctas;
+  /* PDFs open in a new tab from the button AND render as a readable viewer on
+     the page (Xander, 2026-07-28: read online + download, both). Non-PDF
+     downloads (one .docx) get the button only. */
+  const isPdf = page.download?.href.toLowerCase().endsWith('.pdf') ?? false;
 
   return (
     <PageShell>
@@ -52,6 +56,8 @@ export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
               )}
               <a
                 href={page.download.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
               >
                 {page.download.label}
@@ -59,6 +65,32 @@ export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
                   <Download className="w-5 h-5 text-[#0D1B3D]" />
                 </span>
               </a>
+            </div>
+          )}
+
+          {page.download && isPdf && (
+            /* Readable copy of the ebook right on the page. <object> uses the
+               browser's built-in PDF viewer; browsers that can't inline PDFs
+               (mobile Safari) show the fallback link instead. */
+            <div className="mt-8">
+              <object
+                data={page.download.href}
+                type="application/pdf"
+                aria-label={`Read ${page.download.note ?? page.download.label} online`}
+                className="w-full h-[75vh] rounded-2xl border border-black/10 bg-[#F5F5F5]"
+              >
+                <p className="text-[#0D1B3D]/70 text-base leading-relaxed p-8">
+                  Your browser can&rsquo;t show the PDF here.{' '}
+                  <a
+                    href={page.download.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 hover:text-[#0D1B3D]"
+                  >
+                    Open it in a new tab instead.
+                  </a>
+                </p>
+              </object>
             </div>
           )}
 

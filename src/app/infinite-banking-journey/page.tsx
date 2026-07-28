@@ -447,8 +447,6 @@ export default function Page() {
             <a
               key={book.href}
               href={book.href}
-              target="_blank"
-              rel="noopener noreferrer"
               className="group bg-white rounded-2xl border border-black/5 hover:border-black/10 transition-colors duration-200 p-6 md:p-8 flex gap-6 items-center"
             >
               <img

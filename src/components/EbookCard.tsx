@@ -89,9 +89,9 @@ export default function EbookCard({
 
         {landingHref ? (
           /* Default: link to the book's landing page, where the opt-in form is
-             shown immediately. Landing pages open in a new tab so the catalog
-             stays open while the reader browses several books. */
-          <a href={landingHref} target="_blank" rel="noopener noreferrer" className={ctaClass}>
+             shown immediately. Same tab — internal navigation never opens new
+             tabs (Xander, 2026-07-28); only actual file downloads do. */
+          <a href={landingHref} className={ctaClass}>
             {ctaLabel}
             <ArrowRight className="w-4 h-4" />
           </a>

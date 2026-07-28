@@ -648,8 +648,6 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
                   </p>
                   <a
                     href={book.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="mt-auto self-start inline-flex items-center gap-3 bg-white text-[#0D1B3D] font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200"
                   >
                     Learn More
