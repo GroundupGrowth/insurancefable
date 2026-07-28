@@ -57,40 +57,40 @@ function StartHereButton({ light = false }: { light?: boolean }) {
 export default function Page() {
   return (
     <PageShell>
-      {/* Live hero: headlines + the opt-in form + Trustpilot. */}
+      {/* Live hero: headlines + Trustpilot on top, the opt-in form below at
+          full width. Stacked on purpose (Xander, 2026-07-28): a half-width
+          side column made the GHL form run super long — wide, not tall. */}
       <SalesSection tone="navy">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-          <div>
-            <h1
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-6"
-              style={{ letterSpacing: '-0.03em' }}
-            >
-              Stop Banking for Them. Start Banking for Yourself.
-            </h1>
-            <p
-              className="text-white text-xl md:text-2xl font-medium leading-snug mb-6"
-              style={{ letterSpacing: '-0.02em' }}
-            >
-              The system is designed to keep you in the middle. We show you the exit.
-            </p>
-            <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
-              Your numbers are waiting. Let&rsquo;s look at them.
-            </p>
-            <TrustpilotWidget theme="dark" />
-          </div>
-          <div className="bg-white rounded-3xl border border-black/5 p-4 md:p-6">
-            <EmbedSlot slotKey="page:infinite-banking-journey:form">
-              {/* Real GHL lead form — same one as the homepage band. An embed
-                  saved at /admin under this slot overrides it. */}
-              <GhlResizeScript />
-              <iframe
-                src={LIVE_LEAD_FORM}
-                title="Start your infinite banking journey"
-                scrolling="no"
-                className="block w-full min-h-[900px] border-0"
-              />
-            </EmbedSlot>
-          </div>
+        <div className="mb-10">
+          <h1
+            className="text-white text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-6"
+            style={{ letterSpacing: '-0.03em' }}
+          >
+            Stop Banking for Them. Start Banking for Yourself.
+          </h1>
+          <p
+            className="text-white text-xl md:text-2xl font-medium leading-snug mb-6"
+            style={{ letterSpacing: '-0.02em' }}
+          >
+            The system is designed to keep you in the middle. We show you the exit.
+          </p>
+          <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8">
+            Your numbers are waiting. Let&rsquo;s look at them.
+          </p>
+          <TrustpilotWidget theme="dark" />
+        </div>
+        <div className="bg-white rounded-3xl border border-black/5 p-4 md:p-6">
+          <EmbedSlot slotKey="page:infinite-banking-journey:form">
+            {/* Real GHL lead form — same one as the homepage band. An embed
+                saved at /admin under this slot overrides it. */}
+            <GhlResizeScript />
+            <iframe
+              src={LIVE_LEAD_FORM}
+              title="Start your infinite banking journey"
+              scrolling="no"
+              className="block w-full min-h-[700px] border-0"
+            />
+          </EmbedSlot>
         </div>
       </SalesSection>
 
