@@ -66,6 +66,7 @@ export default function Calculator() {
             max={2019}
             minLabel="1928"
             maxLabel="2019"
+            plain
             onChange={setStartYear}
           />
         </InputCard>

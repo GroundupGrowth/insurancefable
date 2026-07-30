@@ -29,6 +29,8 @@ interface SliderFieldProps {
   suffix?: string;
   minLabel?: string;
   maxLabel?: string;
+  /* skip thousands separators in the input, e.g. for years: 1990, not 1,990 */
+  plain?: boolean;
   onChange: (value: number) => void;
 }
 
@@ -42,6 +44,7 @@ export function SliderField({
   suffix,
   minLabel,
   maxLabel,
+  plain,
   onChange,
 }: SliderFieldProps) {
   const handleText = (raw: string) => {
@@ -61,7 +64,7 @@ export function SliderField({
           )}
           <input
             inputMode="decimal"
-            value={value.toLocaleString('en-US')}
+            value={plain ? String(value) : value.toLocaleString('en-US')}
             onChange={(event) => handleText(event.target.value)}
             className={`w-28 bg-[#F5F5F5] border border-black/10 text-[#0D1B3D] text-sm text-right rounded-lg py-2 outline-none focus:border-black/30 transition-colors duration-150 ${
               prefix ? 'pl-7 pr-3' : 'px-3'

@@ -56,6 +56,7 @@ export default function Calculator() {
             max={LAST_YEAR}
             minLabel={String(FIRST_YEAR)}
             maxLabel={String(LAST_YEAR)}
+            plain
             onChange={setFromYear}
           />
           <SliderField
@@ -65,6 +66,7 @@ export default function Calculator() {
             max={LAST_YEAR}
             minLabel={String(FIRST_YEAR)}
             maxLabel={String(LAST_YEAR)}
+            plain
             onChange={setToYear}
           />
         </InputCard>
