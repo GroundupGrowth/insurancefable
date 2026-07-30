@@ -1,3 +1,3 @@
 # Deploy notes
 
-Deploy trigger: explainers per-video URLs + batch 2, 2026-07-30.
+Deploy trigger: admin Forms page + real submissions on all native forms + thank-you booking band, 2026-07-30.
