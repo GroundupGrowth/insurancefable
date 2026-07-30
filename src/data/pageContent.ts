@@ -121,13 +121,13 @@ export const pageDefaults: Record<string, PageDefaults> = {
     slug: 'connect-with-our-experts',
     label: 'Connect with Our Experts',
     path: '/connect-with-our-experts/',
-    title: 'Connect with Our Experts',
+    title: 'Book a Free Strategy Call',
     description:
-      "Book a quick discovery call to map out your goals. We'll identify your needs and match you with the right specialist to design your custom wealth strategy.",
-    eyebrow: 'Discovery Call',
-    heroTitle: 'Connect with Our Experts',
+      'Book a free 30-minute strategy call. We review your situation and goals, answer your questions, and give you an honest read on whether this strategy fits. No pitch, no obligation.',
+    eyebrow: 'Book a Free Call',
+    heroTitle: 'Book Your Free Strategy Call',
     heroIntro:
-      "Book a quick discovery call to map out your goals. We'll identify your needs and match you with the right specialist to design your custom wealth strategy.",
+      'A 30-minute conversation with one of our Pro Client Guides about your situation, your goals, and your questions. You leave with a clear picture of whether this strategy fits you. No pitch, no pressure, no obligation.',
   },
   'life-insurance-quotes': {
     slug: 'life-insurance-quotes',

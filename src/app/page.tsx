@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import ProcessSection from '../components/ProcessSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import CarrierLogoWall from '../components/CarrierLogoWall';
+import VideoSection from '../components/VideoSection';
 import ServicesSection from '../components/ServicesSection';
 // FaqSection hidden: not on the live homepage, and its answers are still placeholders (Phase 2)
 // import FaqSection from '../components/FaqSection';
@@ -132,6 +133,7 @@ export default function HomePage() {
           <Hero />
         </div>
         <CarrierLogoWall />
+        <VideoSection />
         <ServicesSection />
         <ProcessSection />
         <TestimonialsSection />
@@ -177,7 +179,7 @@ export default function HomePage() {
                 situation, our team is here. No pressure, no pitch, just answers.
               </p>
               <div className="mt-8">
-                <SecondaryCta href="/proclientguide/introduction/" label="Connect with an Expert" />
+                <SecondaryCta href="/connect-with-our-experts/" label="Book a Free Call" />
               </div>
             </div>
           </div>

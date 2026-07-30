@@ -3,6 +3,7 @@ import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import LeadMagnetSection from '../../components/LeadMagnetSection';
 import JourneyLadder, { type JourneyLevel } from '../../components/JourneyLadder';
+import { PrimaryCta } from '../../components/CtaButtons';
 import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
@@ -27,15 +28,15 @@ const levels: JourneyLevel[] = [
       "Most people don't know what they don't know. The conventional playbook — max your 401(k), pay off debt, diversify — sounds reasonable until you realize it was written by the same institutions that profit when you follow it. These guides are where the unlearning starts — and where most people realize they were never playing their own game.",
     guides: [
       {
-        title: 'New to IBC? Start Here',
-        text: "Stop financing your bank's empire and start building your own.",
+        title: 'The Anti-Banking Starter Guide',
+        text: "New to IBC? Start here. Stop financing your bank's empire and start building your own.",
         cta: 'Download Here',
         image: `${UPLOADS}/Anti-Banking-Starter-Guide.webp`,
         alt: 'Anti Banking Starter Guide',
         href: '/anti-banking-starter-guide/',
       },
       {
-        title: 'The Playbook They Never Handed You',
+        title: 'Kingdom Money',
         text: 'Most Christians plan for retirement. The wealthy plan for what comes after them.',
         cta: 'Download Here',
         image: `${UPLOADS}/Kingdom-Money-1.webp`,
@@ -43,24 +44,24 @@ const levels: JourneyLevel[] = [
         href: '/kingdom-money/',
       },
       {
-        title: 'Unlearn The Financial Myths',
-        text: 'The habits keeping you dependent, and how to break them.',
+        title: 'Money Secrets of the Wealthy',
+        text: 'Unlearn the financial myths: the habits keeping you dependent, and how to break them.',
         cta: 'Download Here',
         image: `${UPLOADS}/Money-Secrets-of-the-Wealthy.webp`,
         alt: 'Money Secrets of the Wealthy',
         href: '/money-secrets/',
       },
       {
-        title: 'How to Eliminate Debt and Build Wealth',
-        text: "You don't have to wait until the debt is gone to start Building Wealth",
+        title: 'The Purpose-Driven Wealth Plan',
+        text: "How to eliminate debt and build wealth. You don't have to wait until the debt is gone to start.",
         cta: 'Download Here',
         image: `${UPLOADS}/Component-17.webp`,
         alt: 'Wealth Plan',
         href: '/debt-free-plan/',
       },
       {
-        title: 'The Guide to Tax Free Retirement Income',
-        text: 'You’ve outgrown the “Honda Civic” of financial tools.',
+        title: 'Tax-Free Retirement Income Without Limits',
+        text: 'The guide to tax-free retirement income. You’ve outgrown the “Honda Civic” of financial tools.',
         cta: 'Download Here',
         image: `${UPLOADS}/Component-10.webp`,
         alt: 'IUL Retirement',
@@ -143,6 +144,9 @@ export default async function StartYourJourneyPage() {
               operated by a different set of rules. Not secret rules. Just ones nobody bothered
               to explain.
             </p>
+            <div className="mt-8 flex gap-4 flex-wrap">
+              <PrimaryCta label="Book a Free Call" />
+            </div>
           </div>
         </div>
       </section>

@@ -63,6 +63,12 @@ export default function EbookOfferCard({ ebook }: { ebook: Ebook }) {
           Get the free eBook
           <ArrowRight className="w-4 h-4" />
         </button>
+        <a
+          href="/connect-with-our-experts/"
+          className="mt-4 text-center text-white/60 hover:text-white text-sm underline decoration-white/30 underline-offset-4 transition-colors duration-200"
+        >
+          Or book a free call with an expert
+        </a>
       </div>
 
       {/* Portal: the sticky sidebar creates a stacking context, so the fixed

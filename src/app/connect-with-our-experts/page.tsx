@@ -43,6 +43,24 @@ export default async function ConnectWithOurExpertsPage() {
         </a>
       </PageHero>
 
+      {/* What actually happens on the call — kept to one compact row so the
+          calendar still sits above the fold (client request 2026-07-30) */}
+      <section className="px-6 pb-8">
+        <div className="max-w-[88rem] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {[
+            ['1. You talk, we listen', 'Your income, your goals, your existing policies, and what you want your money to do.'],
+            ['2. We map the strategy', 'How a properly designed policy would work with your actual numbers, not a generic pitch.'],
+            ['3. Honest fit check', "If this isn't right for you, we say so on the call. Most strategies fail because of bad fit."],
+            ['4. Clear next steps', 'You leave knowing exactly what to do next, whether that involves us or not.'],
+          ].map(([title, text]) => (
+            <div key={title} className="bg-white rounded-2xl border border-black/5 px-5 py-4">
+              <p className="text-[#0D1B3D] text-sm font-medium mb-1">{title}</p>
+              <p className="text-[#0D1B3D]/60 text-sm leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <LeadForm />
     </PageShell>
   );

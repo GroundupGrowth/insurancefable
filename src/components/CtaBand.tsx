@@ -21,7 +21,7 @@ export default function CtaBand({
         </h2>
         <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-8">{text}</p>
         <div className="flex gap-4 flex-wrap justify-center">
-          <PrimaryCta />
+          <PrimaryCta label="Book a Free Call" />
           <SecondaryCta />
         </div>
       </div>

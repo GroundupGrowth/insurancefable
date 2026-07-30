@@ -14,6 +14,7 @@ const freeResources = [
 ];
 
 const aboutUs = [
+  { label: 'Book a Call', href: '/connect-with-our-experts/' },
   { label: 'Contact Us', href: '/contact/' },
   { label: '877-787-7558', href: 'tel:1-877-787-7558' },
   { label: 'Meet the Team', href: '/proclientguide/introduction/' },
