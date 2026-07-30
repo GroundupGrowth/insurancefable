@@ -1,3 +1,3 @@
 # Deploy notes
 
-Deploy trigger: article structured data (FAQPage, VideoObject, BreadcrumbList) restored at template level, 2026-07-30.
+Deploy trigger: client feedback round (homepage video section, book-a-call CTAs, booking page copy, guide titles), 2026-07-30.
