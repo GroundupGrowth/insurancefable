@@ -7,6 +7,7 @@ import WikiBody from '../../../components/WikiBody';
 import { getWikiTerm, getWikiTermNames, getWikiTerms } from '../../../lib/wiki';
 import { SITE_URL } from '../../../lib/content';
 import { wikiTermDefaults } from '../../../data/wiki';
+import { explainersForWikiTerm } from '../../../data/explainers';
 
 /* One wiki term. Default terms prerender; terms added at /admin → Wiki are
    served on demand (dynamicParams) and cached by ISR. */
@@ -97,6 +98,29 @@ export default async function WikiTermPage({ params }: { params: Promise<{ term:
           <WikiBody body={term.body} names={names} />
         </div>
       </section>
+
+      {/* Video explainers that cover this term (see /explainers/) */}
+      {explainersForWikiTerm(term.slug).length > 0 && (
+        <section className="px-6 pb-16">
+          <div className="max-w-[54rem] mx-auto">
+            <p className="text-[#0D1B3D]/50 text-xs uppercase tracking-wide mb-3">
+              Watch it explained
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {explainersForWikiTerm(term.slug).map((entry) => (
+                <a
+                  key={entry.slug}
+                  href={`/explainers/#${entry.slug}`}
+                  className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] text-sm px-4 py-2 rounded-full border border-black/5 hover:bg-[#0D1B3D] hover:text-white transition-colors duration-200"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#FF0000]" aria-hidden="true" />
+                  {entry.title}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Related terms */}
       {related.length > 0 && (

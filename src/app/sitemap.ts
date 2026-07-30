@@ -37,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     { url: `${SITE_URL}/tools/`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${SITE_URL}/explainers/`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
     ...[
       'infinite-banking-calculator',
       'human-life-value-calculator',
