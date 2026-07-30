@@ -16,11 +16,19 @@ export function YouTubeLogo({ className = 'w-7 h-auto' }: { className?: string }
   );
 }
 
-export function ChannelChip() {
+export function ChannelChip({ subscribers }: { subscribers?: string | null }) {
   return (
     <span className="inline-flex items-center gap-2.5 bg-white rounded-full border border-black/5 pl-4 pr-5 py-2">
       <YouTubeLogo className="w-6 h-auto" />
       <span className="text-[#0D1B3D] text-sm font-medium">InsuranceandEstates.com on YouTube</span>
+      {subscribers && (
+        <>
+          <span className="text-[#0D1B3D]/20" aria-hidden="true">
+            |
+          </span>
+          <span className="text-[#0D1B3D]/60 text-sm">{subscribers} subscribers</span>
+        </>
+      )}
     </span>
   );
 }

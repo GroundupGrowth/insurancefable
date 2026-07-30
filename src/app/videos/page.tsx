@@ -4,7 +4,7 @@ import PageHero from '../../components/PageHero';
 import YouTubeEmbed from '../../components/YouTubeEmbed';
 import VideoFacade from '../../components/VideoFacade';
 import { YouTubeLogo, SubscribeButton } from '../../components/YouTubeBrand';
-import { getLatestVideos, YOUTUBE_CHANNEL_URL } from '../../lib/youtube';
+import { getChannelStats, getLatestVideos, YOUTUBE_CHANNEL_URL } from '../../lib/youtube';
 
 /* The video library: an auto-updating "latest uploads" feed from the YouTube
    channel RSS (new posts appear here within ~30 min, no manual step), above
@@ -205,7 +205,8 @@ const formatFeedDate = (iso: string) =>
 
 export default async function VideosPage() {
   const curatedIds = new Set(videos.map((video) => video.id));
-  const latest = (await getLatestVideos()).filter((video) => !curatedIds.has(video.id));
+  const [latestAll, stats] = await Promise.all([getLatestVideos(), getChannelStats()]);
+  const latest = latestAll.filter((video) => !curatedIds.has(video.id));
   const latestVideos = latest.filter((video) => !video.isShort);
   const latestShorts = latest.filter((video) => video.isShort);
 
@@ -230,6 +231,17 @@ export default async function VideosPage() {
               >
                 @InsuranceandEstates on YouTube
               </a>
+              {stats && (
+                <p className="text-[#0D1B3D]/60 text-sm mt-0.5">
+                  {[
+                    stats.subscribers && `${stats.subscribers} subscribers`,
+                    stats.videos && `${stats.videos} videos`,
+                    stats.views && `${stats.views} views`,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </p>
+              )}
             </div>
           </div>
           <SubscribeButton />

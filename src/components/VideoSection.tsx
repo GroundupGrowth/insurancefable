@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import { PrimaryCta } from './CtaButtons';
 import VideoFacade from './VideoFacade';
 import { ChannelChip, SubscribeButton } from './YouTubeBrand';
+import { getChannelStats } from '../lib/youtube';
 
 /* Homepage YouTube section (client request 2026-07-30): a curated row from the
    channel, branded so it reads instantly as YouTube. The "Welcome to I&E"
@@ -14,13 +15,14 @@ const CHANNEL_ROW = [
   { id: 'w9GannOuleg', title: 'Why Dave Ramsey is Wrong About Whole Life and Infinite Banking' },
 ];
 
-export default function VideoSection() {
+export default async function VideoSection() {
+  const stats = await getChannelStats();
   return (
     <section className="px-6 py-24">
       <div className="max-w-[88rem] mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-10 flex flex-col items-center">
           <div className="mb-5">
-            <ChannelChip />
+            <ChannelChip subscribers={stats?.subscribers} />
           </div>
           <h2
             className="text-[#0D1B3D] text-4xl md:text-5xl lg:text-6xl font-medium leading-none mb-6"

@@ -18,6 +18,67 @@ export interface ChannelVideo {
 
 const FEED_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
 
+export interface ChannelStats {
+  /** e.g. "6.5K" */
+  subscribers: string | null;
+  /** e.g. "940" */
+  videos: string | null;
+  /** e.g. "1.2M" */
+  views: string | null;
+}
+
+/* "6.52K subscribers" / "6,52k abonnenter" / "1,220,683 views" -> a number.
+   Handles K/M suffixes with dot or comma decimals, and plain counts with
+   thousands separators (comma, space, or NBSP). */
+function parseCount(text: string | undefined): number | null {
+  if (!text) return null;
+  const m = text.match(/([\d.,\s ]+)([KkMm])?/);
+  if (!m) return null;
+  const suffix = m[2]?.toUpperCase();
+  if (suffix) {
+    const n = parseFloat(m[1].replace(/[\s ]/g, '').replace(',', '.'));
+    if (!Number.isFinite(n)) return null;
+    return Math.round(n * (suffix === 'M' ? 1e6 : 1e3));
+  }
+  const n = parseInt(m[1].replace(/\D/g, ''), 10);
+  return Number.isFinite(n) ? n : null;
+}
+
+function formatCount(n: number | null): string | null {
+  if (n === null) return null;
+  if (n >= 1e6) return `${(Math.round(n / 1e5) / 10).toString().replace(/\.0$/, '')}M`;
+  if (n >= 1e3) return `${(Math.round(n / 100) / 10).toString().replace(/\.0$/, '')}K`;
+  return n.toLocaleString('en-US');
+}
+
+/* Subscriber/video/view counts from the public channel About page (YouTube's
+   Data API needs a key just for this). The numbers sit in the page's initial
+   data as plain strings; hl=en + Accept-Language pin the locale so parsing is
+   stable. Refreshed every 6h via the fetch cache; any failure returns null
+   and callers render without the stats line. */
+export async function getChannelStats(): Promise<ChannelStats | null> {
+  try {
+    const res = await fetch(`${YOUTUBE_CHANNEL_URL}/about?hl=en`, {
+      headers: {
+        'accept-language': 'en-US,en;q=0.9',
+        'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
+      },
+      next: { revalidate: 21600 },
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    const stats: ChannelStats = {
+      subscribers: formatCount(parseCount(html.match(/"subscriberCountText":"([^"]+)"/)?.[1])),
+      videos: formatCount(parseCount(html.match(/"videoCountText":"([^"]+)"/)?.[1])),
+      views: formatCount(parseCount(html.match(/"viewCountText":"([^"]+)"/)?.[1])),
+    };
+    return stats.subscribers || stats.videos || stats.views ? stats : null;
+  } catch {
+    return null;
+  }
+}
+
 const decodeEntities = (s: string) =>
   s
     .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
@@ -48,7 +109,7 @@ export async function getLatestVideos(): Promise<ChannelVideo[]> {
     }
     return videos;
   } catch {
-    // Feed down → sections that consume it simply don't render
+    // Feed down -> sections that consume it simply don't render
     return [];
   }
 }
