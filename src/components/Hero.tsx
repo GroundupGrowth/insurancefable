@@ -117,13 +117,14 @@ export default function Hero() {
                 type="button"
                 onClick={() => setVideoOpen(true)}
                 aria-label="Play video"
-                className="hidden lg:block relative w-[22rem] xl:w-[26rem] shrink-0 bg-white/80 backdrop-blur p-2 rounded-[1.75rem] group text-left"
+                className="hidden lg:block relative w-[24rem] xl:w-[30rem] 2xl:w-[34rem] shrink-0 bg-white/80 backdrop-blur p-2 rounded-[1.75rem] group text-left"
               >
+                {/* maxres verified to exist for this video (1280px; hq is 480px and soft at this card size) */}
                 <img
-                  src={`https://img.youtube.com/vi/${VIDEO_ID}/hqdefault.jpg`}
+                  src={`https://img.youtube.com/vi/${VIDEO_ID}/maxresdefault.jpg`}
                   alt="Watch: Insurance & Estates"
-                  width={480}
-                  height={360}
+                  width={1280}
+                  height={720}
                   className="w-full aspect-video object-cover rounded-3xl"
                 />
                 <span className="absolute inset-0 flex items-center justify-center">

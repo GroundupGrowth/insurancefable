@@ -133,9 +133,9 @@ export default function HomePage() {
           <Hero />
         </div>
         <CarrierLogoWall />
-        <VideoSection />
         <ServicesSection />
         <ProcessSection />
+        <VideoSection />
         <TestimonialsSection />
         {/* <FaqSection /> — hidden until real FAQ copy exists (Phase 2); was placeholder text */}
 
