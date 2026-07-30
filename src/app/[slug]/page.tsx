@@ -14,6 +14,7 @@ import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
+import { JsonLd, breadcrumbJsonLd, faqJsonLd, videoJsonLds } from '../../lib/articleSchema';
 
 /* Blog articles from the Payload import, served at the root path exactly like
    WordPress (zero redirects at cutover). Static routes always win over this
@@ -78,6 +79,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // First mention of each wiki term becomes a link to its /wiki/ page
   const bodyHtml = linkWikiTerms(post.bodyHtml, wikiTerms);
 
+  /* Structured data regenerated from the body (the old site's hand-added
+     FAQ/video schema was stripped by the import — see lib/articleSchema) */
+  const faqLd = faqJsonLd(post.bodyHtml);
+  const videoLds = await videoJsonLds(post);
+  const breadcrumbLd = breadcrumbJsonLd(post);
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -108,10 +115,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <PageShell>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
+      <JsonLd data={articleJsonLd} />
+      <JsonLd data={breadcrumbLd} />
+      {faqLd && <JsonLd data={faqLd} />}
+      {videoLds.map((videoLd, i) => (
+        <JsonLd key={i} data={videoLd} />
+      ))}
 
       {/* Article hero: category, title, byline row (freshness = E-E-A-T).
           Mirrors the body grid so the title lines up with the article column. */}
