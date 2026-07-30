@@ -2,25 +2,35 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { LEAD_ERROR_MESSAGE, splitName, submitLead } from '../../lib/submitLead';
 
-/* Contact form stub following the LeadMagnetSection form pattern.
-   Lives inside the navy panel on /contact/. Replaced by the GHL form embed
-   once it's saved under form:contact at /admin. */
+/* Contact form on /contact/ (navy panel). Submits to /api/lead/ with source
+   form:contact — the webhook is set at /admin -> Forms. A GHL embed pasted
+   under form:contact still overrides. */
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [agreed, setAgreed] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ name, email, phone, message, agreed });
-    setSubmitted(true);
+    if (status === 'sending') return;
+    setStatus('sending');
+    const ok = await submitLead({
+      ...splitName(name),
+      email,
+      phone,
+      message,
+      consent: agreed,
+      source: 'form:contact',
+    });
+    setStatus(ok ? 'sent' : 'error');
   };
 
-  if (submitted) {
+  if (status === 'sent') {
     return (
       <p className="text-white text-2xl font-medium leading-relaxed">
         Thank you — we&rsquo;ll reach out as soon as possible to schedule your complimentary
@@ -86,11 +96,15 @@ export default function ContactForm() {
           . I read the disclaimer above.
         </span>
       </label>
+      {status === 'error' && (
+        <p className="text-[#FFB4A8] text-sm leading-relaxed">{LEAD_ERROR_MESSAGE}</p>
+      )}
       <button
         type="submit"
-        className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
+        disabled={status === 'sending'}
+        className="bg-white disabled:opacity-60 text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
       >
-        Submit
+        {status === 'sending' ? 'Sending…' : 'Submit'}
       </button>
     </form>
     </EmbedSlot>

@@ -2,25 +2,33 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { LEAD_ERROR_MESSAGE, splitName, submitLead } from '../../lib/submitLead';
 
-/* Visual replica of live's Gravity Form 44 ("trust planning program"
-   registration: Name/Email/Phone + disclaimer consent, submit label
-   "Free Access"), wired the same way as GenerationalTransferBand — the
-   replica is the fallback behind an embed slot so the real form can be
-   pasted at /admin without a deploy. */
+/* Live's Gravity Form 44 ("trust planning program" registration:
+   Name/Email/Phone + disclaimer consent, submit label "Free Access"), now a
+   real form: submits to /api/lead/ with the slot key as source (webhook at
+   /admin -> Forms). A GHL embed pasted into the slot still overrides. */
 
 export default function TrustProgramForm({ slotKey }: { slotKey: string }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [agreed, setAgreed] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const submitted = status === 'sent';
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Same submission pattern as GenerationalTransferBand {/* TODO: wire submissions */}
-    console.log({ name, email, phone, agreed });
-    setSubmitted(true);
+    if (status === 'sending') return;
+    setStatus('sending');
+    const ok = await submitLead({
+      ...splitName(name),
+      email,
+      phone,
+      consent: agreed,
+      source: slotKey,
+    });
+    setStatus(ok ? 'sent' : 'error');
   };
 
   const inputClass =
@@ -94,11 +102,15 @@ export default function TrustProgramForm({ slotKey }: { slotKey: string }) {
               Yes
             </label>
           </div>
+          {status === 'error' && (
+            <p className="text-[#C62828] text-sm leading-relaxed">{LEAD_ERROR_MESSAGE}</p>
+          )}
           <button
             type="submit"
-            className="self-start bg-[#185E99] text-white text-[15px] tracking-[0.5px] rounded-[20px] px-[15px] py-[7.5px] hover:opacity-90 transition-opacity duration-200"
+            disabled={status === 'sending'}
+            className="self-start bg-[#185E99] disabled:opacity-60 text-white text-[15px] tracking-[0.5px] rounded-[20px] px-[15px] py-[7.5px] hover:opacity-90 transition-opacity duration-200"
           >
-            Free Access
+            {status === 'sending' ? 'Sending…' : 'Free Access'}
           </button>
         </form>
       )}

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { serverClient } from '../../../lib/content';
 import { parseSlotNotes } from '../../../lib/slotNotes';
 import { ebookLeadWebhook } from '../../../data/ebooks';
+import { siteFormSlotKeys } from '../../../data/siteForms';
 
 /* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
    and forwards them to the GoHighLevel inbound-webhook trigger matched to the
@@ -20,7 +21,28 @@ const LEGACY_SOURCES: Record<string, string> = {
   'generational-transfer': 'ebook:generational-transfer',
 };
 
-const REQUIRED = ['first_name', 'last_name', 'email', 'age_range', 'annual_income'] as const;
+/* The ebook forms send the full profile (age/income); the site forms
+   (src/data/siteForms.ts — contact, quote widgets, funnel opt-ins) send only
+   what they collect, so just the identity fields are universal. */
+const REQUIRED = ['first_name', 'email'] as const;
+
+/* Base fields handled explicitly below; everything else that's a short string
+   (quote details, message, guide choice, age…) is forwarded verbatim so GHL
+   can map it. */
+const BASE_FIELDS = new Set([
+  'first_name',
+  'last_name',
+  'email',
+  'phone',
+  'age_range',
+  'annual_income',
+  'consent',
+  'website',
+  'source',
+  'page',
+]);
+const MAX_EXTRA_FIELDS = 40;
+const MAX_FIELD_LENGTH = 2000;
 
 export async function POST(request: Request) {
 
@@ -44,8 +66,8 @@ export async function POST(request: Request) {
      src/data/ebooks.ts covers books before their first catalog save. Only
      leadconnectorhq hook URLs are accepted so a bad admin value can't turn
      this into an open relay. */
-  if (/^ebook:[a-z0-9-]+$/.test(source)) {
-    const slug = source.slice('ebook:'.length);
+  const isEbook = /^ebook:[a-z0-9-]+$/.test(source);
+  if (isEbook || siteFormSlotKeys.has(source)) {
     const supabase = serverClient();
     if (supabase) {
       const { data } = await supabase
@@ -58,7 +80,7 @@ export async function POST(request: Request) {
         webhook = candidate;
       }
     }
-    if (!webhook) webhook = ebookLeadWebhook(slug);
+    if (!webhook && isEbook) webhook = ebookLeadWebhook(source.slice('ebook:'.length));
   }
   if (!webhook) {
     return NextResponse.json({ error: 'Unknown lead source.' }, { status: 400 });
@@ -73,13 +95,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Consent is required.' }, { status: 400 });
   }
 
+  /* Any short string field beyond the base set travels along (quote details,
+     message, guide choice, …) — capped so the relay can't be used to pump
+     arbitrary payloads at GHL. */
+  const extras: Record<string, string> = {};
+  let extraCount = 0;
+  for (const [key, value] of Object.entries(body)) {
+    if (BASE_FIELDS.has(key) || typeof value !== 'string') continue;
+    if (++extraCount > MAX_EXTRA_FIELDS) break;
+    extras[key] = value.slice(0, MAX_FIELD_LENGTH);
+  }
+
+  const str = (key: string) => (typeof body[key] === 'string' ? (body[key] as string).trim() : '');
   const payload = {
-    first_name: (body.first_name as string).trim(),
-    last_name: (body.last_name as string).trim(),
-    email: (body.email as string).trim(),
-    phone: typeof body.phone === 'string' ? body.phone.trim() : '',
-    age_range: (body.age_range as string).trim(),
-    annual_income: (body.annual_income as string).trim(),
+    ...extras,
+    first_name: str('first_name'),
+    last_name: str('last_name'),
+    email: str('email'),
+    phone: str('phone'),
+    age_range: str('age_range'),
+    annual_income: str('annual_income'),
     consent: true,
     source,
     page: typeof body.page === 'string' ? body.page : '',

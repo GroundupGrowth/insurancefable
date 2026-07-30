@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { LEAD_ERROR_MESSAGE, splitName, submitLead } from '../../lib/submitLead';
 
 /* Live embeds two third-party Ninja Quoter widgets here (wq.ninjaquoter.com
    scripts) — "No Exam Whole Life Quotes" and "Term Life Insurance Quotes".
@@ -40,11 +41,11 @@ const labelClass = 'block text-[#0D1B3D]/70 text-sm font-medium mb-1.5';
 const inputClass =
   'bg-[#F5F5F5] text-[#0D1B3D] rounded-xl px-4 py-3 w-full outline-none focus:bg-[#EBEBEB]';
 
-function Select({ label, options }: { label: string; options: string[] }) {
+function Select({ label, name, options }: { label: string; name: string; options: string[] }) {
   return (
     <label className="block">
       <span className={labelClass}>{label}</span>
-      <select required defaultValue="" className={`${inputClass} appearance-none`}>
+      <select name={name} required defaultValue="" className={`${inputClass} appearance-none`}>
         <option value="" disabled></option>
         {options.map((option) => (
           <option key={option}>{option}</option>
@@ -55,10 +56,31 @@ function Select({ label, options }: { label: string; options: string[] }) {
 }
 
 function QuoteForm({ title, withTermType }: { title: string; withTermType?: boolean }) {
-  const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const submitted = status === 'sent';
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    if (status === 'sending') return;
+    setStatus('sending');
+    const data = new FormData(event.currentTarget);
+    const field = (key: string) => String(data.get(key) ?? '');
+    const ok = await submitLead({
+      ...splitName(field('name')),
+      email: field('email'),
+      phone: field('phone'),
+      state: field('state'),
+      health_class: field('health_class'),
+      birthdate: field('birthdate'),
+      gender: field('gender'),
+      smoker: field('smoker'),
+      ...(withTermType ? { insurance_type: field('insurance_type') } : {}),
+      face_amount: field('face_amount'),
+      quote_widget: title,
+      // Pressing "Display Quotes" is the consent action
+      consent: true,
+      source: 'page:exam-one:form',
+    });
+    setStatus(ok ? 'sent' : 'error');
   };
 
   return (
@@ -80,34 +102,40 @@ function QuoteForm({ title, withTermType }: { title: string; withTermType?: bool
         </p>
       ) : (
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Select label="State:" options={states} />
-          <Select label="Health Class:" options={healthClasses} />
+          <Select label="State:" name="state" options={states} />
+          <Select label="Health Class:" name="health_class" options={healthClasses} />
           <label className="block">
             <span className={labelClass}>Birthdate:</span>
-            <input type="date" required className={inputClass} />
+            <input type="date" name="birthdate" required className={inputClass} />
           </label>
-          <Select label="Gender:" options={['Male', 'Female']} />
-          <Select label="Smoker/Tobacco:" options={['Yes', 'No']} />
-          {withTermType && <Select label="Type of Insurance:" options={termTypes} />}
-          <Select label="Face Amount:" options={faceAmounts} />
+          <Select label="Gender:" name="gender" options={['Male', 'Female']} />
+          <Select label="Smoker/Tobacco:" name="smoker" options={['Yes', 'No']} />
+          {withTermType && (
+            <Select label="Type of Insurance:" name="insurance_type" options={termTypes} />
+          )}
+          <Select label="Face Amount:" name="face_amount" options={faceAmounts} />
           <label className="block">
             <span className={labelClass}>Your Name:</span>
-            <input type="text" required className={inputClass} />
+            <input type="text" name="name" required className={inputClass} />
           </label>
           <label className="block">
             <span className={labelClass}>Email Address:</span>
-            <input type="email" required className={inputClass} />
+            <input type="email" name="email" required className={inputClass} />
           </label>
           <label className="block">
             <span className={labelClass}>Phone Number:</span>
-            <input type="tel" required className={inputClass} />
+            <input type="tel" name="phone" required className={inputClass} />
           </label>
           <div className="sm:col-span-2">
+            {status === 'error' && (
+              <p className="text-[#C62828] text-sm leading-relaxed mb-3">{LEAD_ERROR_MESSAGE}</p>
+            )}
             <button
               type="submit"
-              className="bg-[#0D1B3D] text-white font-medium px-8 py-3 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+              disabled={status === 'sending'}
+              className="bg-[#0D1B3D] disabled:opacity-60 text-white font-medium px-8 py-3 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
             >
-              Display Quotes
+              {status === 'sending' ? 'Sending…' : 'Display Quotes'}
             </button>
           </div>
         </form>

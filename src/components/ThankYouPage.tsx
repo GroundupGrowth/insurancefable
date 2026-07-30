@@ -125,6 +125,29 @@ export default function ThankYouPage({ page }: { page: ThankYouPageData }) {
               </div>
             </div>
           )}
+
+          {/* Every thank-you visitor just converted — warmest moment to book */}
+          <div className="mt-10 bg-[#0D1B3D] rounded-2xl p-6 md:p-8">
+            <p
+              className="text-white text-xl font-medium mb-2"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              Want to go over this with an expert?
+            </p>
+            <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-5">
+              Book a free 30-minute strategy call. We look at your numbers and your goals,
+              answer your questions, and tell you honestly whether this fits. No pitch.
+            </p>
+            <a
+              href="/connect-with-our-experts/"
+              className="inline-flex items-center gap-3 bg-white text-[#0D1B3D] font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200"
+            >
+              Book a Free Call
+              <span className="bg-[#0D1B3D] rounded-full p-2">
+                <ArrowRight className="w-5 h-5 text-white" />
+              </span>
+            </a>
+          </div>
         </div>
       </section>
     </PageShell>

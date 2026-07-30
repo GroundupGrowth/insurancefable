@@ -1,3 +1,5 @@
+import { unstable_cache } from 'next/cache';
+
 /* Latest uploads from the I&E YouTube channel, via YouTube's public RSS feed
    (no API key, no quota). The feed carries the 15 most recent uploads; pages
    consume it with ISR so new videos appear on the site automatically within
@@ -54,30 +56,34 @@ function formatCount(n: number | null): string | null {
 /* Subscriber/video/view counts from the public channel About page (YouTube's
    Data API needs a key just for this). The numbers sit in the page's initial
    data as plain strings; hl=en + Accept-Language pin the locale so parsing is
-   stable. Refreshed every 6h via the fetch cache; any failure returns null
-   and callers render without the stats line. */
-export async function getChannelStats(): Promise<ChannelStats | null> {
-  try {
-    const res = await fetch(`${YOUTUBE_CHANNEL_URL}/about?hl=en`, {
-      headers: {
-        'accept-language': 'en-US,en;q=0.9',
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
-      },
-      next: { revalidate: 21600 },
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-    const stats: ChannelStats = {
-      subscribers: formatCount(parseCount(html.match(/"subscriberCountText":"([^"]+)"/)?.[1])),
-      videos: formatCount(parseCount(html.match(/"videoCountText":"([^"]+)"/)?.[1])),
-      views: formatCount(parseCount(html.match(/"viewCountText":"([^"]+)"/)?.[1])),
-    };
-    return stats.subscribers || stats.videos || stats.views ? stats : null;
-  } catch {
-    return null;
-  }
-}
+   stable. The raw page is >2MB (over Next's fetch-cache limit), so the fetch
+   runs uncached and unstable_cache stores just the parsed result for 6h. Any
+   failure returns null and callers render without the stats line. */
+export const getChannelStats = unstable_cache(
+  async (): Promise<ChannelStats | null> => {
+    try {
+      const res = await fetch(`${YOUTUBE_CHANNEL_URL}/about?hl=en`, {
+        headers: {
+          'accept-language': 'en-US,en;q=0.9',
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
+        },
+      });
+      if (!res.ok) return null;
+      const html = await res.text();
+      const stats: ChannelStats = {
+        subscribers: formatCount(parseCount(html.match(/"subscriberCountText":"([^"]+)"/)?.[1])),
+        videos: formatCount(parseCount(html.match(/"videoCountText":"([^"]+)"/)?.[1])),
+        views: formatCount(parseCount(html.match(/"viewCountText":"([^"]+)"/)?.[1])),
+      };
+      return stats.subscribers || stats.videos || stats.views ? stats : null;
+    } catch {
+      return null;
+    }
+  },
+  ['youtube-channel-stats'],
+  { revalidate: 21600 }
+);
 
 const decodeEntities = (s: string) =>
   s

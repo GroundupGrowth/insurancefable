@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ArrowLeft } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import EmbedSlot from '../../components/EmbedSlot';
+import SimpleLeadForm from '../../components/SimpleLeadForm';
 import {
   SalesSection,
   SalesHeading,
@@ -30,9 +31,6 @@ export const metadata: Metadata = {
 
 const UPLOADS = '/wp-content/uploads';
 const REGISTER_URL = 'https://us06web.zoom.us/webinar/register/WN_zZSBSImRRJKqD4fqLy6_pQ';
-
-const inputClass =
-  'bg-white/10 text-white placeholder-white/40 rounded-xl px-5 py-4 w-full focus:bg-white/15 outline-none';
 
 function RegisterButton({ light = false }: { light?: boolean }) {
   return (
@@ -411,8 +409,6 @@ export default function Page() {
           </div>
           <div>
             <EmbedSlot slotKey="page:trust-workshop:form">
-              {/* Visual replica of live's Gravity Form (Free Access) until the
-                  GHL embed is pasted at /admin under page:trust-workshop:form. */}
               <div className="flex flex-col gap-4">
                 <p
                   className="text-white text-2xl font-medium"
@@ -421,32 +417,12 @@ export default function Page() {
                   Free Access
                 </p>
                 <p className="text-white/50 text-xs">&quot;*&quot; indicates required fields</p>
-                <input type="text" placeholder="Name*" className={inputClass} />
-                <input type="email" placeholder="Email*" className={inputClass} />
-                <input type="tel" placeholder="Phone*" className={inputClass} />
-                <p className="text-white/50 text-xs leading-relaxed">
-                  By pressing the Submit button, you agree to use InsuranceandEstates&rsquo;{' '}
-                  <a href="/privacytou/" className="underline hover:text-white/70">
-                    privacy policy and terms
-                  </a>
-                  . InsuranceandEstates may contact you at the number you entered on this webpage
-                  using our automatic dialing system to market our life insurance products.
-                  Alternatively, you can contact us at{' '}
-                  <a href="tel:1-877-787-7558" className="underline hover:text-white/70">
-                    877-787-7558
-                  </a>
-                  .
-                </p>
-                <label className="flex items-start gap-3 text-sm text-white/70 leading-relaxed">
-                  <input type="checkbox" className="mt-1 shrink-0" />
-                  <span>I read the disclaimer above.* Yes</span>
-                </label>
-                <button
-                  type="button"
-                  className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-white/90 transition-colors duration-200 self-start"
-                >
-                  Free Access
-                </button>
+                <SimpleLeadForm
+                  source="page:trust-workshop:form"
+                  tone="navy"
+                  submitLabel="Free Access"
+                  successMessage="You're in! Check your inbox for your workshop access details."
+                />
               </div>
             </EmbedSlot>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { LEAD_ERROR_MESSAGE, splitName, submitLead } from '../../lib/submitLead';
 
 export const freeResources = [
   'Money Secrets of the Wealthy',
@@ -12,21 +13,31 @@ export const freeResources = [
   'Life Insurance Essentials Report',
 ];
 
-/* Shared download form for the free eBooks & guides above. Stub for now —
-   the live page has one lead form per resource with identical fields; wire
-   the submit to the email/CRM backend when it exists. */
+/* Shared download form for the free eBooks & guides above. Submits to
+   /api/lead/ with source form:guide-request (webhook at /admin -> Forms);
+   the chosen guide travels in the payload so GHL can send the right file. */
 export default function GuideRequestForm() {
   const [guide, setGuide] = useState(freeResources[0]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [agreed, setAgreed] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const submitted = status === 'sent';
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ guide, name, email, phone, agreed });
-    setSubmitted(true);
+    if (status === 'sending') return;
+    setStatus('sending');
+    const ok = await submitLead({
+      ...splitName(name),
+      email,
+      phone,
+      guide,
+      consent: agreed,
+      source: 'form:guide-request',
+    });
+    setStatus(ok ? 'sent' : 'error');
   };
 
   return (
@@ -122,11 +133,15 @@ export default function GuideRequestForm() {
                       . I read the disclaimer above.
                     </span>
                   </label>
+                  {status === 'error' && (
+                    <p className="text-[#FFB4A8] text-sm leading-relaxed">{LEAD_ERROR_MESSAGE}</p>
+                  )}
                   <button
                     type="submit"
-                    className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
+                    disabled={status === 'sending'}
+                    className="bg-white disabled:opacity-60 text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
                   >
-                    Get Free Access
+                    {status === 'sending' ? 'Sending…' : 'Get Free Access'}
                   </button>
                 </form>
               )}

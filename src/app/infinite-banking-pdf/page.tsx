@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PageShell from '../../components/PageShell';
 import EmbedSlot from '../../components/EmbedSlot';
+import SimpleLeadForm from '../../components/SimpleLeadForm';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
 import {
   SalesSection,
@@ -25,9 +26,6 @@ export const metadata: Metadata = {
 };
 
 const UPLOADS = '/wp-content/uploads';
-
-const inputClass =
-  'bg-[#F5F5F5] text-[#0D1B3D] placeholder-[#0D1B3D]/40 rounded-xl px-5 py-4 w-full border border-black/5 outline-none focus:border-[#0D1B3D]/30';
 
 /* Live's article grid — internal links (domain-stripped) + localized thumbs. */
 const ARTICLES: { title: string; href: string; image: string; alt: string }[] = [
@@ -148,39 +146,12 @@ export default function Page() {
             </h2>
             <p className="text-[#0D1B3D]/50 text-xs mb-6">&quot;*&quot; indicates required fields</p>
             <EmbedSlot slotKey="page:infinite-banking-pdf:form">
-              {/* Visual replica of live's Gravity Form until the GHL embed is
-                  pasted at /admin under page:infinite-banking-pdf:form. */}
-              <div className="flex flex-col gap-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input type="text" placeholder="Name*" className={inputClass} />
-                  <input type="tel" placeholder="Phone*" className={inputClass} />
-                  <input type="email" placeholder="Email*" className={inputClass} />
-                  <input type="text" placeholder="Your age*" className={inputClass} />
-                </div>
-                <p className="text-[#0D1B3D]/50 text-xs leading-relaxed">
-                  By pressing the Submit button, you agree to use InsuranceandEstates&rsquo;{' '}
-                  <a href="/privacytou/" className="underline hover:text-[#0D1B3D]">
-                    privacy policy and terms
-                  </a>
-                  . InsuranceandEstates may contact you at the number you entered on this webpage
-                  using our automatic dialing system to market our life insurance products.
-                  Alternatively, you can contact us at{' '}
-                  <a href="tel:1-877-787-7558" className="underline hover:text-[#0D1B3D]">
-                    877-787-7558
-                  </a>
-                  .
-                </p>
-                <label className="flex items-start gap-3 text-sm text-[#0D1B3D]/70 leading-relaxed">
-                  <input type="checkbox" className="mt-1 shrink-0" />
-                  <span>I read the disclaimer above.* Yes</span>
-                </label>
-                <button
-                  type="button"
-                  className="bg-[#0D1B3D] text-white font-medium px-8 py-3 rounded-full hover:bg-[#1C2E55] transition-colors duration-200 self-start"
-                >
-                  Submit
-                </button>
-              </div>
+              <SimpleLeadForm
+                source="page:infinite-banking-pdf:form"
+                tone="light"
+                includeAge
+                successMessage="Thank you! Check your inbox, your IBC materials are on the way."
+              />
             </EmbedSlot>
           </div>
         </div>

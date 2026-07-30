@@ -2,12 +2,14 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { LEAD_ERROR_MESSAGE, splitName, submitLead } from '../../lib/submitLead';
 
-/* Visual replica of the live page's NinjaQuoter widgets (green-headed quote
-   forms: State / Health Class / Birthdate / Gender / Smoker / [Term] / Face
-   Amount / Name / Email / Phone → "Display Quotes"), wired like the site's
-   other form replicas — the replica is the fallback behind an embed slot so
-   the real quoter embed can be pasted at /admin without a deploy. */
+/* Replica of the live page's NinjaQuoter widgets (green-headed quote forms:
+   State / Health Class / Birthdate / Gender / Smoker / [Term] / Face Amount /
+   Name / Email / Phone → "Display Quotes"), now a real quote-request form:
+   all fields post to /api/lead/ with the slot key as source (webhook at
+   /admin -> Forms) so an agent can run the quotes. A real quoter embed
+   pasted into the slot at /admin still overrides. */
 
 const STATES = [
   ['AL', 'Alabama'], ['AK', 'Alaska'], ['AZ', 'Arizona'], ['AR', 'Arkansas'],
@@ -57,12 +59,32 @@ export default function QuoteWidget({
   /** The term-life widget adds a "Type of Insurance" select. */
   showTermSelect?: boolean;
 }) {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const submitted = status === 'sent';
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Same submission pattern as the site's other form replicas {/* TODO: wire submissions */}
-    setSubmitted(true);
+    if (status === 'sending') return;
+    setStatus('sending');
+    const data = new FormData(event.currentTarget);
+    const field = (key: string) => String(data.get(key) ?? '');
+    const ok = await submitLead({
+      ...splitName(field('name')),
+      email: field('email'),
+      phone: field('phone'),
+      state: field('state'),
+      health_class: field('health_class'),
+      birthdate: `${field('birth_month')}/${field('birth_day')}/${field('birth_year')}`,
+      gender: field('gender'),
+      smoker: field('smoker'),
+      ...(showTermSelect ? { insurance_type: field('insurance_type') } : {}),
+      face_amount: field('face_amount'),
+      quote_widget: heading,
+      // Pressing "Display Quotes" is the consent action (disclaimer below button)
+      consent: true,
+      source: slotKey,
+    });
+    setStatus(ok ? 'sent' : 'error');
   };
 
   return (
@@ -84,7 +106,7 @@ export default function QuoteWidget({
               <div className="grid grid-cols-2 gap-3">
                 <label className={labelClass}>
                   State:
-                  <select className={`${selectClass} mt-1`} defaultValue="">
+                  <select name="state" required className={`${selectClass} mt-1`} defaultValue="">
                     <option value="" />
                     {STATES.map(([value, name]) => (
                       <option key={value} value={value}>
@@ -95,7 +117,7 @@ export default function QuoteWidget({
                 </label>
                 <label className={labelClass}>
                   Health Class:
-                  <select className={`${selectClass} mt-1`}>
+                  <select name="health_class" className={`${selectClass} mt-1`}>
                     {HEALTH_CLASSES.map((c) => (
                       <option key={c}>{c}</option>
                     ))}
@@ -106,19 +128,19 @@ export default function QuoteWidget({
               <div>
                 <span className={labelClass}>Birthdate:</span>
                 <div className="grid grid-cols-3 gap-3 mt-1">
-                  <select className={selectClass} defaultValue="MM" aria-label="Birth month">
+                  <select name="birth_month" className={selectClass} defaultValue="MM" aria-label="Birth month">
                     <option>MM</option>
                     {MONTHS.map((m) => (
                       <option key={m}>{m}</option>
                     ))}
                   </select>
-                  <select className={selectClass} defaultValue="DD" aria-label="Birth day">
+                  <select name="birth_day" className={selectClass} defaultValue="DD" aria-label="Birth day">
                     <option>DD</option>
                     {DAYS.map((d) => (
                       <option key={d}>{d}</option>
                     ))}
                   </select>
-                  <select className={selectClass} defaultValue="Year" aria-label="Birth year">
+                  <select name="birth_year" className={selectClass} defaultValue="Year" aria-label="Birth year">
                     <option>Year</option>
                     {YEARS.map((y) => (
                       <option key={y}>{y}</option>
@@ -132,10 +154,10 @@ export default function QuoteWidget({
                   <legend className={labelClass}>Gender:</legend>
                   <div className="flex gap-4 mt-1 text-[14px] text-[#363636]">
                     <label className="flex items-center gap-1.5">
-                      <input type="radio" name={`${slotKey}-gender`} value="Male" /> Male
+                      <input type="radio" name="gender" value="Male" /> Male
                     </label>
                     <label className="flex items-center gap-1.5">
-                      <input type="radio" name={`${slotKey}-gender`} value="Female" /> Female
+                      <input type="radio" name="gender" value="Female" /> Female
                     </label>
                   </div>
                 </fieldset>
@@ -143,10 +165,10 @@ export default function QuoteWidget({
                   <legend className={labelClass}>Smoker/Tobacco:</legend>
                   <div className="flex gap-4 mt-1 text-[14px] text-[#363636]">
                     <label className="flex items-center gap-1.5">
-                      <input type="radio" name={`${slotKey}-smoker`} value="Yes" /> Yes
+                      <input type="radio" name="smoker" value="Yes" /> Yes
                     </label>
                     <label className="flex items-center gap-1.5">
-                      <input type="radio" name={`${slotKey}-smoker`} value="No" /> No
+                      <input type="radio" name="smoker" value="No" /> No
                     </label>
                   </div>
                 </fieldset>
@@ -156,7 +178,7 @@ export default function QuoteWidget({
                 {showTermSelect && (
                   <label className={labelClass}>
                     Type of Insurance:
-                    <select className={`${selectClass} mt-1`}>
+                    <select name="insurance_type" className={`${selectClass} mt-1`}>
                       {TERMS.map((t) => (
                         <option key={t}>{t}</option>
                       ))}
@@ -165,7 +187,7 @@ export default function QuoteWidget({
                 )}
                 <label className={labelClass}>
                   Face Amount:
-                  <select className={`${selectClass} mt-1`}>
+                  <select name="face_amount" className={`${selectClass} mt-1`}>
                     {FACE_AMOUNTS.map((f) => (
                       <option key={f}>{f}</option>
                     ))}
@@ -173,26 +195,30 @@ export default function QuoteWidget({
                 </label>
                 <label className={labelClass}>
                   Your Name:
-                  <input type="text" className={`${inputClass} mt-1`} />
+                  <input type="text" name="name" required className={`${inputClass} mt-1`} />
                 </label>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <label className={labelClass}>
                   Email Address:
-                  <input type="email" className={`${inputClass} mt-1`} />
+                  <input type="email" name="email" required className={`${inputClass} mt-1`} />
                 </label>
                 <label className={labelClass}>
                   Phone Number:
-                  <input type="tel" className={`${inputClass} mt-1`} />
+                  <input type="tel" name="phone" required className={`${inputClass} mt-1`} />
                 </label>
               </div>
 
+              {status === 'error' && (
+                <p className="text-[#C62828] text-sm leading-relaxed">{LEAD_ERROR_MESSAGE}</p>
+              )}
               <button
                 type="submit"
-                className="self-center bg-[#6ED05D] text-[#0D1B3D] font-medium text-[15px] tracking-[0.5px] rounded-full px-8 py-2.5 hover:opacity-90 transition-opacity duration-200"
+                disabled={status === 'sending'}
+                className="self-center bg-[#6ED05D] disabled:opacity-60 text-[#0D1B3D] font-medium text-[15px] tracking-[0.5px] rounded-full px-8 py-2.5 hover:opacity-90 transition-opacity duration-200"
               >
-                DISPLAY QUOTES
+                {status === 'sending' ? 'SENDING…' : 'DISPLAY QUOTES'}
               </button>
 
               <p className="text-[11px] leading-[1.6] text-[#363636]/80">
