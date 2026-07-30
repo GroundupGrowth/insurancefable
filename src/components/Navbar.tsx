@@ -36,6 +36,10 @@ const navGroups: NavGroup[] = [
     label: 'Blog',
     href: '/blog/',
   },
+  {
+    label: 'Tools',
+    href: '/tools/',
+  },
 ];
 
 export default function Navbar() {
