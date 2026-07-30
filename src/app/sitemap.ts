@@ -4,6 +4,7 @@ import { SITE_URL } from '../lib/content';
 import { getWikiTerms } from '../lib/wiki';
 import { getAllPosts } from '../lib/blog';
 import { ebookDefaults } from '../data/ebooks';
+import { explainers } from '../data/explainers';
 
 /* Canonical, indexable URLs only. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -38,6 +39,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     { url: `${SITE_URL}/tools/`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/explainers/`, lastModified, changeFrequency: 'weekly', priority: 0.7 },
+    ...explainers.map((entry) => ({
+      url: `${SITE_URL}/explainers/${entry.slug}/`,
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
     ...[
       'infinite-banking-calculator',
       'human-life-value-calculator',

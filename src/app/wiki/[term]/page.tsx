@@ -110,7 +110,7 @@ export default async function WikiTermPage({ params }: { params: Promise<{ term:
               {explainersForWikiTerm(term.slug).map((entry) => (
                 <a
                   key={entry.slug}
-                  href={`/explainers/#${entry.slug}`}
+                  href={`/explainers/${entry.slug}/`}
                   className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] text-sm px-4 py-2 rounded-full border border-black/5 hover:bg-[#0D1B3D] hover:text-white transition-colors duration-200"
                 >
                   <span className="w-2 h-2 rounded-full bg-[#FF0000]" aria-hidden="true" />

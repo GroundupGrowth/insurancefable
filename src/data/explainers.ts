@@ -9,8 +9,16 @@ export interface ExplainerLink {
   label: string;
 }
 
+export type ExplainerCategory = 'basics' | 'strategy';
+
+export const explainerCategories: { key: ExplainerCategory; label: string }[] = [
+  { key: 'basics', label: 'Life Insurance Basics' },
+  { key: 'strategy', label: 'Strategy, Risk & Taxes' },
+];
+
 export interface Explainer {
   slug: string;
+  category: ExplainerCategory;
   title: string;
   /** One-line plain-language answer, used as the description/JSON-LD summary */
   summary: string;
@@ -27,6 +35,7 @@ export interface Explainer {
 export const explainers: Explainer[] = [
   {
     slug: 'what-is-whole-life-insurance',
+    category: 'basics',
     title: 'What Is Whole Life Insurance?',
     summary:
       'Whole life insurance is permanent coverage with a guaranteed death benefit, level premiums, and cash value you can use while you are alive.',
@@ -48,6 +57,7 @@ Additional glossary links if you want to check them out: term life insurance, ca
   },
   {
     slug: 'what-is-term-life-insurance',
+    category: 'basics',
     title: 'What Is Term Life Insurance?',
     summary:
       'Term life insurance covers you for a set period like 10, 20, or 30 years, pays only if you die during the term, and builds no cash value.',
@@ -69,6 +79,7 @@ If you want to check out related glossary links you can look at whole life insur
   },
   {
     slug: 'how-cash-value-life-insurance-works',
+    category: 'basics',
     title: 'How Does Life Insurance Actually Work?',
     summary:
       'You pay premiums, the insurer contractually owes your beneficiaries a death benefit, and some policies add cash value and living benefits you can use before death.',
@@ -90,6 +101,7 @@ If you want to check out related glossary links, you can look at death benefit, 
   },
   {
     slug: 'cash-value-life-insurance-explained',
+    category: 'basics',
     title: 'What Is Cash Value Life Insurance?',
     summary:
       'Cash value life insurance is permanent coverage with a built-in savings component that grows tax-deferred and can be borrowed against during your lifetime.',
@@ -111,6 +123,7 @@ If you want to look at related links, you can look at whole life insurance, univ
   },
   {
     slug: 'cash-value-growth-dynamics',
+    category: 'basics',
     title: 'What Determines How Fast Cash Value Grows?',
     summary:
       'Cash value growth comes down to how aggressively you fund the policy, how efficiently it is designed, and the crediting method behind it.',
@@ -135,6 +148,7 @@ If you want related glossary links, check out cash value, overfunding a policy, 
   },
   {
     slug: 'what-is-high-cash-value-insurance',
+    category: 'basics',
     title: 'What Is High Cash Value Life Insurance?',
     summary:
       'High cash value life insurance is a permanent policy engineered with overfunding and paid-up additions so your money shows up as accessible cash value fast.',
@@ -159,6 +173,7 @@ If you want related glossary links, you can check out whole life insurance, cash
   },
   {
     slug: 'dividends-in-life-insurance',
+    category: 'basics',
     title: 'What Are Dividends in Life Insurance?',
     summary:
       'Dividends are discretionary payments participating whole life policyholders receive when the insurer outperforms its conservative assumptions, generally treated as a tax-free return of premium.',
@@ -185,6 +200,7 @@ For related glossary links, you could look at participating whole life insurance
   },
   {
     slug: 'borrow-against-life-insurance',
+    category: 'basics',
     title: 'How Do You Borrow Against Life Insurance?',
     summary:
       'You borrow against permanent life insurance by taking a policy loan secured by your cash value: no credit check, no fixed payments, but unpaid balances reduce your death benefit.',
@@ -209,6 +225,7 @@ If you want to look up some related glossary links: cash value life insurance, p
   },
   {
     slug: 'do-you-have-to-pay-back-a-policy-loan',
+    category: 'basics',
     title: 'Do You Have to Pay Back a Policy Loan?',
     summary:
       'There is no mandatory repayment schedule on a policy loan, but interest keeps accruing, unpaid balances reduce the death benefit, and large loans can lapse the policy.',
@@ -236,6 +253,7 @@ If you're looking for related glossary links, you can check out policy loan, cas
   },
   {
     slug: 'life-insurance-as-a-traditional-alternative',
+    category: 'basics',
     title: 'How Can Life Insurance Replace a Traditional Bank?',
     summary:
       'A high cash value policy can act as your personal cash hub: store capital, earn steady tax-advantaged growth, and borrow on demand with no credit check.',
@@ -260,6 +278,7 @@ If you want related glossary links you can check out infinite banking concept, h
   },
   {
     slug: 'how-life-insurance-creates-liquidity',
+    category: 'basics',
     title: 'How Does Life Insurance Create Liquidity?',
     summary:
       'Life insurance turns illiquid moments into spendable cash, instantly for beneficiaries through the death benefit and during your lifetime through cash value access.',
@@ -283,6 +302,7 @@ If you want related glossary links, you can check out liquidity, cash value life
   },
   {
     slug: 'can-life-insurance-be-used-while-alive',
+    category: 'basics',
     title: "Can Life Insurance Be Used While You're Alive?",
     summary:
       'Yes: permanent policies build cash value you can borrow or withdraw, and living benefit riders can unlock part of the death benefit for serious illness or care needs.',
@@ -304,6 +324,7 @@ For additional links, you can check out cash value life insurance, policy loans,
   },
   {
     slug: 'purpose-of-life-insurance-beyond-death',
+    category: 'basics',
     title: 'What Is the Purpose of Life Insurance Beyond the Death Benefit?',
     summary:
       'Beyond the payout, life insurance works as a living financial tool: cash value access, illness benefits, business protection, and tax-efficient wealth transfer.',
@@ -329,6 +350,7 @@ For additional links, you could look at living benefits, cash value life insuran
   },
   {
     slug: 'who-needs-life-insurance',
+    category: 'basics',
     title: 'Who Actually Needs Life Insurance?',
     summary:
       'Life insurance matters most when your death would create a financial problem for someone else: dependents, shared debts, a business, or care responsibilities.',
@@ -349,6 +371,218 @@ If you want to check out related links, you can look at beneficiary, breadwinner
         href: '/beyond-the-death-benefit-the-heart-of-life-insurance-for-family-breadwinners/',
         label: 'Life Insurance for Breadwinners',
       },
+    ],
+  },
+  /* ---- Batch 2 (2026-07-30): strategy, risk, and tax questions ---------- */
+  {
+    slug: 'is-life-insurance-better-than-a-bank',
+    category: 'strategy',
+    title: 'Is Life Insurance Better Than a Bank?',
+    summary:
+      'A bank wins for short-term cash and quick transactions; properly designed cash value life insurance works as a long-term, tax-advantaged reserve. The smart answer is usually both.',
+    seconds: 151,
+    transcript: `Is life insurance better than a bank? Well, life insurance is not better than a bank in every way, but it does do different things. A bank is arguably best for short-term savings, smaller amounts, and quick transactions, where something like a properly designed cash value life insurance contract can act as a longer-term, tax-advantaged storehouse of capital with a leveraged death benefit.
+
+So, banks perhaps excel at liquidity and simplicity for checking, savings, quick access to cash. Of course, you have your FDIC protection, which is somewhat comforting depending on who you are, but such accounts usually pay very low interest and have no death benefit. In contrast, a properly structured permanent life insurance contract builds tax-deferred cash value with guarantees, potential dividends, flexible policy loans without credit checks, and an income tax-free death benefit that is highly leveraged to the cash value. But of course, you have some costs: underwriting, medical and financial underwriting requirements, and so for short-term parking of cash, you have a few more steps.
+
+So the best approach is usually to use both: banks for day-to-day cash and the properly designed cash value contract for long-term protection and strategic capital. Remember, a bank is your safe, immediate cash storage space, but not ideal for larger sums of cash.
+
+Here's three takeaways. Banks: short-term cash, payments, some emergency fund money, high liquidity, some insurance to cover that amount. Cash value life insurance: useful for long-term, tax-advantaged cash value and legacy, flexible loans and guarantees, but some higher costs, underwriting, and other access requirements. So perhaps you can use this as a takeaway: rather than replacing banks, cash value life insurance, properly designed, is well viewed as a complementary private reserve or a financing tool layered on top of whatever you're doing with your traditional banking, and perhaps as an alternative for larger sums of safe capital. I hope this is helpful. I'll see you in the next video.`,
+    wiki: [
+      { slug: 'cash-value', label: 'Cash Value' },
+      { slug: 'policy-loan', label: 'Policy Loan' },
+      { slug: 'dividend', label: 'Dividend' },
+    ],
+    articles: [
+      {
+        href: '/whole-life-vs-traditional-bank-savings-account/',
+        label: 'Whole Life vs Bank Savings',
+      },
+      { href: '/be-your-own-bank/', label: 'Be Your Own Bank' },
+    ],
+  },
+  {
+    slug: 'is-borrowing-against-life-insurance-risky',
+    category: 'strategy',
+    title: 'Is Borrowing Against Life Insurance Risky?',
+    summary:
+      'Policy loans are useful but they are real debt: unpaid balances reduce the death benefit, and a lapsed policy with a large loan can trigger a surprise tax bill.',
+    seconds: 145,
+    transcript: `Is borrowing against life insurance risky? Well, borrowing against life insurance can be very useful, but it does carry some risks if you don't manage the loan and interest carefully. This is something that one of the originators of the infinite banking idea, Nelson Nash, took very seriously; he talked about being an honest banker with your policy loans.
+
+When you take a policy loan, the insurer lends you money using your cash value as collateral. If you don't pay it, the loan plus interest grows and is deducted from your death benefit, meaning that your beneficiaries receive less. In some cases, this is strategically planned to draw down that death benefit. If the loan balance and interest ever approach or exceed the available cash value, the policy could lapse, though companies keep tabs on this. At that point, the IRS could treat the outstanding loan as taxable income to the extent of gain, creating a surprise tax bill and loss of coverage. Used with a clear repayment strategy and clear monitoring, loans can be relatively low risk. Used casually, they're pretty safe when calculated and it's understood that you want to manage repayment prudently.
+
+So the takeaway here: policy loans aren't automatically bad, but they are debt from the standpoint that they cut into the death benefit and can threaten the policy if not paid for a long period of time.
+
+Three takeaways. One, loans reduce available cash value and will lower the death benefit dollar for dollar if not repaid. Number two, if the loan plus interest grows too large and the policy lapses or is surrendered, any gain above what you paid in can become taxable. Number three, with properly designed policies, monitoring, and a disciplined repayment plan, borrowing can be a flexible, highly tax-advantaged tool, but it should never be treated as free money unless, of course, you're in a particular strategy like tax-free retirement where that is in the cards from a planning standpoint.
+
+Lots more on this, but for related glossary links, you can look at policy loans, cash value life insurance, policy lapse, loan interest, taxable gain. Thanks for watching.`,
+    wiki: [
+      { slug: 'policy-loan', label: 'Policy Loan' },
+      { slug: 'cash-value', label: 'Cash Value' },
+      { slug: 'surrender-value', label: 'Surrender Value' },
+    ],
+    articles: [
+      {
+        href: '/borrowing-against-life-insurance-pros-and-cons/',
+        label: 'Borrowing Pros and Cons',
+      },
+      { href: '/nelson-nash/', label: 'Who Was Nelson Nash?' },
+    ],
+  },
+  {
+    slug: 'is-infinite-banking-only-for-the-wealthy',
+    category: 'strategy',
+    title: 'Is Infinite Banking Only for the Wealthy?',
+    summary:
+      'No. Infinite banking runs on consistent cash flow and proper policy design, not net worth. A few hundred dollars a month can start the system.',
+    seconds: 138,
+    transcript: `Is infinite banking only for the wealthy? No. Infinite banking is often used by wealthy families, but the core strategy can be started at modest contribution levels by middle-income households as well.
+
+The infinite banking concept is a term coined by Nelson Nash, and it's about using high cash value whole life, properly designed, as a personal financing system. You fund the policy consistently, you build cash value, it has tax advantages under 7702, the tax code. Then when it matures, you can borrow against it for purchases and investments, while the cash value continues to grow. Wealthy families are just visible, people like the Rockefellers in case studies, because they move large dollars and utilize this kind of a strategy, but the mechanics don't require being rich. What matters is steady cash flow, disciplined savings, and proper policy design, and ideally a proper company, at whatever level that you can afford. If it's a few hundred bucks a month, that can still work. So you don't need millions, you need a consistent savings habit and properly structured policies. A lot of the wealthy families that have used this have been very visible.
+
+Three takeaways. One, infinite banking is based on cash flow and not your net worth, so you can start with smaller policies and scale over time. Number two, wealthy families are common examples because they understand liquidity, control, and tax advantages, but these benefits are not exclusive to the wealthy. Actually, they benefit average households a great deal. We're going to make that case anyway. Number three, the real key is good design and discipline: funding consistently, managing loans wisely, and viewing it as a long-term system, not a quick fix.
+
+For related glossary links, you can look at the infinite banking concept, high cash value life insurance, policy loans, cash flow management, and wealth building habits. Thanks for watching.`,
+    wiki: [
+      { slug: 'infinite-banking', label: 'Infinite Banking' },
+      { slug: 'cash-value', label: 'Cash Value' },
+      { slug: 'policy-loan', label: 'Policy Loan' },
+    ],
+    articles: [
+      { href: '/infinite-banking/', label: 'Infinite Banking Guide' },
+      { href: '/family-bank/', label: 'The Family Bank' },
+    ],
+  },
+  {
+    slug: 'can-you-lose-money-with-life-insurance',
+    category: 'strategy',
+    title: 'Can You Lose Money with Life Insurance?',
+    summary:
+      'Yes, you can: outliving a term policy, surrendering early, high fees, or mismanaged loans can all leave you with less than you paid in.',
+    seconds: 140,
+    transcript: `Can life insurance lose money? Well, yes. While many life insurance policies offer guarantees, you can lose money if you allow them to lapse, surrender a policy, especially an IUL with surrender charges, or through poor policy design and investment underperformance in the case of an IUL or a variable policy. The way to lose money in life insurance, even though it's contractual, is if you exit early or if you really mismanage your policy loans.
+
+With something like term life, you don't get cash back. If you outlive the term, you've paid for pure protection, so from an investment standpoint, you lose all those premiums if no claim is paid. With permanent policies, you're going to get paid on the death benefit if you keep that policy in force, but early surrender can result in getting back less than you paid because of the front-loaded costs and surrender charges, especially for IULs and variable policies. Cash value can erode from charges and loan interest if loans aren't paid, and that's another way to potentially wipe out your gains in a policy.
+
+So the idea is, life insurance isn't a guaranteed win. If you bail out early, over-borrow, or underfund, you can walk away with less than you put in and maybe even owe taxes if the policy turns into a modified endowment contract, which is a whole other topic. The key is understanding the costs, time horizon, and how to manage loans.
+
+Three takeaways. One, term life has no cash value. If you outlive the term, you walk away with zero, which is normal for pure insurance, but a loss if viewed as an investment. Two, permanent policies can return less than premiums paid if surrendered early, hit with surrender charges, or dragged down by high fees and poor funding. Three, mismanaged loans and underperformance can erode cash value, cause lapse, and create unexpected tax bills.
+
+For related glossary links, check out term life insurance, cash surrender value, policy lapse, surrender charges, policy loans. Thanks for watching.`,
+    wiki: [
+      { slug: 'surrender-value', label: 'Surrender Value' },
+      { slug: 'modified-endowment-contract-mec', label: 'MEC' },
+      { slug: 'policy-loan', label: 'Policy Loan' },
+    ],
+    articles: [
+      {
+        href: '/what-happens-if-you-stop-paying-whole-life-insurance-premiums/',
+        label: 'If You Stop Paying Premiums',
+      },
+      { href: '/whole-life-insurance-pros-cons/', label: 'Whole Life Pros and Cons' },
+    ],
+  },
+  {
+    slug: 'is-life-insurance-tax-free',
+    category: 'strategy',
+    title: 'Is Life Insurance Tax-Free?',
+    summary:
+      'The death benefit is usually income tax-free and cash value grows tax-deferred, but interest, installments, large estates, employer coverage, and transfers for value can all create taxable income.',
+    seconds: 136,
+    transcript: `Is life insurance tax-free? Well, life insurance is not always tax-free. The death benefit from a personally owned policy is usually received income tax-free by beneficiaries. Let's get to the bottom of it.
+
+US tax law says most individual life insurance death benefits paid as a lump sum are excluded from the beneficiary's taxable income, so they are not subject to federal income tax. However, taxes can apply in certain situations. For example, if the proceeds earn interest, if benefits are paid in installments, if the policy is part of a very large taxable estate, if it is employer-provided coverage above IRS limits, or if the policy has been transferred for value. We're getting into some very detailed legal terms there when you talk about things like transfer for value.
+
+People say life insurance is tax-free because the death benefit is usually income tax-free. There's also tax-free growth inside of properly designed cash value policies. It's actually tax-deferred growth, but you may never pay taxes on it if you never pull out the income or the cash beyond what you paid in as basis.
+
+Three bullet takeaways. One, lump sum death benefits from individually owned policies are generally income tax-free to beneficiaries. Two, interest on payouts, employer-provided coverage above certain limits, very large taxable estates, transfers for value, and some installment annuity options can create taxable income, so just be wary of that. Three, cash value grows tax-deferred and loans are typically tax-free while the policy stays in force and is not a modified endowment contract, known as a MEC in the industry, but withdrawals and surrenders above basis can be taxable.
+
+For related glossary links, check out death benefit, income tax versus estate tax, modified endowment contract, transfer for value (it's a good one to look up), cash value, and policy loans. Thanks for watching.`,
+    wiki: [
+      { slug: 'death-benefit', label: 'Death Benefit' },
+      { slug: 'modified-endowment-contract-mec', label: 'MEC' },
+      { slug: 'cash-value', label: 'Cash Value' },
+    ],
+    articles: [
+      { href: '/is-life-insurance-taxable/', label: 'Is Life Insurance Taxable?' },
+      { href: '/three-tax-buckets/', label: 'The Three Tax Buckets' },
+    ],
+  },
+  {
+    slug: 'life-insurance-vs-401k',
+    category: 'strategy',
+    title: 'Life Insurance vs 401k: How Do They Compare?',
+    summary:
+      'A 401k chases market growth with an employer match; cash value life insurance adds guarantees, tax-free loan access, and a death benefit. For most people they complement each other.',
+    seconds: 204,
+    transcript: `How does life insurance compare to a 401k? They're both regulated by different provisions of the tax code, and they also do very different jobs. A 401k is designed primarily as a tax-deferred savings and investment account, where cash value life insurance is first recognized as an insurance contract that can also double as a supplemental tax-advantaged asset. Sounds cool, right?
+
+A 401k is a first stop for retirement savings: contributions are pre-tax unless you have a Roth, you may get an employer match, which is essentially free money, and long-term investment returns in diversified markets. These are proposed as highly opportunistic and generally recognized as higher than what you might get in a properly designed cash value life insurance policy, which is by contrast a slower growth proposition, also tax-deferred accumulation, and one huge benefit: potential tax-free access through policy loans, guaranteed growth, another big benefit, and of course the leveraged death benefit, which is part of the life insurance component.
+
+So your 401k is arguably built to grow your retirement in the markets and offer the potential for larger returns. Life insurance is built to protect your family and can also store cash with tax advantages and guarantees. Most people don't replace a 401k with life insurance; if anything they replace a portion of it, having a tax-free life insurance component to complement it in order to add liquidity, stability, and legacy on top of market-based retirement savings. This helps to buffer sequence of returns risk and other factors in relying solely on market-based accounts.
+
+Three takeaways. Number one, higher growth potential and employer match with a 401k, but it also carries market risk, early withdrawal penalties, and taxable distributions, which can be pretty cumbersome if you're trying to get money out of a 401k before the time that you're required to take distributions. Number two, cash value life insurance has perhaps lower expected returns but offers guarantees, tax-deferred growth, flexible access through loans with no age 59 and a half penalty, and also a permanent death benefit to create legacy protection and liquidity. Number three, for most people life insurance is best used to complement, not entirely replace, a 401k or IRA kind of strategy for retirement, especially when you're looking for lifetime coverage, liquidity, and diversification. But arguably you also want the component that is tax-free, guaranteed growth, leverage, and the ability to buffer: if you need to take income out, you'd rather take it out of a policy tax-free as opposed to a retirement account in a difficult time.
+
+If you want glossary links, check out 401k, cash value life insurance, life insurance retirement plan, Roth versus traditional accounts, and tax diversification in retirement. Thanks for watching.`,
+    wiki: [
+      { slug: 'cash-value', label: 'Cash Value' },
+      { slug: 'lirp', label: 'LIRP' },
+      { slug: 'policy-loan', label: 'Policy Loan' },
+    ],
+    articles: [
+      { href: '/iul-vs-401k/', label: 'IUL vs 401k' },
+      { href: '/401k-alternatives/', label: '401k Alternatives' },
+    ],
+  },
+  {
+    slug: 'sequence-of-returns-risk',
+    category: 'strategy',
+    title: 'Sequence of Returns Risk: The Retirement Risk No One Warns You About',
+    summary:
+      'Two people can retire with the same savings and the same plan and end up in completely different places. The order of market returns in your first retirement years decides more than the average.',
+    seconds: 171,
+    transcript: `You don't get to pick the year that you retire. The market does. And nobody ever told you that that is how it works. Look, I've been doing this for 16 years. I've helped guide people through guaranteed income planning for retirement. And the one thing that still keeps me up at night is something called sequence of returns risk.
+
+Now, what does that mean? Well, in plain English, two people can retire with the exact same amount of money, follow the exact same plan, and withdraw the exact same income every month. The difference is one runs out of money at age 84, while the other passes away at age 90 with over $5 million left. Same plan, same savings, completely different outcome. And the only difference is the order that the market gave them for their returns.
+
+If the market is up strong in the first three years of retirement, you're probably set for the next 30. But if the market is down those first three years, now you're forced to sell investments at a loss just to pay for groceries. And the math never fully recovers. You didn't do anything wrong. You're not bad at investing. You simply retired into the wrong window. And your 401k provider never warns you that that window matters.
+
+Every week I sit across from couples who are 60, 62, 64 years old. They've worked hard their whole lives. They've hit the number their advisor told them they needed to hit. Now they're about to discover whether they retired into a 1998-style bull market or a 2008-style crash right at the start. And they don't get to choose. The calendar chooses for them. And the calendar doesn't care how responsible you've been.
+
+This is the risk that no one talks to you about. It's not about the average rate of return. It's not about inflation. It's the order of returns that decides everything. The order determines whether you spend your 70s traveling the world with your grandkids, or you're sitting at the kitchen table clipping coupons to survive, and you hope that you just don't outlive your money. You've mastered the accumulation phase, but now you're moving into the distribution phase that no one has talked to you about. And the gap is the difference between the two retirements you might be about to enjoy. If you're within five years of retirement, the right plan can protect you from the wrong window.`,
+    wiki: [
+      { slug: 'annuity', label: 'Annuity' },
+      { slug: 'lirp', label: 'LIRP' },
+    ],
+    articles: [
+      { href: '/whole-life-insurance-retirement/', label: 'Whole Life in Retirement' },
+      { href: '/fixed-index-annuity/', label: 'Fixed Index Annuities' },
+    ],
+  },
+  {
+    slug: 'the-widows-penalty',
+    category: 'strategy',
+    title: "The Widow's Penalty: The Tax Surprise for Surviving Spouses",
+    summary:
+      'When one spouse dies, the survivor files single: same income, tighter brackets, and a tax bill that can jump by thousands. Most retirement plans never model it.',
+    seconds: 156,
+    transcript: `When one of you dies, the survivor doesn't just lose their spouse. They get hit with a surprise tax increase that nobody ever warned you about.
+
+Here's how it works. You retire as a couple. You file taxes together. The brackets are wide, so you can pull a decent amount of income from your 401k, your IRA, Social Security, without jumping into those higher rates. And life feels very manageable. The plan seems solid. But then when one of you passes away, in that moment everything changes. The survivor is forced to file as a single. Same total income, but now it's squeezed into much tighter tax brackets. And what used to be comfortable in the 12 or 22 percent bracket can now seem just unimaginable in a 24 to 32 percent or even higher bracket.
+
+You know, I sit with widows every month who are living the worst year of their lives. They just buried the person that they built this entire world with. Then a few months later, reality hits. Their tax bill jumps 12,000, 20,000, sometimes even more. Not because they suddenly have more money, but because the government's brackets changed underneath them. The IRS doesn't send condolences. They just send a bigger bill.
+
+And the painful part is that most retirement plans are built assuming you both are going to live for decades filing jointly. Your withdrawal strategy, Roth conversions, Social Security claiming, all of it was modeled for two people. The minute one of you is gone, that model breaks. The same income that felt safe now creates a much larger tax problem.
+
+Now, a lot of you wives, you already know this. You know the statistics, that you're likely going to outlive your husbands. They know the tax hit is coming for them, and they carry that quiet burden, that quiet dread, alone. Because how do you even say that out loud? Well, here's the good news. There are categories of money where the survivor isn't punished for surviving. Most couples never plan for this moment, but the moment is coming, and the smart ones prepare for it.`,
+    wiki: [
+      { slug: 'estate-planning', label: 'Estate Planning' },
+      { slug: 'beneficiary', label: 'Beneficiary' },
+    ],
+    articles: [
+      { href: '/three-tax-buckets/', label: 'The Three Tax Buckets' },
+      { href: '/rich-man-roth/', label: 'The Rich Man\'s Roth' },
     ],
   },
 ];
