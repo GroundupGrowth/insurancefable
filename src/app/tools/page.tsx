@@ -8,6 +8,8 @@ import {
   DollarSign,
   ShieldCheck,
   Calculator,
+  Landmark,
+  HeartHandshake,
   ArrowRight,
 } from 'lucide-react';
 import PageShell from '../../components/PageShell';
@@ -39,6 +41,13 @@ interface Tool {
 }
 
 const financialTools: Tool[] = [
+  {
+    href: '/tools/infinite-banking-calculator/',
+    icon: Landmark,
+    title: 'Infinite Banking Calculator',
+    description:
+      'Model cash value growth in a properly structured policy and what borrowing against it really costs.',
+  },
   {
     href: '/tools/compound-interest-calculator/',
     icon: TrendingUp,
@@ -83,6 +92,13 @@ const insuranceTools: Tool[] = [
     title: 'Life Insurance Needs Calculator',
     description:
       'Estimate how much coverage your family actually needs with the DIME method, in under a minute.',
+  },
+  {
+    href: '/tools/human-life-value-calculator/',
+    icon: HeartHandshake,
+    title: 'Human Life Value Calculator',
+    description:
+      'Size coverage holistically: retirement, college, and final expenses, less what your investments will cover.',
   },
   {
     href: '/whole-life-insurance-calculator/',

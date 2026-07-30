@@ -2,14 +2,15 @@ import type { Metadata } from 'next';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 import { SalesSection, SalesHeading, SalesSubheading, SalesProse, SalesCta } from '../../components/EbookLanding';
+import HlvCalculator from '../../components/tools/HlvCalculator';
 import QuoteWidget from './QuoteWidget';
 
-/* 1:1 rebuild of the live (noindexed) /whole-life-insurance-calculator/ page.
+/* Rebuild of the live (noindexed) /whole-life-insurance-calculator/ page.
    Copy verbatim. Live embeds three interactive widgets that are reproduced as
    follows:
-   - The jQuery-UI "Human Life Value" slider calculator → its full on-page copy
-     (headings, slider labels with live default values, RESULTS text) rendered
-     statically, linked to this site's /life-insurance-needs-calculator/ tool.
+   - The jQuery-UI "Human Life Value" slider calculator → fully interactive
+     again since 2026-07-30 via the shared HlvCalculator component (also at
+     /tools/human-life-value-calculator/).
    - Three NinjaQuoter forms (whole life / no exam / term life) → visual
      replicas behind embed slots (QuoteWidget). */
 
@@ -25,17 +26,6 @@ export const metadata: Metadata = {
 };
 
 const linkClass = 'underline decoration-[#0D1B3D]/30 underline-offset-2 hover:decoration-[#0D1B3D]';
-
-/* The slider rows of live's Human Life Value calculator with its default values. */
-const hlvRows: [string, string][] = [
-  ['What’s your current age:', '35'],
-  ['Expected college expenses for kids:', 'US$50,000.00'],
-  ['Burial costs:', 'US$8,000.00'],
-  ['Annual net income during retirement:', 'US$50,000.00'],
-  ['Number of years in retirement:', '25'],
-  ['Money in investment accounts:', 'US$10,000.00'],
-  ['Annual investment contribution:', 'US$5,000.00'],
-];
 
 export default function WholeLifeInsuranceCalculatorPage() {
   return (
@@ -85,57 +75,10 @@ export default function WholeLifeInsuranceCalculatorPage() {
           </p>
         </SalesProse>
 
-        {/* Live's jQuery slider calculator, reproduced as static content.
-            The interactive equivalent on this site is /life-insurance-needs-calculator/. */}
-        <div className="mt-8 rounded-3xl border border-black/5 overflow-hidden max-w-3xl">
-          <div className="bg-[#F5F5F5] px-6 py-8 md:px-10">
-            <div className="flex items-start justify-between gap-6 flex-wrap">
-              <div>
-                <h3 className="text-[#0D1B3D] text-xl md:text-2xl font-medium" style={{ letterSpacing: '-0.02em' }}>
-                  LIFE INSURANCE CALCULATOR
-                </h3>
-                <p className="text-[#0D1B3D]/60 mt-2">Adjust the sliders to fit your criteria. View your results below.</p>
-              </div>
-              <img
-                src="/wp-content/uploads/IESLogo.png"
-                alt="Top 10 Best Infinite Banking Companies"
-                className="w-14 h-auto"
-              />
-            </div>
-            <dl className="mt-6 divide-y divide-black/5">
-              {hlvRows.map(([label, value]) => (
-                <div key={label} className="flex items-center justify-between gap-4 py-2.5">
-                  <dt className="text-[#0D1B3D]/70">{label}</dt>
-                  <dd className="text-[#0D1B3D] font-medium whitespace-nowrap">{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div className="bg-[#0D1B3D] px-6 py-8 md:px-10 text-white">
-            <h3 className="text-xl md:text-2xl font-medium mb-4" style={{ letterSpacing: '-0.02em' }}>
-              RESULTS
-            </h3>
-            <div className="text-white/70 leading-relaxed space-y-4 [&_b]:text-white [&_b]:font-medium">
-              <p>
-                Based on your inputs, we recommend a life insurance policy with an approximate
-                value of: <b>US$785,238.31</b>
-              </p>
-              <p>
-                Your total cost for <b>25</b> years of retirement at <b>US$50,000.00</b> per year
-                is: <b>US$1,250,000.00</b>
-              </p>
-              <p>
-                Assuming you retire at age <b>70</b>, you have <b>35</b> investing years left.
-                Using a <b>5%</b> annual rate of return for your investments, you&rsquo;re
-                expected to earn a total of <b>US$506,761.69</b>.
-              </p>
-            </div>
-            <div className="mt-8">
-              <SalesCta light href="/life-insurance-needs-calculator/">
-                Try Our Interactive Calculator
-              </SalesCta>
-            </div>
-          </div>
+        {/* Live's jQuery slider calculator, rebuilt as a fully interactive
+            tool. Also published standalone at /tools/human-life-value-calculator/. */}
+        <div className="mt-8">
+          <HlvCalculator />
         </div>
 
         <SalesProse>

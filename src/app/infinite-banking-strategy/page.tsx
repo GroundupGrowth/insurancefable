@@ -143,6 +143,36 @@ export default async function InfiniteBankingStrategyPage() {
         </div>
       </section>
 
+      {/* Interactive calculator promo — sits between the reading tracks so
+          "show me the numbers" visitors get a hands-on next step */}
+      <section className="px-6 pb-24">
+        <div className="max-w-[88rem] mx-auto bg-[#0D1B3D] rounded-3xl px-8 py-14 md:px-16 flex flex-col md:flex-row md:items-center gap-8">
+          <div className="flex-1">
+            <p className="text-white/50 text-sm mb-2">Free interactive tool</p>
+            <h2
+              className="text-white text-3xl md:text-4xl font-medium leading-tight mb-3"
+              style={{ letterSpacing: '-0.03em' }}
+            >
+              See the numbers for yourself.
+            </h2>
+            <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl">
+              The Infinite Banking Calculator models how cash value builds in a properly
+              structured policy, and what borrowing against it for a major purchase really costs
+              compared to a bank loan. No email, no signup.
+            </p>
+          </div>
+          <a
+            href="/tools/infinite-banking-calculator/"
+            className="shrink-0 inline-flex items-center gap-3 bg-white text-[#0D1B3D] font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start md:self-center"
+          >
+            Try the Calculator
+            <span className="bg-[#0D1B3D] rounded-full p-2">
+              <ArrowRight className="w-5 h-5 text-white" />
+            </span>
+          </a>
+        </div>
+      </section>
+
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
           <h2

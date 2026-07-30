@@ -38,6 +38,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     { url: `${SITE_URL}/tools/`, lastModified, changeFrequency: 'monthly', priority: 0.7 },
     ...[
+      'infinite-banking-calculator',
+      'human-life-value-calculator',
       'compound-interest-calculator',
       'sp500-historical-calculator',
       'fire-calculator',
