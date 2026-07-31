@@ -1,3 +1,3 @@
 # Deploy notes
 
-Deploy trigger: admin Forms page + real submissions on all native forms + thank-you booking band, 2026-07-30.
+Deploy trigger: Trustpilot #1 of 22 category ranking badge on homepage reviews, 2026-07-31.
