@@ -73,12 +73,34 @@ export default function TestimonialsSection() {
   return (
     <section className="bg-white py-24">
       <div className="max-w-[88rem] mx-auto px-6">
-        <h2
-          className="text-[#0D1B3D] text-4xl md:text-5xl font-medium mb-12"
-          style={{ letterSpacing: '-0.03em' }}
-        >
-          Our clients&rsquo; journeys.
-        </h2>
+        <div className="flex items-end justify-between gap-6 flex-wrap mb-12">
+          <h2
+            className="text-[#0D1B3D] text-4xl md:text-5xl font-medium"
+            style={{ letterSpacing: '-0.03em' }}
+          >
+            Our clients&rsquo; journeys.
+          </h2>
+          {/* Trustpilot category ranking (screenshot 2026-07-31: "#1 of 22 best
+              companies in Life Insurance Agency") — keep in sync with Trustpilot */}
+          <a
+            href="https://www.trustpilot.com/review/insuranceandestates.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-[#F5F5F5] rounded-full pl-4 pr-5 py-2.5 border border-black/5 hover:bg-[#EDEDED] transition-colors duration-200"
+          >
+            <span className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i} className="w-5 h-5 bg-[#00B67A] flex items-center justify-center">
+                  <Star className="w-3.5 h-3.5 fill-white text-white" />
+                </span>
+              ))}
+            </span>
+            <span className="text-sm text-[#0D1B3D] leading-snug">
+              <span className="font-medium">#1 of 22 best companies</span>
+              <span className="text-[#0D1B3D]/60"> in Life Insurance Agency on Trustpilot</span>
+            </span>
+          </a>
+        </div>
       </div>
 
       <style>{`
