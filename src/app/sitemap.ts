@@ -6,7 +6,10 @@ import { getAllPosts } from '../lib/blog';
 import { ebookDefaults } from '../data/ebooks';
 import { explainers } from '../data/explainers';
 
-/* Canonical, indexable URLs only. */
+/* Canonical, indexable URLs only. Revalidates hourly so articles published
+   through /admin/blog appear without a redeploy. */
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
   const advisorPaths = [

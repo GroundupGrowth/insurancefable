@@ -200,7 +200,7 @@ export interface BlogPostSummary {
 export async function getAllPosts(): Promise<BlogPostSummary[]> {
   const supabase = serverClient();
   if (!supabase) return [];
-  const [posts, rels, cats] = await Promise.all([
+  const [posts, rels, cats, images] = await Promise.all([
     supabase
       .from('posts')
       .select('id, slug, title, excerpt, published_at, legacy_modified_at')
@@ -208,8 +208,13 @@ export async function getAllPosts(): Promise<BlogPostSummary[]> {
       .order('published_at', { ascending: false }),
     supabase.from('posts_rels').select('parent_id, categories_id').not('categories_id', 'is', null),
     supabase.from('categories').select('id, name, slug'),
+    supabase.from('site_post_images').select('post_slug, image_url'),
   ]);
   if (!posts.data) return [];
+  /* Admin-set featured images (blog publisher) win over the code-owned
+     WordPress-export map. The table may not exist until the publisher SQL has
+     run — images.data is simply null then. */
+  const imageBySlug = new Map(images.data?.map((row) => [row.post_slug, row.image_url]) ?? []);
   const catById = new Map(cats.data?.map((cat) => [cat.id, { name: cat.name, slug: cat.slug }]));
   const catByPost = new Map<number, { name: string; slug: string }>();
   rels.data?.forEach((rel) => {
@@ -223,6 +228,6 @@ export async function getAllPosts(): Promise<BlogPostSummary[]> {
     publishedAt: post.published_at,
     modifiedAt: post.legacy_modified_at,
     category: catByPost.get(post.id) ?? null,
-    image: postThumbnails[post.slug] ?? null,
+    image: imageBySlug.get(post.slug) ?? postThumbnails[post.slug] ?? null,
   }));
 }

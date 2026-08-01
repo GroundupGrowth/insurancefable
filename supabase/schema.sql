@@ -217,3 +217,23 @@ insert into public.embed_slots (slot_key, label, category) values
   ('ebook:estate-planning-tactical-checklist','Estate Planning Tactical Checklist','ebook'),
   ('ebook:life-insurance-essentials-report', 'Life Insurance Essentials Report', 'ebook')
 on conflict (slot_key) do nothing;
+
+-- ---------------------------------------------------------------------------
+-- Featured images set in the blog publisher (/admin/blog). Overrides the
+-- code-owned WordPress-export thumbnail map on the /blog/ index cards.
+-- (Also created by blog-publisher.sql, which additionally grants the admin
+-- role write access to the Payload posts tables + the post-media bucket.)
+-- ---------------------------------------------------------------------------
+create table if not exists public.site_post_images (
+  post_slug text primary key,
+  image_url text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.site_post_images enable row level security;
+
+drop policy if exists "public read" on public.site_post_images;
+create policy "public read" on public.site_post_images for select using (true);
+drop policy if exists "authenticated write" on public.site_post_images;
+create policy "authenticated write" on public.site_post_images
+  for all to authenticated using (true) with check (true);
