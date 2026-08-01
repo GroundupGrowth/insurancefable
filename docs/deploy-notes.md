@@ -1,3 +1,3 @@
-# Deploy notes
+Deploy notes
 
-Deploy trigger: Trustpilot #1 of 22 category ranking badge on homepage reviews, 2026-07-31.
+Last trigger: blog publisher (2026-08-01)
