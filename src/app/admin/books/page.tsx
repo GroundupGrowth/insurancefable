@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
+import { loadRoleState } from '../../../lib/adminRoles';
 import { parseSlotNotes, serializeSlotNotes } from '../../../lib/slotNotes';
 import {
   ebookDefaults,
@@ -53,9 +54,15 @@ export default function BooksAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newCategory, setNewCategory] = useState<EbookCategory>('featured');
+  /* The opt-in embed, thank-you page and lead webhook are the same class of
+     secret as the Forms section, so editors don't see or write them. */
+  const [isOwner, setIsOwner] = useState(false);
 
   const load = useCallback(async () => {
     if (!supabase) return;
+    const { data: auth } = await supabase.auth.getSession();
+    const roleState = await loadRoleState(supabase, auth.session?.user.email);
+    setIsOwner(roleState.role === 'owner');
     const [rows, slots] = await Promise.all([
       supabase.from('site_ebooks').select('*').order('sort'),
       supabase.from('embed_slots').select('slot_key, embed_code, notes').like('slot_key', 'ebook:%'),
@@ -193,18 +200,21 @@ export default function BooksAdminPage() {
       ),
     );
     if (insertError) throw new Error(insertError.message);
-    // embeds: upsert one slot per book
-    const { error: embedError } = await supabase.from('embed_slots').upsert(
-      books.map((book) => ({
-        slot_key: `ebook:${book.slug}`,
-        label: book.title,
-        category: 'ebook' as const,
-        embed_code: book.embed,
-        notes: serializeSlotNotes({ thankYou: book.thankYou, webhook: book.webhook }),
-        updated_at: now,
-      })),
-    );
-    if (embedError) throw new Error(embedError.message);
+    /* embeds: upsert one slot per book. Owner-only — editors never load or
+       edit these fields, and the embed_slots policy rejects them anyway. */
+    if (isOwner) {
+      const { error: embedError } = await supabase.from('embed_slots').upsert(
+        books.map((book) => ({
+          slot_key: `ebook:${book.slug}`,
+          label: book.title,
+          category: 'ebook' as const,
+          embed_code: book.embed,
+          notes: serializeSlotNotes({ thankYou: book.thankYou, webhook: book.webhook }),
+          updated_at: now,
+        })),
+      );
+      if (embedError) throw new Error(embedError.message);
+    }
     await revalidatePaths(['/ebooks-and-guides/']);
     await load();
   };
@@ -317,6 +327,8 @@ export default function BooksAdminPage() {
                       <input className={inputClass} value={book.href} onChange={(e) => update(book.slug, { href: e.target.value })} />
                     </Field>
                   </div>
+                  {isOwner && (
+                  <>
                   <div className="mt-4">
                     <Field label="Opt-in embed" hint="GHL form embed for this book — the card opens it inline once pasted.">
                       <textarea
@@ -367,6 +379,8 @@ export default function BooksAdminPage() {
                       />
                     </Field>
                   </div>
+                  </>
+                  )}
                 </Card>
               ))}
             </div>

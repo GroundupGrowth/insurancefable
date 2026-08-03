@@ -1,9 +1,20 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, BarChart3, Code2, FileText, Newspaper, TrendingUp, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  BarChart3,
+  Code2,
+  FileText,
+  Library,
+  Newspaper,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
 import { getSupabase } from '../../lib/supabase';
+import { loadRoleState } from '../../lib/adminRoles';
 import { pageDefaults } from '../../data/pageContent';
+import { wikiTermDefaults } from '../../data/wiki';
 import { advisorDefaults } from '../../data/advisors';
 import { Card, PageHeader } from './ui';
 
@@ -19,6 +30,8 @@ interface Stats {
 export default function DashboardPage() {
   const supabase = useMemo(() => getSupabase(), []);
   const [stats, setStats] = useState<Stats | null>(null);
+  // Embed counts and the Embeds shortcut are owner-only, like the section itself.
+  const [isOwner, setIsOwner] = useState(false);
 
   const totalPages = Object.keys(pageDefaults).length + 1; // + homepage
   const totalAgents = Object.keys(advisorDefaults).length;
@@ -27,6 +40,11 @@ export default function DashboardPage() {
     if (!supabase) return;
     let cancelled = false;
     (async () => {
+      const { data: auth } = await supabase.auth.getSession();
+      const roleState = await loadRoleState(supabase, auth.session?.user.email);
+      if (cancelled) return;
+      const owner = roleState.role === 'owner';
+      setIsOwner(owner);
       const [pages, advisors, embeds, posts] = await Promise.all([
         supabase.from('site_pages').select('slug, updated_at'),
         supabase.from('advisors').select('slug, updated_at'),
@@ -39,9 +57,11 @@ export default function DashboardPage() {
       const recent = [
         ...(pages.data ?? []).map((r) => ({ what: `Page: ${r.slug}`, when: r.updated_at })),
         ...(advisors.data ?? []).map((r) => ({ what: `Agent: ${r.slug}`, when: r.updated_at })),
-        ...embedRows
-          .filter((r) => r.embed_code?.trim())
-          .map((r) => ({ what: `Embed: ${r.label}`, when: r.updated_at })),
+        ...(owner
+          ? embedRows
+              .filter((r) => r.embed_code?.trim())
+              .map((r) => ({ what: `Embed: ${r.label}`, when: r.updated_at }))
+          : []),
       ]
         .sort((a, b) => (a.when < b.when ? 1 : -1))
         .slice(0, 6);
@@ -81,17 +101,27 @@ export default function DashboardPage() {
           sub={stats ? `${stats.advisorOverrides} customized` : '—'}
           href="/admin/agents/"
         />
-        <Kpi
-          icon={Code2}
-          label="Embeds live"
-          value={stats ? `${stats.embedsLive}/${stats.embedsTotal}` : '—'}
-          sub={
-            stats && stats.embedsTotal > stats.embedsLive
-              ? `${stats.embedsTotal - stats.embedsLive} placeholders waiting`
-              : 'all placeholders filled'
-          }
-          href="/admin/embeds/"
-        />
+        {isOwner ? (
+          <Kpi
+            icon={Code2}
+            label="Embeds live"
+            value={stats ? `${stats.embedsLive}/${stats.embedsTotal}` : '—'}
+            sub={
+              stats && stats.embedsTotal > stats.embedsLive
+                ? `${stats.embedsTotal - stats.embedsLive} placeholders waiting`
+                : 'all placeholders filled'
+            }
+            href="/admin/embeds/"
+          />
+        ) : (
+          <Kpi
+            icon={Library}
+            label="Wiki terms"
+            value={String(wikiTermDefaults.length)}
+            sub="plain-English definitions"
+            href="/admin/wiki/"
+          />
+        )}
         <Kpi
           icon={Newspaper}
           label="Blog posts"

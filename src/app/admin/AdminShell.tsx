@@ -12,15 +12,20 @@ import {
   Inbox,
   LayoutDashboard,
   Library,
+  Lock,
   LogOut,
   Menu,
   Newspaper,
+  ShieldCheck,
   Users,
   X,
 } from 'lucide-react';
 import { getSupabase } from '../../lib/supabase';
+import { canAccess, loadRoleState, type RoleState } from '../../lib/adminRoles';
 
-/* Admin chrome: auth gate + sidebar. Every /admin/* page renders inside this. */
+/* Admin chrome: auth gate + role gate + sidebar. Every /admin/* page renders
+   inside this, so hiding a link and blocking a typed-in URL are the same code
+   path. Roles come from src/lib/adminRoles.ts. */
 
 const NAV = [
   { href: '/admin/', label: 'Dashboard', icon: LayoutDashboard },
@@ -32,6 +37,7 @@ const NAV = [
   { href: '/admin/wiki/', label: 'Wiki', icon: Library },
   { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },
   { href: '/admin/embeds/', label: 'Embeds', icon: Code2 },
+  { href: '/admin/users/', label: 'Users', icon: ShieldCheck },
 ];
 
 const inputClass =
@@ -46,6 +52,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [roleState, setRoleState] = useState<RoleState | null>(null);
 
   useEffect(() => {
     if (!supabase) {
@@ -65,6 +72,21 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     setMobileNavOpen(false);
   }, [pathname]);
+
+  /* Role follows the session: signing in as someone else re-resolves it. */
+  useEffect(() => {
+    if (!supabase || !session) {
+      setRoleState(null);
+      return;
+    }
+    let cancelled = false;
+    void loadRoleState(supabase, session.user.email).then((state) => {
+      if (!cancelled) setRoleState(state);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [supabase, session]);
 
   if (!supabase) {
     return (
@@ -131,9 +153,15 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     );
   }
 
+  // Don't render any section until the role is known — no owner-only flash.
+  if (!roleState) return <Centered />;
+
+  const { role } = roleState;
+  const allowed = canAccess(pathname, role);
+
   const nav = (
     <nav className="flex flex-col gap-1">
-      {NAV.map(({ href, label, icon: Icon }) => {
+      {NAV.filter((item) => canAccess(item.href, role)).map(({ href, label, icon: Icon }) => {
         const active =
           href === '/admin/' ? pathname === '/admin' || pathname === '/admin/' : pathname.startsWith(href.slice(0, -1));
         return (
@@ -156,6 +184,14 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
   const footerLinks = (
     <div className="flex flex-col gap-1">
+      <div className="px-4 py-2 mb-1">
+        <p className="text-[#0D1B3D]/70 text-xs truncate" title={session.user.email ?? ''}>
+          {session.user.email}
+        </p>
+        <p className="text-[#0D1B3D]/35 text-[0.6875rem] mt-0.5">
+          {role === 'owner' ? 'Owner — full access' : 'Editor — content only'}
+        </p>
+      </div>
       <a
         href="/"
         target="_blank"
@@ -213,7 +249,44 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       )}
 
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-10 pt-20 lg:pt-8">
-        <div className="max-w-5xl mx-auto">{children}</div>
+        <div className="max-w-5xl mx-auto">
+          {roleState.bootstrap && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6 flex items-start gap-3">
+              <ShieldCheck className="w-4 h-4 text-amber-700 mt-0.5 shrink-0" />
+              <p className="text-amber-800 text-sm leading-relaxed">
+                {roleState.missingTable
+                  ? 'Access levels are not set up yet, so every signed-in account can see everything. Run supabase/admin-roles.sql in Supabase, then add yourself as owner under Users.'
+                  : 'No owner has been set yet, so every signed-in account can see everything. '}
+                {!roleState.missingTable && (
+                  <a href="/admin/users/" className="font-medium underline">
+                    Add yourself as owner under Users
+                  </a>
+                )}
+                {!roleState.missingTable && ' to restrict the rest.'}
+              </p>
+            </div>
+          )}
+          {allowed ? (
+            children
+          ) : (
+            <div className="bg-white rounded-2xl p-8 border border-black/5 max-w-xl">
+              <div className="flex items-center gap-3 mb-3">
+                <Lock className="w-5 h-5 text-[#0D1B3D]/40" />
+                <h2 className="text-[#0D1B3D] text-xl font-medium">Owner access only</h2>
+              </div>
+              <p className="text-[#0D1B3D]/70 text-sm leading-relaxed">
+                This section holds reporting and integration settings. Your account manages
+                content, so it is not available here. Ask the site owner if you need it.
+              </p>
+              <a
+                href="/admin/blog/"
+                className="inline-flex items-center mt-5 bg-[#0D1B3D] text-white font-medium text-sm px-6 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+              >
+                Go to Blog
+              </a>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
