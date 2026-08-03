@@ -217,18 +217,27 @@ export default function AdminUsersPage() {
         <h2 className="text-[#0D1B3D] text-lg font-medium mb-3">Giving someone a login</h2>
         <ol className="text-[#0D1B3D]/70 text-sm leading-relaxed list-decimal pl-5 flex flex-col gap-1.5">
           <li>
-            In Supabase, open Authentication → Users → Add user, and create them with an email and
-            password (tick &ldquo;Auto Confirm User&rdquo;).
+            In Supabase, open Authentication → Users → Add user. Enter their email and a temporary
+            password you make up, and tick &ldquo;Auto Confirm User&rdquo; so they can sign in right
+            away.
           </li>
           <li>Add that same email here as an editor and save.</li>
           <li>
-            Send them the password and the link to <code className="font-mono">/admin/</code>. They
-            can change the password from Supabase&rsquo;s reset email.
+            Send them the temporary password and the link to{' '}
+            <code className="font-mono">/admin/</code>.
+          </li>
+          <li>
+            They sign in and set their own password under <strong>Password</strong> in the sidebar.
+            Tell them to do it straight away.
           </li>
         </ol>
-        <p className="text-[#0D1B3D]/40 text-xs mt-4 leading-relaxed">
-          Removing someone here drops them to editor. To block them from signing in at all, delete
-          their user in Supabase.
+        <p className="text-[#0D1B3D]/40 text-xs mt-4 leading-relaxed max-w-2xl">
+          No email is sent at any point, which is deliberate: Supabase&rsquo;s built-in mailer is
+          rate limited and often does not deliver until custom SMTP is configured. If someone
+          forgets their password, set a new temporary one for them in Supabase (Authentication →
+          Users → the person → Reset password) and they change it again here. Removing someone from
+          the list above drops them to editor; to block them from signing in at all, delete their
+          user in Supabase.
         </p>
       </Card>
 

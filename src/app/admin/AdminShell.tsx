@@ -10,6 +10,7 @@ import {
   ExternalLink,
   FileText,
   Inbox,
+  KeyRound,
   LayoutDashboard,
   Library,
   Lock,
@@ -184,14 +185,25 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
   const footerLinks = (
     <div className="flex flex-col gap-1">
-      <div className="px-4 py-2 mb-1">
-        <p className="text-[#0D1B3D]/70 text-xs truncate" title={session.user.email ?? ''}>
+      {/* Who you are — and the way to change your own password */}
+      <a
+        href="/admin/account/"
+        className="block px-4 py-2 mb-1 rounded-xl hover:bg-black/5 transition-colors duration-150"
+      >
+        <span className="block text-[#0D1B3D]/70 text-xs truncate" title={session.user.email ?? ''}>
           {session.user.email}
-        </p>
-        <p className="text-[#0D1B3D]/35 text-[0.6875rem] mt-0.5">
+        </span>
+        <span className="block text-[#0D1B3D]/35 text-[0.6875rem] mt-0.5">
           {role === 'owner' ? 'Owner — full access' : 'Editor — content only'}
-        </p>
-      </div>
+        </span>
+      </a>
+      <a
+        href="/admin/account/"
+        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-[#0D1B3D]/70 hover:bg-black/5 hover:text-[#0D1B3D] transition-colors duration-150"
+      >
+        <KeyRound className="w-4 h-4" />
+        Password
+      </a>
       <a
         href="/"
         target="_blank"
