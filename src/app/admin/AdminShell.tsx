@@ -250,22 +250,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-10 pt-20 lg:pt-8">
         <div className="max-w-5xl mx-auto">
-          {roleState.bootstrap && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-6 flex items-start gap-3">
-              <ShieldCheck className="w-4 h-4 text-amber-700 mt-0.5 shrink-0" />
-              <p className="text-amber-800 text-sm leading-relaxed">
-                {roleState.missingTable
-                  ? 'Access levels are not set up yet, so every signed-in account can see everything. Run supabase/admin-roles.sql in Supabase, then add yourself as owner under Users.'
-                  : 'No owner has been set yet, so every signed-in account can see everything. '}
-                {!roleState.missingTable && (
-                  <a href="/admin/users/" className="font-medium underline">
-                    Add yourself as owner under Users
-                  </a>
-                )}
-                {!roleState.missingTable && ' to restrict the rest.'}
-              </p>
-            </div>
-          )}
+          {/* Setup state is explained on /admin/users/ itself — no site-wide banner. */}
           {allowed ? (
             children
           ) : (
