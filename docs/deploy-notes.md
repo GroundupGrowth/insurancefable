@@ -1,3 +1,3 @@
 Deploy notes
 
-Last trigger: blog publisher (2026-08-01)
+Last trigger: admin access levels (2026-08-03)
