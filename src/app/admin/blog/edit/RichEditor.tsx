@@ -18,6 +18,7 @@ import {
   Bold,
   Columns3,
   Eraser,
+  FileSearch,
   Heading2,
   Heading3,
   Heading4,
@@ -66,9 +67,16 @@ export interface RichEditorHandle {
 }
 
 interface ModalRequest {
-  kind: 'link' | 'image' | 'youtube' | 'rawhtml';
+  kind: 'link' | 'image' | 'youtube' | 'rawhtml' | 'postlink';
   pos?: number;
   initial?: string;
+}
+
+/** Something on this site the editor can link to (article, wiki term, page). */
+export interface LinkTarget {
+  href: string;
+  title: string;
+  kind: string;
 }
 
 export default function RichEditor({
@@ -76,11 +84,13 @@ export default function RichEditor({
   onDirty,
   onReady,
   uploadImage,
+  linkTargets = [],
 }: {
   initialHtml: string;
   onDirty: () => void;
   onReady: (handle: RichEditorHandle) => void;
   uploadImage: (file: File) => Promise<string>;
+  linkTargets?: LinkTarget[];
 }) {
   const [mode, setMode] = useState<EditorMode>('visual');
   const [htmlDraft, setHtmlDraft] = useState(initialHtml);
@@ -180,6 +190,49 @@ export default function RichEditor({
     setModalError(null);
   };
 
+  /* "Link to an article": search the site's own pages instead of pasting a
+     URL. With text selected it links that text; with nothing selected it
+     inserts the article title as the link text, ready to be edited. */
+  const insertPostLink = (target: LinkTarget) => {
+    if (!editor) return;
+    const { empty } = editor.state.selection;
+    if (empty) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'text',
+          text: target.title,
+          marks: [{ type: 'link', attrs: { href: target.href } }],
+        })
+        .run();
+    } else {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: target.href }).run();
+    }
+    onDirty();
+    setModal(null);
+  };
+
+  const matchedTargets = (() => {
+    const needle = modalValue.trim().toLowerCase();
+    const words = needle.split(/\s+/).filter(Boolean);
+    const scored = linkTargets
+      .filter((target) =>
+        words.every(
+          (word) =>
+            target.title.toLowerCase().includes(word) || target.href.toLowerCase().includes(word)
+        )
+      )
+      .sort((a, b) => {
+        // Titles that start with the query first, then shortest title
+        const aStarts = a.title.toLowerCase().startsWith(needle) ? 0 : 1;
+        const bStarts = b.title.toLowerCase().startsWith(needle) ? 0 : 1;
+        if (aStarts !== bStarts) return aStarts - bStarts;
+        return a.title.length - b.title.length;
+      });
+    return scored.slice(0, 40);
+  })();
+
   const applyModal = async () => {
     if (!editor || !modal) return;
     const value = modalValue.trim();
@@ -275,6 +328,13 @@ export default function RichEditor({
           onClick={() => openModal('link', (editor.getAttributes('link').href as string) ?? '')}
         >
           <Link2 className="w-4 h-4" />
+        </ToolButton>
+        <ToolButton
+          title="Link to an article on this site"
+          disabled={linkTargets.length === 0}
+          onClick={() => openModal('postlink')}
+        >
+          <FileSearch className="w-4 h-4" />
         </ToolButton>
         <ToolButton title="Remove link" disabled={!editor.isActive('link')} onClick={() => editor.chain().focus().unsetLink().run()}>
           <Link2Off className="w-4 h-4" />
@@ -397,8 +457,55 @@ export default function RichEditor({
               {modal.kind === 'image' && 'Image URL'}
               {modal.kind === 'youtube' && 'YouTube video URL'}
               {modal.kind === 'rawhtml' && 'Edit custom HTML block'}
+              {modal.kind === 'postlink' && 'Link to an article on this site'}
             </p>
-            {modal.kind === 'rawhtml' ? (
+            {modal.kind === 'postlink' ? (
+              <>
+                <input
+                  autoFocus
+                  value={modalValue}
+                  onChange={(event) => setModalValue(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' && matchedTargets[0]) {
+                      event.preventDefault();
+                      insertPostLink(matchedTargets[0]);
+                    }
+                  }}
+                  placeholder="Search articles, wiki terms and pages…"
+                  className="bg-white border border-black/10 text-[#0D1B3D] text-sm rounded-xl px-4 py-2.5 w-full outline-none focus:border-black/30"
+                />
+                <p className="text-[#0D1B3D]/40 text-xs mt-2">
+                  {editor.state.selection.empty
+                    ? 'Nothing is selected, so the article title is inserted as the link text. Edit it afterwards like any other text.'
+                    : 'Your selected text becomes the link.'}
+                </p>
+                <div className="mt-3 max-h-80 overflow-y-auto border border-black/5 rounded-xl divide-y divide-black/5">
+                  {matchedTargets.length === 0 && (
+                    <p className="text-[#0D1B3D]/40 text-sm px-4 py-6">Nothing matches that.</p>
+                  )}
+                  {matchedTargets.map((target) => (
+                    <button
+                      key={target.href}
+                      type="button"
+                      onClick={() => insertPostLink(target)}
+                      className="w-full text-left px-4 py-2.5 hover:bg-[#FAFAFA] transition-colors duration-100"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="text-[#0D1B3D] text-sm font-medium leading-snug">
+                          {target.title}
+                        </span>
+                        <span className="text-[#0D1B3D]/35 text-[0.6875rem] uppercase tracking-wide shrink-0">
+                          {target.kind}
+                        </span>
+                      </span>
+                      <span className="block text-[#0D1B3D]/35 text-xs font-mono truncate">
+                        {target.href}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : modal.kind === 'rawhtml' ? (
               <textarea
                 value={modalValue}
                 onChange={(event) => setModalValue(event.target.value)}
@@ -429,15 +536,18 @@ export default function RichEditor({
                 onClick={() => setModal(null)}
                 className="text-[#0D1B3D]/60 hover:text-[#0D1B3D] text-sm font-medium px-4 py-2"
               >
-                Cancel
+                {modal.kind === 'postlink' ? 'Close' : 'Cancel'}
               </button>
-              <button
-                type="button"
-                onClick={() => void applyModal()}
-                className="bg-[#0D1B3D] text-white text-sm font-medium px-6 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-              >
-                Apply
-              </button>
+              {/* the picker applies on click, so it needs no Apply button */}
+              {modal.kind !== 'postlink' && (
+                <button
+                  type="button"
+                  onClick={() => void applyModal()}
+                  className="bg-[#0D1B3D] text-white text-sm font-medium px-6 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+                >
+                  Apply
+                </button>
+              )}
             </div>
           </div>
         </div>

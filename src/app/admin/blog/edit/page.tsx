@@ -16,7 +16,9 @@ import { ebookDefaults } from '../../../../data/ebooks';
 import { AUTHOR_META } from '../../../../data/authors';
 import { postThumbnails } from '../../../../data/postThumbnails';
 import { inputClass, revalidatePaths, textareaClass } from '../../ui';
-import RichEditor, { type RichEditorHandle } from './RichEditor';
+import RichEditor, { type LinkTarget, type RichEditorHandle } from './RichEditor';
+import { pageDefaults } from '../../../../data/pageContent';
+import { wikiTermDefaults } from '../../../../data/wiki';
 
 /* The blog publisher: a WordPress-grade editor over the Payload posts tables.
    Everything saves client-side through the authenticated Supabase session —
@@ -101,6 +103,7 @@ function EditPage() {
   const [authorChoice, setAuthorChoice] = useState<string>('auto');
   const [reviewerChoice, setReviewerChoice] = useState<string>('');
 
+  const [linkTargets, setLinkTargets] = useState<LinkTarget[]>([]);
   const [imageUrl, setImageUrl] = useState('');
   const [imageFromCode, setImageFromCode] = useState<string | null>(null);
   const [uploadingThumb, setUploadingThumb] = useState(false);
@@ -112,9 +115,11 @@ function EditPage() {
     if (!supabase) return;
     const id = idParam ? Number(idParam) : null;
 
-    const [cats, ebookRows] = await Promise.all([
+    const [cats, ebookRows, linkPosts] = await Promise.all([
       supabase.from('categories').select('id, name, slug').order('name'),
       supabase.from('site_ebooks').select('slug, title').order('sort'),
+      // everything the "link to an article" picker can search
+      supabase.from('posts').select('slug, title').eq('_status', 'published').order('title'),
     ]);
     setCategories(cats.data ?? []);
     setEbooks(
@@ -122,6 +127,27 @@ function EditPage() {
         ? ebookRows.data
         : ebookDefaults.map(({ slug: s, title: t }) => ({ slug: s, title: t }))
     );
+
+    /* Articles first (what gets linked most), then wiki terms and the main
+       static pages. Wiki/page titles come from the code defaults, which is
+       what those routes render when Supabase has no override. */
+    setLinkTargets([
+      ...(linkPosts.data ?? []).map((row) => ({
+        href: `/${row.slug}/`,
+        title: row.title ?? row.slug,
+        kind: 'article',
+      })),
+      ...wikiTermDefaults.map((term) => ({
+        href: `/wiki/${term.slug}/`,
+        title: term.term,
+        kind: 'wiki',
+      })),
+      ...Object.values(pageDefaults).map((page) => ({
+        href: page.path,
+        title: page.label,
+        kind: 'page',
+      })),
+    ]);
 
     if (!id) {
       setLoaded(true);
@@ -502,6 +528,7 @@ function EditPage() {
               editorRef.current = handle;
             }}
             uploadImage={uploadImage}
+            linkTargets={linkTargets}
           />
         </div>
 

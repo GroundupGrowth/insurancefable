@@ -46,23 +46,9 @@ export default async function BlogIndexPage() {
         intro={`${posts.length} in-depth articles on whole life insurance, infinite banking, estate planning, and wealth strategy, written by attorneys and practitioners, not content farms.`}
       />
 
-      {/* Category jump links */}
-      <nav className="px-6 pb-12" aria-label="Blog categories">
-        <div className="max-w-[88rem] mx-auto flex flex-wrap gap-2">
-          {ordered.map(([slug, section]) => (
-            <a
-              key={slug}
-              href={`#${slug}`}
-              className="bg-white text-[#0D1B3D]/70 hover:text-[#0D1B3D] border border-black/5 hover:border-black/15 text-sm font-medium px-4 py-2 rounded-full transition-colors duration-200"
-            >
-              {section.name}
-              <span className="text-[#0D1B3D]/35"> · {section.posts.length}</span>
-            </a>
-          ))}
-        </div>
-      </nav>
-
-      <section className="px-6 pb-24">
+      {/* Search + category jump links + the sections all live in the browser
+          component, so searching can replace the sections with one ranked list. */}
+      <section className="px-6 pb-24 pt-4">
         <div className="max-w-[88rem] mx-auto flex flex-col gap-16">
           <BlogSections
             sections={ordered.map(([slug, section]) => ({ slug, ...section }))}
