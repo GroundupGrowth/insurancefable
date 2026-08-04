@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Mail, MessageCircle, Phone, X } from 'lucide-react';
+import { isBareRoute } from '../lib/bareRoutes';
 
 /* Floating contact launcher, fixed bottom-right on every page. Closed it is a
    navy chat bubble; open it reveals a chat-box style card with the contact
@@ -25,6 +27,10 @@ const channels = [
 
 export default function CallButton() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Bare landing pages carry their own contact buttons — see lib/bareRoutes.
+  if (isBareRoute(pathname)) return null;
 
   return (
     /* pointer-events-none on the wrapper is load-bearing: the fixed container
