@@ -1,3 +1,3 @@
 Deploy notes
 
-Last trigger: journey booking calendar (2026-08-04)
+Last trigger: bare booking landing page (2026-08-04)
