@@ -6,6 +6,7 @@ import { getSupabase, type AdvisorRow } from '../../../lib/supabase';
 import { advisorDefaults } from '../../../data/advisors';
 import type { AdvisorProfile, BioParagraph, BioSection } from '../../proclientguide/ProfileLayout';
 import { Card, Field, PageHeader, SaveButton, StatusPill, inputClass, revalidatePaths, textareaClass } from '../ui';
+import { loadRoleState } from '../../../lib/adminRoles';
 
 /* Agents: one profile per advisor. The editor shows the merged view (override
    or code default) and saves the full state as an override row + the booking
@@ -21,12 +22,17 @@ interface EditorState {
   schedulerUrl: string;
   specialties: string;                                        // one per line
   credentials: string;                                        // one per line
-  /* `paragraphs` is the blank-line-separated plain-text view. `source` keeps the
-     original structured section so anything this editor cannot represent
-     (inline links, bullets, images) survives a save untouched. */
+  /* `paragraphs` is the blank-line-separated plain-text view and `bullets` is
+     one bullet per line. Both are editable, so the form shows everything the
+     page renders — a section whose content is entirely bullets used to appear
+     as an empty box, which invited retyping the bullets into the paragraph
+     field and rendering the copy twice. `source` keeps the original structured
+     section so anything this editor cannot represent (inline links, images)
+     survives a save untouched. */
   bioSections: {
     heading: string;
     paragraphs: string;
+    bullets: string;
     readOnly: boolean;
     source: BioSection | null;
   }[];
@@ -79,6 +85,7 @@ function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, booking
     bioSections: bioSections.map((section) => ({
       heading: section.heading,
       paragraphs: section.paragraphs.map(paragraphText).join('\n\n'),
+      bullets: (section.bullets ?? []).map(paragraphText).join('\n'),
       readOnly: isRichSection(section),
       source: section,
     })),
@@ -107,9 +114,15 @@ export default function AgentsPage() {
   const [embeds, setEmbeds] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
   const [editor, setEditor] = useState<EditorState | null>(null);
+  /* The booking calendar embed is an integration setting, like Embeds and
+     Forms — owners only. Profile copy stays open to editors. */
+  const [isOwner, setIsOwner] = useState(false);
 
   const load = async () => {
     if (!supabase) return;
+    const { data: auth } = await supabase.auth.getSession();
+    const roleState = await loadRoleState(supabase, auth.session?.user.email);
+    setIsOwner(roleState.role === 'owner');
     const [advisors, slots] = await Promise.all([
       supabase.from('advisors').select('*'),
       supabase.from('embed_slots').select('slot_key, embed_code').like('slot_key', 'advisor:%'),
@@ -164,10 +177,14 @@ export default function AgentsPage() {
           .filter((section) => section.heading.trim())
           .map((section) => {
             if (section.readOnly && section.source) return section.source;
+            const bullets = section.bullets
+              .split('\n')
+              .map((bullet) => bullet.trim())
+              .filter(Boolean);
             return {
               heading: section.heading,
               paragraphs: section.paragraphs.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
-              ...(section.source?.bullets ? { bullets: section.source.bullets } : {}),
+              ...(bullets.length > 0 ? { bullets } : {}),
               ...(section.source?.wide ? { wide: section.source.wide } : {}),
               ...(section.source?.image ? { image: section.source.image } : {}),
             };
@@ -193,14 +210,21 @@ export default function AgentsPage() {
         updated_at: new Date().toISOString(),
       });
       if (advisorError) throw new Error(advisorError.message);
-      const { error: embedError } = await supabase.from('embed_slots').upsert({
-        slot_key: `advisor:${selected}:booking`,
-        label: `${editor.name} — booking calendar`,
-        category: 'advisor',
-        embed_code: editor.bookingEmbed,
-        updated_at: new Date().toISOString(),
-      });
-      if (embedError) throw new Error(embedError.message);
+      /* The booking embed lives in embed_slots, which only owners may write.
+         Editors never see the field, so skip the write entirely for them —
+         writing it unconditionally made every editor save fail AFTER the
+         profile had already been saved. Owners only write it when it changed,
+         so an untouched embed never needs the permission at all. */
+      if (isOwner && editor.bookingEmbed !== (embeds[selected] ?? '')) {
+        const { error: embedError } = await supabase.from('embed_slots').upsert({
+          slot_key: `advisor:${selected}:booking`,
+          label: `${editor.name} — booking calendar`,
+          category: 'advisor',
+          embed_code: editor.bookingEmbed,
+          updated_at: new Date().toISOString(),
+        });
+        if (embedError) throw new Error(embedError.message);
+      }
       await revalidatePaths([path, '/proclientguide/introduction/']);
       await load();
     };
@@ -279,20 +303,22 @@ export default function AgentsPage() {
                 <input className={inputClass} value={editor.schedulerUrl} onChange={(e) => set({ schedulerUrl: e.target.value })} />
               </Field>
             </div>
-            <div className="mt-4">
-              <Field
-                label="Booking calendar embed"
-                hint="Paste the LeadConnector calendar embed code — it renders as a booking section on the profile page."
-              >
-                <textarea
-                  rows={editor.bookingEmbed.trim() ? 6 : 3}
-                  placeholder="Paste the embed code here (iframe + script)…"
-                  className={`${textareaClass} font-mono text-xs`}
-                  value={editor.bookingEmbed}
-                  onChange={(e) => set({ bookingEmbed: e.target.value })}
-                />
-              </Field>
-            </div>
+            {isOwner && (
+              <div className="mt-4">
+                <Field
+                  label="Booking calendar embed"
+                  hint="Paste the LeadConnector calendar embed code — it renders as a booking section on the profile page."
+                >
+                  <textarea
+                    rows={editor.bookingEmbed.trim() ? 6 : 3}
+                    placeholder="Paste the embed code here (iframe + script)…"
+                    className={`${textareaClass} font-mono text-xs`}
+                    value={editor.bookingEmbed}
+                    onChange={(e) => set({ bookingEmbed: e.target.value })}
+                  />
+                </Field>
+              </div>
+            )}
           </Card>
 
           <Card>
@@ -419,7 +445,7 @@ export default function AgentsPage() {
                   set({
                     bioSections: [
                       ...editor.bioSections,
-                      { heading: '', paragraphs: '', readOnly: false, source: null },
+                      { heading: '', paragraphs: '', bullets: '', readOnly: false, source: null },
                     ],
                   })
                 }
@@ -467,6 +493,30 @@ export default function AgentsPage() {
                       set({ bioSections: next });
                     }}
                   />
+                  {/* Bullets are a separate field so the form mirrors the page.
+                      Hiding them made bullet-only sections look empty. */}
+                  {!section.readOnly && (
+                    <div className="mt-3">
+                      <span className="block text-[#0D1B3D] text-sm font-medium mb-1.5">
+                        Bulleted list
+                      </span>
+                      <textarea
+                        rows={3}
+                        className={textareaClass}
+                        placeholder="One bullet per line. Leave empty for no list."
+                        value={section.bullets}
+                        onChange={(e) => {
+                          const next = [...editor.bioSections];
+                          next[index] = { ...next[index], bullets: e.target.value };
+                          set({ bioSections: next });
+                        }}
+                      />
+                      <span className="block text-[#0D1B3D]/40 text-xs mt-1">
+                        Shown as a bulleted list under the text above. Do not repeat these lines in
+                        the text box or they appear twice on the page.
+                      </span>
+                    </div>
+                  )}
                   {section.readOnly && (
                     /* Why this is locked: the text above is a flattened preview.
                        Saving it as plain text would drop the inline links (and

@@ -49,20 +49,29 @@ export function SaveButton({
   label?: string;
 }) {
   const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  /* Show what actually went wrong. "Check the console" is not something a
+     non-developer can act on, and it hid a real permissions error for days. */
+  const [message, setMessage] = useState<string | null>(null);
   return (
-    <span className="inline-flex items-center gap-3">
+    <span className="inline-flex items-center gap-3 flex-wrap">
       <button
         type="button"
         disabled={disabled || state === 'saving'}
         onClick={async () => {
           setState('saving');
+          setMessage(null);
           try {
             await onSave();
             setState('saved');
             setTimeout(() => setState('idle'), 2000);
-          } catch {
+          } catch (error) {
+            const raw = error instanceof Error ? error.message : String(error);
+            setMessage(
+              /permission denied|row-level security|violates/i.test(raw)
+                ? `${raw} — your account may not have access to part of this page. Ask the site owner.`
+                : raw
+            );
             setState('error');
-            setTimeout(() => setState('idle'), 3000);
           }
         }}
         className="bg-[#0D1B3D] disabled:bg-[#0D1B3D]/30 text-white font-medium text-sm px-6 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
@@ -74,7 +83,11 @@ export function SaveButton({
           <Check className="w-4 h-4" /> Saved
         </span>
       )}
-      {state === 'error' && <span className="text-red-600 text-sm">Save failed — check the console.</span>}
+      {state === 'error' && (
+        <span className="text-red-600 text-sm max-w-lg leading-snug">
+          Save failed. {message}
+        </span>
+      )}
     </span>
   );
 }
