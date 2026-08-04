@@ -289,3 +289,82 @@ body {
 .article-body p:has(> a[name]:only-child:empty) {
   margin: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Inline eBook offer that replaces the imported WordPress lead-magnet blocks
+   (see src/lib/legacyOffers.ts). Styled to match EbookOfferCard in the rail. */
+.article-body .legacy-offer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #0d1b3d;
+  border-radius: 1.25rem;
+  padding: 1.75rem 2rem;
+  margin: 2.5em 0;
+  text-decoration: none;
+  border: 0;
+  transition: background-color 0.2s ease;
+}
+
+.article-body .legacy-offer:hover {
+  background: #1c2e55;
+  text-decoration: none;
+}
+
+.article-body .legacy-offer-cover {
+  width: 96px;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+}
+
+.article-body .legacy-offer-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.article-body .legacy-offer-eyebrow {
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.article-body .legacy-offer-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-top: 0.25rem;
+}
+
+.article-body .legacy-offer-text {
+  color: rgb(255 255 255 / 0.7);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.article-body .legacy-offer-cta {
+  display: inline-block;
+  background: #fff;
+  color: #0d1b3d;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.625rem 1.5rem;
+  border-radius: 999px;
+  margin-top: 1.125rem;
+}
+
+@media (max-width: 640px) {
+  .article-body .legacy-offer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+}

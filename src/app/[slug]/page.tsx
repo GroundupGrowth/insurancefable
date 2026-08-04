@@ -14,6 +14,7 @@ import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
+import { repairArticleBody } from '../../lib/legacyOffers';
 import { JsonLd, breadcrumbJsonLd, faqJsonLd, videoJsonLds } from '../../lib/articleSchema';
 
 /* Blog articles from the Payload import, served at the root path exactly like
@@ -76,8 +77,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     getPostAuthorship(post.slug, post.bodyHtml),
     getComments(post.slug),
   ]);
+  /* Legacy WordPress lead-magnet blocks (invisible white-on-white copy around
+     a dead Gravity Form) become working offer cards — see lib/legacyOffers.
+     Runs before the wiki linker so the promo's own copy is never linked. */
+  const repairedHtml = repairArticleBody(post.bodyHtml);
   // First mention of each wiki term becomes a link to its /wiki/ page
-  const bodyHtml = linkWikiTerms(post.bodyHtml, wikiTerms);
+  const bodyHtml = linkWikiTerms(repairedHtml, wikiTerms);
 
   /* Structured data regenerated from the body (the old site's hand-added
      FAQ/video schema was stripped by the import — see lib/articleSchema) */
