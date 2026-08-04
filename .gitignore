@@ -33,3 +33,6 @@ extraction/
 
 scripts/verify-deploy.results.json
 Videos/
+
+# eBook source drops (the shipped copies live in public/wp-content/uploads/)
+Ebook/

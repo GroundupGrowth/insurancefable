@@ -644,6 +644,27 @@ export const thankYouPages: ThankYouPageData[] = [
     ],
     ctas: [],
   },
+  /* Native book added 2026-08-04 (not a WordPress migration): our own
+     LeadCaptureForm on /nine-questions-before-you-retire/ redirects here, and
+     the PDF is served straight from /wp-content/uploads/. */
+  {
+    path: '/thank-you-nine-questions/',
+    title: 'Thank you – Nine Questions Before You Retire – I&E | Whole Life & Infinite Banking Strategies',
+    heading: 'Thank You',
+    body: [
+      'Your copy of Nine Questions Before You Retire is ready. Download it below, and we have also sent it to your email.',
+    ],
+    download: {
+      note: 'Nine Questions Before You Retire',
+      label: 'Download the eBook',
+      href: '/wp-content/uploads/Nine-Questions-Before-You-Retire.pdf',
+    },
+    ctaIntro: 'Questions? Talk to Our Experts',
+    ctas: [
+      { label: 'Book A Discovery Call', href: GHL_DISCOVERY_CALL },
+      { label: 'Visit our Resources Page', href: RESOURCES },
+    ],
+  },
 ];
 
 /** Children of /thank-you-main/ served by src/app/thank-you-main/[slug]/page.tsx. */

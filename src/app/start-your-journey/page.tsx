@@ -91,6 +91,14 @@ const levels: JourneyLevel[] = [
         alt: 'The Self Banking Blueprint',
         href: '/self-banking-blueprint/',
       },
+      {
+        title: 'Nine Questions Before You Retire',
+        text: 'The conversation most couples haven’t had, and the nine questions that start it.',
+        cta: 'Download Here',
+        image: `${UPLOADS}/Nine-Questions-Before-You-Retire-Cover.webp`,
+        alt: 'Nine Questions Before You Retire',
+        href: '/nine-questions-before-you-retire/',
+      },
     ],
   },
   {

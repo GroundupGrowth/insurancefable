@@ -3,8 +3,9 @@ import type { ReactNode } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import PageShell from './PageShell';
 import EmbedSlot from './EmbedSlot';
+import LeadCaptureForm from './LeadCaptureForm';
 import { getEbooks } from '../lib/content';
-import { ebookDefaults, ebookLandingPath, type Ebook } from '../data/ebooks';
+import { ebookDefaults, ebookLandingPath, ebookLeadWebhook, type Ebook } from '../data/ebooks';
 
 /* Landing page for one eBook/guide, at its own route (e.g. /kingdom-money/).
    The catalog on /ebooks-and-guides/ links here; this page shows the book's
@@ -154,21 +155,40 @@ export default async function EbookLanding({
               Get your free copy
             </h2>
             <EmbedSlot slotKey={`ebook:${book.slug}`}>
-              {/* Fallback until an opt-in embed is pasted at /admin → Books:
-                  send the reader to the shared request form on the catalog. */}
-              <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
-                Request <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
-                we&rsquo;ll send it straight to your inbox.
-              </p>
-              <a
-                href={REQUEST_ANCHOR}
-                className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-              >
-                Request This Book
-                <span className="bg-white rounded-full p-2">
-                  <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
-                </span>
-              </a>
+              {/* No GHL embed pasted. With a lead webhook configured for this
+                  book we capture the lead ourselves; without one there is
+                  nowhere to send it, so link to the shared request form
+                  rather than show a form that cannot deliver. */}
+              {ebookLeadWebhook(book.slug) ? (
+                <>
+                  <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                    Tell us where to send it and{' '}
+                    <span className="font-medium text-[#0D1B3D]">{book.title}</span> lands in your
+                    inbox straight away.
+                  </p>
+                  <LeadCaptureForm
+                    source={`ebook:${book.slug}`}
+                    redirectTo={book.thankYouPath}
+                    submitLabel="Send Me the Book"
+                  />
+                </>
+              ) : (
+                <>
+                  <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                    Request <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
+                    we&rsquo;ll send it straight to your inbox.
+                  </p>
+                  <a
+                    href={REQUEST_ANCHOR}
+                    className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+                  >
+                    Request This Book
+                    <span className="bg-white rounded-full p-2">
+                      <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
+                    </span>
+                  </a>
+                </>
+              )}
             </EmbedSlot>
           </div>
         </div>

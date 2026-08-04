@@ -313,4 +313,25 @@ export const ebookDefaults: Ebook[] = [
       alt: '10 Modules on Infinite Banking cover',
     },
   },
+  /* Added 2026-08-04. Unlike the migrated books this one is native: the
+     landing page runs our own LeadCaptureForm against the webhook below, and
+     the thank-you page serves the PDF directly from /wp-content/uploads/. */
+  {
+    slug: 'nine-questions-before-you-retire',
+    landingPath: '/nine-questions-before-you-retire/',
+    noindexLanding: true,
+    thankYouPath: '/thank-you-nine-questions/',
+    leadWebhook:
+      'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/34b79a8a-7015-42ab-bedc-13385e879dd9',
+    category: 'journey',
+    eyebrow: 'Free eBook',
+    title: 'Nine Questions Before You Retire',
+    text: 'The conversation most couples haven’t had, and the nine questions that start it.',
+    href: REQUEST,
+    sort: 104,
+    image: {
+      src: '/wp-content/uploads/Nine-Questions-Before-You-Retire-Cover.webp',
+      alt: 'Nine Questions Before You Retire book cover',
+    },
+  },
 ];

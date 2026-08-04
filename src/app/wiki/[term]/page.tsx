@@ -8,6 +8,7 @@ import { getWikiTerm, getWikiTermNames, getWikiTerms } from '../../../lib/wiki';
 import { SITE_URL } from '../../../lib/content';
 import { wikiTermDefaults } from '../../../data/wiki';
 import { explainersForWikiTerm } from '../../../data/explainers';
+import { guideForTerm } from '../../../data/wikiGuides';
 
 /* One wiki term. Default terms prerender; terms added at /admin → Wiki are
    served on demand (dynamicParams) and cached by ISR. */
@@ -50,6 +51,7 @@ export default async function WikiTermPage({ params }: { params: Promise<{ term:
   const related = term.related
     .map((relatedSlug) => allTerms.find((candidate) => candidate.slug === relatedSlug))
     .filter((candidate): candidate is NonNullable<typeof candidate> => Boolean(candidate));
+  const guide = guideForTerm(term.slug);
 
   const definedTermJsonLd = {
     '@context': 'https://schema.org',
@@ -96,6 +98,29 @@ export default async function WikiTermPage({ params }: { params: Promise<{ term:
       <section className="px-6 pb-16">
         <div className="max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12">
           <WikiBody body={term.body} names={names} />
+
+          {/* The in-depth article for this term. The definition answers "what
+              is it"; this is where the reader goes next — and it points the
+              topic signal at the article rather than leaving the short page
+              and the long one to compete. See src/data/wikiGuides.ts. */}
+          {guide && (
+            <a
+              href={guide.href}
+              className="group mt-10 flex items-center justify-between gap-6 bg-[#0D1B3D] rounded-2xl px-6 py-5 md:px-8 md:py-6 hover:bg-[#1C2E55] transition-colors duration-200"
+            >
+              <span className="min-w-0">
+                <span className="block text-white/55 text-xs uppercase tracking-wide mb-1.5">
+                  Read the full guide
+                </span>
+                <span className="block text-white text-lg md:text-xl font-medium leading-snug">
+                  {guide.label}
+                </span>
+              </span>
+              <span className="bg-white rounded-full p-2.5 shrink-0">
+                <ArrowRight className="w-5 h-5 text-[#0D1B3D]" />
+              </span>
+            </a>
+          )}
         </div>
       </section>
 
