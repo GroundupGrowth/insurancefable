@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import PageShell from '../../components/PageShell';
-import LeadCaptureForm from '../../components/LeadCaptureForm';
+import EmbedSlot from '../../components/EmbedSlot';
+import StaticEmbed from '../../components/StaticEmbed';
 import TrustpilotWidget from '../../components/TrustpilotWidget';
 import YouTubeEmbed from '../../components/YouTubeEmbed';
 import ArticleThumbCard, { type ArticleThumb } from '../../components/ArticleThumbCard';
@@ -24,10 +25,15 @@ import {
    content below the hero. Body copy is verbatim from the old page — don't
    "improve" it.
 
-   The hero opt-in is the custom ebook form (LeadCaptureForm -> /api/lead/ ->
-   GHL inbound webhook), embedded beside the headline (Xander, 2026-07-28:
-   embed instead of popup, present it clearly as an ebook, and add a Connect
-   with an Expert button on top). Noindexed on live. */
+   The hero slot beside the headline was the ebook opt-in (LeadCaptureForm ->
+   /api/lead/ -> GHL inbound webhook); on 2026-08-04 Xander replaced it with
+   the GHL booking calendar, so the page now converts straight to a booked
+   call. The Self Banking Blueprint is still offered in the free-ebooks
+   section further down. Noindexed on live. */
+
+/* Pasted by Xander 2026-08-04. Overridable at /admin -> Embeds under
+   `page:infinite-banking-journey:booking`. */
+const BOOKING_EMBED = `<iframe src="https://link.insuranceandestates.com/widget/booking/x2iaxH8z6vs4HR4yurcX" allow="payment" style="width: 100%;border:none;overflow: hidden;" scrolling="no" id="x2iaxH8z6vs4HR4yurcX_1785842702459"></iframe><br><script src="https://link.insuranceandestates.com/js/form_embed.js" type="text/javascript"></script>`;
 
 export const metadata: Metadata = {
   title: {
@@ -152,24 +158,25 @@ export default function Page() {
               <TrustpilotWidget theme="dark" />
             </div>
           </div>
-          <div className="bg-white rounded-3xl border border-black/5 p-6 md:p-8">
-            <p className="text-[#0D1B3D]/60 text-sm mb-1">Free eBook</p>
+          <div id="book-a-call" className="bg-white rounded-3xl border border-black/5 p-6 md:p-8 scroll-mt-28">
+            <p className="text-[#0D1B3D]/60 text-sm mb-1">Free Strategy Call</p>
             <h2
               className="text-[#0D1B3D] text-2xl md:text-3xl font-medium leading-tight mb-2"
               style={{ letterSpacing: '-0.03em' }}
             >
-              Get the Free Infinite Banking eBook
+              Book Your Free Call
             </h2>
             <p className="text-[#0D1B3D]/70 text-sm leading-relaxed mb-6">
-              Fill this in and we&rsquo;ll send the ebook straight to your inbox.
+              Pick a time that suits you. A conversation about your numbers, not a pitch.
             </p>
-            {/* Delivers the Self Banking Blueprint — webhook managed per book
-                at /admin -> Books ("Lead webhook" on self-banking-blueprint). */}
-            <LeadCaptureForm
-              source="ebook:self-banking-blueprint"
-              phoneRequired
-              redirectTo="/thank-you-self-printing-blue-print-3-0/"
-            />
+            {/* The booking calendar replaced the ebook opt-in here (Xander,
+                2026-08-04). Ships in the code so the page works today; pasting
+                an embed under this slot key at /admin -> Embeds overrides it
+                without a deploy. The Self Banking Blueprint is still offered
+                further down the page in the free-ebooks section. */}
+            <EmbedSlot slotKey="page:infinite-banking-journey:booking">
+              <StaticEmbed html={BOOKING_EMBED} />
+            </EmbedSlot>
           </div>
         </div>
       </SalesSection>

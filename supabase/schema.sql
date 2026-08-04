@@ -205,6 +205,7 @@ insert into public.embed_slots (slot_key, label, category) values
   ('form:contact',                   'Contact form (/contact/)',                             'form'),
   ('form:guide-request',             'Generic guide-request form (/ebooks-and-guides/)',     'form'),
   ('page:life-insurance-quotes:quote-engine', 'Quote engine (/life-insurance-quotes/)', 'page'),
+  ('page:infinite-banking-journey:booking',   'Booking calendar (/infinite-banking-journey/ hero)', 'page'),
   ('ebook:self-banking-blueprint',           'The Self Banking Blueprint',       'ebook'),
   ('ebook:kingdom-money',                    'Kingdom Money',                    'ebook'),
   ('ebook:generational-transfer',            'The Generational Transfer',        'ebook'),
