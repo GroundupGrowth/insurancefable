@@ -1,3 +1,3 @@
 Deploy notes
 
-Last trigger: legacy offer repair (2026-08-04)
+Last trigger: agents editor fixes (2026-08-04)
