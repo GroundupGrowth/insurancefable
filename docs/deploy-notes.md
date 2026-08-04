@@ -1,3 +1,3 @@
 Deploy notes
 
-Last trigger: account password page (2026-08-03)
+Last trigger: legacy offer repair (2026-08-04)
