@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 /* Shared native lead-capture form (Xander, 2026-07-28) — replicates the GHL
    form fields: name, email, phone, age + income pill selectors, disclaimer
@@ -16,7 +17,6 @@ import { useState, type FormEvent } from 'react';
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
-    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -129,7 +129,7 @@ export default function LeadCaptureForm({
         return;
       }
       window.fbq?.('track', 'Lead');
-      window.gtag?.('event', 'generate_lead');
+      sendGTMEvent({ event: 'generate_lead' });
       setDone(true);
     } catch {
       setSending(false);
