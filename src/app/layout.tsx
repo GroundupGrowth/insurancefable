@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Script from 'next/script';
+import { GoogleTagManager } from '@next/third-parties/google';
 import CallButton from '../components/CallButton';
 import '@fontsource/figtree/400.css';
 import '@fontsource/figtree/600.css';
@@ -36,7 +37,20 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      {/* GTM-MDHKCKNF is the ONLY Google tag loader: GA4 (G-M1Z2R5LEKP) and
+          Google Ads (AW-794710710) load via Google tags INSIDE the container,
+          which also runs the GHL booking listener + Conversion Linker. Never
+          re-add a direct gtag.js include — GA4 would double-count page_views. */}
+      <GoogleTagManager gtmId="GTM-MDHKCKNF" />
       <body>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-MDHKCKNF"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
         {children}
         <CallButton />
         {/* Trustpilot TrustBox bootstrap — loaded once; widgets render via <TrustpilotWidget /> */}
@@ -44,18 +58,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
           strategy="afterInteractive"
         />
-        {/* Google Analytics 4 (gtag.js, G-M1Z2R5LEKP) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-M1Z2R5LEKP"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-M1Z2R5LEKP');`}
-        </Script>
         {/* Meta Pixel (2569006776797614) */}
         <Script id="meta-pixel" strategy="afterInteractive">
           {`!function(f,b,e,v,n,t,s)
