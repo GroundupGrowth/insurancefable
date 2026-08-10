@@ -766,7 +766,7 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     schedulerUrl:
       'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/deniseboisvert',
     email: 'denise@insuranceandestates.com',
-    // FILL IN: linkedinUrl (via /admin or here)
+    linkedinUrl: 'https://www.linkedin.com/in/denise-boisvert-419b0441a/',
     /* Live's hero says "15 years of experience in the life industry"; the bio
        body says "22 years". The stat follows the hero (as Barry's does); both
        figures appear on our page exactly as they do on live. */
