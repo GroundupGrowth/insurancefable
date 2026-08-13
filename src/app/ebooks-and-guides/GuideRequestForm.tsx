@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { trackConversion } from '../../lib/analytics';
 
 export const freeResources = [
   'Money Secrets of the Wealthy',
@@ -26,6 +27,7 @@ export default function GuideRequestForm() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ guide, name, email, phone, agreed });
+    trackConversion('lead_submit', { form: 'guide-request', guide });
     setSubmitted(true);
   };
 

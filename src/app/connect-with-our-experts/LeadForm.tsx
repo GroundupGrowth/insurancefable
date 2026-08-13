@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { trackConversion } from '../../lib/analytics';
 
 const callPoints = [
   'Map out your goals — where you are and where you want to be',
@@ -24,6 +25,7 @@ export default function LeadForm() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ name, email, phone, agreed });
+    trackConversion('lead_submit', { form: 'discovery-call' });
     setSubmitted(true);
   };
 

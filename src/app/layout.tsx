@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import '@fontsource/figtree/400.css';
 import '@fontsource/figtree/600.css';
 import './globals.css';
+import OpenAnalytics from '../components/OpenAnalytics';
+import PhoneClickTracker from '../components/PhoneClickTracker';
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +20,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <OpenAnalytics />
+        <PhoneClickTracker />
+        {children}
+      </body>
     </html>
   );
 }
