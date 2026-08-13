@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
 import EmbedSlot from './EmbedSlot';
+import { trackConversion } from '../lib/analytics';
 
 const bookTopics = [
   'Risk in a Litigious Society',
@@ -22,6 +23,7 @@ export default function LeadMagnetSection() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ name, email, phone, agreed });
+    trackConversion('lead_submit', { form: 'lead-magnet' });
     setSubmitted(true);
   };
 

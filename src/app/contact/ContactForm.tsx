@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
+import { trackConversion } from '../../lib/analytics';
 
 /* Contact form stub following the LeadMagnetSection form pattern.
    Lives inside the navy panel on /contact/. Replaced by the GHL form embed
@@ -17,6 +18,7 @@ export default function ContactForm() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ name, email, phone, message, agreed });
+    trackConversion('lead_submit', { form: 'contact' });
     setSubmitted(true);
   };
 
