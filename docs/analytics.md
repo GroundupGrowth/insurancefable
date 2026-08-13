@@ -5,23 +5,30 @@ reporting. It is cookieless and stores no device identifiers, so it needs no
 consent banner — worth keeping in mind before anyone swaps it for something
 that does.
 
-## Turning it on
+## Setup
 
-1. Create the site in the Open dashboard and copy the tracking key from
-   **Settings → Installation**.
-2. In Vercel → Settings → Environment Variables, set
-   `NEXT_PUBLIC_OPEN_TRACKING_KEY` to that key for Production.
-3. Redeploy. Visits show up in the realtime dashboard within seconds.
+Already done — there is nothing to configure. The site's `oa_pk_` key is
+compiled into `src/lib/analytics.ts`. That key is a public, write-only ingest
+key that ships in the page source of every site using Open, exactly like a GA
+measurement ID, so it is committed rather than left in an env var somebody has
+to remember to set. It is not a dashboard credential and grants no read access.
 
-For local work, copy the key into `.env.local`. Leaving it blank is the normal
-state: `<OpenAnalytics />` renders nothing without a key, and every
-`trackEvent` / `trackConversion` call becomes a no-op, so dev traffic never
-reaches the collector.
+Which environment reports what is decided at build time, so no one has to
+remember a flag:
 
-Two optional vars are documented in `.env.example`:
-`NEXT_PUBLIC_OPEN_COLLECTOR` (only needed when self-hosting) and
-`NEXT_PUBLIC_OPEN_TEST_MODE`, which is worth setting to `true` on Preview
-deploys so branch traffic is recorded but never billed or charted.
+| Where | Behaviour |
+| --- | --- |
+| `next dev` | Tag never renders, helpers are no-ops. Nothing is sent. |
+| Vercel Preview, local `next build` | Sends in **test mode** — recorded, never billed, kept out of every chart. |
+| Vercel Production | Reports live. |
+
+The three env vars in `.env.example` are all optional overrides: a different
+tracking key, a self-hosted collector, and `NEXT_PUBLIC_OPEN_TEST_MODE=true`
+to force a Production deploy into test mode for a pre-launch dry run.
+
+The CLI installer (`npx getopen init`) is deliberately **not** used here. It
+auto-detects the framework and injects its own snippet, which would duplicate
+the tag this repo already renders. Keep the integration in code.
 
 ## How it is wired
 
@@ -32,7 +39,10 @@ deploys so branch traffic is recorded but never billed or charted.
 - `src/lib/analytics.ts` wraps the `oa` global with `trackEvent` and
   `trackConversion`. Both trim properties to Open's limits (32 properties,
   40-char keys, 256-char values) and queue calls made before the async script
-  has landed, replaying them for up to ten seconds.
+  has landed, replaying them for up to ten seconds. They read
+  `window.openanalytics` as well as `window.oa`, because oa.js renames itself
+  to the former if another script already owns `window.oa` — a live risk here
+  given the third-party embeds.
 - `src/components/PhoneClickTracker.tsx` records a `phone_click` conversion
   for any `tel:` link, via one delegated listener on `document`.
 
