@@ -232,12 +232,14 @@ export default function AdminUsersPage() {
           </li>
         </ol>
         <p className="text-[#0D1B3D]/40 text-xs mt-4 leading-relaxed max-w-2xl">
-          No email is sent at any point, which is deliberate: Supabase&rsquo;s built-in mailer is
-          rate limited and often does not deliver until custom SMTP is configured. If someone
-          forgets their password, set a new temporary one for them in Supabase (Authentication →
-          Users → the person → Reset password) and they change it again here. Removing someone from
-          the list above drops them to editor; to block them from signing in at all, delete their
-          user in Supabase.
+          Onboarding sends no email, which is deliberate: Supabase&rsquo;s built-in mailer is rate
+          limited and often does not deliver until custom SMTP is configured. If someone forgets
+          their password they can use &ldquo;Forgot password?&rdquo; on the sign-in screen to email
+          themselves a reset link (this needs custom SMTP configured in Supabase → Auth → SMTP to be
+          reliable). The manual fallback always works: set a new temporary password for them in
+          Supabase (Authentication → Users → the person → Reset password) and they change it again
+          here. Removing someone from the list above drops them to editor; to block them from
+          signing in at all, delete their user in Supabase.
         </p>
       </Card>
 

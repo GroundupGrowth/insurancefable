@@ -108,6 +108,16 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
   if (!authReady) return <Centered />;
 
+  /* The password-reset pages must render without a normal session — the
+     emailed reset link is the credential. They get the centered chrome and
+     handle their own auth state. */
+  if (
+    pathname.startsWith('/admin/forgot-password') ||
+    pathname.startsWith('/admin/reset-password')
+  ) {
+    return <Centered>{children}</Centered>;
+  }
+
   if (!session) {
     return (
       <Centered>
@@ -149,6 +159,12 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           >
             Sign in
           </button>
+          <a
+            href="/admin/forgot-password/"
+            className="text-sm text-[#0D1B3D]/50 hover:text-[#0D1B3D] text-center transition-colors duration-150"
+          >
+            Forgot password?
+          </a>
         </form>
       </Centered>
     );
