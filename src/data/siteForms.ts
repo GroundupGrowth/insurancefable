@@ -16,6 +16,13 @@ export interface SiteForm {
 
 export const siteForms: SiteForm[] = [
   {
+    slotKey: 'form:intake',
+    label: 'Intake questionnaire',
+    pages: ['/intake/'],
+    fields:
+      'heard_of_ibc, primary_goal, monthly_allocation, tax_advantaged_accounts, timeline, age, income, name, email, phone',
+  },
+  {
     slotKey: 'form:contact',
     label: 'Contact form',
     pages: ['/contact/'],

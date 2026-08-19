@@ -203,6 +203,7 @@ insert into public.embed_slots (slot_key, label, category) values
   ('form:generational-transfer',     'Generational Transfer download form (site-wide band)', 'form'),
   ('form:connect-with-our-experts',  'Discovery-call form (/connect-with-our-experts/)',     'form'),
   ('form:contact',                   'Contact form (/contact/)',                             'form'),
+  ('form:intake',                    'Intake questionnaire (/intake/)',                      'form'),
   ('form:guide-request',             'Generic guide-request form (/ebooks-and-guides/)',     'form'),
   ('page:life-insurance-quotes:quote-engine', 'Quote engine (/life-insurance-quotes/)', 'page'),
   ('page:infinite-banking-journey:booking',   'Booking calendar (/infinite-banking-journey/ hero)', 'page'),
