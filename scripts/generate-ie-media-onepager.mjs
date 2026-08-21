@@ -42,14 +42,7 @@ const people = [
       'Steve was admitted to the bar in 1999 and has practiced for more than twenty-five years. He opened a Florida trusts and estates practice in 2008 and ran it until 2023, which is fifteen years of sitting with families after the person who built the thing was gone, holding a plan that read fine on paper and did not survive a tax bill, a soft market, or a brother who wanted out. He is admitted in three states, holds the Accredited Estate Planner designation, and is licensed as a life and annuity producer in all fifty states.',
     tail: 'Books: <em>What Do You Want Your Kids to Inherit?</em> (2025) &middot; <em>The Intentional Wealth Effect</em> (2024)',
   },
-  {
-    name: 'Erik J. Hayton',
-    cred: 'Chief Marketing Officer — Compliance-First Growth Architect',
-    photo: b64(`${REPO}/public/wp-content/uploads/erik-hayton-.webp`, 'image/webp'),
-    story:
-      'As Chief Marketing Officer of Insurance and Estates, Erik brings over a decade of experience building compliance-first revenue infrastructure for firms that serve ultra-high-net-worth families, high-income professionals, and independent investment advisors. Since 2012, he has designed and deployed growth systems that have generated multiple nine figures in real assets under management and distribution across family offices and businesses, alt investment funds, and advisory channels. Erik operates as a Compliance-First Growth Architect - a discipline he developed at the intersection of performance marketing, regulatory governance, and applied artificial intelligence for over a decade.',
-    tail: '&ldquo;I don&rsquo;t build marketing campaigns. I build systems that buy back your time and protect your reputation.&rdquo;',
-  },
+  /* Erik removed from the one-pager per Xander, 2026-08-21. */
 ];
 
 const html = `<!doctype html>
@@ -71,9 +64,9 @@ const html = `<!doctype html>
   .chips { display: flex; gap: 8px; margin-top: 11px; }
   .chip { background: #fff; border: 1px solid rgba(0,0,0,.06); border-radius: 999px;
           padding: 7px 18px; font-size: 12.5px; font-weight: 600; }
-  .people { display: flex; flex-direction: column; gap: 0.16in; margin-top: 0.2in; flex: 1; }
+  .people { display: flex; flex-direction: column; gap: 0.16in; margin-top: 0.2in; }
   .person { background: #fff; border: 1px solid rgba(0,0,0,.05); border-radius: 14px;
-            padding: 16px 20px; display: flex; gap: 16px; flex: 1; }
+            padding: 16px 20px; display: flex; gap: 16px; }
   .person img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover;
                 object-position: top; flex-shrink: 0; }
   .person .name { font-size: 16.5px; font-weight: 600; letter-spacing: -0.02em; }
@@ -82,6 +75,15 @@ const html = `<!doctype html>
   .person .tail { font-size: 10px; color: rgba(13,27,61,.6); border-top: 1px solid rgba(0,0,0,.06);
                   padding-top: 6px; margin-top: 7px; line-height: 1.45; }
   .person .tail em { color: ${NAVY}; font-style: italic; }
+  .topics { background: #fff; border: 1px solid rgba(0,0,0,.05); border-radius: 14px;
+            padding: 16px 20px; margin-top: 0.16in; flex: 1; }
+  .topics h2 { font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+               color: rgba(13,27,61,.5); font-weight: 600; margin-bottom: 9px; }
+  .topics li { font-size: 11.4px; line-height: 1.5; color: rgba(13,27,61,.78);
+               margin-bottom: 8px; list-style: none; display: flex; gap: 8px; }
+  .topics li::before { content: ''; width: 5px; height: 5px; border-radius: 50%;
+                       background: #0D1B3D; margin-top: 6px; flex-shrink: 0; }
+  .pad.grow { flex: 1; display: flex; flex-direction: column; }
   footer { margin-top: 0.2in; background: ${NAVY}; color: #fff; border-radius: 22px 22px 0 0;
            padding: 0.22in 0.55in; display: flex; align-items: center; justify-content: space-between; }
   footer .book { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
@@ -104,7 +106,7 @@ const html = `<!doctype html>
   </div>
 </div>
 
-<div class="pad people">
+<div class="pad grow"><div class="people">
   ${people
     .map(
       (person) => `
@@ -119,6 +121,18 @@ const html = `<!doctype html>
   </div>`,
     )
     .join('')}
+</div>
+
+<div class="topics">
+  <h2>What they talk about</h2>
+  <ul>
+    <li>Why a house costs eight times what you make and thirty years stopped being enough.</li>
+    <li>Why the money doesn&rsquo;t survive your kids.</li>
+    <li>What happens to the thing you built when you stop running it.</li>
+    <li>The people writing the tax rules already restructured around them.</li>
+    <li>Getting to your own money without asking anyone.</li>
+  </ul>
+</div>
 </div>
 
 <footer>
