@@ -180,6 +180,8 @@ export default async function EbookLanding({
                 </p>
                 <a
                   href={purchaseOnly.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
                 >
                   Buy on {purchaseOnly.retailer}
@@ -349,9 +351,13 @@ export function SalesCta({
   light?: boolean;
   children: ReactNode;
 }) {
+  /* External CTAs (Amazon listings etc.) open in a new tab so the sales page
+     stays open; in-page anchors and internal routes keep the same tab. */
+  const external = /^https?:\/\//.test(href);
   return (
     <a
       href={href}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className={`inline-flex items-center gap-3 font-medium pl-8 pr-2 py-2 rounded-full transition-colors duration-200 ${
         light
           ? 'bg-white text-[#0D1B3D] hover:bg-white/90'

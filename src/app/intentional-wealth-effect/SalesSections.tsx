@@ -14,7 +14,12 @@ export default function SalesSections() {
   return (
     <SalesSection>
       <SalesHeading>Get Your Copy of The Intentional Wealth Effect</SalesHeading>
-      <a href={AMAZON_URL} className="inline-block mb-8">
+      <a
+        href={AMAZON_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block mb-8"
+      >
         <img
           src="/wp-content/uploads/The-Intentional-Wealth-Effect-Marketing-Page-Graphic-2-600x362.webp"
           alt="The Intentional Wealth Effect Marketing Page Graphic (2)"
