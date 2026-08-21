@@ -154,10 +154,15 @@ export const ebookDefaults: Ebook[] = [
     slug: 'intentional-wealth-effect',
     landingPath: '/intentional-wealth-effect/',
     category: 'featured',
-    eyebrow: 'Featured eBook',
+    /* Client, 2026-08-21: not a free ebook — sold on Amazon Kindle (the
+       landing page runs purchaseOnly). Card must not say "eBook" or route to
+       the free request form. The live site_ebooks override row carries the
+       same values; this default matches it so a cleared override cannot
+       regress the card to a free-download framing. */
+    eyebrow: 'On Amazon Kindle',
     title: 'The Intentional Wealth Effect',
     text: "Recapture your earnings and build wealth on purpose — principles inspired by Nelson Nash's Infinite Banking Concept.",
-    href: REQUEST,
+    href: '/intentional-wealth-effect/',
     sort: 50,
     /* Landscape marketing composite, not a portrait cover — this is the only
        art live uses for this title on /ebooks-and-guides/. */
