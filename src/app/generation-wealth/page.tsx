@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight, Mail } from 'lucide-react';
+import { ArrowUpRight, Download, Mail } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
 
@@ -28,7 +28,7 @@ const guests = [
     profileHref: '/proclientguide/barry/',
     bio: [
       'Barry started in financial services on the strength of charts showing 12% and 18% returns. Within two years his own clients were calling to ask where the returns had gone, and his mentor told him to say they were in it for the long haul. He left.',
-      'He co-founded a trust-deed investment company in Las Vegas and ran a portfolio past $100 million, until 2008 took the collateral under those loans. He lost over $1.4 million and moved his family out of state. He rebuilt buying foreclosures, and has spent the twenty-five years since designing high cash value policies for real estate investors and business owners, certified by the Nelson Nash Institute. He still argues in public for funding them in the way that pays him least.',
+      'He co-founded a trust-deed investment company in Las Vegas and ran a portfolio past $100 million, until 2008 took the collateral under those loans. He lost over $1.4 million and moved his family out of state. He rebuilt buying foreclosures, and has spent the eighteen years since designing high cash value policies for real estate investors and business owners, as an Authorized IBC Practitioner with the Nelson Nash Institute. He still argues in public for funding them in the way that pays him least.',
     ],
   },
   {
@@ -37,7 +37,7 @@ const guests = [
     profileHref: '/proclientguide/steve/',
     bio: [
       'Steve was admitted to the bar in 1999 and has practiced for more than twenty-five years. He opened a Florida trusts and estates practice in 2008 and ran it until 2023, which is fifteen years of sitting with families after the person who built the thing was gone, holding a plan that read fine on paper and did not survive a tax bill, a soft market, or a brother who wanted out.',
-      'He is admitted in three states, holds the Accredited Estate Planner designation, and is licensed as a life and annuity producer in all fifty.',
+      'He is admitted in three states, holds the Accredited Estate Planner designation, and is licensed as a life and annuity producer in all fifty states.',
     ],
   },
 ];
@@ -144,13 +144,15 @@ export default function GenerationWealthPage() {
                 className="bg-white rounded-2xl border border-black/5 p-8 md:p-10 flex flex-col"
               >
                 <div className="flex items-center gap-5 mb-6">
+                  {/* object-top keeps the crown of the head in frame — the
+                      center crop was cutting it off (client, 2026-08). */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={guest.photo.src}
                     alt={guest.photo.alt}
                     width={80}
                     height={80}
-                    className="w-20 h-20 rounded-full object-cover shrink-0"
+                    className="w-20 h-20 rounded-full object-cover object-top shrink-0"
                   />
                   <div>
                     <h3
@@ -322,13 +324,25 @@ export default function GenerationWealthPage() {
           <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-8">
             Headshots and short-form bios on request.
           </p>
-          <a
-            href={`mailto:${BOOKING_EMAIL}`}
-            className="inline-flex items-center gap-2.5 bg-white text-[#0D1B3D] font-medium px-7 py-3 rounded-full hover:bg-white/90 transition-colors duration-200"
-          >
-            <Mail className="w-4 h-4" />
-            {BOOKING_EMAIL}
-          </a>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <a
+              href={`mailto:${BOOKING_EMAIL}`}
+              className="inline-flex items-center gap-2.5 bg-white text-[#0D1B3D] font-medium px-7 py-3 rounded-full hover:bg-white/90 transition-colors duration-200"
+            >
+              <Mail className="w-4 h-4" />
+              Book Now
+            </a>
+            {/* One-page media snapshot (names, credentials, story, formats).
+                Regenerate after copy changes: scripts/generate-media-onepager.mjs */}
+            <a
+              href="/media/generation-wealth-media-kit.pdf"
+              download
+              className="inline-flex items-center gap-2.5 bg-white/10 text-white font-medium px-7 py-3 rounded-full hover:bg-white/20 transition-colors duration-200"
+            >
+              <Download className="w-4 h-4" />
+              Download the one-pager
+            </a>
+          </div>
         </div>
       </section>
     </PageShell>
