@@ -67,10 +67,18 @@ export async function ebookLandingMetadata(
 export default async function EbookLanding({
   slug,
   children,
+  purchaseOnly,
 }: {
   slug: string;
   /** Per-book sales sections (live copy), rendered below the hero + form block. */
   children?: ReactNode;
+  /** For commercially published books that are purchased externally instead of
+      delivered as a free site download. */
+  purchaseOnly?: {
+    href: string;
+    retailer: string;
+    format: string;
+  };
 }) {
   const book = await resolveEbook(slug);
 
@@ -107,7 +115,9 @@ export default async function EbookLanding({
         <div className="max-w-[88rem] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left: cover + copy */}
           <div className="lg:sticky lg:top-28">
-            <p className="text-[#0D1B3D]/60 text-sm mb-3">{book.eyebrow}</p>
+            <p className="text-[#0D1B3D]/60 text-sm mb-3">
+              {purchaseOnly ? `Available on ${purchaseOnly.retailer}` : book.eyebrow}
+            </p>
             <h1
               className="text-[#0D1B3D] text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.05] mb-6"
               style={{ letterSpacing: '-0.04em' }}
@@ -129,11 +139,18 @@ export default async function EbookLanding({
             )}
 
             <ul className="mt-8 space-y-3">
-              {[
-                'Instant access — delivered to your inbox',
-                'No cost, no obligation',
-                'Written by licensed estate-planning and insurance experts',
-              ].map((point) => (
+              {(purchaseOnly
+                ? [
+                    `${purchaseOnly.format} edition available from ${purchaseOnly.retailer}`,
+                    'Read on compatible Kindle devices and apps',
+                    'Written by a licensed estate-planning and insurance expert',
+                  ]
+                : [
+                    'Instant access — delivered to your inbox',
+                    'No cost, no obligation',
+                    'Written by licensed estate-planning and insurance experts',
+                  ]
+              ).map((point) => (
                 <li key={point} className="flex items-start gap-3 text-[#0D1B3D]/70">
                   <Check className="w-5 h-5 shrink-0 text-[#0D1B3D]" />
                   <span>{point}</span>
@@ -152,44 +169,63 @@ export default async function EbookLanding({
               className="text-[#0D1B3D] text-2xl md:text-3xl font-medium mb-6"
               style={{ letterSpacing: '-0.02em' }}
             >
-              Get your free copy
+              {purchaseOnly ? `Get the ${purchaseOnly.format} edition` : 'Get your free copy'}
             </h2>
-            <EmbedSlot slotKey={`ebook:${book.slug}`}>
-              {/* No GHL embed pasted. With a lead webhook configured for this
-                  book we capture the lead ourselves; without one there is
-                  nowhere to send it, so link to the shared request form
-                  rather than show a form that cannot deliver. */}
-              {ebookLeadWebhook(book.slug) ? (
-                <>
-                  <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
-                    Tell us where to send it and{' '}
-                    <span className="font-medium text-[#0D1B3D]">{book.title}</span> lands in your
-                    inbox straight away.
-                  </p>
-                  <LeadCaptureForm
-                    source={`ebook:${book.slug}`}
-                    redirectTo={book.thankYouPath}
-                    submitLabel="Send Me the Book"
-                  />
-                </>
-              ) : (
-                <>
-                  <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
-                    Request <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
-                    we&rsquo;ll send it straight to your inbox.
-                  </p>
-                  <a
-                    href={REQUEST_ANCHOR}
-                    className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-                  >
-                    Request This Book
-                    <span className="bg-white rounded-full p-2">
-                      <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
-                    </span>
-                  </a>
-                </>
-              )}
-            </EmbedSlot>
+            {purchaseOnly ? (
+              <>
+                <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                  <span className="font-medium text-[#0D1B3D]">{book.title}</span> is available
+                  for purchase from {purchaseOnly.retailer}. We do not offer a free ebook or
+                  downloadable edition on this website.
+                </p>
+                <a
+                  href={purchaseOnly.href}
+                  className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+                >
+                  Buy on {purchaseOnly.retailer}
+                  <span className="bg-white rounded-full p-2">
+                    <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
+                  </span>
+                </a>
+              </>
+            ) : (
+              <EmbedSlot slotKey={`ebook:${book.slug}`}>
+                {/* No GHL embed pasted. With a lead webhook configured for this
+                    book we capture the lead ourselves; without one there is
+                    nowhere to send it, so link to the shared request form
+                    rather than show a form that cannot deliver. */}
+                {ebookLeadWebhook(book.slug) ? (
+                  <>
+                    <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                      Tell us where to send it and{' '}
+                      <span className="font-medium text-[#0D1B3D]">{book.title}</span> lands in
+                      your inbox straight away.
+                    </p>
+                    <LeadCaptureForm
+                      source={`ebook:${book.slug}`}
+                      redirectTo={book.thankYouPath}
+                      submitLabel="Send Me the Book"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                      Request <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
+                      we&rsquo;ll send it straight to your inbox.
+                    </p>
+                    <a
+                      href={REQUEST_ANCHOR}
+                      className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+                    >
+                      Request This Book
+                      <span className="bg-white rounded-full p-2">
+                        <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
+                      </span>
+                    </a>
+                  </>
+                )}
+              </EmbedSlot>
+            )}
           </div>
         </div>
       </section>

@@ -163,7 +163,7 @@ export const ebookDefaults: Ebook[] = [
        art live uses for this title on /ebooks-and-guides/. */
     image: {
       src: '/wp-content/uploads/The-Intentional-Wealth-Effect-Marketing-Page-Graphic-2-600x362.webp',
-      alt: 'The Intentional Wealth Effect, shown in ebook, paperback and audiobook editions',
+      alt: 'The Intentional Wealth Effect book',
     },
   },
   {

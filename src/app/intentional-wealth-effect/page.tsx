@@ -20,7 +20,14 @@ export function generateMetadata(): Promise<Metadata> {
 
 export default function Page() {
   return (
-    <EbookLanding slug="intentional-wealth-effect">
+    <EbookLanding
+      slug="intentional-wealth-effect"
+      purchaseOnly={{
+        href: 'https://amzn.to/3UgeUor',
+        retailer: 'Amazon',
+        format: 'Kindle',
+      }}
+    >
       <SalesSections />
     </EbookLanding>
   );
