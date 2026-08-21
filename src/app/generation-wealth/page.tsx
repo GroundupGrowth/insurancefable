@@ -322,7 +322,11 @@ export default function GenerationWealthPage() {
             Booking
           </h2>
           <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-8">
-            Headshots and short-form bios on request.
+            Headshots, brand marks, and the one-pager are all on the{' '}
+            <a href="/media/" className="text-white underline hover:text-white/80">
+              media page
+            </a>
+            .
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <a

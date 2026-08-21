@@ -19,6 +19,7 @@ const aboutUs = [
   { label: 'Contact Us', href: '/contact/' },
   { label: '877-787-7558', href: 'tel:1-877-787-7558' },
   { label: 'Meet the Team', href: '/proclientguide/introduction/' },
+  { label: 'Media & Press', href: '/media/' },
   // Recruiting page not yet built — route to contact until then
   { label: 'Join The Team', href: '/contact/' },
 ];
