@@ -128,28 +128,33 @@ export async function POST(request: Request) {
     submitted_at: new Date().toISOString(),
   };
 
+  /* Every lead is archived in fallback_leads (the /admin Leads module reads
+     it); `forwarded` records whether GHL got it. Delivery order: webhook
+     first when configured, and a webhook failure stores the lead here
+     instead of failing the visitor — the download must never dead-end. */
+  const supabase = serverClient();
+
   if (webhook) {
     const response = await fetch(webhook, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!response.ok) {
-      return NextResponse.json({ error: 'Webhook delivery failed.' }, { status: 502 });
+    if (response.ok) {
+      // Best-effort archive; GHL already has the lead if this insert fails.
+      if (supabase) {
+        await supabase.from('fallback_leads').insert({ source, payload, forwarded: true });
+      }
+      return NextResponse.json({ ok: true });
     }
-    return NextResponse.json({ ok: true });
   }
 
-  /* Known source, no webhook yet: keep the lead and let the visitor through
-     to their download. Paste the webhook at /admin (Books or Forms) to resume
-     GHL delivery; rows here are readable by signed-in admins. */
-  const supabase = serverClient();
   if (!supabase) {
     return NextResponse.json({ error: 'Lead storage is not configured.' }, { status: 502 });
   }
   const { error: insertError } = await supabase
     .from('fallback_leads')
-    .insert({ source, payload });
+    .insert({ source, payload, forwarded: false });
   if (insertError) {
     return NextResponse.json({ error: 'Could not store the lead.' }, { status: 502 });
   }

@@ -251,8 +251,14 @@ create table if not exists public.fallback_leads (
   id uuid primary key default gen_random_uuid(),
   source text not null,
   payload jsonb not null,
+  -- true when the GHL webhook delivery succeeded; false = the lead lives
+  -- only here until handled (webhook missing or delivery failed).
+  forwarded boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- For tables created before the column existed.
+alter table public.fallback_leads add column if not exists forwarded boolean not null default false;
 
 alter table public.fallback_leads enable row level security;
 

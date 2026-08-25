@@ -18,6 +18,7 @@ import {
   Menu,
   Newspaper,
   ShieldCheck,
+  UserPlus,
   Users,
   X,
 } from 'lucide-react';
@@ -34,6 +35,7 @@ const NAV = [
   { href: '/admin/pages/', label: 'Pages', icon: FileText },
   { href: '/admin/books/', label: 'Books', icon: BookOpen },
   { href: '/admin/forms/', label: 'Forms', icon: Inbox },
+  { href: '/admin/leads/', label: 'Leads', icon: UserPlus },
   { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
   { href: '/admin/wiki/', label: 'Wiki', icon: Library },
   { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },

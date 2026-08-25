@@ -34,11 +34,14 @@ export interface RoleState {
   missingTable: boolean;
 }
 
-/** Sections only an owner may open. Everything else is content work. */
+/** Sections only an owner may open. Everything else is content work.
+    Leads is owner-only for the same reason as Forms: it holds the site's
+    captured contact data. */
 export const OWNER_ONLY_PREFIXES = [
   '/admin/reports',
   '/admin/embeds',
   '/admin/forms',
+  '/admin/leads',
   '/admin/users',
 ];
 
