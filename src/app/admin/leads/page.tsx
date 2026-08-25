@@ -49,7 +49,7 @@ function toCsv(rows: LeadRow[]): string {
   const keys = new Set<string>();
   rows.forEach((row) => Object.keys(row.payload).forEach((key) => keys.add(key)));
   const columns = ['created_at', 'source', 'forwarded', ...Array.from(keys).sort()];
-  const escape = (value: string) => `"${value.replaceAll('"', '""')}"`;
+  const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
   const lines = [columns.map(escape).join(',')];
   for (const row of rows) {
     lines.push(
