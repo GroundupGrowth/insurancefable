@@ -310,6 +310,7 @@ export const ebookDefaults: Ebook[] = [
   {
     slug: 'ibc-modules',
     landingPath: '/ibc-modules/',
+    thankYouPath: '/thank-you-ibc-modules/',
     noindexLanding: true,
     category: 'journey',
     requestKind: 'video',

@@ -8,7 +8,6 @@ import { getEbooks } from '../lib/content';
 import {
   ebookDefaults,
   ebookLandingPath,
-  ebookLeadWebhook,
   ebookThankYouPath,
   type Ebook,
 } from '../data/ebooks';
@@ -37,8 +36,6 @@ async function resolveEbook(slug: string): Promise<Ebook | undefined> {
   const catalog = await getEbooks();
   return catalog.find((book) => book.slug === slug) ?? ebookDefaults.find((b) => b.slug === slug);
 }
-
-const REQUEST_ANCHOR = '/ebooks-and-guides/#request-a-guide';
 
 export async function ebookLandingMetadata(
   slug: string,
@@ -153,11 +150,17 @@ export default async function EbookLanding({
                     'Read on compatible Kindle devices and apps',
                     'Written by a licensed estate-planning and insurance expert',
                   ]
-                : [
-                    'Instant access — delivered to your inbox',
-                    'No cost, no obligation',
-                    'Written by licensed estate-planning and insurance experts',
-                  ]
+                : requestKind === 'video'
+                  ? [
+                      'Free video training — access sent to your inbox',
+                      'No cost, no obligation',
+                      'Taught by licensed estate-planning and insurance experts',
+                    ]
+                  : [
+                      'Instant access — delivered to your inbox',
+                      'No cost, no obligation',
+                      'Written by licensed estate-planning and insurance experts',
+                    ]
               ).map((point) => (
                 <li key={point} className="flex items-start gap-3 text-[#0D1B3D]/70">
                   <Check className="w-5 h-5 shrink-0 text-[#0D1B3D]" />
@@ -211,38 +214,24 @@ export default async function EbookLanding({
                     downloads must never dead-end). Only books with neither
                     (e.g. the video module series) link to the shared request
                     form. */}
-                {ebookLeadWebhook(book.slug) || ebookThankYouPath(book.slug) ? (
-                  <>
-                    <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
-                      Tell us where to send it and{' '}
-                      <span className="font-medium text-[#0D1B3D]">{book.title}</span> lands in
-                      your inbox straight away.
-                    </p>
-                    <LeadCaptureForm
-                      source={`ebook:${book.slug}`}
-                      redirectTo={ebookThankYouPath(book.slug)}
-                      submitLabel="Send Me the Book"
-                    />
-                  </>
+                {requestKind === 'video' ? (
+                  <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                    Tell us where to send it and we&rsquo;ll get your access to{' '}
+                    <span className="font-medium text-[#0D1B3D]">{book.title}</span> on its way.
+                  </p>
                 ) : (
-                  <>
-                    <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
-                      Request{' '}
-                      <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
-                      we&rsquo;ll send {requestKind === 'video' ? 'you access' : 'it'}{' '}
-                      straight to your inbox.
-                    </p>
-                    <a
-                      href={REQUEST_ANCHOR}
-                      className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
-                    >
-                      {requestKind === 'video' ? 'Request This Training' : 'Request This Book'}
-                      <span className="bg-white rounded-full p-2">
-                        <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
-                      </span>
-                    </a>
-                  </>
+                  <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
+                    Tell us where to send it and{' '}
+                    <span className="font-medium text-[#0D1B3D]">{book.title}</span> lands in
+                    your inbox straight away.
+                  </p>
                 )}
+                <LeadCaptureForm
+                  source={`ebook:${book.slug}`}
+                  redirectTo={ebookThankYouPath(book.slug)}
+                  submitLabel={requestKind === 'video' ? 'Send Me Access' : 'Send Me the Book'}
+                  successMessage="Thank you! Your request is in — we'll send it to your inbox."
+                />
               </EmbedSlot>
             )}
           </div>

@@ -665,6 +665,26 @@ export const thankYouPages: ThankYouPageData[] = [
       { label: 'Visit our Resources Page', href: RESOURCES },
     ],
   },
+  /* Native page, NOT migrated from live (Xander, 2026-08-22): redirect target
+     for the /ibc-modules/ request form. The modules are a video series with
+     nothing to serve here — access is sent by email (manually from
+     /admin -> Leads until the GHL webhook/embed for ebook:ibc-modules is
+     configured, automatically afterwards). Keep the copy honest about that:
+     no "read it below", no instant-access promise. */
+  {
+    path: '/thank-you-ibc-modules/',
+    title:
+      'Thank You – 10 Modules on Infinite Banking – I&E | Whole Life & Infinite Banking Strategies',
+    heading: 'Thank You – Your Request Is In',
+    body: [
+      "You have successfully requested access to the 10 Modules on Infinite Banking. We'll send your access to the email address you entered.",
+    ],
+    ctaIntro: 'Questions? Talk to Our Experts',
+    ctas: [
+      { label: 'Book A Discovery Call', href: '/connect-with-our-experts/' },
+      { label: 'Visit our Resources Page', href: RESOURCES },
+    ],
+  },
 ];
 
 /** Children of /thank-you-main/ served by src/app/thank-you-main/[slug]/page.tsx. */
