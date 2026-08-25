@@ -204,11 +204,42 @@ export default function QuizFlow() {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // {/* TODO: wire submissions */}
-    console.log({ name, email, phone, agreed, answers, track: scoreAnswers(answers) });
-    setPhase('result');
+    if (sending) return;
+    setError(null);
+    setSending(true);
+    try {
+      /* Stored in the Leads module (source form:quiz-advice, registered in
+         src/data/siteForms.ts); forwarded to GHL once its webhook is pasted
+         at /admin -> Forms. Trailing slash required (308 redirect). */
+      const response = await fetch('/api/lead/', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          first_name: name,
+          email,
+          phone,
+          consent: agreed,
+          website: '',
+          source: 'form:quiz-advice',
+          page: window.location.href,
+          recommended_track: scoreAnswers(answers),
+          quiz_answers: answers.join(','),
+        }),
+      });
+      if (!response.ok) throw new Error(`status ${response.status}`);
+      setPhase('result');
+    } catch {
+      setError(
+        'Something went wrong sending your answers. Please try again, or call us at 877-787-7558.',
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   const progress =
@@ -350,12 +381,17 @@ export default function QuizFlow() {
                     I read the disclaimer above.
                   </label>
 
-                  {/* TODO: wire submissions */}
+                  {error && (
+                    <p className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
+                      {error}
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className="self-start bg-[#0D1B3D] text-white font-medium px-8 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+                    disabled={sending}
+                    className="self-start bg-[#0D1B3D] text-white font-medium px-8 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200 disabled:opacity-60"
                   >
-                    Send My Plan
+                    {sending ? 'Sending…' : 'Send My Plan'}
                   </button>
                 </form>
               </EmbedSlot>

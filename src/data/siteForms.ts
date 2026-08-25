@@ -64,6 +64,44 @@ export const siteForms: SiteForm[] = [
     pages: ['/infinite-banking-pdf/'],
     fields: 'name, phone, email, age',
   },
+  /* Gravity-form replica pages, wired to /api/lead 2026-08-22 (they were
+     fake-submit stubs that saved nothing). */
+  {
+    slotKey: 'page:questionnaire:form',
+    label: 'Client questionnaire',
+    pages: ['/questionnaire/'],
+    fields: 'name, email, phone + the full questionnaire answers',
+  },
+  {
+    slotKey: 'page:getmyquote:form',
+    label: 'Get My Quote form',
+    pages: ['/getmyquote/'],
+    fields: 'name, phone, email, quote details (health, coverage, spouse…)',
+  },
+  {
+    slotKey: 'page:agent-broker:form',
+    label: 'Agent/broker inquiry',
+    pages: ['/agent-broker/'],
+    fields: 'name, phone, email, message',
+  },
+  {
+    slotKey: 'page:agent-partners:form',
+    label: 'Agent partners application',
+    pages: ['/agent-partners/'],
+    fields: 'name, email, phone, application answers',
+  },
+  {
+    slotKey: 'page:insurance-options-for-long-term-care-expenses:form',
+    label: 'LTC options request',
+    pages: ['/insurance-options-for-long-term-care-expenses/'],
+    fields: 'name, email, phone, LTC details',
+  },
+  {
+    slotKey: 'form:quiz-advice',
+    label: 'Wealth Strategy Quiz plan request',
+    pages: ['/quiz/'],
+    fields: 'name, email, phone, recommended_track, quiz_answers',
+  },
   {
     slotKey: 'page:exam-one:form',
     label: 'Exam One quote requests (both forms)',

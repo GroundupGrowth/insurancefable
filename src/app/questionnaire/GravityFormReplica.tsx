@@ -3,17 +3,23 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
 
+/* Field labels double as payload keys (slugified) for /api/lead. */
+const slugify = (label: string) =>
+  label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+
 /* Replica of the WordPress Gravity Forms that live renders on its form/booking
    utility pages (/questionnaire/, /getmyquote/, /agent-partners/,
    /agent-broker/, /insurance-options-for-long-term-care-expenses/, /exam-one/).
    Field labels, options, descriptions and the consent/disclaimer copy are
    reproduced verbatim from the capture — typos included.
 
-   The live forms POST to WordPress, which this static site can't do, so this
-   is the ContactForm-style stub: it renders inside an EmbedSlot and is
-   replaced wholesale the moment a real (GHL) form embed is pasted at /admin
-   under the page's `page:<slug>:form` slot. Until then, submitting shows the
-   standard "we'll reach out" note with the phone number.
+   The live forms POSTed to WordPress; here they submit to /api/lead with the
+   page's `page:<slug>:form` slot key as the source (registered in
+   src/data/siteForms.ts), so every submission is stored in the Leads module
+   and forwarded to GHL once that source's webhook is pasted at /admin ->
+   Forms. This replaced a fake-submit stub that pretended success while
+   saving nothing (fixed 2026-08-22 per Xander: collect leads everywhere). A
+   real GHL embed pasted under the slot still replaces the form wholesale.
 
    Lives in this route folder rather than src/components because the replica
    pages were scoped to their own folders; sibling pages import it relatively. */
@@ -50,7 +56,7 @@ function Field({ field }: { field: ReplicaField }) {
     return (
       <label className="block">
         {label}
-        <textarea required={field.required} rows={4} className={`${inputClass} resize-y`} />
+        <textarea name={slugify(field.label)} required={field.required} rows={4} className={`${inputClass} resize-y`} />
         {description}
       </label>
     );
@@ -59,7 +65,7 @@ function Field({ field }: { field: ReplicaField }) {
     return (
       <label className="block">
         {label}
-        <select required={field.required} defaultValue="" className={`${inputClass} appearance-none`}>
+        <select name={slugify(field.label)} required={field.required} defaultValue="" className={`${inputClass} appearance-none`}>
           <option value="" disabled>
             {field.placeholder ?? '(select)'}
           </option>
@@ -85,7 +91,8 @@ function Field({ field }: { field: ReplicaField }) {
             <label key={option} className="flex items-start gap-3 text-white/70 text-sm leading-relaxed cursor-pointer">
               <input
                 type={field.kind === 'radio' ? 'radio' : 'checkbox'}
-                name={field.kind === 'radio' ? field.label : undefined}
+                name={slugify(field.label)}
+                value={option}
                 className="mt-0.5 shrink-0"
               />
               {option}
@@ -99,7 +106,7 @@ function Field({ field }: { field: ReplicaField }) {
   return (
     <label className="block">
       {label}
-      <input type={field.kind} required={field.required} className={inputClass} />
+      <input type={field.kind} name={slugify(field.label)} required={field.required} className={inputClass} />
       {description}
     </label>
   );
@@ -125,10 +132,56 @@ export default function GravityFormReplica({
   disclaimerNote,
 }: GravityFormReplicaProps) {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    if (sending) return;
+    setError(null);
+    setSending(true);
+    const data = new FormData(event.currentTarget);
+    const values: Record<string, string> = {};
+    for (const field of fields) {
+      const key = slugify(field.label);
+      values[key] =
+        field.kind === 'checkboxes'
+          ? data.getAll(key).map(String).join(', ')
+          : String(data.get(key) ?? '');
+    }
+    /* Identity fields map by kind/label; the rest travel as extra fields. */
+    const emailField = fields.find((field) => field.kind === 'email');
+    const phoneField = fields.find((field) => field.kind === 'tel');
+    const email = emailField ? values[slugify(emailField.label)] : '';
+    const phone = phoneField ? values[slugify(phoneField.label)] : '';
+    const firstName = values.name ?? '';
+    delete values.name;
+    if (emailField) delete values[slugify(emailField.label)];
+    if (phoneField) delete values[slugify(phoneField.label)];
+    try {
+      /* Trailing slash required: next.config redirects /api/lead -> /api/lead/ (308). */
+      const response = await fetch('/api/lead/', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          ...values,
+          first_name: firstName,
+          email,
+          phone,
+          consent: true,
+          website: '',
+          source: slotKey,
+          page: window.location.href,
+        }),
+      });
+      if (!response.ok) throw new Error(`status ${response.status}`);
+      setSubmitted(true);
+    } catch {
+      setSending(false);
+      setError(
+        'Something went wrong sending your answers. Please try again, or call us at 877-787-7558.',
+      );
+    }
   };
 
   return (
@@ -168,11 +221,17 @@ export default function GravityFormReplica({
           {disclaimerNote && (
             <p className="text-xs text-white/40 leading-relaxed">{disclaimerNote}</p>
           )}
+          {error && (
+            <p className="bg-white/10 border border-white/20 text-white text-sm rounded-xl px-4 py-3">
+              {error}
+            </p>
+          )}
           <button
             type="submit"
-            className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start"
+            disabled={sending}
+            className="bg-white text-[#0D1B3D] font-medium px-8 py-3 rounded-full hover:bg-[#E5E7EB] transition-colors duration-200 self-start disabled:opacity-60"
           >
-            {submitLabel}
+            {sending ? 'Sending…' : submitLabel}
           </button>
         </form>
       )}
