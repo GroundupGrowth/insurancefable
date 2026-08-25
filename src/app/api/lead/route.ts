@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { serverClient } from '../../../lib/content';
 import { parseSlotNotes } from '../../../lib/slotNotes';
-import { ebookLeadWebhook } from '../../../data/ebooks';
+import { ebookDefaults, ebookLeadWebhook } from '../../../data/ebooks';
 import { siteFormSlotKeys } from '../../../data/siteForms';
 
 /* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
@@ -82,7 +82,14 @@ export async function POST(request: Request) {
     }
     if (!webhook && isEbook) webhook = ebookLeadWebhook(source.slice('ebook:'.length));
   }
-  if (!webhook) {
+  /* A KNOWN source without a configured webhook must never fail the visitor
+     (client escalation 2026-08-22: broken ebook downloads). Those leads are
+     stored in fallback_leads instead — see the branch below. Unknown sources
+     still get rejected so this never becomes an open relay/dump. */
+  const knownSource =
+    (isEbook && ebookDefaults.some((book) => `ebook:${book.slug}` === source)) ||
+    siteFormSlotKeys.has(source);
+  if (!webhook && !knownSource) {
     return NextResponse.json({ error: 'Unknown lead source.' }, { status: 400 });
   }
 
@@ -121,13 +128,30 @@ export async function POST(request: Request) {
     submitted_at: new Date().toISOString(),
   };
 
-  const response = await fetch(webhook, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) {
-    return NextResponse.json({ error: 'Webhook delivery failed.' }, { status: 502 });
+  if (webhook) {
+    const response = await fetch(webhook, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      return NextResponse.json({ error: 'Webhook delivery failed.' }, { status: 502 });
+    }
+    return NextResponse.json({ ok: true });
+  }
+
+  /* Known source, no webhook yet: keep the lead and let the visitor through
+     to their download. Paste the webhook at /admin (Books or Forms) to resume
+     GHL delivery; rows here are readable by signed-in admins. */
+  const supabase = serverClient();
+  if (!supabase) {
+    return NextResponse.json({ error: 'Lead storage is not configured.' }, { status: 502 });
+  }
+  const { error: insertError } = await supabase
+    .from('fallback_leads')
+    .insert({ source, payload });
+  if (insertError) {
+    return NextResponse.json({ error: 'Could not store the lead.' }, { status: 502 });
   }
   return NextResponse.json({ ok: true });
 }

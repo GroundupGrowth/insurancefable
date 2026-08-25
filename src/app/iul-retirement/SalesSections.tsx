@@ -4,7 +4,6 @@ import {
   SalesSubheading,
   SalesProse,
   SalesQuote,
-  SalesCta,
 } from '../../components/EbookLanding';
 
 /* Live sales copy for /iul-retirement/ — reproduced verbatim from
@@ -212,29 +211,8 @@ export default function SalesSections() {
         </div>
       </SalesSection>
 
-      {/* Live section 3: final CTA (live repeats the opt-in form here; the CTA
-          anchors back up to the form card instead). */}
-      <SalesSection tone="navy">
-        <div className="flex flex-col items-center text-center">
-          <img
-            src={`${UPLOADS}/The-Self-Banking-Blueprint-2020-Cover-Update-V3-128x200.jpg`}
-            alt="The Self Banking Blueprint 2020 Cover Update V3"
-            className="w-32 h-auto rounded-sm shadow-[0_16px_40px_rgba(0,0,0,0.35)] mb-6"
-          />
-          <p className="text-white/60 text-sm mb-3">The Ultimate Free Download</p>
-          <p
-            className="text-white text-3xl md:text-5xl font-medium leading-tight mb-6"
-            style={{ letterSpacing: '-0.03em' }}
-          >
-            Get Access Now
-          </p>
-          <p className="text-white/60 leading-relaxed max-w-2xl mb-8">
-            Join the thousands of readers who have already transformed their approach to wealth
-            protection. Grab your free copy today!
-          </p>
-          <SalesCta light>Get Access Now</SalesCta>
-        </div>
-      </SalesSection>
+      {/* Live's final CTA band showed the Self Banking Blueprint cover here —
+          the wrong book for this page. Removed per Jason, 2026-08-22. */}
     </>
   );
 }

@@ -43,6 +43,10 @@ export interface Ebook {
       /api/lead for `ebook:<slug>` sources. Code-owned like `thankYouPath`. */
   leadWebhook?: string;
   sort: number;
+  /** 'video' for module-series items: the request copy says access/training,
+      never "book" (client, 2026-08-22 — /ibc-modules/ is video, not a book).
+      Code-owned like `image`; never part of the site_ebooks round-trip. */
+  requestKind?: 'video';
   /* Cover art, localized under public/wp-content/uploads/. Covers are code-owned
      and deliberately NOT part of the site_ebooks round-trip: the admin editor
      never sends or wipes them, and getEbooks() re-attaches the cover by slug
@@ -308,6 +312,7 @@ export const ebookDefaults: Ebook[] = [
     landingPath: '/ibc-modules/',
     noindexLanding: true,
     category: 'journey',
+    requestKind: 'video',
     eyebrow: 'Free Video Training',
     title: '10 Modules on Infinite Banking',
     text: 'Step-by-step video training to build your financial infrastructure correctly.',

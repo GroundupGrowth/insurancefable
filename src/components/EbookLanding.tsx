@@ -5,7 +5,13 @@ import PageShell from './PageShell';
 import EmbedSlot from './EmbedSlot';
 import LeadCaptureForm from './LeadCaptureForm';
 import { getEbooks } from '../lib/content';
-import { ebookDefaults, ebookLandingPath, ebookLeadWebhook, type Ebook } from '../data/ebooks';
+import {
+  ebookDefaults,
+  ebookLandingPath,
+  ebookLeadWebhook,
+  ebookThankYouPath,
+  type Ebook,
+} from '../data/ebooks';
 
 /* Landing page for one eBook/guide, at its own route (e.g. /kingdom-money/).
    The catalog on /ebooks-and-guides/ links here; this page shows the book's
@@ -81,6 +87,8 @@ export default async function EbookLanding({
   };
 }) {
   const book = await resolveEbook(slug);
+  /* Code-owned like image/landingPath: admin catalog overrides never carry it. */
+  const requestKind = ebookDefaults.find((b) => b.slug === slug)?.requestKind;
 
   // A route can only exist for a known book, but guard anyway.
   if (!book) {
@@ -169,7 +177,11 @@ export default async function EbookLanding({
               className="text-[#0D1B3D] text-2xl md:text-3xl font-medium mb-6"
               style={{ letterSpacing: '-0.02em' }}
             >
-              {purchaseOnly ? `Get the ${purchaseOnly.format} edition` : 'Get your free copy'}
+              {purchaseOnly
+                ? `Get the ${purchaseOnly.format} edition`
+                : requestKind === 'video'
+                  ? 'Get free access'
+                  : 'Get your free copy'}
             </h2>
             {purchaseOnly ? (
               <>
@@ -192,11 +204,14 @@ export default async function EbookLanding({
               </>
             ) : (
               <EmbedSlot slotKey={`ebook:${book.slug}`}>
-                {/* No GHL embed pasted. With a lead webhook configured for this
-                    book we capture the lead ourselves; without one there is
-                    nowhere to send it, so link to the shared request form
-                    rather than show a form that cannot deliver. */}
-                {ebookLeadWebhook(book.slug) ? (
+                {/* No GHL embed pasted. Our own form works whenever there is a
+                    webhook OR a thank-you page to land on: /api/lead forwards
+                    to the webhook when configured and stores the lead in
+                    fallback_leads otherwise (client escalation 2026-08-22 —
+                    downloads must never dead-end). Only books with neither
+                    (e.g. the video module series) link to the shared request
+                    form. */}
+                {ebookLeadWebhook(book.slug) || ebookThankYouPath(book.slug) ? (
                   <>
                     <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
                       Tell us where to send it and{' '}
@@ -205,21 +220,23 @@ export default async function EbookLanding({
                     </p>
                     <LeadCaptureForm
                       source={`ebook:${book.slug}`}
-                      redirectTo={book.thankYouPath}
+                      redirectTo={ebookThankYouPath(book.slug)}
                       submitLabel="Send Me the Book"
                     />
                   </>
                 ) : (
                   <>
                     <p className="text-[#0D1B3D]/70 leading-relaxed mb-6">
-                      Request <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
-                      we&rsquo;ll send it straight to your inbox.
+                      Request{' '}
+                      <span className="font-medium text-[#0D1B3D]">{book.title}</span> and
+                      we&rsquo;ll send {requestKind === 'video' ? 'you access' : 'it'}{' '}
+                      straight to your inbox.
                     </p>
                     <a
                       href={REQUEST_ANCHOR}
                       className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
                     >
-                      Request This Book
+                      {requestKind === 'video' ? 'Request This Training' : 'Request This Book'}
                       <span className="bg-white rounded-full p-2">
                         <ArrowLeft className="w-5 h-5 text-[#0D1B3D] rotate-180" />
                       </span>

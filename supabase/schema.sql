@@ -239,3 +239,29 @@ create policy "public read" on public.site_post_images for select using (true);
 drop policy if exists "authenticated write" on public.site_post_images;
 create policy "authenticated write" on public.site_post_images
   for all to authenticated using (true) with check (true);
+
+-- ---------------------------------------------------------------------------
+-- Fallback leads: /api/lead submissions for a KNOWN source whose GHL webhook
+-- is not configured yet. The visitor's download keeps working and the lead is
+-- kept here instead of being lost; paste the webhook at /admin to resume
+-- normal GHL delivery. (Also applied as migration
+-- fallback_leads_for_unconfigured_webhooks, 2026-08-22.)
+-- ---------------------------------------------------------------------------
+create table if not exists public.fallback_leads (
+  id uuid primary key default gen_random_uuid(),
+  source text not null,
+  payload jsonb not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.fallback_leads enable row level security;
+
+create policy "public forms can submit leads"
+  on public.fallback_leads for insert
+  to anon, authenticated
+  with check (true);
+
+create policy "admins can read leads"
+  on public.fallback_leads for select
+  to authenticated
+  using (true);
