@@ -384,9 +384,10 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     schedulerUrl: 'https://api.leadconnectorhq.com/widget/bookings/insuranceandestates/barrybrooksby',
     email: 'barry@insuranceandestates.com',
     linkedinUrl: 'https://www.linkedin.com/in/barrybrooksby/',
-    youtubeUrl: 'https://www.youtube.com/@wealthoptimized',
+    /* The I&E channel, not Barry's personal @wealthoptimized — leads from the
+       bio page must credit I&E (client request, 2026-08-26). */
+    youtubeUrl: 'https://www.youtube.com/@InsuranceandEstates',
     storyVideoUrl: 'https://www.youtube.com/watch?v=7xGv9_WNtmg&t=1664s',
-    sameAs: ['https://www.youtube.com/@wealthoptimized'],
     // FILL IN: licenses (via /admin or here)
     /* Live's claim about client experience: "has been helping clients take
        control of their wealth for over 25 years". The old "30+ years" was not

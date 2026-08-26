@@ -823,9 +823,14 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
         </div>
       </section>
 
+      {/* When the guide has their own booking calendar, the closing band books
+          with THEM — not the generic strategy-call page. */}
       <CtaBand
         title={`Ready to talk it through with ${firstName}?`}
         text="A Fit Call is a conversation, not a pitch. Bring your numbers and your questions — leave with a clear picture of whether this strategy fits your situation."
+        {...(schedulerUrl
+          ? { primaryHref: schedulerUrl, primaryLabel: `Book a call with ${firstName}` }
+          : {})}
       />
     </PageShell>
   );

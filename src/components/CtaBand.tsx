@@ -3,12 +3,17 @@ import { PrimaryCta, SecondaryCta } from './CtaButtons';
 interface CtaBandProps {
   title?: string;
   text?: string;
+  /** Override the primary button (e.g. an advisor's own booking calendar). */
+  primaryHref?: string;
+  primaryLabel?: string;
 }
 
 /* Navy closing band used at the bottom of interior pages, above the footer. */
 export default function CtaBand({
   title = 'Ready to take back control?',
   text = 'Talk with one of our Pro Client Guides: real experts, no pitch, no pressure. Your first call is about your numbers and your goals, nothing else.',
+  primaryHref,
+  primaryLabel,
 }: CtaBandProps) {
   return (
     <section className="px-6 pb-16">
@@ -21,7 +26,10 @@ export default function CtaBand({
         </h2>
         <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-8">{text}</p>
         <div className="flex gap-4 flex-wrap justify-center">
-          <PrimaryCta label="Book a Free Call" />
+          <PrimaryCta
+            {...(primaryHref ? { href: primaryHref } : {})}
+            label={primaryLabel ?? 'Book a Free Call'}
+          />
           <SecondaryCta />
         </div>
       </div>
