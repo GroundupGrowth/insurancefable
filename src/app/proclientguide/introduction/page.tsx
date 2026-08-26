@@ -50,6 +50,12 @@ const guides = [
     href: '/proclientguide/jasonh/',
     image: '/wp-content/uploads/Jason-1.webp',
   },
+  {
+    name: 'Tom Farrar',
+    role: 'Cash Flow Strategist',
+    href: '/proclientguide/tom/',
+    image: '/wp-content/uploads/tom-farrar.jpg',
+  },
 ];
 
 /* Leadership headshots are the full-size originals fetched from live
