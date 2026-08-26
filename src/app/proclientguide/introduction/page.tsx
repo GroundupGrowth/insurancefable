@@ -52,7 +52,7 @@ const guides = [
   },
   {
     name: 'Tom Farrar',
-    role: 'Cash Flow Strategist',
+    role: 'Cash Flow Strategist & Certified Certainty Advisor',
     href: '/proclientguide/tom/',
     /* Transparent cutout (rembg from the supplied photo) so his card matches
        the other guides; the original with background is tom-farrar.jpg. */

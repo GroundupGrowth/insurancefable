@@ -887,7 +887,7 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     role: 'Pro Client Guide',
     name: 'Tom Farrar',
     firstName: 'Tom',
-    subtitle: 'Cash Flow Strategist',
+    subtitle: 'Cash Flow Strategist & Certified Certainty Advisor',
     intro:
       "Tom Farrar is a Cash Flow Strategist and an Authorized Infinite Banking Practitioner. He works with business owners, investors and families who want their money doing more than one job at a time, and who want to control it themselves rather than wait on someone else's approval.",
     /* Transparent cutout (rembg, 2026-08-26) matching the other guides'
@@ -949,7 +949,7 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
       {
         heading: 'Personal',
         paragraphs: [
-          "Tom lives in Kansas City and still invests in real estate. He and his wife have three children, two grown and one still at home. He's happiest outdoors, and the trips he cares about are the ones he takes with his kids. This spring he and his oldest son climbed Mt. Shasta together. Every year he plays in a charity golf tournament his wife's family has sponsored for thirty-seven years, and he'll tell you himself that he's terrible at golf and that isn't the point.",
+          "Tom lives in Kansas City and still invests in real estate. He and his wife have three children, two grown and one still at home. He's happiest outdoors, and the trips he cares about are the ones he takes with his kids. This spring he and his oldest son climbed Mt. Shasta together.",
         ],
       },
     ],
