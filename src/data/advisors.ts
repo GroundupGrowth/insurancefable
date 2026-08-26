@@ -210,8 +210,9 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     role: 'IBC Pro Client Guide Practitioner',
     name: 'Barry Brooksby',
     firstName: 'Barry',
-    // Live subtitle really does read "Practioner" (missing 't') — verbatim, do not fix.
-    subtitle: 'Infinite Banking Practioner & Real Estate Strategist',
+    /* Live read "Practioner" (missing 't'); kept verbatim during migration,
+       fixed 2026-08-23 at Jason Kenyon's request. */
+    subtitle: 'Infinite Banking Practitioner & Real Estate Strategist',
     intro:
       'Barry Brooksby is our resident Infinite Banking Practitioner and Real Estate Strategist. He has been helping clients take control of their wealth for over 25 years and offers clients an extensive background in large scale real estate investing and financial services.',
     photo: {
@@ -876,5 +877,118 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     // FOLLOW-UP: no email, booking widget or LinkedIn surfaced on the live page.
     /* Live: "Since 2012, he has designed and deployed growth systems…". */
     yearsExperience: 'Since 2012',
+  },
+  /* Tom Farrar — built 2026-08-23 from Jason Kenyon's page brief (template:
+     Barry's page). Sections the brief omits (book, story video, FAQ,
+     testimonials, licenses) are deliberately absent — do not stub them. */
+  tom: {
+    slug: 'tom',
+    role: 'Pro Client Guide',
+    name: 'Tom Farrar',
+    firstName: 'Tom',
+    subtitle: 'Cash Flow Strategist',
+    intro:
+      "Tom Farrar is a Cash Flow Strategist and an Authorized Infinite Banking Practitioner. He works with business owners, investors and families who want their money doing more than one job at a time, and who want to control it themselves rather than wait on someone else's approval.",
+    /* FILL IN: headshot. Save the photo Jason supplied as
+       public/wp-content/uploads/tom-farrar.webp and set
+       photo: { src: '/wp-content/uploads/tom-farrar.webp', alt: 'Tom Farrar' }.
+       Until then the initials block renders. */
+    initials: 'TF',
+    specialties: [
+      'Cash Flow Strategy',
+      'Policy Design for Investors',
+      'Infinite Banking Coaching',
+      'Business Owner Planning',
+    ],
+    achievements: {
+      intro:
+        "From thirty-six houses in 2008 to helping families take control of their own capital, Tom's career has been shaped by a single question: who actually decides what happens to your money when things go wrong.",
+      items: [
+        'Authorized Nelson Nash Infinite Banking Practitioner',
+        'Real estate investor since 1999',
+        'Rebuilt from a total portfolio liquidation in 2008 without filing bankruptcy',
+      ],
+    },
+    bioSections: [
+      {
+        heading: 'Background and Expertise',
+        wide: true,
+        paragraphs: [
+          'Tom Farrar has been a real estate investor since 1999. By 2008 he held thirty-six houses in Kansas City, conservatively levered and, by his own account, without a dollar in reserve. Anytime he had cash, he bought something else.',
+          'Then the market turned, equity fell, and his bank found it more advantageous to sell his portfolio off for pennies on the dollar. The bank liquidated thirteen portfolios that year. Tom was the only one of the thirteen who did not file bankruptcy.',
+          "He dug out the way he knew how. He went back to what he understood, opened a roofing company, and rebuilt over the following years. But the question that stayed with him wasn't how to recover. It was how to make sure nobody else ever got to make that decision for him again.",
+          "That question led him to Nelson Nash's Becoming Your Own Banker, and what he found there was something he half recognized. For years he had been paying mortgages down fast at a small bank, converting the first lien into a line of credit instead of taking the payoff, then using those lines to buy more property. He had been running the same idea without the foundation underneath it, on terms a bank could change whenever it chose. He'll tell you what that cost him, and he's still angry about it.",
+          'He reached out to Barry Brooksby asking for a mentor and has trained under him since. Today he works with clients on the same question in different clothes: where your money sits, who controls it, and what happens to your plans when the person holding it makes a decision that suits them instead of you.',
+        ],
+      },
+      {
+        heading: 'Philosophy',
+        paragraphs: [
+          "Tom looks at money the way an operator does, not the way a spreadsheet does. Most people are taught to chase a number and to collapse time getting there. He thinks that's the error. What matters is what your money can actually do for you while you still own it, how much of it stays under your control, and whether the plan holds up when circumstances don't cooperate.",
+          'His usual invitation is not to take his word for any of it. Send him a date of birth and look at the real numbers.',
+        ],
+      },
+      {
+        heading: 'Current Focus',
+        paragraphs: [],
+        bullets: [
+          "Helping investors and business owners redirect money they're already spending into something they own and control",
+          'Building the foundation first, so the opportunities that follow are the result of good structure rather than good timing',
+        ],
+      },
+      {
+        heading: 'Unique Perspective',
+        paragraphs: [
+          'Tom has been on the wrong side of someone else’s decision about his own money, at a point when he had done nothing wrong by any standard anyone uses. He was conservatively levered and it happened anyway.',
+          "That's why he talks about control before he talks about growth. He isn't cautious by temperament. He's spent his life picking hard things and doing them on purpose, on his own terms, with his eyes open. What he objects to is having the terms set by somebody else.",
+        ],
+      },
+      {
+        heading: 'Personal',
+        paragraphs: [
+          "Tom lives in Kansas City and still invests in real estate. He and his wife have three children, two grown and one still at home. He's happiest outdoors, and the trips he cares about are the ones he takes with his kids. This spring he and his oldest son climbed Mt. Shasta together. Every year he plays in a charity golf tournament his wife's family has sponsored for thirty-seven years, and he'll tell you himself that he's terrible at golf and that isn't the point.",
+        ],
+      },
+    ],
+    expertiseAreas: [
+      {
+        title: 'Cash Flow',
+        text: 'Money that works while you hold it, instead of money that only counts when you sell.',
+      },
+      {
+        title: 'Control',
+        text: "Access to your own capital without waiting on anyone's approval.",
+      },
+      {
+        title: 'Certainty',
+        text: "A plan that still works when the market, the bank, or the timing doesn't cooperate.",
+      },
+      {
+        title: 'Legacy',
+        text: "What you built arriving where you intended, whether you're there or not.",
+      },
+    ],
+    credentials: [
+      'Authorized Nelson Nash Infinite Banking Practitioner',
+      'Real estate investor since 1999',
+      'Rebuilt from a total portfolio liquidation in 2008 without filing bankruptcy',
+    ],
+    credentialLinks: {
+      'Authorized Nelson Nash Infinite Banking Practitioner':
+        'https://infinitebanking.org/practitioners/thomas-farrar/',
+    },
+    // No testimonials yet (brief: omit rather than stub or borrow).
+    testimonials: [],
+    /* CONFIRM (Xander): address assumed from the team pattern
+       (barry@/denise@/jason@) — verify before announcing the page. */
+    email: 'tom@insuranceandestates.com',
+    linkedinUrl: 'https://www.linkedin.com/in/farrarkc/',
+    /* FILL IN: schedulerUrl — Tom's LeadConnector booking link (the brief
+       requires his ACTUAL calendar; do not guess the URL). Until it is set,
+       the header CTA falls back to /start-your-journey/ and the on-page
+       booking section appears once the advisor:tom:booking embed is pasted
+       at /admin -> Embeds. */
+    yearsExperience: '25+ years real estate investing',
+    recentArticles: legacyRecentArticles,
   },
 };

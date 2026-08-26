@@ -200,6 +200,7 @@ insert into public.embed_slots (slot_key, label, category) values
   ('advisor:jasonh:booking', 'Jason Herring — booking calendar',    'advisor'),
   ('advisor:jasonk:booking', 'Jason Kenyon — booking calendar',     'advisor'),
   ('advisor:denise:booking', 'Denise Boisvert — booking calendar',  'advisor'),
+  ('advisor:tom:booking',    'Tom Farrar — booking calendar',       'advisor'),
   ('form:generational-transfer',     'Generational Transfer download form (site-wide band)', 'form'),
   ('form:connect-with-our-experts',  'Discovery-call form (/connect-with-our-experts/)',     'form'),
   ('form:contact',                   'Contact form (/contact/)',                             'form'),

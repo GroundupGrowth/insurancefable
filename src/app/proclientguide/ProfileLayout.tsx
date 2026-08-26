@@ -147,7 +147,7 @@ export interface AdvisorProfile {
          (2026-07-21). All optional: an advisor only shows a section once its
          content exists, so the advisors still on the old live template render
          exactly as before. --- */
-  /** Line under the name, e.g. "Infinite Banking Practioner & Real Estate Strategist" */
+  /** Line under the name, e.g. "Infinite Banking Practitioner & Real Estate Strategist" */
   subtitle?: string;
   /** Personal YouTube channel (distinct from the I&E channel) */
   youtubeUrl?: string;
