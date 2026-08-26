@@ -889,12 +889,10 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     subtitle: 'Cash Flow Strategist',
     intro:
       "Tom Farrar is a Cash Flow Strategist and an Authorized Infinite Banking Practitioner. He works with business owners, investors and families who want their money doing more than one job at a time, and who want to control it themselves rather than wait on someone else's approval.",
-    /* Headshot supplied by Jason via Xander (2026-08-26). The file must be
-       committed from Xander's PC as public/wp-content/uploads/tom-farrar.jpg
-       — until it exists this renders as a broken image, so ship them
-       together. */
+    /* Transparent cutout (rembg, 2026-08-26) matching the other guides'
+       photo style; the original with background is tom-farrar.jpg. */
     photo: {
-      src: '/wp-content/uploads/tom-farrar.jpg',
+      src: '/wp-content/uploads/tom-farrar-cutout.webp',
       alt: 'Tom Farrar',
     },
     initials: 'TF',

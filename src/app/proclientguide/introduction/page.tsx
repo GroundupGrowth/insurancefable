@@ -54,7 +54,9 @@ const guides = [
     name: 'Tom Farrar',
     role: 'Cash Flow Strategist',
     href: '/proclientguide/tom/',
-    image: '/wp-content/uploads/tom-farrar.jpg',
+    /* Transparent cutout (rembg from the supplied photo) so his card matches
+       the other guides; the original with background is tom-farrar.jpg. */
+    image: '/wp-content/uploads/tom-farrar-cutout.webp',
   },
 ];
 
@@ -168,7 +170,8 @@ export default async function ProClientGuideIntroductionPage() {
           >
             Pro Client Guides
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Four guides on one row on desktop, matching the leadership grid. */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {guides.map((guide) => (
               <TeamCard key={guide.name} {...guide} />
             ))}
