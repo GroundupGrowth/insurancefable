@@ -113,3 +113,21 @@ export function stripDeadForms(html: string): string {
 
 export const repairArticleBody = (html: string): string =>
   stripDeadForms(repairLegacyOffers(html));
+
+/* -----------------------------------------------------------------------
+   Dead interactive-map plugin (creditor-protection article). The WordPress
+   "interactive US map" plugin's markup survived the import but its JS/CSS
+   did not, leaving an inert SVG blob. The [slug] page splits the body at
+   that block and mounts the native <CreditorProtectionMap /> island in its
+   place (client, 2026-08-27: recreate the interactive map).
+   ----------------------------------------------------------------------- */
+
+/** Split `html` around the `<div id="mapwrapper">…</div>` plugin block.
+    Returns null when the block isn't present (every other article). */
+export function splitAtDeadMap(html: string): { before: string; after: string } | null {
+  const start = html.indexOf('<div id="mapwrapper">');
+  if (start === -1) return null;
+  const end = balancedDivEnd(html, start);
+  if (end === -1) return null;
+  return { before: html.slice(0, start), after: html.slice(end) };
+}

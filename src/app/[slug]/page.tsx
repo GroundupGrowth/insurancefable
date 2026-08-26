@@ -14,7 +14,8 @@ import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
-import { repairArticleBody } from '../../lib/legacyOffers';
+import { repairArticleBody, splitAtDeadMap } from '../../lib/legacyOffers';
+import CreditorProtectionMap from '../../components/CreditorProtectionMap';
 import { JsonLd, breadcrumbJsonLd, faqJsonLd, videoJsonLds } from '../../lib/articleSchema';
 
 /* Blog articles from the Payload import, served at the root path exactly like
@@ -83,6 +84,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const repairedHtml = repairArticleBody(post.bodyHtml);
   // First mention of each wiki term becomes a link to its /wiki/ page
   const bodyHtml = linkWikiTerms(repairedHtml, wikiTerms);
+
+  /* The creditor-protection article carries the dead WordPress map plugin's
+     markup; split the body there and mount the native interactive map island
+     between the halves. Null for every other article. */
+  const mapSplit = splitAtDeadMap(bodyHtml);
 
   /* Structured data regenerated from the body (the old site's hand-added
      FAQ/video schema was stripped by the import — see lib/articleSchema) */
@@ -179,10 +185,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div
           className={`max-w-[54rem] ${offer ? 'lg:max-w-[80rem]' : ''} mx-auto grid grid-cols-1 ${offer ? 'lg:grid-cols-[minmax(0,1fr)_21rem]' : ''} gap-4 lg:items-start`}
         >
-          <article
-            className="article-body w-full max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12"
-            dangerouslySetInnerHTML={{ __html: bodyHtml }}
-          />
+          {mapSplit ? (
+            <article className="article-body w-full max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12">
+              <div dangerouslySetInnerHTML={{ __html: mapSplit.before }} />
+              <CreditorProtectionMap />
+              <div dangerouslySetInnerHTML={{ __html: mapSplit.after }} />
+            </article>
+          ) : (
+            <article
+              className="article-body w-full max-w-[54rem] mx-auto bg-white rounded-3xl border border-black/5 p-6 md:p-12"
+              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+            />
+          )}
           {offer && (
             <aside className="lg:sticky lg:top-28">
               <EbookOfferCard ebook={offer.ebook} />
