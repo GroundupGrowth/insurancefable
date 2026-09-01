@@ -140,7 +140,8 @@ export default function Footer() {
                 purchased as an investment. In addition, by using this website, I confirm that
                 I understand and agree to the applicable Privacy Policy and Terms of Service.
                 I understand that by calling the phone number above I will reach a licensed
-                sales agent. 4602 E Thomas Rd, Phoenix, AZ 85018. InsuranceandEstates.com is a
+                sales agent. 2325 E Camelback Road, Suite 400, Phoenix, AZ 85016.
+                InsuranceandEstates.com is a
                 free information source designed to help find insurance coverage. We compile
                 our data from multiple sources, which includes the government, non-profit and
                 private sources. The rates and information displayed are for informational

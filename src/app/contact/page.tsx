@@ -70,9 +70,9 @@ export default async function ContactPage() {
               <div>
                 <p className="text-sm text-[#0D1B3D]/60 mb-1">Offices</p>
                 <p className="text-[#0D1B3D] text-lg font-medium leading-snug" style={{ letterSpacing: '-0.02em' }}>
-                  4602 E Thomas Rd, N10
+                  2325 E Camelback Road, Suite 400
                   <br />
-                  Phoenix, AZ 85018
+                  Phoenix, AZ 85016
                 </p>
               </div>
             </div>

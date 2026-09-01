@@ -23,10 +23,10 @@ const organizationJsonLd = {
   telephone: '+1-877-787-7558',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '4602 E Thomas Rd',
+    streetAddress: '2325 E Camelback Road, Suite 400',
     addressLocality: 'Phoenix',
     addressRegion: 'AZ',
-    postalCode: '85018',
+    postalCode: '85016',
     addressCountry: 'US',
   },
   sameAs: [
