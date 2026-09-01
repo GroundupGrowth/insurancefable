@@ -3,6 +3,7 @@ import { serverClient } from '../../../lib/content';
 import { parseSlotNotes } from '../../../lib/slotNotes';
 import { ebookDefaults, ebookLeadWebhook } from '../../../data/ebooks';
 import { siteFormSlotKeys } from '../../../data/siteForms';
+import { scoreLeadSpam } from '../../../lib/spamScore';
 
 /* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
    and forwards them to the GoHighLevel inbound-webhook trigger matched to the
@@ -40,6 +41,7 @@ const BASE_FIELDS = new Set([
   'website',
   'source',
   'page',
+  'elapsed_ms',
 ]);
 const MAX_EXTRA_FIELDS = 40;
 const MAX_FIELD_LENGTH = 2000;
@@ -128,11 +130,35 @@ export async function POST(request: Request) {
     submitted_at: new Date().toISOString(),
   };
 
+  /* Spam scoring (src/lib/spamScore): a flagged lead is still archived —
+     with spam=true, never forwarded to GHL — and the bot still sees success
+     so it learns nothing. Real-looking leads are unaffected. */
+  const verdict = scoreLeadSpam({
+    name: [payload.first_name, payload.last_name].filter(Boolean).join(' '),
+    email: payload.email,
+    phone: payload.phone,
+    extras,
+    elapsedMs: typeof body.elapsed_ms === 'number' ? body.elapsed_ms : undefined,
+  });
+
   /* Every lead is archived in fallback_leads (the /admin Leads module reads
      it); `forwarded` records whether GHL got it. Delivery order: webhook
      first when configured, and a webhook failure stores the lead here
      instead of failing the visitor — the download must never dead-end. */
   const supabase = serverClient();
+
+  if (verdict.spam) {
+    if (supabase) {
+      await supabase.from('fallback_leads').insert({
+        source,
+        payload,
+        forwarded: false,
+        spam: true,
+        spam_reasons: verdict.reasons.join(', '),
+      });
+    }
+    return NextResponse.json({ ok: true });
+  }
 
   if (webhook) {
     const response = await fetch(webhook, {

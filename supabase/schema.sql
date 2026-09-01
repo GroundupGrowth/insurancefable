@@ -261,11 +261,18 @@ create table if not exists public.fallback_leads (
   -- true when the GHL webhook delivery succeeded; false = the lead lives
   -- only here until handled (webhook missing or delivery failed).
   forwarded boolean not null default false,
+  -- Heuristically flagged bot submission (src/lib/spamScore, migration
+  -- leads_spam_flag 2026-09-01). Still archived, never forwarded to GHL;
+  -- hidden behind a toggle at /admin -> Leads.
+  spam boolean not null default false,
+  spam_reasons text,
   created_at timestamptz not null default now()
 );
 
--- For tables created before the column existed.
+-- For tables created before the columns existed.
 alter table public.fallback_leads add column if not exists forwarded boolean not null default false;
+alter table public.fallback_leads add column if not exists spam boolean not null default false;
+alter table public.fallback_leads add column if not exists spam_reasons text;
 
 alter table public.fallback_leads enable row level security;
 

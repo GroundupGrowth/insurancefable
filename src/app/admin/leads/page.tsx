@@ -16,6 +16,8 @@ interface LeadRow {
   source: string;
   payload: Record<string, unknown>;
   forwarded: boolean;
+  spam: boolean;
+  spam_reasons: string | null;
   created_at: string;
 }
 
@@ -48,7 +50,7 @@ function extras(payload: Record<string, unknown>): string {
 function toCsv(rows: LeadRow[]): string {
   const keys = new Set<string>();
   rows.forEach((row) => Object.keys(row.payload).forEach((key) => keys.add(key)));
-  const columns = ['created_at', 'source', 'forwarded', ...Array.from(keys).sort()];
+  const columns = ['created_at', 'source', 'forwarded', 'spam', ...Array.from(keys).sort()];
   const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
   const lines = [columns.map(escape).join(',')];
   for (const row of rows) {
@@ -58,6 +60,7 @@ function toCsv(rows: LeadRow[]): string {
           if (column === 'created_at') return escape(row.created_at);
           if (column === 'source') return escape(row.source);
           if (column === 'forwarded') return escape(row.forwarded ? 'yes' : 'no');
+          if (column === 'spam') return escape(row.spam ? row.spam_reasons || 'yes' : 'no');
           const value = row.payload[column];
           return escape(typeof value === 'string' ? value : value == null ? '' : String(value));
         })
@@ -73,6 +76,7 @@ export default function LeadsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sourceFilter, setSourceFilter] = useState('all');
+  const [showSpam, setShowSpam] = useState(false);
 
   const load = useCallback(async () => {
     if (!supabase) return;
@@ -80,7 +84,7 @@ export default function LeadsPage() {
     setError(null);
     const { data, error: queryError } = await supabase
       .from('fallback_leads')
-      .select('id, source, payload, forwarded, created_at')
+      .select('id, source, payload, forwarded, spam, spam_reasons, created_at')
       .order('created_at', { ascending: false })
       .limit(PAGE_SIZE);
     if (queryError) {
@@ -99,8 +103,10 @@ export default function LeadsPage() {
     () => Array.from(new Set(rows.map((row) => row.source))).sort(),
     [rows],
   );
-  const visible = sourceFilter === 'all' ? rows : rows.filter((row) => row.source === sourceFilter);
-  const unforwarded = visible.filter((row) => !row.forwarded).length;
+  const bySource = sourceFilter === 'all' ? rows : rows.filter((row) => row.source === sourceFilter);
+  const spamCount = bySource.filter((row) => row.spam).length;
+  const visible = showSpam ? bySource : bySource.filter((row) => !row.spam);
+  const unforwarded = visible.filter((row) => !row.forwarded && !row.spam).length;
 
   const exportCsv = () => {
     const blob = new Blob([toCsv(visible)], { type: 'text/csv;charset=utf-8' });
@@ -156,6 +162,15 @@ export default function LeadsPage() {
                 </option>
               ))}
             </select>
+          </label>
+          <label className="text-[#0D1B3D] text-sm font-medium inline-flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showSpam}
+              onChange={(e) => setShowSpam(e.target.checked)}
+              className="accent-[#0D1B3D]"
+            />
+            Show suspected spam{spamCount > 0 ? ` (${spamCount})` : ''}
           </label>
           <p className="text-[#0D1B3D]/60 text-sm">
             {visible.length} lead{visible.length === 1 ? '' : 's'}
@@ -223,15 +238,24 @@ export default function LeadsPage() {
                       {row.source}
                     </td>
                     <td className="py-2.5 pr-4">
-                      <span
-                        className={`inline-block text-xs font-medium px-2.5 py-0.5 rounded-full ${
-                          row.forwarded
-                            ? 'bg-[#0D1B3D]/5 text-[#0D1B3D]/60'
-                            : 'bg-[#0D1B3D] text-white'
-                        }`}
-                      >
-                        {row.forwarded ? 'forwarded' : 'only here'}
-                      </span>
+                      {row.spam ? (
+                        <span
+                          className="inline-block text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-100 text-red-700"
+                          title={row.spam_reasons ?? undefined}
+                        >
+                          spam
+                        </span>
+                      ) : (
+                        <span
+                          className={`inline-block text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                            row.forwarded
+                              ? 'bg-[#0D1B3D]/5 text-[#0D1B3D]/60'
+                              : 'bg-[#0D1B3D] text-white'
+                          }`}
+                        >
+                          {row.forwarded ? 'forwarded' : 'only here'}
+                        </span>
+                      )}
                     </td>
                     <td className="py-2.5 text-[#0D1B3D]/60">{extras(row.payload) || '—'}</td>
                   </tr>

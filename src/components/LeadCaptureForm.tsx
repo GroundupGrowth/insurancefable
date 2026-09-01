@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { sendGTMEvent } from '@next/third-parties/google';
 
 /* Shared native lead-capture form (Xander, 2026-07-28) — replicates the GHL
@@ -90,6 +90,9 @@ export default function LeadCaptureForm({
   submitLabel = 'Submit',
 }: LeadCaptureFormProps) {
   const [firstName, setFirstName] = useState('');
+  /* Time-to-submit spam signal: bots that autofill in under ~2.5s get
+     flagged server-side (src/lib/spamScore). */
+  const mountedAt = useRef(Date.now());
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -121,6 +124,7 @@ export default function LeadCaptureForm({
           website,
           source,
           page: window.location.href,
+          elapsed_ms: Date.now() - mountedAt.current,
         }),
       });
       if (!response.ok) throw new Error(`status ${response.status}`);

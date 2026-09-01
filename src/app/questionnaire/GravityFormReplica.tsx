@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import EmbedSlot from '../../components/EmbedSlot';
 
 /* Field labels double as payload keys (slugified) for /api/lead. */
@@ -132,6 +132,8 @@ export default function GravityFormReplica({
   disclaimerNote,
 }: GravityFormReplicaProps) {
   const [submitted, setSubmitted] = useState(false);
+  /* Time-to-submit spam signal (see src/lib/spamScore). */
+  const mountedAt = useRef(Date.now());
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -172,6 +174,7 @@ export default function GravityFormReplica({
           website: '',
           source: slotKey,
           page: window.location.href,
+          elapsed_ms: Date.now() - mountedAt.current,
         }),
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
