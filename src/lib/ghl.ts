@@ -31,18 +31,30 @@ export function ghlConfigured(): boolean {
   return Boolean(token());
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 async function ghl<T>(path: string, version: string): Promise<T> {
   const pit = token();
   if (!pit) throw new GhlError(path, 0, 'GHL_PIT env var is not set');
-  const response = await fetch(`${BASE}${path}`, {
-    headers: { Authorization: `Bearer ${pit}`, Version: version, Accept: 'application/json' },
-    cache: 'no-store',
-  });
-  if (!response.ok) {
-    const body = await response.text().catch(() => '');
-    throw new GhlError(path.split('?')[0], response.status, body.slice(0, 300));
+  /* GHL burst limit: 100 requests / 10s per token. A big report legitimately
+     exceeds that, so 429s are expected mid-run — wait out the window and
+     retry instead of failing the whole report. */
+  for (let attempt = 0; ; attempt += 1) {
+    const response = await fetch(`${BASE}${path}`, {
+      headers: { Authorization: `Bearer ${pit}`, Version: version, Accept: 'application/json' },
+      cache: 'no-store',
+    });
+    if (response.status === 429 && attempt < 5) {
+      const retryAfter = Number(response.headers.get('retry-after'));
+      await sleep(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 3000 * (attempt + 1));
+      continue;
+    }
+    if (!response.ok) {
+      const body = await response.text().catch(() => '');
+      throw new GhlError(path.split('?')[0], response.status, body.slice(0, 300));
+    }
+    return (await response.json()) as T;
   }
-  return (await response.json()) as T;
 }
 
 /** Small promise pool — the PIT rate limit is 100 requests per 10s. */

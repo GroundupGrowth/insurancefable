@@ -21,6 +21,9 @@ import {
    is as sensitive as /admin/leads). */
 
 export const dynamic = 'force-dynamic';
+/* A large date range makes hundreds of GHL calls and may sit out several
+   429 windows — give the function room (Vercel Pro allows up to 300s). */
+export const maxDuration = 300;
 
 const MAX_RANGE_DAYS = 400;
 
