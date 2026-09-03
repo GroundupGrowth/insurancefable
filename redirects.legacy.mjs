@@ -717,6 +717,11 @@ const legacyRedirects = [
     "permanent": true
   },
   {
+    "source": "/resources",
+    "destination": "/start-your-journey/",
+    "permanent": true
+  },
+  {
     "source": "/retirement-planning-with-whole-life-insurance",
     "destination": "/lirp/",
     "permanent": true
