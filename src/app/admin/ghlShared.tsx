@@ -21,6 +21,7 @@ export interface Attribution {
 export type Channel =
   | 'email'
   | 'google-ads'
+  | 'youtube'
   | 'organic'
   | 'social'
   | 'referral'
@@ -30,6 +31,7 @@ export type Channel =
 export const CHANNEL_LABEL: Record<Channel, string> = {
   email: 'Email',
   'google-ads': 'Google Ads',
+  youtube: 'YouTube',
   organic: 'Organic search',
   social: 'Social',
   referral: 'Referral',
@@ -40,6 +42,7 @@ export const CHANNEL_LABEL: Record<Channel, string> = {
 const CHANNEL_CLASS: Record<Channel, string> = {
   email: 'bg-blue-100 text-blue-800',
   'google-ads': 'bg-yellow-100 text-yellow-800',
+  youtube: 'bg-red-100 text-red-700',
   organic: 'bg-green-100 text-green-800',
   social: 'bg-purple-100 text-purple-800',
   referral: 'bg-teal-100 text-teal-800',
@@ -62,6 +65,7 @@ export function classifyChannel(parts: Array<string | undefined>, hasReferrer = 
   ) {
     return 'google-ads';
   }
+  if (haystack.includes('youtube') || haystack.includes('youtu.be')) return 'youtube';
   if (
     haystack.includes('organic') ||
     ((haystack.includes('google') || haystack.includes('bing') || haystack.includes('duckduckgo')) &&
@@ -69,7 +73,7 @@ export function classifyChannel(parts: Array<string | undefined>, hasReferrer = 
   ) {
     return 'organic';
   }
-  if (/facebook|instagram|fb\b|meta|linkedin|youtube|tiktok|social/.test(haystack)) return 'social';
+  if (/facebook|instagram|fb\b|meta|linkedin|tiktok|social/.test(haystack)) return 'social';
   if (haystack.includes('direct')) return 'direct';
   if (haystack.includes('referral') || hasReferrer) return 'referral';
   return 'other';

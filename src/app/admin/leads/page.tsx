@@ -63,6 +63,8 @@ function channelOf(row: LeadRow, detail?: LeadDetail | null): Channel {
       detail?.lastTouch?.utmMedium,
       detail?.lastTouch?.sessionSource,
       detail?.firstTouch?.referrer,
+      detail?.firstTouch?.url,
+      detail?.lastTouch?.url,
     ],
     Boolean(detail?.firstTouch?.referrer || detail?.lastTouch?.referrer),
   );
