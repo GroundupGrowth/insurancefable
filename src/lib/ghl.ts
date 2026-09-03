@@ -223,6 +223,8 @@ export interface GhlOpportunity {
   pipelineName: string;
   stageName: string;
   status: string;
+  /** GHL's monetaryValue on the opportunity (null when none assigned). */
+  value: number | null;
 }
 
 /** stageId → { pipelineName, stageName } lookup, fetched once per report. */
@@ -248,7 +250,12 @@ export async function getContactOpportunity(
 ): Promise<GhlOpportunity | null> {
   const query = `location_id=${encodeURIComponent(locationId)}&contact_id=${encodeURIComponent(contactId)}&limit=3`;
   const data = await ghl<{
-    opportunities: Array<{ pipelineStageId?: string; status?: string; updatedAt?: string }>;
+    opportunities: Array<{
+      pipelineStageId?: string;
+      status?: string;
+      updatedAt?: string;
+      monetaryValue?: number;
+    }>;
   }>(`/opportunities/search?${query}`, '2021-07-28');
   const opportunities = data.opportunities ?? [];
   if (opportunities.length === 0) return null;
@@ -261,6 +268,7 @@ export async function getContactOpportunity(
     pipelineName: stage?.pipelineName ?? '',
     stageName: stage?.stageName ?? '',
     status: latest.status ?? '',
+    value: typeof latest.monetaryValue === 'number' ? latest.monetaryValue : null,
   };
 }
 

@@ -50,7 +50,13 @@ interface BookingRow {
   pipeline: string;
   stage: string;
   opportunityStatus: string;
+  value: number | null;
 }
+
+const formatValue = (value: number | null) =>
+  value == null || value === 0
+    ? ''
+    : value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
 /* ---- Source channel classification & colors ------------------------------
    Email = blue and Google Ads = yellow per the client; the rest are ours.
@@ -150,6 +156,7 @@ const CSV_COLUMNS: Array<[keyof BookingRow | 'channel', string]> = [
   ['pipeline', 'Pipeline'],
   ['stage', 'Current stage'],
   ['opportunityStatus', 'Opportunity status'],
+  ['value', 'Value'],
 ];
 
 const isoDay = (date: Date) => date.toISOString().slice(0, 10);
@@ -289,6 +296,7 @@ function BookingModal({
             <DetailLine label="Pipeline" value={row.pipeline} />
             <DetailLine label="Current stage" value={row.stage} />
             <DetailLine label="Opportunity" value={row.opportunityStatus} />
+            <DetailLine label="Value" value={formatValue(row.value)} />
           </>
         )}
 
@@ -373,6 +381,7 @@ export default function BookingsPage() {
   );
   const visible =
     calendarFilter === 'all' ? rows : rows.filter((row) => row.calendar === calendarFilter);
+  const totalValue = visible.reduce((sum, row) => sum + (row.value ?? 0), 0);
 
   const exportCsv = () => {
     const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
@@ -381,6 +390,7 @@ export default function BookingsPage() {
       lines.push(
         CSV_COLUMNS.map(([key]) => {
           if (key === 'channel') return escape(CHANNEL_LABEL[channelOf(row)]);
+          if (key === 'value') return escape(row.value == null ? '' : String(row.value));
           const value = row[key];
           return escape(typeof value === 'string' ? value : '');
         }).join(','),
@@ -467,6 +477,12 @@ export default function BookingsPage() {
           </label>
           <p className="text-[#0D1B3D]/60 text-sm">
             {visible.length} booking{visible.length === 1 ? '' : 's'}
+            {totalValue > 0 && (
+              <span className="text-[#0D1B3D] font-medium">
+                {' '}
+                · {formatValue(totalValue)} pipeline value
+              </span>
+            )}
           </p>
         </div>
       </Card>
@@ -495,8 +511,10 @@ export default function BookingsPage() {
                   <th className="py-2 pr-4 font-medium">Calendar</th>
                   <th className="py-2 pr-4 font-medium">Name</th>
                   <th className="py-2 pr-4 font-medium">Email</th>
+                  <th className="py-2 pr-4 font-medium">Phone</th>
                   <th className="py-2 pr-4 font-medium">Source</th>
                   <th className="py-2 pr-4 font-medium">Stage</th>
+                  <th className="py-2 pr-4 font-medium text-right">Value</th>
                   <th className="py-2 font-medium">Status</th>
                 </tr>
               </thead>
@@ -518,11 +536,18 @@ export default function BookingsPage() {
                     <td className="py-2.5 pr-4 whitespace-nowrap">{row.calendar}</td>
                     <td className="py-2.5 pr-4 font-medium whitespace-nowrap">{row.name || '—'}</td>
                     <td className="py-2.5 pr-4">{row.email || '—'}</td>
+                    <td className="py-2.5 pr-4 whitespace-nowrap">{row.phone || '—'}</td>
                     <td className="py-2.5 pr-4">
                       <ChannelPill channel={channelOf(row)} />
                     </td>
                     <td className="py-2.5 pr-4 whitespace-nowrap">
                       {row.stage ? `${row.stage}${row.pipeline ? ` (${row.pipeline})` : ''}` : '—'}
+                    </td>
+                    <td
+                      className="py-2.5 pr-4 whitespace-nowrap text-right font-medium"
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {formatValue(row.value) || '—'}
                     </td>
                     <td className="py-2.5 whitespace-nowrap text-[#0D1B3D]/60">
                       {row.appointmentStatus || '—'}

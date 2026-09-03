@@ -142,6 +142,7 @@ export async function GET(request: Request) {
         pipeline: opportunity?.pipelineName ?? '',
         stage: opportunity?.stageName ?? '',
         opportunityStatus: opportunity?.status ?? '',
+        value: opportunity?.value ?? null,
       };
     });
 
