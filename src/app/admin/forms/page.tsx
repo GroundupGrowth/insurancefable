@@ -5,7 +5,7 @@ import { ExternalLink } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { parseSlotNotes, serializeSlotNotes } from '../../../lib/slotNotes';
 import { siteForms } from '../../../data/siteForms';
-import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths } from '../ui';
+import { Card, Field, FormsTabs, PageHeader, SaveButton, inputClass, revalidatePaths } from '../ui';
 
 /* Forms: every native site form (contact, quote widgets, funnel opt-ins) and
    the GHL webhook its submissions forward to. The forms POST to /api/lead/
@@ -96,6 +96,7 @@ export default function FormsAdminPage() {
 
   return (
     <div>
+      <FormsTabs active="forms" />
       <PageHeader
         title="Forms"
         text={`The site's native lead forms and the GHL webhook each one delivers to. ${configured}/${siteForms.length} forms have a webhook. Without one, a form shows an honest error on submit (never a fake success). Paste the workflow's inbound-webhook URL and it's live within minutes. Ebook opt-in webhooks live under Books.`}

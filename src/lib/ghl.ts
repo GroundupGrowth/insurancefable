@@ -33,7 +33,7 @@ export function ghlConfigured(): boolean {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function ghl<T>(path: string, version: string): Promise<T> {
+async function ghl<T>(path: string, version: string, body?: unknown): Promise<T> {
   const pit = token();
   if (!pit) throw new GhlError(path, 0, 'GHL_PIT env var is not set');
   /* GHL burst limit: 100 requests / 10s per token. A big report legitimately
@@ -41,7 +41,14 @@ async function ghl<T>(path: string, version: string): Promise<T> {
      retry instead of failing the whole report. */
   for (let attempt = 0; ; attempt += 1) {
     const response = await fetch(`${BASE}${path}`, {
-      headers: { Authorization: `Bearer ${pit}`, Version: version, Accept: 'application/json' },
+      method: body === undefined ? 'GET' : 'POST',
+      headers: {
+        Authorization: `Bearer ${pit}`,
+        Version: version,
+        Accept: 'application/json',
+        ...(body === undefined ? {} : { 'content-type': 'application/json' }),
+      },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
       cache: 'no-store',
     });
     if (response.status === 429 && attempt < 5) {
@@ -270,6 +277,140 @@ export async function getContactOpportunity(
     status: latest.status ?? '',
     value: typeof latest.monetaryValue === 'number' ? latest.monetaryValue : null,
   };
+}
+
+/* ---- All-leads listing (the /admin/leads page) ------------------------- */
+
+export interface GhlContactSummary {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  source: string;
+  dateAdded: string;
+  tags: string[];
+  city: string;
+  state: string;
+  country: string;
+  companyName: string;
+}
+
+/** Contacts added in [startIso, endIso], newest first, via the paged search
+    API (100 per call, `searchAfter` cursor), capped so one huge range can't
+    run the function into its time budget. */
+export async function searchContacts(
+  locationId: string,
+  startIso: string,
+  endIso: string,
+  cap = 500,
+): Promise<{ contacts: GhlContactSummary[]; total: number }> {
+  const out: GhlContactSummary[] = [];
+  let searchAfter: unknown[] | undefined;
+  let total = 0;
+  while (out.length < cap) {
+    const data = await ghl<{
+      total?: number;
+      contacts: Array<{
+        id: string;
+        contactName?: string;
+        firstNameLowerCase?: string;
+        lastNameLowerCase?: string;
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+        source?: string;
+        dateAdded?: string;
+        tags?: string[];
+        city?: string;
+        state?: string;
+        country?: string;
+        companyName?: string;
+        searchAfter?: unknown[];
+      }>;
+    }>('/contacts/search', '2021-07-28', {
+      locationId,
+      pageLimit: 100,
+      ...(searchAfter ? { searchAfter } : {}),
+      filters: [{ field: 'dateAdded', operator: 'range', value: { gte: startIso, lte: endIso } }],
+      sort: [{ field: 'dateAdded', direction: 'desc' }],
+    });
+    total = data.total ?? total;
+    const page = data.contacts ?? [];
+    if (page.length === 0) break;
+    for (const contact of page) {
+      out.push({
+        id: contact.id,
+        name:
+          contact.contactName ??
+          [contact.firstName ?? contact.firstNameLowerCase, contact.lastName ?? contact.lastNameLowerCase]
+            .filter(Boolean)
+            .join(' '),
+        email: contact.email ?? '',
+        phone: contact.phone ?? '',
+        source: contact.source ?? '',
+        dateAdded: contact.dateAdded ?? '',
+        tags: contact.tags ?? [],
+        city: contact.city ?? '',
+        state: contact.state ?? '',
+        country: contact.country ?? '',
+        companyName: contact.companyName ?? '',
+      });
+    }
+    searchAfter = page[page.length - 1]?.searchAfter;
+    if (!searchAfter || page.length < 100) break;
+  }
+  return { contacts: out.slice(0, cap), total };
+}
+
+/** All opportunities in the location (paged), reduced to the most recently
+    updated one per contact — one bulk sweep instead of a call per lead. */
+export async function listOpportunitiesByContact(
+  locationId: string,
+  stages: Map<string, { pipelineName: string; stageName: string }>,
+  cap = 2000,
+): Promise<Map<string, GhlOpportunity>> {
+  const byContact = new Map<string, { updatedAt: string; opportunity: GhlOpportunity }>();
+  let fetched = 0;
+  for (let page = 1; fetched < cap; page += 1) {
+    const data = await ghl<{
+      opportunities: Array<{
+        contactId?: string;
+        contact?: { id?: string };
+        pipelineStageId?: string;
+        status?: string;
+        updatedAt?: string;
+        monetaryValue?: number;
+      }>;
+    }>(
+      `/opportunities/search?location_id=${encodeURIComponent(locationId)}&limit=100&page=${page}`,
+      '2021-07-28',
+    );
+    const opportunities = data.opportunities ?? [];
+    if (opportunities.length === 0) break;
+    fetched += opportunities.length;
+    for (const item of opportunities) {
+      const contactId = item.contactId ?? item.contact?.id;
+      if (!contactId) continue;
+      const updatedAt = item.updatedAt ?? '';
+      const existing = byContact.get(contactId);
+      if (existing && existing.updatedAt.localeCompare(updatedAt) >= 0) continue;
+      const stage = item.pipelineStageId ? stages.get(item.pipelineStageId) : undefined;
+      byContact.set(contactId, {
+        updatedAt,
+        opportunity: {
+          pipelineName: stage?.pipelineName ?? '',
+          stageName: stage?.stageName ?? '',
+          status: item.status ?? '',
+          value: typeof item.monetaryValue === 'number' ? item.monetaryValue : null,
+        },
+      });
+    }
+    if (opportunities.length < 100) break;
+  }
+  return new Map(
+    Array.from(byContact.entries()).map(([contactId, entry]) => [contactId, entry.opportunity]),
+  );
 }
 
 export { pool as ghlPool };

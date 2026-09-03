@@ -5,6 +5,18 @@ import { createPortal } from 'react-dom';
 import { Download, ExternalLink, RefreshCw, X } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { Card, PageHeader } from '../ui';
+import {
+  type Attribution,
+  type Channel,
+  CHANNEL_LABEL,
+  ChannelPill,
+  classifyChannel,
+  DetailLine,
+  formatValue,
+  formatWhen,
+  ghlContactUrl,
+  TouchBlock,
+} from '../ghlShared';
 
 /* GHL bookings report (owner-only): every appointment across every GHL
    calendar in a date range, with the lead's source/attribution and current
@@ -12,19 +24,6 @@ import { Card, PageHeader } from '../ui';
    email blue, Google Ads yellow); clicking a row opens the full detail
    popup with both attribution touches and an Open-in-GHL link. Data comes
    from /api/admin/bookings/ (server-side, GHL_PIT env var). */
-
-interface Attribution {
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  utmContent?: string;
-  utmTerm?: string;
-  campaign?: string;
-  medium?: string;
-  sessionSource?: string;
-  referrer?: string;
-  url?: string;
-}
 
 interface BookingRow {
   bookedAt: string;
@@ -53,88 +52,18 @@ interface BookingRow {
   value: number | null;
 }
 
-const formatValue = (value: number | null) =>
-  value == null || value === 0
-    ? ''
-    : value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-
-/* ---- Source channel classification & colors ------------------------------
-   Email = blue and Google Ads = yellow per the client; the rest are ours.
-   Classification reads every source-ish field so GHL's varying labels
-   ("Paid Search", utm_source=google&utm_medium=cpc, "adwords") all land in
-   the same bucket. */
-type Channel =
-  | 'email'
-  | 'google-ads'
-  | 'organic'
-  | 'social'
-  | 'referral'
-  | 'direct'
-  | 'other';
-
-const CHANNEL_LABEL: Record<Channel, string> = {
-  email: 'Email',
-  'google-ads': 'Google Ads',
-  organic: 'Organic search',
-  social: 'Social',
-  referral: 'Referral',
-  direct: 'Direct',
-  other: 'Other',
-};
-
-const CHANNEL_CLASS: Record<Channel, string> = {
-  email: 'bg-blue-100 text-blue-800',
-  'google-ads': 'bg-yellow-100 text-yellow-800',
-  organic: 'bg-green-100 text-green-800',
-  social: 'bg-purple-100 text-purple-800',
-  referral: 'bg-teal-100 text-teal-800',
-  direct: 'bg-gray-200 text-gray-700',
-  other: 'bg-slate-100 text-slate-600',
-};
-
 function channelOf(row: BookingRow): Channel {
-  const haystack = [
-    row.utmSource,
-    row.utmMedium,
-    row.sessionSource,
-    row.contactSource,
-    row.referrer,
-    row.firstTouch?.medium,
-    row.lastTouch?.medium,
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-  if (haystack.includes('email') || haystack.includes('newsletter')) return 'email';
-  if (
-    haystack.includes('adwords') ||
-    haystack.includes('googleads') ||
-    haystack.includes('paid search') ||
-    (haystack.includes('google') &&
-      (haystack.includes('cpc') || haystack.includes('ppc') || haystack.includes('paid')))
-  ) {
-    return 'google-ads';
-  }
-  if (
-    haystack.includes('organic') ||
-    ((haystack.includes('google') || haystack.includes('bing') || haystack.includes('duckduckgo')) &&
-      !haystack.includes('cpc'))
-  ) {
-    return 'organic';
-  }
-  if (/facebook|instagram|fb\b|meta|linkedin|youtube|tiktok|social/.test(haystack)) return 'social';
-  if (haystack.includes('direct')) return 'direct';
-  if (haystack.includes('referral') || row.referrer) return 'referral';
-  return 'other';
-}
-
-function ChannelPill({ channel }: { channel: Channel }) {
-  return (
-    <span
-      className={`inline-block text-xs font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap ${CHANNEL_CLASS[channel]}`}
-    >
-      {CHANNEL_LABEL[channel]}
-    </span>
+  return classifyChannel(
+    [
+      row.utmSource,
+      row.utmMedium,
+      row.sessionSource,
+      row.contactSource,
+      row.referrer,
+      row.firstTouch?.medium,
+      row.lastTouch?.medium,
+    ],
+    Boolean(row.referrer),
   );
 }
 
@@ -161,59 +90,6 @@ const CSV_COLUMNS: Array<[keyof BookingRow | 'channel', string]> = [
 
 const isoDay = (date: Date) => date.toISOString().slice(0, 10);
 
-const formatWhen = (iso: string) =>
-  iso
-    ? new Date(iso).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-      })
-    : '—';
-
-/* One label/value line in the popup; hidden entirely when there's no value. */
-function DetailLine({ label, value, href }: { label: string; value?: string; href?: string }) {
-  if (!value) return null;
-  return (
-    <div className="grid grid-cols-[9rem_1fr] gap-2 py-1 text-sm">
-      <span className="text-[#0D1B3D]/50">{label}</span>
-      {href ? (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#0D1B3D] underline decoration-[#0D1B3D]/30 break-all">
-          {value}
-        </a>
-      ) : (
-        <span className="text-[#0D1B3D] break-words">{value}</span>
-      )}
-    </div>
-  );
-}
-
-function TouchBlock({ title, touch }: { title: string; touch: Attribution | null }) {
-  if (!touch) return null;
-  const entries: Array<[string, string | undefined]> = [
-    ['Session source', touch.sessionSource],
-    ['UTM source', touch.utmSource],
-    ['UTM medium', touch.utmMedium],
-    ['UTM campaign', touch.utmCampaign],
-    ['UTM content', touch.utmContent],
-    ['UTM term', touch.utmTerm],
-    ['Campaign', touch.campaign],
-    ['Medium', touch.medium],
-    ['Referrer', touch.referrer],
-    ['Landing page', touch.url],
-  ];
-  if (!entries.some(([, value]) => value)) return null;
-  return (
-    <div>
-      <p className="text-[#0D1B3D]/50 text-xs uppercase tracking-wide mt-5 mb-1">{title}</p>
-      {entries.map(([label, value]) => (
-        <DetailLine key={label} label={label} value={value} />
-      ))}
-    </div>
-  );
-}
-
 function BookingModal({
   row,
   locationId,
@@ -231,10 +107,7 @@ function BookingModal({
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const ghlUrl =
-    locationId && row.contactId
-      ? `https://app.gohighlevel.com/v2/location/${locationId}/contacts/detail/${row.contactId}`
-      : null;
+  const ghlUrl = ghlContactUrl(locationId, row.contactId);
 
   /* Portal to body: the admin layout creates stacking contexts that would
      trap a fixed overlay (same class of bug as the site modal in 9852fcc). */

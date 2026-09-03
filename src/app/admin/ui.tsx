@@ -116,3 +116,26 @@ export async function revalidatePaths(paths: string[]) {
     // non-fatal: the ISR window picks the change up anyway
   }
 }
+
+/* Sub-tab row for the Forms section (Webhooks config vs. archived
+   submissions — the old /admin/leads table, renamed 2026-09-03). */
+export function FormsTabs({ active }: { active: 'forms' | 'submissions' }) {
+  const tab = (href: string, label: string, isActive: boolean) => (
+    <a
+      href={href}
+      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 ${
+        isActive
+          ? 'bg-[#0D1B3D] text-white'
+          : 'bg-white text-[#0D1B3D]/60 hover:text-[#0D1B3D] border border-black/10'
+      }`}
+    >
+      {label}
+    </a>
+  );
+  return (
+    <div className="flex items-center gap-2 mb-6">
+      {tab('/admin/forms/', 'Forms', active === 'forms')}
+      {tab('/admin/forms/submissions/', 'Submissions', active === 'submissions')}
+    </div>
+  );
+}

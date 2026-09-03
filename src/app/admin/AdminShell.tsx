@@ -281,8 +281,14 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       )}
 
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-10 pt-20 lg:pt-8">
-        {/* Bookings is a wide data table — give it the full viewport. */}
-        <div className={pathname.startsWith('/admin/bookings') ? 'max-w-none' : 'max-w-5xl mx-auto'}>
+        {/* Bookings and Leads are wide data tables — give them the full viewport. */}
+        <div
+          className={
+            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads')
+              ? 'max-w-none'
+              : 'max-w-5xl mx-auto'
+          }
+        >
           {/* Setup state is explained on /admin/users/ itself — no site-wide banner. */}
           {allowed ? (
             children
