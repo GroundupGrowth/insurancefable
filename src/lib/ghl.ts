@@ -62,10 +62,23 @@ async function pool<T, R>(items: T[], size: number, run: (item: T) => Promise<R>
 export async function getLocationId(): Promise<string> {
   const fromEnv = process.env.GHL_LOCATION_ID;
   if (fromEnv) return fromEnv;
-  const data = await ghl<{ locations: Array<{ id: string }> }>('/locations/search?limit=1', '2021-07-28');
-  const id = data.locations?.[0]?.id;
-  if (!id) throw new GhlError('/locations/search', 200, 'no locations visible to this token');
-  return id;
+  try {
+    const data = await ghl<{ locations: Array<{ id: string }> }>('/locations/search?limit=1', '2021-07-28');
+    const id = data.locations?.[0]?.id;
+    if (!id) throw new GhlError('/locations/search', 200, 'no locations visible to this token');
+    return id;
+  } catch (error) {
+    /* /locations/search is agency-level; a sub-account (location) token gets
+       403 here no matter its scopes. The fix is configuration, not scopes. */
+    if (error instanceof GhlError && (error.status === 401 || error.status === 403)) {
+      throw new GhlError(
+        '/locations/search',
+        error.status,
+        'this is a sub-account token, which cannot list locations. Add the GHL_LOCATION_ID environment variable in Vercel (GHL → Settings → Business Profile → Location ID) and redeploy.',
+      );
+    }
+    throw error;
+  }
 }
 
 export interface GhlCalendar {
