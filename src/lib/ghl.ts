@@ -59,9 +59,16 @@ async function pool<T, R>(items: T[], size: number, run: (item: T) => Promise<R>
   return results;
 }
 
+/* The I&E sub-account's location ID. Not a secret — it is the first path
+   segment of the location's own inbound-webhook URLs, already committed in
+   src/data/ebooks.ts (services.leadconnectorhq.com/hooks/<locationId>/…).
+   GHL_LOCATION_ID still overrides it if the account ever changes. */
+const DEFAULT_LOCATION_ID = 'g8TD4Xx0YuFrBlcfcrE2';
+
 export async function getLocationId(): Promise<string> {
   const fromEnv = process.env.GHL_LOCATION_ID;
   if (fromEnv) return fromEnv;
+  if (DEFAULT_LOCATION_ID) return DEFAULT_LOCATION_ID;
   try {
     const data = await ghl<{ locations: Array<{ id: string }> }>('/locations/search?limit=1', '2021-07-28');
     const id = data.locations?.[0]?.id;
