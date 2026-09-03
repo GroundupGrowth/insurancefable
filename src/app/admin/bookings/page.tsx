@@ -202,6 +202,10 @@ export default function BookingsPage() {
   const [rows, setRows] = useState<BookingRow[]>([]);
   const [locationId, setLocationId] = useState('');
   const [calendarFilter, setCalendarFilter] = useState('all');
+  const [channelFilter, setChannelFilter] = useState<'all' | Channel>('all');
+  const [stageFilter, setStageFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<BookingRow | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -252,8 +256,26 @@ export default function BookingsPage() {
     () => Array.from(new Set(rows.map((row) => row.calendar))).sort(),
     [rows],
   );
-  const visible =
-    calendarFilter === 'all' ? rows : rows.filter((row) => row.calendar === calendarFilter);
+  const stagesSeen = useMemo(
+    () => Array.from(new Set(rows.map((row) => row.stage).filter(Boolean))).sort(),
+    [rows],
+  );
+  const statusesSeen = useMemo(
+    () => Array.from(new Set(rows.map((row) => row.appointmentStatus).filter(Boolean))).sort(),
+    [rows],
+  );
+  const query = search.trim().toLowerCase();
+  const visible = rows.filter(
+    (row) =>
+      (calendarFilter === 'all' || row.calendar === calendarFilter) &&
+      (channelFilter === 'all' || channelOf(row) === channelFilter) &&
+      (stageFilter === 'all' || row.stage === stageFilter) &&
+      (statusFilter === 'all' || row.appointmentStatus === statusFilter) &&
+      (query === '' ||
+        row.name.toLowerCase().includes(query) ||
+        row.email.toLowerCase().includes(query) ||
+        row.phone.includes(query)),
+  );
   const totalValue = visible.reduce((sum, row) => sum + (row.value ?? 0), 0);
 
   const exportCsv = () => {
@@ -344,6 +366,58 @@ export default function BookingsPage() {
               {calendars.map((calendar) => (
                 <option key={calendar} value={calendar}>
                   {calendar}
+                </option>
+              ))}
+            </select>
+          </label>
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search name, email, phone"
+            className="bg-white border border-black/10 text-[#0D1B3D] text-sm rounded-xl px-3 py-2 outline-none focus:border-black/30 w-56"
+          />
+          <label className="text-[#0D1B3D] text-sm font-medium">
+            Channel{' '}
+            <select
+              value={channelFilter}
+              onChange={(e) => setChannelFilter(e.target.value as 'all' | Channel)}
+              className="ml-1 bg-white border border-black/10 text-[#0D1B3D] text-sm rounded-xl px-3 py-2 outline-none focus:border-black/30"
+            >
+              <option value="all">All channels</option>
+              {(Object.keys(CHANNEL_LABEL) as Channel[]).map((channel) => (
+                <option key={channel} value={channel}>
+                  {CHANNEL_LABEL[channel]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-[#0D1B3D] text-sm font-medium">
+            Stage{' '}
+            <select
+              value={stageFilter}
+              onChange={(e) => setStageFilter(e.target.value)}
+              className="ml-1 bg-white border border-black/10 text-[#0D1B3D] text-sm rounded-xl px-3 py-2 outline-none focus:border-black/30"
+            >
+              <option value="all">All stages</option>
+              {stagesSeen.map((stage) => (
+                <option key={stage} value={stage}>
+                  {stage}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-[#0D1B3D] text-sm font-medium">
+            Status{' '}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="ml-1 bg-white border border-black/10 text-[#0D1B3D] text-sm rounded-xl px-3 py-2 outline-none focus:border-black/30"
+            >
+              <option value="all">All statuses</option>
+              {statusesSeen.map((status) => (
+                <option key={status} value={status}>
+                  {status}
                 </option>
               ))}
             </select>
