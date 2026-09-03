@@ -293,6 +293,12 @@ export interface GhlContactSummary {
   state: string;
   country: string;
   companyName: string;
+  /** Session source of the latest attribution (e.g. "Paid Search",
+      "Organic Search", "Direct traffic") — the search API returns these in
+      an `attributions` array, no per-contact fetch needed. */
+  sessionSource: string;
+  attributionMedium: string;
+  attributionUrl: string;
 }
 
 /** Contacts added in [startIso, endIso], newest first, via the paged search
@@ -326,6 +332,12 @@ export async function searchContacts(
         state?: string;
         country?: string;
         companyName?: string;
+        attributions?: Array<{
+          utmSessionSource?: string;
+          medium?: string;
+          url?: string;
+          isFirst?: boolean;
+        }>;
         searchAfter?: unknown[];
       }>;
     }>('/contacts/search', '2021-07-28', {
@@ -339,7 +351,19 @@ export async function searchContacts(
     const page = data.contacts ?? [];
     if (page.length === 0) break;
     for (const contact of page) {
+      const attributions = contact.attributions ?? [];
+      // Latest touch wins for display; any touch contributes to classification.
+      const latest = attributions[attributions.length - 1];
       out.push({
+        sessionSource:
+          latest?.utmSessionSource ??
+          attributions.find((a) => a.utmSessionSource)?.utmSessionSource ??
+          '',
+        attributionMedium: attributions
+          .map((a) => a.medium)
+          .filter(Boolean)
+          .join(' '),
+        attributionUrl: latest?.url ?? '',
         id: contact.id,
         name:
           contact.contactName ??
