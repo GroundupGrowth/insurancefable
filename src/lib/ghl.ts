@@ -147,10 +147,14 @@ export async function getCalendarEvents(
   }));
 }
 
-interface Attribution {
+export interface Attribution {
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  campaign?: string;
+  medium?: string;
   sessionSource?: string;
   referrer?: string;
   url?: string;
@@ -162,6 +166,12 @@ export interface GhlContact {
   email: string;
   phone: string;
   source: string;
+  tags: string[];
+  dateAdded: string;
+  city: string;
+  state: string;
+  country: string;
+  companyName: string;
   firstTouch: Attribution | null;
   lastTouch: Attribution | null;
 }
@@ -176,6 +186,12 @@ export async function getContact(contactId: string): Promise<GhlContact | null> 
         email?: string;
         phone?: string;
         source?: string;
+        tags?: string[];
+        dateAdded?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        companyName?: string;
         attributionSource?: Attribution;
         lastAttributionSource?: Attribution;
       };
@@ -187,6 +203,12 @@ export async function getContact(contactId: string): Promise<GhlContact | null> 
       email: contact.email ?? '',
       phone: contact.phone ?? '',
       source: contact.source ?? '',
+      tags: contact.tags ?? [],
+      dateAdded: contact.dateAdded ?? '',
+      city: contact.city ?? '',
+      state: contact.state ?? '',
+      country: contact.country ?? '',
+      companyName: contact.companyName ?? '',
       firstTouch: contact.attributionSource ?? null,
       lastTouch: contact.lastAttributionSource ?? null,
     };

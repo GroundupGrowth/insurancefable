@@ -122,16 +122,23 @@ export async function GET(request: Request) {
         bookedAt: event.startTime,
         calendar: calendarName.get(event.calendarId) ?? event.calendarId,
         appointmentStatus: event.appointmentStatus,
+        contactId: event.contactId ?? '',
         name: contact?.name ?? '',
         email: contact?.email ?? '',
         phone: contact?.phone ?? '',
         contactSource: contact?.source ?? '',
+        tags: contact?.tags ?? [],
+        contactCreatedAt: contact?.dateAdded ?? '',
+        location: [contact?.city, contact?.state, contact?.country].filter(Boolean).join(', '),
+        company: contact?.companyName ?? '',
         utmSource: touch?.utmSource ?? '',
         utmMedium: touch?.utmMedium ?? '',
         utmCampaign: touch?.utmCampaign ?? '',
         sessionSource: touch?.sessionSource ?? '',
         referrer: touch?.referrer ?? '',
         landingPage: touch?.url ?? '',
+        firstTouch: contact?.firstTouch ?? null,
+        lastTouch: contact?.lastTouch ?? null,
         pipeline: opportunity?.pipelineName ?? '',
         stage: opportunity?.stageName ?? '',
         opportunityStatus: opportunity?.status ?? '',
@@ -140,6 +147,9 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       calendars: calendars.map((calendar) => calendar.name),
+      /* For "Open in GHL" deep links in the detail popup (an identifier, not
+         a credential — it already appears in committed webhook URLs). */
+      locationId,
       rows,
       ...(stagesError ? { stagesError } : {}),
     });

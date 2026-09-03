@@ -1,42 +1,145 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Download, RefreshCw } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Download, ExternalLink, RefreshCw, X } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { Card, PageHeader } from '../ui';
 
 /* GHL bookings report (owner-only): every appointment across every GHL
    calendar in a date range, with the lead's source/attribution and current
-   pipeline stage — the columns of the client's tracking sheet. Data comes
-   from /api/admin/bookings/ (server-side, GHL_PIT env var); the CSV export
-   is meant to be imported into the Google tracking sheet. */
+   pipeline stage. Sources are color-coded by channel (client, 2026-09-03:
+   email blue, Google Ads yellow); clicking a row opens the full detail
+   popup with both attribution touches and an Open-in-GHL link. Data comes
+   from /api/admin/bookings/ (server-side, GHL_PIT env var). */
+
+interface Attribution {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  campaign?: string;
+  medium?: string;
+  sessionSource?: string;
+  referrer?: string;
+  url?: string;
+}
 
 interface BookingRow {
   bookedAt: string;
   calendar: string;
   appointmentStatus: string;
+  contactId: string;
   name: string;
   email: string;
   phone: string;
   contactSource: string;
+  tags: string[];
+  contactCreatedAt: string;
+  location: string;
+  company: string;
   utmSource: string;
   utmMedium: string;
   utmCampaign: string;
   sessionSource: string;
   referrer: string;
   landingPage: string;
+  firstTouch: Attribution | null;
+  lastTouch: Attribution | null;
   pipeline: string;
   stage: string;
   opportunityStatus: string;
 }
 
-const CSV_COLUMNS: Array<[keyof BookingRow, string]> = [
+/* ---- Source channel classification & colors ------------------------------
+   Email = blue and Google Ads = yellow per the client; the rest are ours.
+   Classification reads every source-ish field so GHL's varying labels
+   ("Paid Search", utm_source=google&utm_medium=cpc, "adwords") all land in
+   the same bucket. */
+type Channel =
+  | 'email'
+  | 'google-ads'
+  | 'organic'
+  | 'social'
+  | 'referral'
+  | 'direct'
+  | 'other';
+
+const CHANNEL_LABEL: Record<Channel, string> = {
+  email: 'Email',
+  'google-ads': 'Google Ads',
+  organic: 'Organic search',
+  social: 'Social',
+  referral: 'Referral',
+  direct: 'Direct',
+  other: 'Other',
+};
+
+const CHANNEL_CLASS: Record<Channel, string> = {
+  email: 'bg-blue-100 text-blue-800',
+  'google-ads': 'bg-yellow-100 text-yellow-800',
+  organic: 'bg-green-100 text-green-800',
+  social: 'bg-purple-100 text-purple-800',
+  referral: 'bg-teal-100 text-teal-800',
+  direct: 'bg-gray-200 text-gray-700',
+  other: 'bg-slate-100 text-slate-600',
+};
+
+function channelOf(row: BookingRow): Channel {
+  const haystack = [
+    row.utmSource,
+    row.utmMedium,
+    row.sessionSource,
+    row.contactSource,
+    row.referrer,
+    row.firstTouch?.medium,
+    row.lastTouch?.medium,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  if (haystack.includes('email') || haystack.includes('newsletter')) return 'email';
+  if (
+    haystack.includes('adwords') ||
+    haystack.includes('googleads') ||
+    haystack.includes('paid search') ||
+    (haystack.includes('google') &&
+      (haystack.includes('cpc') || haystack.includes('ppc') || haystack.includes('paid')))
+  ) {
+    return 'google-ads';
+  }
+  if (
+    haystack.includes('organic') ||
+    ((haystack.includes('google') || haystack.includes('bing') || haystack.includes('duckduckgo')) &&
+      !haystack.includes('cpc'))
+  ) {
+    return 'organic';
+  }
+  if (/facebook|instagram|fb\b|meta|linkedin|youtube|tiktok|social/.test(haystack)) return 'social';
+  if (haystack.includes('direct')) return 'direct';
+  if (haystack.includes('referral') || row.referrer) return 'referral';
+  return 'other';
+}
+
+function ChannelPill({ channel }: { channel: Channel }) {
+  return (
+    <span
+      className={`inline-block text-xs font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap ${CHANNEL_CLASS[channel]}`}
+    >
+      {CHANNEL_LABEL[channel]}
+    </span>
+  );
+}
+
+const CSV_COLUMNS: Array<[keyof BookingRow | 'channel', string]> = [
   ['bookedAt', 'Booked at'],
   ['calendar', 'Calendar'],
   ['appointmentStatus', 'Appointment status'],
   ['name', 'Name'],
   ['email', 'Email'],
   ['phone', 'Phone'],
+  ['channel', 'Channel'],
   ['contactSource', 'Contact source'],
   ['utmSource', 'UTM source'],
   ['utmMedium', 'UTM medium'],
@@ -51,6 +154,164 @@ const CSV_COLUMNS: Array<[keyof BookingRow, string]> = [
 
 const isoDay = (date: Date) => date.toISOString().slice(0, 10);
 
+const formatWhen = (iso: string) =>
+  iso
+    ? new Date(iso).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+      })
+    : '—';
+
+/* One label/value line in the popup; hidden entirely when there's no value. */
+function DetailLine({ label, value, href }: { label: string; value?: string; href?: string }) {
+  if (!value) return null;
+  return (
+    <div className="grid grid-cols-[9rem_1fr] gap-2 py-1 text-sm">
+      <span className="text-[#0D1B3D]/50">{label}</span>
+      {href ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#0D1B3D] underline decoration-[#0D1B3D]/30 break-all">
+          {value}
+        </a>
+      ) : (
+        <span className="text-[#0D1B3D] break-words">{value}</span>
+      )}
+    </div>
+  );
+}
+
+function TouchBlock({ title, touch }: { title: string; touch: Attribution | null }) {
+  if (!touch) return null;
+  const entries: Array<[string, string | undefined]> = [
+    ['Session source', touch.sessionSource],
+    ['UTM source', touch.utmSource],
+    ['UTM medium', touch.utmMedium],
+    ['UTM campaign', touch.utmCampaign],
+    ['UTM content', touch.utmContent],
+    ['UTM term', touch.utmTerm],
+    ['Campaign', touch.campaign],
+    ['Medium', touch.medium],
+    ['Referrer', touch.referrer],
+    ['Landing page', touch.url],
+  ];
+  if (!entries.some(([, value]) => value)) return null;
+  return (
+    <div>
+      <p className="text-[#0D1B3D]/50 text-xs uppercase tracking-wide mt-5 mb-1">{title}</p>
+      {entries.map(([label, value]) => (
+        <DetailLine key={label} label={label} value={value} />
+      ))}
+    </div>
+  );
+}
+
+function BookingModal({
+  row,
+  locationId,
+  onClose,
+}: {
+  row: BookingRow;
+  locationId: string;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  const ghlUrl =
+    locationId && row.contactId
+      ? `https://app.gohighlevel.com/v2/location/${locationId}/contacts/detail/${row.contactId}`
+      : null;
+
+  /* Portal to body: the admin layout creates stacking contexts that would
+     trap a fixed overlay (same class of bug as the site modal in 9852fcc). */
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center overflow-y-auto p-4 md:p-10"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Booking details for ${row.name || row.email}`}
+    >
+      <div
+        className="bg-white rounded-2xl w-full max-w-xl p-6 md:p-8 shadow-xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-4 mb-1">
+          <div>
+            <p
+              className="text-[#0D1B3D] text-2xl font-medium"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              {row.name || row.email || 'Unknown contact'}
+            </p>
+            <div className="mt-2 flex items-center gap-2 flex-wrap">
+              <ChannelPill channel={channelOf(row)} />
+              {row.appointmentStatus && (
+                <span className="inline-block text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#0D1B3D]/5 text-[#0D1B3D]/70">
+                  {row.appointmentStatus}
+                </span>
+              )}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="text-[#0D1B3D]/50 hover:text-[#0D1B3D] transition-colors duration-150 p-1"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <p className="text-[#0D1B3D]/50 text-xs uppercase tracking-wide mt-5 mb-1">Booking</p>
+        <DetailLine label="Booked for" value={formatWhen(row.bookedAt)} />
+        <DetailLine label="Calendar" value={row.calendar} />
+
+        <p className="text-[#0D1B3D]/50 text-xs uppercase tracking-wide mt-5 mb-1">Contact</p>
+        <DetailLine label="Email" value={row.email} href={row.email ? `mailto:${row.email}` : undefined} />
+        <DetailLine label="Phone" value={row.phone} href={row.phone ? `tel:${row.phone}` : undefined} />
+        <DetailLine label="Company" value={row.company} />
+        <DetailLine label="Location" value={row.location} />
+        <DetailLine label="In CRM since" value={formatWhen(row.contactCreatedAt)} />
+        <DetailLine label="Contact source" value={row.contactSource} />
+        <DetailLine label="Tags" value={row.tags.join(', ')} />
+
+        {(row.pipeline || row.stage || row.opportunityStatus) && (
+          <>
+            <p className="text-[#0D1B3D]/50 text-xs uppercase tracking-wide mt-5 mb-1">Pipeline</p>
+            <DetailLine label="Pipeline" value={row.pipeline} />
+            <DetailLine label="Current stage" value={row.stage} />
+            <DetailLine label="Opportunity" value={row.opportunityStatus} />
+          </>
+        )}
+
+        <TouchBlock title="First touch" touch={row.firstTouch} />
+        <TouchBlock title="Latest touch" touch={row.lastTouch} />
+
+        {ghlUrl && (
+          <a
+            href={ghlUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 bg-[#0D1B3D] text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+          >
+            Open in GHL
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        )}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export default function BookingsPage() {
   const supabase = useMemo(() => getSupabase(), []);
   const [start, setStart] = useState(() =>
@@ -58,7 +319,9 @@ export default function BookingsPage() {
   );
   const [end, setEnd] = useState(() => isoDay(new Date()));
   const [rows, setRows] = useState<BookingRow[]>([]);
+  const [locationId, setLocationId] = useState('');
   const [calendarFilter, setCalendarFilter] = useState('all');
+  const [selected, setSelected] = useState<BookingRow | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -79,11 +342,13 @@ export default function BookingsPage() {
       );
       const body = (await response.json()) as {
         rows?: BookingRow[];
+        locationId?: string;
         error?: string;
         stagesError?: string;
       };
       if (!response.ok) throw new Error(body.error ?? `Request failed (${response.status}).`);
       setRows(body.rows ?? []);
+      setLocationId(body.locationId ?? '');
       if (body.stagesError) {
         setNotice(
           `Pipeline stages unavailable (${body.stagesError}) — bookings and sources still shown. Add the opportunities scope to the GHL private integration to include stages.`,
@@ -113,7 +378,13 @@ export default function BookingsPage() {
     const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
     const lines = [CSV_COLUMNS.map(([, label]) => escape(label)).join(',')];
     for (const row of visible) {
-      lines.push(CSV_COLUMNS.map(([key]) => escape(row[key] ?? '')).join(','));
+      lines.push(
+        CSV_COLUMNS.map(([key]) => {
+          if (key === 'channel') return escape(CHANNEL_LABEL[channelOf(row)]);
+          const value = row[key];
+          return escape(typeof value === 'string' ? value : '');
+        }).join(','),
+      );
     }
     const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -124,18 +395,11 @@ export default function BookingsPage() {
     URL.revokeObjectURL(url);
   };
 
-  const sourceOf = (row: BookingRow) =>
-    [row.utmSource, row.utmMedium].filter(Boolean).join(' / ') ||
-    row.sessionSource ||
-    row.contactSource ||
-    row.referrer ||
-    '—';
-
   return (
     <>
       <PageHeader
         title="Bookings"
-        text="Every appointment across every GHL calendar, with the lead's source and current pipeline stage. Export the CSV to update the tracking sheet."
+        text="Every appointment across every GHL calendar, color-coded by source channel. Click a booking for the full detail; export the CSV to update the tracking sheet."
         actions={
           <div className="flex items-center gap-3">
             <button
@@ -238,7 +502,11 @@ export default function BookingsPage() {
               </thead>
               <tbody className="divide-y divide-black/5">
                 {visible.map((row, index) => (
-                  <tr key={`${row.bookedAt}-${row.email}-${index}`} className="align-top text-[#0D1B3D]">
+                  <tr
+                    key={`${row.bookedAt}-${row.email}-${index}`}
+                    onClick={() => setSelected(row)}
+                    className="align-top text-[#0D1B3D] cursor-pointer hover:bg-[#F5F5F5] transition-colors duration-100"
+                  >
                     <td className="py-2.5 pr-4 whitespace-nowrap text-[#0D1B3D]/60">
                       {new Date(row.bookedAt).toLocaleString('en-US', {
                         month: 'short',
@@ -250,7 +518,9 @@ export default function BookingsPage() {
                     <td className="py-2.5 pr-4 whitespace-nowrap">{row.calendar}</td>
                     <td className="py-2.5 pr-4 font-medium whitespace-nowrap">{row.name || '—'}</td>
                     <td className="py-2.5 pr-4">{row.email || '—'}</td>
-                    <td className="py-2.5 pr-4">{sourceOf(row)}</td>
+                    <td className="py-2.5 pr-4">
+                      <ChannelPill channel={channelOf(row)} />
+                    </td>
                     <td className="py-2.5 pr-4 whitespace-nowrap">
                       {row.stage ? `${row.stage}${row.pipeline ? ` (${row.pipeline})` : ''}` : '—'}
                     </td>
@@ -264,6 +534,10 @@ export default function BookingsPage() {
           </div>
         )}
       </Card>
+
+      {selected && (
+        <BookingModal row={selected} locationId={locationId} onClose={() => setSelected(null)} />
+      )}
     </>
   );
 }
