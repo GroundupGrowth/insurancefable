@@ -111,16 +111,30 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-/* Print-ready report of the current (filtered) booking set. Opens in a new
-   window and triggers the print dialog — "Save as PDF" there produces the
-   shareable report. No PDF library: the repo ships no new dependencies. */
+/* Print-ready report of the current (filtered) booking set — statistics
+   only, per the client (2026-09-04): channel mix, values, lead counts, plus
+   no-show and close rates that fill in as outcomes get recorded in GHL.
+   Opens in a new window and triggers the print dialog ("Save as PDF").
+   No PDF library: the repo ships no new dependencies. */
 function openPdfReport(rows: BookingRow[], start: string, end: string, filterLabel: string) {
-  const totalValue = rows.reduce((sum, row) => sum + (row.value ?? 0), 0);
   const money = (value: number) =>
     value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const totalValue = rows.reduce((sum, row) => sum + (row.value ?? 0), 0);
 
-  const tally = <K extends string>(keyOf: (row: BookingRow) => K) => {
-    const map = new Map<string, { count: number; value: number }>();
+  /* Outcome + close metrics from what GHL has recorded so far. */
+  const status = (row: BookingRow) => row.appointmentStatus.toLowerCase();
+  const showed = rows.filter((row) => /show/.test(status(row)) && !/no[_\s-]?show/.test(status(row))).length;
+  const noShows = rows.filter((row) => /no[_\s-]?show/.test(status(row))).length;
+  const cancelled = rows.filter((row) => /cancel/.test(status(row))).length;
+  const won = rows.filter((row) => row.opportunityStatus.toLowerCase() === 'won').length;
+  const lost = rows.filter((row) => row.opportunityStatus.toLowerCase() === 'lost').length;
+  const outcomes = showed + noShows;
+  const decidable = rows.length - cancelled;
+  const noShowRate = outcomes > 0 ? Math.round((noShows / outcomes) * 100) : null;
+  const closeRate = won + lost > 0 && decidable > 0 ? Math.round((won / decidable) * 100) : null;
+
+  const tally = (keyOf: (row: BookingRow) => string) => {
+    const map = new Map<string, { count: number; value: number; channel?: Channel }>();
     for (const row of rows) {
       const key = keyOf(row) || '—';
       const entry = map.get(key) ?? { count: 0, value: 0 };
@@ -130,89 +144,108 @@ function openPdfReport(rows: BookingRow[], start: string, end: string, filterLab
     }
     return Array.from(map.entries()).sort((a, b) => b[1].count - a[1].count);
   };
-
-  const byCalendar = tally((row) => row.calendar);
   const byChannel = tally((row) => CHANNEL_LABEL[channelOf(row)]);
-  const byStatus = tally((row) => row.appointmentStatus);
+  const byCalendar = tally((row) => row.calendar);
+  const channelColorByLabel = new Map(
+    (Object.keys(CHANNEL_LABEL) as Channel[]).map((channel) => [
+      CHANNEL_LABEL[channel],
+      CHANNEL_PRINT_COLOR[channel],
+    ]),
+  );
 
-  const breakdownTable = (title: string, entries: Array<[string, { count: number; value: number }]>) => `
-    <table class="mini">
-      <thead><tr><th>${escapeHtml(title)}</th><th class="num">Bookings</th><th class="num">Value</th></tr></thead>
-      <tbody>${entries
-        .map(
-          ([key, entry]) =>
-            `<tr><td>${escapeHtml(key)}</td><td class="num">${entry.count}</td><td class="num">${
-              entry.value ? money(entry.value) : '—'
-            }</td></tr>`,
-        )
-        .join('')}</tbody>
-    </table>`;
+  /* Horizontal magnitude bars in one hue; identity lives in the labeled row
+     (name + colored chip for channels), never in the bar color alone. */
+  const barList = (
+    entries: Array<[string, { count: number; value: number }]>,
+    withChips: boolean,
+  ) => {
+    const max = Math.max(1, ...entries.map(([, entry]) => entry.count));
+    return entries
+      .map(([key, entry]) => {
+        const width = Math.max(2, Math.round((entry.count / max) * 100));
+        const chip = withChips
+          ? `<span class="dot" style="background:${channelColorByLabel.get(key) ?? '#64748b'}"></span>`
+          : '';
+        return `<div class="bar-row">
+          <div class="bar-label">${chip}${escapeHtml(key)}</div>
+          <div class="bar-track"><div class="bar" style="width:${width}%"></div></div>
+          <div class="bar-val">${entry.count}<span class="muted"> · ${
+            entry.value ? money(entry.value) : '—'
+          }</span></div>
+        </div>`;
+      })
+      .join('');
+  };
 
-  const rowsHtml = rows
-    .map((row) => {
-      const channel = channelOf(row);
-      return `<tr>
-        <td>${escapeHtml(
-          new Date(row.bookedAt).toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-          }),
-        )}</td>
-        <td>${escapeHtml(row.calendar)}</td>
-        <td>${escapeHtml(row.name || '—')}</td>
-        <td>${escapeHtml(row.email || '—')}</td>
-        <td><span class="chip" style="color:${CHANNEL_PRINT_COLOR[channel]};border-color:${CHANNEL_PRINT_COLOR[channel]}">${
-          CHANNEL_LABEL[channel]
-        }</span></td>
-        <td>${escapeHtml(row.stage || '—')}</td>
-        <td class="num">${row.value ? money(row.value) : '—'}</td>
-        <td>${escapeHtml(row.appointmentStatus || '—')}</td>
-      </tr>`;
-    })
-    .join('');
+  const pct = (rate: number | null) => (rate == null ? '—' : `${rate}%`);
+  const share = (count: number) =>
+    rows.length > 0 ? `${Math.round((count / rows.length) * 100)}%` : '—';
 
   const html = `<!doctype html><html><head><meta charset="utf-8"><title>Bookings report ${escapeHtml(start)} to ${escapeHtml(end)}</title>
   <style>
     * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0D1B3D; margin: 40px; font-size: 12px; }
-    h1 { font-size: 22px; letter-spacing: -0.02em; margin: 0 0 2px; }
-    .sub { color: #5a6478; margin: 0 0 24px; }
-    .tiles { display: flex; gap: 12px; margin-bottom: 24px; }
-    .tile { border: 1px solid #dfe3ea; border-radius: 10px; padding: 12px 18px; }
-    .tile b { display: block; font-size: 20px; }
-    .tile span { color: #5a6478; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
-    .grid { display: flex; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
-    table { border-collapse: collapse; width: 100%; }
-    .mini { width: auto; min-width: 220px; }
-    th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #5a6478; border-bottom: 1px solid #dfe3ea; padding: 6px 10px 6px 0; }
-    td { border-bottom: 1px solid #eef0f4; padding: 6px 10px 6px 0; vertical-align: top; }
-    .num { text-align: right; font-variant-numeric: tabular-nums; }
-    .chip { border: 1px solid; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; white-space: nowrap; }
-    tr { page-break-inside: avoid; }
-    h2 { font-size: 13px; margin: 24px 0 8px; }
-    @page { margin: 18mm 14mm; }
+    body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0D1B3D; margin: 0; font-size: 12px; background: #fff; }
+    .band { background: #0D1B3D; color: #fff; padding: 34px 44px 30px; }
+    .band .brand { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.65; margin: 0 0 10px; }
+    .band h1 { font-size: 30px; letter-spacing: -0.02em; margin: 0; font-weight: 600; }
+    .band .range { display: inline-block; margin-top: 14px; border: 1px solid rgba(255,255,255,0.35); border-radius: 999px; padding: 4px 14px; font-size: 12px; }
+    .band .filters { margin-top: 8px; font-size: 11px; opacity: 0.65; }
+    main { padding: 30px 44px 40px; }
+    .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 30px; }
+    .tile { border: 1px solid #E3E7EE; border-top: 3px solid #0D1B3D; border-radius: 12px; padding: 14px 18px 12px; }
+    .tile b { display: block; font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .tile .label { color: #5a6478; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+    .tile .sub { color: #8b93a3; font-size: 10px; margin-top: 4px; }
+    h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: #5a6478; margin: 26px 0 12px; font-weight: 600; }
+    .bar-row { display: grid; grid-template-columns: 150px 1fr 120px; gap: 12px; align-items: center; padding: 5px 0; }
+    .bar-label { font-weight: 500; display: flex; align-items: center; gap: 7px; }
+    .dot { width: 9px; height: 9px; border-radius: 3px; display: inline-block; flex: none; }
+    .bar-track { background: #EFF1F5; border-radius: 4px; height: 14px; }
+    .bar { background: #0D1B3D; height: 14px; border-radius: 4px; min-width: 3px; }
+    .bar-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+    .muted { color: #8b93a3; font-weight: 400; }
+    .outcomes { display: flex; gap: 26px; margin-top: 4px; }
+    .outcome b { font-size: 17px; font-variant-numeric: tabular-nums; display: block; }
+    .outcome span { color: #5a6478; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; }
+    .note { color: #8b93a3; font-size: 10px; margin-top: 30px; border-top: 1px solid #EFF1F5; padding-top: 12px; line-height: 1.6; }
+    @page { margin: 0 0 12mm; }
   </style></head><body>
-    <h1>Insurance &amp; Estates — Bookings Report</h1>
-    <p class="sub">${escapeHtml(start)} to ${escapeHtml(end)}${
-      filterLabel ? ` · ${escapeHtml(filterLabel)}` : ''
-    } · generated ${escapeHtml(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }))}</p>
-    <div class="tiles">
-      <div class="tile"><b>${rows.length}</b><span>Bookings</span></div>
-      <div class="tile"><b>${totalValue ? money(totalValue) : '—'}</b><span>Pipeline value</span></div>
-      <div class="tile"><b>${byCalendar.length}</b><span>Calendars</span></div>
+    <div class="band">
+      <p class="brand">Insurance &amp; Estates</p>
+      <h1>Bookings Report</h1>
+      <span class="range">${escapeHtml(start)} — ${escapeHtml(end)}</span>
+      ${filterLabel ? `<div class="filters">Filtered: ${escapeHtml(filterLabel)}</div>` : ''}
     </div>
-    <div class="grid">
-      <div>${breakdownTable('By calendar', byCalendar)}</div>
-      <div>${breakdownTable('By channel', byChannel)}</div>
-      <div>${breakdownTable('By status', byStatus)}</div>
-    </div>
-    <h2>All bookings</h2>
-    <table>
-      <thead><tr><th>Booked</th><th>Calendar</th><th>Name</th><th>Email</th><th>Channel</th><th>Stage</th><th class="num">Value</th><th>Status</th></tr></thead>
-      <tbody>${rowsHtml}</tbody>
-    </table>
+    <main>
+      <div class="tiles">
+        <div class="tile"><div class="label">Bookings</div><b>${rows.length}</b><div class="sub">${byCalendar.length} calendar${byCalendar.length === 1 ? '' : 's'}</div></div>
+        <div class="tile"><div class="label">Pipeline value</div><b>${totalValue ? money(totalValue) : '—'}</b><div class="sub">${rows.filter((row) => row.value).length} bookings with value</div></div>
+        <div class="tile"><div class="label">No-show rate</div><b>${pct(noShowRate)}</b><div class="sub">${
+          outcomes > 0 ? `${showed} showed · ${noShows} no-show` : 'no outcomes recorded yet'
+        }</div></div>
+        <div class="tile"><div class="label">Close rate</div><b>${pct(closeRate)}</b><div class="sub">${
+          won + lost > 0 ? `${won} won · ${lost} lost` : 'no results recorded yet'
+        }</div></div>
+      </div>
+
+      <h2>Leads by channel</h2>
+      ${barList(byChannel, true)}
+
+      <h2>Bookings by calendar</h2>
+      ${barList(byCalendar, false)}
+
+      <h2>Appointment outcomes</h2>
+      <div class="outcomes">
+        <div class="outcome"><b>${showed}</b><span>Showed (${share(showed)})</span></div>
+        <div class="outcome"><b>${noShows}</b><span>No-show (${share(noShows)})</span></div>
+        <div class="outcome"><b>${cancelled}</b><span>Cancelled (${share(cancelled)})</span></div>
+        <div class="outcome"><b>${rows.length - showed - noShows - cancelled}</b><span>Pending outcome</span></div>
+      </div>
+
+      <p class="note">No-show rate = no-shows ÷ (showed + no-shows). Close rate = won ÷ bookings excl. cancelled — both fill in automatically as appointment outcomes and opportunity results are recorded in GHL. Generated ${escapeHtml(
+        new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      )} from GHL data.</p>
+    </main>
     <script>window.addEventListener('load', () => setTimeout(() => window.print(), 300));</script>
   </body></html>`;
 
