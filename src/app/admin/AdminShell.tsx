@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   UserPlus,
   CalendarCheck,
+  LineChart,
   Users,
   X,
 } from 'lucide-react';
@@ -38,6 +39,7 @@ const NAV = [
   { href: '/admin/forms/', label: 'Forms', icon: Inbox },
   { href: '/admin/leads/', label: 'Leads', icon: UserPlus },
   { href: '/admin/bookings/', label: 'Bookings', icon: CalendarCheck },
+  { href: '/admin/analytics/', label: 'Analytics', icon: LineChart },
   { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
   { href: '/admin/wiki/', label: 'Wiki', icon: Library },
   { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },
@@ -284,7 +286,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         {/* Bookings and Leads are wide data tables — give them the full viewport. */}
         <div
           className={
-            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads')
+            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads') || pathname.startsWith('/admin/analytics')
               ? 'max-w-none'
               : 'max-w-5xl mx-auto'
           }

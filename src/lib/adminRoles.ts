@@ -43,6 +43,7 @@ export const OWNER_ONLY_PREFIXES = [
   '/admin/forms',
   '/admin/leads',
   '/admin/bookings',
+  '/admin/analytics',
   '/admin/users',
 ];
 

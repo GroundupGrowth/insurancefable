@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { resolveRole, type AdminRoleRow } from '../../../../lib/adminRoles';
+import { callerIsOwner } from '../../../../lib/adminApiAuth';
 import {
   GhlError,
   ghlConfigured,
@@ -28,24 +27,6 @@ export const maxDuration = 300;
 
 const MAX_RANGE_DAYS = 400;
 const LIST_CAP = 500;
-
-async function callerIsOwner(request: Request): Promise<boolean> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
-  if (!url || !anonKey || !bearer) return false;
-  const supabase = createClient(url, anonKey, {
-    global: { headers: { Authorization: `Bearer ${bearer}` } },
-  });
-  const { data: userData, error } = await supabase.auth.getUser(bearer);
-  const email = userData?.user?.email;
-  if (error || !email) return false;
-  const { data: rows, error: rolesError } = await supabase
-    .from('admin_roles')
-    .select('email, role');
-  if (rolesError) return true;
-  return resolveRole((rows ?? []) as AdminRoleRow[], email).role === 'owner';
-}
 
 export async function GET(request: Request) {
   if (!(await callerIsOwner(request))) {
