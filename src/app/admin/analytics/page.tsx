@@ -77,6 +77,7 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [setup, setSetup] = useState<string | null>(null);
+  const [canConnect, setCanConnect] = useState(false);
 
   const load = useCallback(async () => {
     if (!supabase) return;
@@ -90,10 +91,15 @@ export default function AnalyticsPage() {
       const response = await fetch(`/api/admin/analytics/?start=${start}&end=${end}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const body = (await response.json()) as Analytics & { error?: string; setup?: string };
+      const body = (await response.json()) as Analytics & {
+        error?: string;
+        setup?: string;
+        canConnect?: boolean;
+      };
       if (!response.ok) {
         if (body.setup) {
           setSetup(body.setup);
+          setCanConnect(Boolean(body.canConnect));
           return;
         }
         throw new Error(body.error ?? `Request failed (${response.status}).`);
@@ -170,6 +176,14 @@ export default function AnalyticsPage() {
         <Card>
           <p className="text-[#0D1B3D] font-medium mb-2">Connect Google Analytics</p>
           <p className="text-[#0D1B3D]/70 text-sm leading-relaxed max-w-2xl">{setup}</p>
+          {canConnect && (
+            <a
+              href="/api/admin/analytics/oauth/"
+              className="mt-5 inline-flex items-center gap-2 bg-[#0D1B3D] text-white text-sm font-medium px-6 py-2.5 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+            >
+              Connect Google Analytics
+            </a>
+          )}
         </Card>
       ) : error ? (
         <Card>

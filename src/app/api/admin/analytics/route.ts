@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import { callerIsOwner } from '../../../../lib/adminApiAuth';
-import { Ga4Error, ga4BatchReports, ga4Configured, reportRows } from '../../../../lib/ga4';
+import {
+  Ga4Error,
+  ga4BatchReports,
+  ga4Configured,
+  oauthClientConfigured,
+  reportRows,
+} from '../../../../lib/ga4';
 
 /* GA4 report for /admin/analytics (owner-only): totals, daily sessions,
    traffic by default channel group, and top pages for a date range — one
@@ -14,11 +20,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Owner access required.' }, { status: 403 });
   }
   if (!ga4Configured()) {
+    /* Two setup states: the OAuth client exists (offer the one-click connect
+       flow) or nothing is configured yet (name the env vars). */
+    const canConnect = oauthClientConfigured();
     return NextResponse.json(
       {
         error: 'not_configured',
-        setup:
-          'Google Analytics is not connected yet. In Google Cloud: create a service account, enable the Google Analytics Data API, and create a JSON key. In GA4 Admin → Property access management: add the service account email as Viewer. Then add Vercel env vars GA4_PROPERTY_ID (numeric property id), GOOGLE_SA_EMAIL, and GOOGLE_SA_PRIVATE_KEY (the private_key from the JSON key) and redeploy.',
+        canConnect,
+        setup: canConnect
+          ? 'The Google OAuth client is configured — click Connect Google Analytics below, approve with the Google account that has access to the I&E property, and paste the refresh token it shows into Vercel as GOOGLE_OAUTH_REFRESH_TOKEN (plus GA4_PROPERTY_ID if not set yet), then redeploy.'
+          : 'Google Analytics is not connected yet. In Google Cloud → APIs & Services: enable the Google Analytics Data API, configure the OAuth consent screen (Internal), and create an OAuth client ID (Web application) with redirect URI https://www.insuranceandestates.com/api/admin/analytics/oauth/ — then add Vercel env vars GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET, and GA4_PROPERTY_ID (the numeric id from GA4 Admin → Property details), redeploy, and come back here to click Connect.',
       },
       { status: 503 },
     );

@@ -25,10 +25,27 @@ export class Ga4Error extends Error {
   }
 }
 
+/* Two auth modes, OAuth preferred (Xander, 2026-09-05: the org policy
+   blocks service-account key creation):
+   - OAuth:           GOOGLE_OAUTH_CLIENT_ID + GOOGLE_OAUTH_CLIENT_SECRET +
+                      GOOGLE_OAUTH_REFRESH_TOKEN (obtained once via
+                      /api/admin/analytics/oauth/ — the "Connect Google
+                      Analytics" button)
+   - Service account: GOOGLE_SA_EMAIL + GOOGLE_SA_PRIVATE_KEY */
+export function oauthClientConfigured(): boolean {
+  return Boolean(process.env.GOOGLE_OAUTH_CLIENT_ID && process.env.GOOGLE_OAUTH_CLIENT_SECRET);
+}
+
+function oauthConfigured(): boolean {
+  return oauthClientConfigured() && Boolean(process.env.GOOGLE_OAUTH_REFRESH_TOKEN);
+}
+
+function serviceAccountConfigured(): boolean {
+  return Boolean(process.env.GOOGLE_SA_EMAIL && process.env.GOOGLE_SA_PRIVATE_KEY);
+}
+
 export function ga4Configured(): boolean {
-  return Boolean(
-    process.env.GA4_PROPERTY_ID && process.env.GOOGLE_SA_EMAIL && process.env.GOOGLE_SA_PRIVATE_KEY,
-  );
+  return Boolean(process.env.GA4_PROPERTY_ID) && (oauthConfigured() || serviceAccountConfigured());
 }
 
 const b64url = (input: Buffer | string) =>
@@ -38,6 +55,25 @@ let cachedToken: { token: string; expiresAt: number } | null = null;
 
 async function accessToken(): Promise<string> {
   if (cachedToken && cachedToken.expiresAt > Date.now() + 60_000) return cachedToken.token;
+  if (oauthConfigured()) {
+    const response = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID!,
+        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET!,
+        refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN!,
+      }),
+      cache: 'no-store',
+    });
+    if (!response.ok) {
+      throw new Ga4Error('oauth-refresh', response.status, (await response.text()).slice(0, 300));
+    }
+    const data = (await response.json()) as { access_token: string; expires_in: number };
+    cachedToken = { token: data.access_token, expiresAt: Date.now() + data.expires_in * 1000 };
+    return data.access_token;
+  }
   const email = process.env.GOOGLE_SA_EMAIL!;
   // Vercel stores the PEM with literal \n sequences; restore real newlines.
   const privateKey = process.env.GOOGLE_SA_PRIVATE_KEY!.replace(/\\n/g, '\n');
