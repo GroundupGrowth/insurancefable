@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Download, ExternalLink, RefreshCw, X } from 'lucide-react';
+import { Download, ExternalLink, FileText, RefreshCw, X } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { Card, PageHeader } from '../ui';
 import {
@@ -92,6 +92,135 @@ const CSV_COLUMNS: Array<[keyof BookingRow | 'channel', string]> = [
 ];
 
 const isoDay = (date: Date) => date.toISOString().slice(0, 10);
+
+const CHANNEL_PRINT_COLOR: Record<Channel, string> = {
+  email: '#1d4ed8',
+  'google-ads': '#a16207',
+  youtube: '#b91c1c',
+  organic: '#15803d',
+  social: '#7e22ce',
+  referral: '#0f766e',
+  direct: '#4b5563',
+  other: '#64748b',
+};
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+/* Print-ready report of the current (filtered) booking set. Opens in a new
+   window and triggers the print dialog — "Save as PDF" there produces the
+   shareable report. No PDF library: the repo ships no new dependencies. */
+function openPdfReport(rows: BookingRow[], start: string, end: string, filterLabel: string) {
+  const totalValue = rows.reduce((sum, row) => sum + (row.value ?? 0), 0);
+  const money = (value: number) =>
+    value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+  const tally = <K extends string>(keyOf: (row: BookingRow) => K) => {
+    const map = new Map<string, { count: number; value: number }>();
+    for (const row of rows) {
+      const key = keyOf(row) || '—';
+      const entry = map.get(key) ?? { count: 0, value: 0 };
+      entry.count += 1;
+      entry.value += row.value ?? 0;
+      map.set(key, entry);
+    }
+    return Array.from(map.entries()).sort((a, b) => b[1].count - a[1].count);
+  };
+
+  const byCalendar = tally((row) => row.calendar);
+  const byChannel = tally((row) => CHANNEL_LABEL[channelOf(row)]);
+  const byStatus = tally((row) => row.appointmentStatus);
+
+  const breakdownTable = (title: string, entries: Array<[string, { count: number; value: number }]>) => `
+    <table class="mini">
+      <thead><tr><th>${escapeHtml(title)}</th><th class="num">Bookings</th><th class="num">Value</th></tr></thead>
+      <tbody>${entries
+        .map(
+          ([key, entry]) =>
+            `<tr><td>${escapeHtml(key)}</td><td class="num">${entry.count}</td><td class="num">${
+              entry.value ? money(entry.value) : '—'
+            }</td></tr>`,
+        )
+        .join('')}</tbody>
+    </table>`;
+
+  const rowsHtml = rows
+    .map((row) => {
+      const channel = channelOf(row);
+      return `<tr>
+        <td>${escapeHtml(
+          new Date(row.bookedAt).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+          }),
+        )}</td>
+        <td>${escapeHtml(row.calendar)}</td>
+        <td>${escapeHtml(row.name || '—')}</td>
+        <td>${escapeHtml(row.email || '—')}</td>
+        <td><span class="chip" style="color:${CHANNEL_PRINT_COLOR[channel]};border-color:${CHANNEL_PRINT_COLOR[channel]}">${
+          CHANNEL_LABEL[channel]
+        }</span></td>
+        <td>${escapeHtml(row.stage || '—')}</td>
+        <td class="num">${row.value ? money(row.value) : '—'}</td>
+        <td>${escapeHtml(row.appointmentStatus || '—')}</td>
+      </tr>`;
+    })
+    .join('');
+
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Bookings report ${escapeHtml(start)} to ${escapeHtml(end)}</title>
+  <style>
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0D1B3D; margin: 40px; font-size: 12px; }
+    h1 { font-size: 22px; letter-spacing: -0.02em; margin: 0 0 2px; }
+    .sub { color: #5a6478; margin: 0 0 24px; }
+    .tiles { display: flex; gap: 12px; margin-bottom: 24px; }
+    .tile { border: 1px solid #dfe3ea; border-radius: 10px; padding: 12px 18px; }
+    .tile b { display: block; font-size: 20px; }
+    .tile span { color: #5a6478; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .grid { display: flex; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+    table { border-collapse: collapse; width: 100%; }
+    .mini { width: auto; min-width: 220px; }
+    th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #5a6478; border-bottom: 1px solid #dfe3ea; padding: 6px 10px 6px 0; }
+    td { border-bottom: 1px solid #eef0f4; padding: 6px 10px 6px 0; vertical-align: top; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .chip { border: 1px solid; border-radius: 999px; padding: 1px 8px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+    tr { page-break-inside: avoid; }
+    h2 { font-size: 13px; margin: 24px 0 8px; }
+    @page { margin: 18mm 14mm; }
+  </style></head><body>
+    <h1>Insurance &amp; Estates — Bookings Report</h1>
+    <p class="sub">${escapeHtml(start)} to ${escapeHtml(end)}${
+      filterLabel ? ` · ${escapeHtml(filterLabel)}` : ''
+    } · generated ${escapeHtml(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }))}</p>
+    <div class="tiles">
+      <div class="tile"><b>${rows.length}</b><span>Bookings</span></div>
+      <div class="tile"><b>${totalValue ? money(totalValue) : '—'}</b><span>Pipeline value</span></div>
+      <div class="tile"><b>${byCalendar.length}</b><span>Calendars</span></div>
+    </div>
+    <div class="grid">
+      <div>${breakdownTable('By calendar', byCalendar)}</div>
+      <div>${breakdownTable('By channel', byChannel)}</div>
+      <div>${breakdownTable('By status', byStatus)}</div>
+    </div>
+    <h2>All bookings</h2>
+    <table>
+      <thead><tr><th>Booked</th><th>Calendar</th><th>Name</th><th>Email</th><th>Channel</th><th>Stage</th><th class="num">Value</th><th>Status</th></tr></thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>
+    <script>window.addEventListener('load', () => setTimeout(() => window.print(), 300));</script>
+  </body></html>`;
+
+  const reportWindow = window.open('', '_blank');
+  if (!reportWindow) return;
+  reportWindow.document.write(html);
+  reportWindow.document.close();
+}
 
 function BookingModal({
   row,
@@ -317,6 +446,25 @@ export default function BookingsPage() {
             >
               <RefreshCw className="w-4 h-4" />
               Refresh
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const filters = [
+                  calendarFilter !== 'all' ? calendarFilter : '',
+                  channelFilter !== 'all' ? CHANNEL_LABEL[channelFilter] : '',
+                  stageFilter !== 'all' ? stageFilter : '',
+                  statusFilter !== 'all' ? statusFilter : '',
+                ]
+                  .filter(Boolean)
+                  .join(', ');
+                openPdfReport(visible, start, end, filters);
+              }}
+              disabled={visible.length === 0}
+              className="inline-flex items-center gap-2 bg-white text-[#0D1B3D] border border-black/10 text-sm font-medium px-5 py-2.5 rounded-full hover:bg-[#F5F5F5] transition-colors duration-200 disabled:opacity-50"
+            >
+              <FileText className="w-4 h-4" />
+              PDF report
             </button>
             <button
               type="button"
