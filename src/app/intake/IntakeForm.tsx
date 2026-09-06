@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { track } from '../../lib/track';
+import { identifyLead, track } from '../../lib/track';
 import { sendGTMEvent } from '@next/third-parties/google';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 
@@ -170,6 +170,7 @@ export default function IntakeForm() {
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
       track('lead_form_submitted', { source: 'form:intake' });
+      identifyLead(email, { name: firstName });
       window.fbq?.('track', 'Lead');
       sendGTMEvent({ event: 'generate_lead' });
       setDone(true);

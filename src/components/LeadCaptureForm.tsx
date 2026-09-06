@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, type FormEvent } from 'react';
-import { track } from '../lib/track';
+import { identifyLead, track } from '../lib/track';
 import { sendGTMEvent } from '@next/third-parties/google';
 
 /* Shared native lead-capture form (Xander, 2026-07-28) — replicates the GHL
@@ -130,6 +130,7 @@ export default function LeadCaptureForm({
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
       track('lead_form_submitted', { source });
+      identifyLead(email, { name: `${firstName} ${lastName}`.trim() });
       if (redirectTo) {
         window.location.href = redirectTo;
         return;

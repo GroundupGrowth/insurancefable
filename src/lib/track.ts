@@ -18,3 +18,17 @@ export function track(event: string, properties?: Record<string, unknown>): void
     // analytics must never break the page
   }
 }
+
+/** Stitch the visitor's anonymous sessions to the person once they submit a
+    form: from then on the lead's whole pre-submit journey (every page read,
+    every CTA clicked) is on their PostHog person profile, keyed by email —
+    the same key GHL uses, so the two line up. */
+export function identifyLead(email: string, properties?: Record<string, unknown>): void {
+  const id = email.trim().toLowerCase();
+  if (typeof window === 'undefined' || !process.env.NEXT_PUBLIC_POSTHOG_KEY || !id) return;
+  try {
+    posthog.identify(id, { email: id, ...properties });
+  } catch {
+    // analytics must never break the page
+  }
+}

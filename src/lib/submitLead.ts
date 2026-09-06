@@ -7,7 +7,7 @@
 export const LEAD_ERROR_MESSAGE =
   'Something went wrong sending your request. Please call 877-787-7558 or email info@insuranceandestates.com and we will take care of you directly.';
 
-import { track } from './track';
+import { identifyLead, track } from './track';
 
 export async function submitLead(payload: Record<string, unknown>): Promise<boolean> {
   try {
@@ -16,7 +16,14 @@ export async function submitLead(payload: Record<string, unknown>): Promise<bool
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ ...payload, page: window.location.pathname }),
     });
-    if (response.ok) track('lead_form_submitted', { source: payload.source });
+    if (response.ok) {
+      track('lead_form_submitted', { source: payload.source });
+      if (typeof payload.email === 'string') {
+        identifyLead(payload.email, {
+          name: [payload.first_name, payload.last_name].filter(Boolean).join(' '),
+        });
+      }
+    }
     return response.ok;
   } catch {
     return false;

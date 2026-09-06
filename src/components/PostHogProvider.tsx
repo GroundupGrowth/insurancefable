@@ -23,7 +23,35 @@ if (typeof window !== 'undefined' && KEY) {
     api_host: HOST,
     capture_pageview: false, // manual — see PageView below
     capture_pageleave: true,
+    // Core Web Vitals (LCP / CLS / INP / FCP) per page — slow pages lose leads.
+    capture_performance: { web_vitals: true },
   });
+}
+
+/* form_started: first focus inside any <form>, once per form per page —
+   started-vs-submitted is the abandonment rate per form. Document-level so
+   every form (current and future) is covered without per-form wiring. */
+function FormStarts() {
+  const pathname = usePathname();
+  useEffect(() => {
+    if (!KEY) return;
+    const seen = new WeakSet<HTMLFormElement>();
+    const onFocus = (event: FocusEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target || !/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+      const form = target.closest('form');
+      if (!form || seen.has(form)) return;
+      seen.add(form);
+      posthog.capture('form_started', {
+        page: pathname,
+        form: form.getAttribute('aria-label') ?? form.id ?? 'form',
+        field: (target as HTMLInputElement).name || target.getAttribute('placeholder') || '',
+      });
+    };
+    document.addEventListener('focusin', onFocus);
+    return () => document.removeEventListener('focusin', onFocus);
+  }, [pathname]);
+  return null;
 }
 
 function PageView() {
@@ -48,6 +76,7 @@ export default function PostHogProvider({ children }: { children: ReactNode }) {
       <Suspense fallback={null}>
         <PageView />
       </Suspense>
+      <FormStarts />
       {children}
     </Provider>
   );

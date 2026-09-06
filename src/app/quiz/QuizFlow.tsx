@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { track as trackEvent } from '../../lib/track';
+import { identifyLead, track as trackEvent } from '../../lib/track';
 import { ArrowLeft, BookOpen, Compass } from 'lucide-react';
 import EmbedSlot from '../../components/EmbedSlot';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
@@ -234,6 +234,7 @@ export default function QuizFlow() {
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
       trackEvent('lead_form_submitted', { source: 'form:quiz-advice' });
+      identifyLead(email, { name });
       setPhase('result');
     } catch {
       setError(
