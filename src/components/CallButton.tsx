@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Mail, MessageCircle, Phone, X } from 'lucide-react';
 import { isBareRoute } from '../lib/bareRoutes';
+import { track } from '../lib/track';
 
 /* Floating contact launcher, fixed bottom-right on every page. Closed it is a
    navy chat bubble; open it reveals a chat-box style card with the contact
@@ -58,6 +59,7 @@ export default function CallButton() {
               <a
                 key={label}
                 href={href}
+                onClick={() => track('contact_channel_clicked', { channel: label })}
                 className="flex items-center gap-3.5 rounded-xl px-3 py-3 hover:bg-[#F5F5F5] transition-colors duration-200 group"
               >
                 <span className="w-10 h-10 rounded-full bg-[#0D1B3D] text-white flex items-center justify-center shrink-0 group-hover:bg-[#1C2E55] transition-colors duration-200">

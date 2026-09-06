@@ -7,6 +7,8 @@
 export const LEAD_ERROR_MESSAGE =
   'Something went wrong sending your request. Please call 877-787-7558 or email info@insuranceandestates.com and we will take care of you directly.';
 
+import { track } from './track';
+
 export async function submitLead(payload: Record<string, unknown>): Promise<boolean> {
   try {
     const response = await fetch('/api/lead/', {
@@ -14,6 +16,7 @@ export async function submitLead(payload: Record<string, unknown>): Promise<bool
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ ...payload, page: window.location.pathname }),
     });
+    if (response.ok) track('lead_form_submitted', { source: payload.source });
     return response.ok;
   } catch {
     return false;

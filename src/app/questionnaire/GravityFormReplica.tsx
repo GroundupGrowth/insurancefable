@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { track } from '../../lib/track';
 import EmbedSlot from '../../components/EmbedSlot';
 
 /* Field labels double as payload keys (slugified) for /api/lead. */
@@ -178,6 +179,7 @@ export default function GravityFormReplica({
         }),
       });
       if (!response.ok) throw new Error(`status ${response.status}`);
+      track('lead_form_submitted', { source: slotKey });
       setSubmitted(true);
     } catch {
       setSending(false);

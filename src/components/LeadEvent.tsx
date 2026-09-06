@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { sendGTMEvent } from '@next/third-parties/google';
+import { track } from '../lib/track';
 
 /* Conversion tracking for a completed opt-in: fires Meta Pixel `Lead` and
    pushes dataLayer event `generate_lead` (forwarded to GA4 by GTM) once per
@@ -27,6 +28,7 @@ declare global {
 export default function LeadEvent() {
   useEffect(() => {
     sendGTMEvent({ event: 'generate_lead' });
+    track('lead_captured', { page: window.location.pathname });
     const fire = () => {
       if (typeof window.fbq !== 'function') return false;
       window.fbq('track', 'Lead');
