@@ -25,7 +25,7 @@ import JourneySections from './JourneySections';
 
 /* Pasted by Xander 2026-08-04. Overridable at /admin -> Embeds under
    `page:infinite-banking-journey:booking`. */
-const BOOKING_EMBED = `<iframe src="https://link.insuranceandestates.com/widget/booking/x2iaxH8z6vs4HR4yurcX" allow="payment" style="width: 100%;border:none;overflow: hidden;" scrolling="no" id="x2iaxH8z6vs4HR4yurcX_1785842702459"></iframe><br><script src="https://link.insuranceandestates.com/js/form_embed.js" type="text/javascript"></script>`;
+const BOOKING_EMBED = `<iframe src="https://links.insuranceandestates.com/widget/booking/x2iaxH8z6vs4HR4yurcX" allow="payment" style="width: 100%;border:none;overflow: hidden;" scrolling="no" id="x2iaxH8z6vs4HR4yurcX_1785842702459"></iframe><br><script src="https://links.insuranceandestates.com/js/form_embed.js" type="text/javascript"></script>`;
 
 export const metadata: Metadata = {
   title: {

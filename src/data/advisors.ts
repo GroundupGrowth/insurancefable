@@ -986,11 +986,8 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
        (barry@/denise@/jason@) — verify before announcing the page. */
     email: 'tom@insuranceandestates.com',
     linkedinUrl: 'https://www.linkedin.com/in/farrarkc/',
-    /* FILL IN: schedulerUrl — Tom's LeadConnector booking link (the brief
-       requires his ACTUAL calendar; do not guess the URL). Until it is set,
-       the header CTA falls back to /start-your-journey/ and the on-page
-       booking section appears once the advisor:tom:booking embed is pasted
-       at /admin -> Embeds. */
+    // Provided by Xander 2026-09-06 (new links. white-label domain).
+    schedulerUrl: 'https://links.insuranceandestates.com/widget/bookings/insuranceandestates/tomfarrar',
     yearsExperience: '25+ years real estate investing',
     recentArticles: legacyRecentArticles,
   },

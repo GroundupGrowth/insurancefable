@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/infinite-banking-journey-call/' },
 };
 
-const BOOKING_EMBED = `<iframe src="https://link.insuranceandestates.com/widget/booking/x2iaxH8z6vs4HR4yurcX" allow="payment" style="width: 100%;border:none;overflow: hidden;" scrolling="no" id="x2iaxH8z6vs4HR4yurcX_1785842702459"></iframe><br><script src="https://link.insuranceandestates.com/js/form_embed.js" type="text/javascript"></script>`;
+const BOOKING_EMBED = `<iframe src="https://links.insuranceandestates.com/widget/booking/x2iaxH8z6vs4HR4yurcX" allow="payment" style="width: 100%;border:none;overflow: hidden;" scrolling="no" id="x2iaxH8z6vs4HR4yurcX_1785842702459"></iframe><br><script src="https://links.insuranceandestates.com/js/form_embed.js" type="text/javascript"></script>`;
 
 const CONTACT_EMAIL = 'tom@insuranceandestates.com';
 const CONTACT_PHONE_DISPLAY = '816-816-4870';
