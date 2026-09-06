@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Script from 'next/script';
 import CallButton from '../components/CallButton';
+import PostHogProvider from '../components/PostHogProvider';
 import '@fontsource/figtree/400.css';
 import '@fontsource/figtree/600.css';
 import './globals.css';
@@ -45,8 +46,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        {children}
-        <CallButton />
+        <PostHogProvider>
+          {children}
+          <CallButton />
+        </PostHogProvider>
         {/* Trustpilot TrustBox bootstrap — loaded once; widgets render via <TrustpilotWidget /> */}
         <Script
           src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
