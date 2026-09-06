@@ -1,3 +1,3 @@
 Deploy notes
 
-Last trigger: landing page full content (2026-08-04)
+Last trigger: activate PostHog (NEXT_PUBLIC_POSTHOG_KEY added in Vercel, 2026-09-06)
