@@ -424,7 +424,7 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     /* Live's eyebrow is "Pro Client Guide"; "Overfunded Life Specialist" is the
        heading directly under the name. */
     role: 'Pro Client Guide',
-    subtitle: 'Overfunded Life Specialist',
+    subtitle: 'Retirement Income Specialist',
     name: 'Jason Herring',
     firstName: 'Jason',
     intro:

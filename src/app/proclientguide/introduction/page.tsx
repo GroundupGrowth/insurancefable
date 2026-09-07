@@ -46,7 +46,7 @@ const guides = [
   },
   {
     name: 'Jason Herring',
-    role: 'Overfunded Life Insurance & Retirement Income Specialist',
+    role: 'Retirement Income Specialist',
     href: '/proclientguide/jasonh/',
     image: '/wp-content/uploads/Jason-1.webp',
   },

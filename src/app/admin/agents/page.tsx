@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { markupToRuns, runsToMarkup } from '../../../lib/bioMarkup';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { getSupabase, type AdvisorRow } from '../../../lib/supabase';
 import { advisorDefaults } from '../../../data/advisors';
-import type { AdvisorProfile, BioParagraph, BioSection } from '../../proclientguide/ProfileLayout';
+import type { AdvisorProfile, BioSection } from '../../proclientguide/ProfileLayout';
 import { Card, Field, PageHeader, SaveButton, StatusPill, inputClass, revalidatePaths, textareaClass } from '../ui';
 import { loadRoleState } from '../../../lib/adminRoles';
 
@@ -47,24 +48,6 @@ interface EditorState {
   publications: { source: string; title: string; href: string }[];
 }
 
-/* Bio paragraphs may be rich text (run arrays with inline links). This editor is
-   plain-text only, so a rich paragraph can only be SHOWN flattened — and saving
-   the flattened string would permanently drop its links into the override row.
-   So rich sections are read-only here (see `isRichSection` below) and are
-   written back to Supabase exactly as they came in. */
-function paragraphText(paragraph: BioParagraph): string {
-  if (typeof paragraph === 'string') return paragraph;
-  return paragraph.map((run) => (typeof run === 'string' ? run : run.text)).join('');
-}
-
-/* True when a section holds structure this plain-text editor cannot round-trip:
-   inline links / emphasis in a paragraph or bullet, or an embedded image. */
-function isRichSection(section: BioSection): boolean {
-  const hasRuns = (entries: BioParagraph[] = []) =>
-    entries.some((entry) => typeof entry !== 'string');
-  return hasRuns(section.paragraphs) || hasRuns(section.bullets) || Boolean(section.image);
-}
-
 function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, bookingEmbed: string): EditorState {
   const val = <T,>(override: T | null | undefined, def: T): T =>
     override === null || override === undefined || (typeof override === 'string' && override.trim() === '')
@@ -84,9 +67,9 @@ function toEditorState(fallback: AdvisorProfile, row: AdvisorRow | null, booking
     credentials: val(row?.credentials, fallback.credentials).join('\n'),
     bioSections: bioSections.map((section) => ({
       heading: section.heading,
-      paragraphs: section.paragraphs.map(paragraphText).join('\n\n'),
-      bullets: (section.bullets ?? []).map(paragraphText).join('\n'),
-      readOnly: isRichSection(section),
+      paragraphs: section.paragraphs.map(runsToMarkup).join('\n\n'),
+      bullets: (section.bullets ?? []).map(runsToMarkup).join('\n'),
+      readOnly: false,
       source: section,
     })),
     testimonials: testimonials.map((testimonial) => ({
@@ -176,14 +159,20 @@ export default function AgentsPage() {
         bio_sections: editor.bioSections
           .filter((section) => section.heading.trim())
           .map((section) => {
-            if (section.readOnly && section.source) return section.source;
+            /* Inline links / bold round-trip through the [text](url) and
+               **text** syntax (src/lib/bioMarkup) — nothing is flattened. */
             const bullets = section.bullets
               .split('\n')
               .map((bullet) => bullet.trim())
-              .filter(Boolean);
+              .filter(Boolean)
+              .map(markupToRuns);
             return {
               heading: section.heading,
-              paragraphs: section.paragraphs.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+              paragraphs: section.paragraphs
+                .split(/\n\s*\n/)
+                .map((p) => p.trim())
+                .filter(Boolean)
+                .map(markupToRuns),
               ...(bullets.length > 0 ? { bullets } : {}),
               ...(section.source?.wide ? { wide: section.source.wide } : {}),
               ...(section.source?.image ? { image: section.source.image } : {}),
@@ -481,9 +470,7 @@ export default function AgentsPage() {
                   </div>
                   <textarea
                     rows={4}
-                    className={`${textareaClass}${
-                      section.readOnly ? ' bg-[#F5F5F5] text-[#0D1B3D]/60 cursor-not-allowed' : ''
-                    }`}
+                    className={textareaClass}
                     placeholder="Section text — separate paragraphs with a blank line."
                     value={section.paragraphs}
                     readOnly={section.readOnly}
@@ -495,7 +482,7 @@ export default function AgentsPage() {
                   />
                   {/* Bullets are a separate field so the form mirrors the page.
                       Hiding them made bullet-only sections look empty. */}
-                  {!section.readOnly && (
+                  {(
                     <div className="mt-3">
                       <span className="block text-[#0D1B3D] text-sm font-medium mb-1.5">
                         Bulleted list
@@ -517,18 +504,10 @@ export default function AgentsPage() {
                       </span>
                     </div>
                   )}
-                  {section.readOnly && (
-                    /* Why this is locked: the text above is a flattened preview.
-                       Saving it as plain text would drop the inline links (and
-                       any bulleted or image content) for good. */
-                    <p className="mt-2 text-[#0D1B3D]/60 text-xs leading-relaxed">
-                      <span className="font-medium text-[#0D1B3D]">Read-only —</span> this section
-                      contains formatting this editor can&apos;t represent (inline links, bulleted
-                      lists or an image). The text shown is a flattened preview; saving would lose
-                      that formatting permanently, so the section is saved exactly as it is. To
-                      change it, edit <code>src/data/advisors.ts</code>.
-                    </p>
-                  )}
+                  <p className="mt-2 text-[#0D1B3D]/40 text-xs leading-relaxed">
+                    Links: <code>[text](https://…)</code> · Bold: <code>**text**</code> — existing
+                    links in this section are shown that way and are kept on save.
+                  </p>
                 </div>
               ))}
             </div>
