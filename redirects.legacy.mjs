@@ -988,7 +988,30 @@ const legacyRedirects = [
   }
 ];
 
+/* Recovered from the 404 log (Vercel runtime logs, 2026-09-11): old WordPress
+   slugs that crawlers and old backlinks still request. Every target below is a
+   published slug on this site; only unambiguous renames are mapped — unknown
+   old URLs stay 404 rather than guess. */
+const recoveredRedirects = [
+  { source: '/new-york-life-insurance-review', destination: '/new-york-life-whole-life-insurance-review/', permanent: true },
+  { source: '/new-york-life-insurance-company-review', destination: '/new-york-life-whole-life-insurance-review/', permanent: true },
+  { source: '/prudential-whole-life-insurance-review', destination: '/prudential-life-insurance-review/', permanent: true },
+  { source: '/penn-mutual-life-insurance-company-review', destination: '/penn-mutual-life-insurance-review/', permanent: true },
+  { source: '/securian-minnesota-life-insurance-review', destination: '/securian-minnesota-life-insurance-company-review/', permanent: true },
+  { source: '/symetra-life-insurance-review', destination: '/symetra-life-insurance-company-review/', permanent: true },
+  { source: '/equitable-life-insurance-review', destination: '/axa-equitable-life-insurance-company-review/', permanent: true },
+  { source: '/aig-direct-review', destination: '/aig-life-insurance-reviews/', permanent: true },
+  { source: '/ilit-irrevocable-life-insurance-trust', destination: '/ilit-irrevocable-life-insurance-trusts/', permanent: true },
+  { source: '/types-of-life-insurance', destination: '/different-types-of-life-insurance-policies/', permanent: true },
+  { source: '/comparing-whole-life-insurance-to-a-roth-ira', destination: '/whole-life-vs-roth-ira/', permanent: true },
+  { source: '/infinite-banking-legacy', destination: '/infinite-banking-legacy-creation/', permanent: true },
+  { source: '/life-insurance-calculator', destination: '/life-insurance-needs-calculator/', permanent: true },
+  { source: '/about-us', destination: '/about/', permanent: true },
+  { source: '/team', destination: '/proclientguide/introduction/', permanent: true },
+];
+
 export default [
   ...legacyRedirects,
+  ...recoveredRedirects,
   { source: '/category/:path*', destination: '/blog/', permanent: true },
 ];

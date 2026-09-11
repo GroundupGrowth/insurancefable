@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   // Homepage meta description — matches the live site
   description:
     'We are here to educate, coach and partner with you, to equip you with properly designed Whole Life and Indexed Universal Life strategies that accomplish your specific goals.',
-  alternates: { canonical: '/' },
+  alternates: { canonical: '/', types: { 'application/rss+xml': '/feed/' } },
   openGraph: {
     siteName: 'Insurance & Estates',
     locale: 'en_US',

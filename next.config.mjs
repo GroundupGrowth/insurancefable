@@ -11,6 +11,12 @@ const nextConfig = {
   async redirects() {
     return legacyRedirects;
   },
+  /* Safari and many crawlers request the legacy apple-touch-icon names
+     (plain, -precomposed, -120x120…); Next only emits /apple-icon.png. Serve
+     that file for all of them instead of 404s. */
+  async rewrites() {
+    return [{ source: '/:icon(apple-touch-icon.*\\.png)', destination: '/apple-icon.png' }];
+  },
 };
 
 export default nextConfig;
