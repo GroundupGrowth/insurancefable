@@ -13,6 +13,7 @@ import {
   Star,
   Youtube,
 } from 'lucide-react';
+import Breadcrumbs from '../../components/Breadcrumbs';
 import PageShell from '../../components/PageShell';
 import CtaBand from '../../components/CtaBand';
 import { PrimaryCta } from '../../components/CtaButtons';
@@ -297,9 +298,11 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
     '@context': 'https://schema.org',
     '@type': 'Person',
     name,
-    jobTitle: role,
+    /* The specific specialty beats the generic team label for entity clarity. */
+    jobTitle: subtitle ?? role,
     description: intro,
     url: `https://www.insuranceandestates.com/proclientguide/${slug}/`,
+    mainEntityOfPage: `https://www.insuranceandestates.com/proclientguide/${slug}/`,
     ...(photo ? { image: photo.src } : {}),
     ...(email ? { email } : {}),
     ...(sameAs.length > 0 ? { sameAs } : {}),
@@ -342,6 +345,13 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
 
   return (
     <PageShell>
+      <Breadcrumbs
+        items={[
+          { name: 'About', href: '/about/' },
+          { name: 'Pro Client Guides', href: '/proclientguide/introduction/' },
+          { name, href: `/proclientguide/${slug}/` },
+        ]}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

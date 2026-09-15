@@ -3,6 +3,9 @@ import type { ReactNode } from 'react';
 import { Check } from 'lucide-react';
 import PageShell from '../../components/PageShell';
 import PageHero from '../../components/PageHero';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import { JsonLd } from '../../lib/articleSchema';
+import { SITE_URL } from '../../lib/content';
 import CtaBand from '../../components/CtaBand';
 import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
 import { getPageContent, pageMetadata } from '../../lib/content';
@@ -51,6 +54,29 @@ export default async function AboutPage() {
   const content = await getPageContent('about');
   return (
     <PageShell>
+      {/* Entity graph for E-E-A-T: the About page names the organization and
+          its founders (Steve Gibbs and Jason Kenyon — co-founders per their
+          bios), each pointing at their profile so the Person and Organization
+          entities link both ways. */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          name: content.heroTitle,
+          url: `${SITE_URL}/about/`,
+          mainEntity: {
+            '@type': 'Organization',
+            name: 'Insurance & Estates',
+            legalName: 'Insurance and Estate Strategies LLC',
+            url: `${SITE_URL}/`,
+            founder: [
+              { '@type': 'Person', name: 'Steve Gibbs, JD, AEP®', url: `${SITE_URL}/proclientguide/steve/` },
+              { '@type': 'Person', name: 'Jason Kenyon, Esq.', url: `${SITE_URL}/proclientguide/jasonk/` },
+            ],
+          },
+        }}
+      />
+      <Breadcrumbs items={[{ name: 'About', href: '/about/' }]} />
       <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro} />
 
       <section className="px-6 pb-24">

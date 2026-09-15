@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import PageHero from '../../../components/PageHero';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import { JsonLd } from '../../../lib/articleSchema';
+import { SITE_URL } from '../../../lib/content';
 import LeadMagnetSection from '../../../components/LeadMagnetSection';
 import { PrimaryCta, SecondaryCta } from '../../../components/CtaButtons';
 import { getPageContent, pageMetadata } from '../../../lib/content';
@@ -136,6 +139,26 @@ export default async function ProClientGuideIntroductionPage() {
   const content = await getPageContent('proclientguide/introduction');
   return (
     <PageShell>
+      {/* The team as an ItemList of Person entities (each profile carries the
+          full Person schema) so the hub → person relationship is machine-readable. */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Insurance & Estates team',
+          itemListElement: [...guides, ...leadership].map((member, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            item: { '@type': 'Person', name: member.name, jobTitle: member.role, url: `${SITE_URL}${member.href}` },
+          })),
+        }}
+      />
+      <Breadcrumbs
+        items={[
+          { name: 'About', href: '/about/' },
+          { name: 'Pro Client Guides', href: '/proclientguide/introduction/' },
+        ]}
+      />
       <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
         <PrimaryCta href="/connect-with-our-experts/" label="Book a Fit Call" />
         <SecondaryCta href="/start-your-journey/" label="Start your Journey" />
@@ -144,6 +167,8 @@ export default async function ProClientGuideIntroductionPage() {
       {/* How it works */}
       <section className="px-6 pb-24">
         <div className="max-w-[88rem] mx-auto">
+          {/* Outline hygiene: the step cards are H3s, so they need an H2 parent. */}
+          <h2 className="sr-only">How working with a Pro Client Guide works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {steps.map((step) => (
               <div key={step.number} className="bg-white rounded-2xl p-7 border border-black/5">
@@ -198,6 +223,7 @@ export default async function ProClientGuideIntroductionPage() {
 
       {/* Proof + contact */}
       <section className="px-6 pb-24">
+        <h2 className="sr-only">Next steps</h2>
         <div className="max-w-[88rem] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
           <a
             href="/testimonials/"

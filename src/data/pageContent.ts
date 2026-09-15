@@ -220,13 +220,13 @@ export const pageDefaults: Record<string, PageDefaults> = {
   },
   'proclientguide/introduction': {
     slug: 'proclientguide/introduction',
-    label: 'Pro Client Guide Introduction',
+    label: 'Pro Client Guides',
     path: '/proclientguide/introduction/',
-    title: 'Pro Client Guide Introduction',
+    title: 'Pro Client Guides: Meet the I&E Team',
     description:
       "Meet the I&E Pro Client Guides: strategic advisors who've been through this themselves. No pressure, just someone who knows the system and walks you through the exit.",
-    eyebrow: 'Our Pro Team',
-    heroTitle: 'You Found the Exit. Here’s Who Walks You Through It.',
+    eyebrow: 'You found the exit. Here’s who walks you through it.',
+    heroTitle: 'Meet the I&E Pro Client Guides',
     heroIntro:
       "A Pro Client Guide is a strategic advisor who's been through this themselves, someone who designs and uses these policies, not just sells them. No pressure, just someone who knows the system.",
   },

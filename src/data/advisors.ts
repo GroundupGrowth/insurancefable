@@ -664,6 +664,8 @@ export const advisorDefaults: Record<string, AdvisorProfile> = {
     role: 'Pro Client Guide',
     name: 'Denise Boisvert',
     firstName: 'Denise',
+    // Same specialty line as her Pro Client Guide card (page title + hero).
+    subtitle: 'IBC, Debt Elimination & College Funding Strategist',
     /* Verbatim from live's hero paragraph. Note live contradicts itself on the
        year count: the hero says "15 years", the bio body below says "22 years".
        Both are reproduced as live has them; flagged for the client to resolve. */

@@ -55,9 +55,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white/40 text-xs uppercase tracking-wide mb-4">
+            <p className="text-white/40 text-xs uppercase tracking-wide mb-4">
               Free Resources
-            </h3>
+            </p>
             <ul className="space-y-3">
               {freeResources.map((link) => (
                 <li key={link.label}>
@@ -73,9 +73,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white/40 text-xs uppercase tracking-wide mb-4">
+            <p className="text-white/40 text-xs uppercase tracking-wide mb-4">
               About Us
-            </h3>
+            </p>
             <ul className="space-y-3">
               {aboutUs.map((link) => (
                 <li key={link.label}>

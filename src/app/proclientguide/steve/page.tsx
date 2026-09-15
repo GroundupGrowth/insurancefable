@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
 import ProfileLayout from '../ProfileLayout';
+import { advisorMetadata } from '../../../lib/advisorMetadata';
 import { getAdvisor } from '../../../lib/content';
 
-export const metadata: Metadata = {
-  title: 'Steve Gibbs, Esq., Founder & CEO',
-  description:
-    'Steven Gibbs, JD, AEP® is Co-Founder and Chief Strategic Partnerships Officer of I&E — estate planning attorney turned strategist for wealth transfer and life insurance design.',
-  alternates: { canonical: '/proclientguide/steve/' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return advisorMetadata('steve', 'Steven Gibbs, JD, AEP® is Co-Founder and Chief Strategic Partnerships Officer of I&E — estate planning attorney turned strategist for wealth transfer and life insurance design.');
+}
 
 export const revalidate = 300;
 
