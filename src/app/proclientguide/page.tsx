@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
-import PageShell from '../../../components/PageShell';
-import PageHero from '../../../components/PageHero';
-import Breadcrumbs from '../../../components/Breadcrumbs';
-import { JsonLd } from '../../../lib/articleSchema';
-import { SITE_URL } from '../../../lib/content';
-import LeadMagnetSection from '../../../components/LeadMagnetSection';
-import { PrimaryCta, SecondaryCta } from '../../../components/CtaButtons';
-import { getPageContent, pageMetadata } from '../../../lib/content';
+import PageShell from '../../components/PageShell';
+import PageHero from '../../components/PageHero';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import { JsonLd } from '../../lib/articleSchema';
+import { SITE_URL } from '../../lib/content';
+import LeadMagnetSection from '../../components/LeadMagnetSection';
+import { PrimaryCta, SecondaryCta } from '../../components/CtaButtons';
+import { getPageContent, pageMetadata } from '../../lib/content';
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await getPageContent('proclientguide/introduction');
+  const content = await getPageContent('proclientguide');
   return pageMetadata(content);
 }
 
@@ -136,7 +136,7 @@ function TeamCard({
 }
 
 export default async function ProClientGuideIntroductionPage() {
-  const content = await getPageContent('proclientguide/introduction');
+  const content = await getPageContent('proclientguide');
   return (
     <PageShell>
       {/* The team as an ItemList of Person entities (each profile carries the
@@ -156,7 +156,7 @@ export default async function ProClientGuideIntroductionPage() {
       <Breadcrumbs
         items={[
           { name: 'About', href: '/about/' },
-          { name: 'Pro Client Guides', href: '/proclientguide/introduction/' },
+          { name: 'Pro Client Guides', href: '/proclientguide/' },
         ]}
       />
       <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>

@@ -67,7 +67,7 @@ export default function ApplicationPage() {
           <div className="bg-white rounded-3xl border border-black/5 p-8 md:p-12">
             <p className={`${paragraph} max-w-[75ch]`}>
               Your{' '}
-              <a href="/proclientguide/introduction/" className={inlineLink}>
+              <a href="/proclientguide/" className={inlineLink}>
                 Pro Client Guide
               </a>{' '}
               can maximize your application process by leveraging their expertise to get you the

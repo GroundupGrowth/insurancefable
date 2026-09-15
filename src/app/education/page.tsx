@@ -66,7 +66,7 @@ export default function EducationPage() {
             />
             <figcaption className="mt-6 text-center text-[#0D1B3D]/60 text-sm md:text-base leading-relaxed">
               The I&amp;E difference begins with Education and is the mission of your appointed{' '}
-              <a href="/proclientguide/introduction/" className={inlineLink}>
+              <a href="/proclientguide/" className={inlineLink}>
                 Pro Client Guide
               </a>
               .

@@ -35,7 +35,7 @@ function ConnectCta() {
   return (
     <div className="text-center">
       <a
-        href="/proclientguide/introduction/"
+        href="/proclientguide/"
         className="inline-flex items-center gap-3 bg-[#0D1B3D] text-white font-medium pl-8 pr-2 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
       >
         Connect with An Expert Today!

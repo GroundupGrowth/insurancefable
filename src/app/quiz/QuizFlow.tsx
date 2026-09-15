@@ -443,7 +443,7 @@ export default function QuizFlow() {
               <p className="mt-8 text-sm text-[#0D1B3D]/60 inline-flex items-center gap-1.5">
                 <BookOpen className="w-4 h-4" />
                 <a
-                  href="/proclientguide/introduction/"
+                  href="/proclientguide/"
                   className="underline underline-offset-2 hover:text-[#0D1B3D] transition-colors duration-200"
                 >
                   Or connect with an expert for a free fit call

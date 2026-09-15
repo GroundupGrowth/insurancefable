@@ -218,7 +218,7 @@ export default async function AboutPage() {
             <div className="space-y-4 text-[#0D1B3D]/70 text-base leading-relaxed">
               <p>
                 We don&rsquo;t do high-pressure sales calls. Our{' '}
-                <a href="/proclientguide/introduction/" className={linkClass}>
+                <a href="/proclientguide/" className={linkClass}>
                   Pro Client Guides
                 </a>{' '}
                 are strategic advisors who walk you through the process at your pace. You explore
@@ -250,14 +250,14 @@ export default async function AboutPage() {
               </p>
               <p>
                 Ready to take the next step?{' '}
-                <a href="/proclientguide/introduction/" className={linkClass}>
+                <a href="/proclientguide/" className={linkClass}>
                   Meet our Pro Client Guides
                 </a>{' '}
                 and schedule a conversation on your terms.
               </p>
             </div>
             <div className="flex gap-4 flex-wrap mt-8">
-              <PrimaryCta href="/proclientguide/introduction/" label="Meet our Pro Client Guides" />
+              <PrimaryCta href="/proclientguide/" label="Meet our Pro Client Guides" />
               <SecondaryCta href="/ebooks-and-guides/" label="Free Resources" />
             </div>
           </div>

@@ -678,12 +678,12 @@ const legacyRedirects = [
   },
   {
     "source": "/pro-client-guide",
-    "destination": "/proclientguide/introduction/",
+    "destination": "/proclientguide/",
     "permanent": true
   },
   {
-    "source": "/proclientguide",
-    "destination": "/proclientguide/introduction/",
+    "source": "/proclientguide/introduction",
+    "destination": "/proclientguide/",
     "permanent": true
   },
   {
@@ -1007,7 +1007,7 @@ const recoveredRedirects = [
   { source: '/infinite-banking-legacy', destination: '/infinite-banking-legacy-creation/', permanent: true },
   { source: '/life-insurance-calculator', destination: '/life-insurance-needs-calculator/', permanent: true },
   { source: '/about-us', destination: '/about/', permanent: true },
-  { source: '/team', destination: '/proclientguide/introduction/', permanent: true },
+  { source: '/team', destination: '/proclientguide/', permanent: true },
 ];
 
 export default [

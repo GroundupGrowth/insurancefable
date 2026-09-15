@@ -43,7 +43,7 @@ export default function MaintenancePage() {
           </p>
           <p>
             Your expert{' '}
-            <a href="/proclientguide/introduction/" className={linkClass}>
+            <a href="/proclientguide/" className={linkClass}>
               Pro Client Guide
             </a>{' '}
             is available to conduct regular status checkups concerning all aspects of your

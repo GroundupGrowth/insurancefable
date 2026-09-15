@@ -214,7 +214,7 @@ export default function AgentsPage() {
         });
         if (embedError) throw new Error(embedError.message);
       }
-      await revalidatePaths([path, '/proclientguide/introduction/']);
+      await revalidatePaths([path, '/proclientguide/']);
       await load();
     };
 

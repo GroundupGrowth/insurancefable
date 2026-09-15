@@ -56,7 +56,7 @@ export default function EvaluationPage() {
             <div className="space-y-4 max-w-[75ch]">
               <p className={paragraph}>
                 Your expert{' '}
-                <a href="/proclientguide/introduction/" className={inlineLink}>
+                <a href="/proclientguide/" className={inlineLink}>
                   Pro Client Guide
                 </a>{' '}
                 will help you get started at creating an ideal plan of action to achieve your

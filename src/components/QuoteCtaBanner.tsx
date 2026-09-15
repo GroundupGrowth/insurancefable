@@ -1,6 +1,6 @@
 /* Coral CTA pill from the live intro pages ("bricks-button lg circle"):
    centered, fully rounded, white 15px text on the coral accent.
-   NOTE: the live button links to /proclientguide/introduction/ — pass that via
+   NOTE: the live button links to /proclientguide/ — pass that via
    `href` when cloning a page verbatim; default follows the build spec. */
 
 export default function QuoteCtaBanner({

@@ -68,7 +68,7 @@ export default function QuotationPage() {
           <div className="bg-white rounded-3xl border border-black/5 p-8 md:p-12">
             <p className={`${paragraph} max-w-[75ch]`}>
               Your expert{' '}
-              <a href="/proclientguide/introduction/" className={inlineLink}>
+              <a href="/proclientguide/" className={inlineLink}>
                 Pro Client Guide
               </a>{' '}
               will help you understand the context around obtaining quotes, such as how rates are

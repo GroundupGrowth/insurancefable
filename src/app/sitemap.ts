@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/proclientguide/jasonh/',
     '/proclientguide/jasonk/',
     '/proclientguide/denise/',
+    '/proclientguide/tom/',
   ];
   const [wikiTerms, posts] = await Promise.all([getWikiTerms(), getAllPosts()]);
   return [

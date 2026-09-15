@@ -20,7 +20,7 @@ const navGroups: NavGroup[] = [
     items: [
       { label: 'About I&E', href: '/about/' },
       { label: 'Contact Us', href: '/contact/' },
-      { label: 'Our Pro Team', href: '/proclientguide/introduction/' },
+      { label: 'Our Pro Team', href: '/proclientguide/' },
       { label: 'Testimonials', href: '/testimonials/' },
     ],
   },

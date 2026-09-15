@@ -277,7 +277,7 @@ export default function WholeLifeInsuranceCalculatorPage() {
             💥Connect With I&amp;E! Schedule a Conversation with one of our Pro Client Guides to
             Discuss Strategies for Your Family, Your Investments, or Your Business, using Your
             Own numbers-{' '}
-            <a href="/proclientguide/introduction/" className={linkClass}>
+            <a href="/proclientguide/" className={linkClass}>
               Pro Client Guide Introduction
             </a>
           </p>

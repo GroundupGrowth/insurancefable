@@ -20,7 +20,7 @@ const ALIAS: Record<string, string> = { 'barry-brooksby': 'barry' };
 const KNOWN = new Set(AUTHOR_META.map((author) => author.slug));
 
 /* Most-linked real advisor in the body wins; ties break by AUTHOR_META order.
-   The team-hub link (/proclientguide/introduction/) and unknown slugs are
+   The team-hub link (/proclientguide/) and unknown slugs are
    ignored, so a post that only links the hub falls back to the house author. */
 export function detectAuthorSlug(bodyHtml: string): string {
   const counts: Record<string, number> = {};

@@ -58,7 +58,7 @@ alter table public.advisors add column if not exists publications jsonb;
 -- Named site_pages because the Payload CMS in the same project owns `pages`.
 -- ---------------------------------------------------------------------------
 create table if not exists public.site_pages (
-  slug text primary key,      -- e.g. 'life-insurance', 'proclientguide/introduction'
+  slug text primary key,      -- e.g. 'life-insurance', 'proclientguide'
   title text,                 -- SERP title (without the site suffix)
   description text,           -- meta description
   eyebrow text,

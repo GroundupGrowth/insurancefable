@@ -1,5 +1,5 @@
 export interface PageDefaults {
-  slug: string;        // e.g. 'life-insurance' or 'proclientguide/introduction'
+  slug: string;        // e.g. 'life-insurance' or 'proclientguide'
   label: string;       // human name for the admin UI, e.g. 'Life Insurance'
   path: string;        // live route, e.g. '/life-insurance/'
   title: string;       // current metadata title (WITHOUT the site suffix)
@@ -218,10 +218,10 @@ export const pageDefaults: Record<string, PageDefaults> = {
       'InsuranceAndEstates.com strives to ensure its services are accessible to people with disabilities. Read our accessibility statement and how to reach us.',
     heroTitle: 'Accessibility',
   },
-  'proclientguide/introduction': {
-    slug: 'proclientguide/introduction',
+  'proclientguide': {
+    slug: 'proclientguide',
     label: 'Pro Client Guides',
-    path: '/proclientguide/introduction/',
+    path: '/proclientguide/',
     title: 'Pro Client Guides: Meet the I&E Team',
     description:
       "Meet the I&E Pro Client Guides: strategic advisors who've been through this themselves. No pressure, just someone who knows the system and walks you through the exit.",

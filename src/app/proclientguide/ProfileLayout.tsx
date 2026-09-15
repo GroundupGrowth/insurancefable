@@ -348,7 +348,7 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
       <Breadcrumbs
         items={[
           { name: 'About', href: '/about/' },
-          { name: 'Pro Client Guides', href: '/proclientguide/introduction/' },
+          { name: 'Pro Client Guides', href: '/proclientguide/' },
           { name, href: `/proclientguide/${slug}/` },
         ]}
       />
@@ -824,7 +824,7 @@ export default function ProfileLayout({ profile }: { profile: AdvisorProfile }) 
       <section className="px-6 pb-16">
         <div className="max-w-[88rem] mx-auto">
           <a
-            href="/proclientguide/introduction/"
+            href="/proclientguide/"
             className="inline-flex items-center gap-2 text-[#0D1B3D]/60 hover:text-[#0D1B3D] font-medium text-sm transition-colors duration-200"
           >
             <ArrowLeft className="w-4 h-4" />

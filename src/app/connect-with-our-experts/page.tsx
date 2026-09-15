@@ -21,7 +21,7 @@ export default async function ConnectWithOurExpertsPage() {
     <PageShell>
       <PageHero eyebrow={content.eyebrow} title={content.heroTitle} intro={content.heroIntro}>
         <a
-          href="/proclientguide/introduction/"
+          href="/proclientguide/"
           className="group inline-flex items-center gap-2 bg-white text-[#0D1B3D] font-medium px-7 py-2.5 rounded-full border border-black/5 hover:bg-white/70 transition-colors duration-200"
         >
           Meet All Our Experts
