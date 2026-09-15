@@ -8,7 +8,9 @@ import { getAdvisor } from './content';
 export async function advisorMetadata(slug: string, description?: string): Promise<Metadata> {
   const profile = await getAdvisor(slug);
   return {
-    title: `${profile.name}, ${profile.subtitle ?? profile.role}`,
+    /* `absolute` skips the 48-char site template — with it the profile
+       titles ran to ~115 chars and Google truncated the specialty away. */
+    title: { absolute: `${profile.name}, ${profile.subtitle ?? profile.role} | Insurance & Estates` },
     description: description ?? profile.intro,
     alternates: { canonical: `/proclientguide/${slug}/` },
   };
