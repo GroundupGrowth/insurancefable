@@ -10,9 +10,9 @@ import { getChannelStats } from '../lib/youtube';
    is at /videos/. */
 
 const CHANNEL_ROW = [
-  { id: 'HEK3JJMN3CQ', title: 'What is Infinite Banking? A Short Whiteboard Overview' },
-  { id: 'prf_IMFH-NU', title: '4 Ways to Escape Your 401k Without Penalties' },
-  { id: 'w9GannOuleg', title: 'Why Dave Ramsey is Wrong About Whole Life and Infinite Banking' },
+  { id: 'mBMpuJPZ-YQ', title: 'Be Your Own Banker: 6 Steps', duration: '3:27' },
+  { id: '8N7OVKQixtM', title: 'Best Dividend Whole Life', duration: '17:16' },
+  { id: 's-LAxdctIsI', title: 'How To Be Your Own Bank', duration: 'Over an hour' },
 ];
 
 export default async function VideoSection() {
@@ -44,6 +44,7 @@ export default async function VideoSection() {
                 <p className="text-[#0D1B3D] text-sm font-medium leading-snug px-1">
                   {video.title}
                 </p>
+                <p className="text-[#0D1B3D]/60 text-sm px-1">{video.duration}</p>
               </div>
             ))}
           </div>
