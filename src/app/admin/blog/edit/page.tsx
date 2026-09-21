@@ -88,6 +88,10 @@ function EditPage() {
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
   const [publishedAt, setPublishedAt] = useState('');
+  /* Typo fixes must not claim the article was revised: Google devalues a
+     dateModified that moves without the content moving. See 'Article dates'
+     in BUILD-CONVENTIONS.md. */
+  const [minorEdit, setMinorEdit] = useState(false);
   const [initialBody, setInitialBody] = useState('');
   const bodyDirtyRef = useRef(false);
   const editorRef = useRef<RichEditorHandle | null>(null);
@@ -293,7 +297,11 @@ function EditPage() {
           seo_meta_description: metaDescription.trim() || null,
           _status: nextStatus,
           published_at: publishedIso,
-          legacy_modified_at: now,
+          /* legacy_modified_at is the article's public "Updated" date — the
+             Article schema, the sitemap lastmod and the visible dateline all
+             read it. A minor edit leaves it alone; updated_at still moves so
+             the admin list shows the real last touch. */
+          ...(minorEdit && !isNew ? {} : { legacy_modified_at: now }),
           updated_at: now,
         };
 
@@ -563,9 +571,24 @@ function EditPage() {
               className={inputClass}
             />
             <p className="text-[#0D1B3D]/40 text-xs mt-1.5">
-              Empty = set automatically when published. The &ldquo;Updated&rdquo; date refreshes on
-              every save.
+              Empty = set automatically when published.
             </p>
+            <label className="flex items-start gap-2 mt-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={minorEdit}
+                onChange={(event) => setMinorEdit(event.target.checked)}
+                className="mt-0.5 shrink-0"
+              />
+              <span className="text-[#0D1B3D]/60 text-xs leading-snug">
+                Minor edit &mdash; keep the current &ldquo;Updated&rdquo; date
+                <span className="block text-[#0D1B3D]/40 mt-0.5">
+                  Every save normally refreshes the &ldquo;Updated&rdquo; date shown on the article
+                  and sent to Google. Tick this for typos and formatting so the article does not
+                  claim a revision it did not get.
+                </span>
+              </span>
+            </label>
           </SidePanel>
 
           <SidePanel title="Category">
