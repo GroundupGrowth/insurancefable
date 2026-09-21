@@ -121,5 +121,6 @@ Console. Nothing here forces Google's hand; it raises the odds.
 3. `node scripts/audit-images.mjs` — 0 missing, 0 hotlinks.
 4. `node scripts/audit-post-dates.mjs` — 0 drifted meta date claims, 0 posts
    without a modified date. Only needed when blog content or metadata changed.
-5. Report: files changed, pages covered, anything skipped or approximated,
-   and the results of 1–4.
+5. `npx tsx scripts/test-site-iso.ts` — only if you touched `src/lib/dates.ts`.
+6. Report: files changed, pages covered, anything skipped or approximated,
+   and the results of 1–5.

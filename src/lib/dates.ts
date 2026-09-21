@@ -31,7 +31,16 @@ export const formatPostDateShort = (iso: string) =>
   });
 
 /* Offset of SITE_TIMEZONE from UTC, in minutes, at the given instant
-   (handles PST/PDT). */
+   (handles PST/PDT).
+
+   Rounded, and that rounding is load-bearing: formatToParts only resolves to
+   whole seconds, so an instant carrying milliseconds — which every timestamp
+   written by /admin/blog does, via new Date().toISOString() — produced a
+   fractional offset like -420.0074833. toSiteIso then emitted
+   "2026-08-31T17:46:07-07:0.007483333333311748", an invalid ISO 8601 string,
+   into dateModified and the visible <time dateTime>. Google discards a date it
+   cannot parse, so the posts that had genuinely been updated were the ones
+   whose freshness signal was silently void. */
 function siteOffsetMinutes(date: Date): number {
   const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: SITE_TIMEZONE,
@@ -57,7 +66,7 @@ function siteOffsetMinutes(date: Date): number {
     Number(parts.minute),
     Number(parts.second),
   );
-  return (asUtc - date.getTime()) / 60000;
+  return Math.round((asUtc - date.getTime()) / 60000);
 }
 
 /* Same instant, expressed with the site's UTC offset (e.g.
