@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import type { BlogPostSummary } from '../lib/blog';
-import { formatPostDateShort as formatDate } from '../lib/dates';
+import { formatPostDateShort as formatDate, toSiteIso } from '../lib/dates';
 
 /* Article card used on the /blog/ index and in the related-posts section
    under each article.
@@ -43,7 +43,13 @@ export default function BlogPostCard({ post }: { post: BlogPostSummary }) {
           <p className="text-[#0D1B3D]/60 text-sm leading-relaxed line-clamp-3">{post.excerpt}</p>
         )}
         <span className="mt-auto pt-5 flex items-center justify-between text-sm">
-          <span className="text-[#0D1B3D]/40">{date ? `${label} ${formatDate(date)}` : ''}</span>
+          <span className="text-[#0D1B3D]/40">
+            {date && (
+              <>
+                {label} <time dateTime={toSiteIso(date)}>{formatDate(date)}</time>
+              </>
+            )}
+          </span>
           <span className="inline-flex items-center gap-2 font-medium text-[#0D1B3D]/50 group-hover:text-[#0D1B3D] transition-colors duration-200">
             Read
             <ArrowRight className="w-4 h-4" />

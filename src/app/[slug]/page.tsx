@@ -7,6 +7,7 @@ import LeadMagnetSection from '../../components/LeadMagnetSection';
 import BlogPostCard from '../../components/BlogPostCard';
 import AuthorByline from '../../components/AuthorByline';
 import AuthorBioCard from '../../components/AuthorBioCard';
+import PostDateline from '../../components/PostDateline';
 import TrustDisclosure from '../../components/TrustDisclosure';
 import CommentsSection from '../../components/CommentsSection';
 import { getComments, getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
@@ -32,7 +33,7 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-import { formatPostDate as formatDate, toSiteIso } from '../../lib/dates';
+import { toSiteIso } from '../../lib/dates';
 
 export async function generateMetadata({
   params,
@@ -165,12 +166,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               readingMinutes={post.readingMinutes}
             />
           ) : (
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#0D1B3D]/50">
-              {post.publishedAt && <span>Published {formatDate(post.publishedAt)}</span>}
-              {post.publishedAt && post.modifiedAt && <span aria-hidden="true">·</span>}
-              {post.modifiedAt && <span>Updated {formatDate(post.modifiedAt)}</span>}
-              <span aria-hidden="true">·</span>
-              <span>{post.readingMinutes} min read</span>
+            <div>
+              <PostDateline
+                publishedAt={post.publishedAt}
+                modifiedAt={post.modifiedAt}
+                readingMinutes={post.readingMinutes}
+                variant="standalone"
+              />
             </div>
           )}
           <TrustDisclosure reviewer={authorship.reviewer} />

@@ -1,5 +1,5 @@
 import type { Author } from '../lib/authors';
-import { formatPostDate as formatDate } from '../lib/dates';
+import PostDateline from './PostDateline';
 
 /* Author byline at the top of a blog article: headshot, "Written by <name>",
    credentials, and a meta line with dates, reading time, and the reviewer
@@ -53,17 +53,11 @@ export default function AuthorByline({
           </a>
         </p>
         <p className="text-[#0D1B3D]/50 text-xs mt-0.5">{author.credential}</p>
-        <p className="text-[#0D1B3D]/40 text-xs mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-          {publishedAt && <span>Published {formatDate(publishedAt)}</span>}
-          {modifiedAt && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>Updated {formatDate(modifiedAt)}</span>
-            </>
-          )}
-          <span aria-hidden="true">·</span>
-          <span>{readingMinutes} min read</span>
-        </p>
+        <PostDateline
+          publishedAt={publishedAt}
+          modifiedAt={modifiedAt}
+          readingMinutes={readingMinutes}
+        />
       </div>
     </div>
   );

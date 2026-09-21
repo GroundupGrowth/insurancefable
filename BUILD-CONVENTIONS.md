@@ -77,6 +77,34 @@ page-local variant.
 
 Do not add npm dependencies. Icons are lucide-react.
 
+## Article dates (freshness)
+
+Google decides for itself which date goes in the SERP snippet. It only shows
+the modified date when the visible page corroborates the `dateModified` in our
+Article schema, and it will happily keep stamping a 2025 publish date on a post
+revised in 2026. So every article date obeys three rules:
+
+1. **The updated date is the prominent one and comes first.** The original
+   publish date is demoted to a smaller secondary line ("Originally published
+   ..."). Never render them as two equal-weight dates with published first —
+   that is exactly what made Google show Feb 2025 on an April 2026 revision.
+2. **Render dates only through `PostDateline`** (`src/components/PostDateline.tsx`),
+   used by `AuthorByline` and the author-less fallback. It emits
+   `<time dateTime>` whose value is the same `toSiteIso()` string the JSON-LD
+   carries, so the visible date and the schema date are byte-identical. A bare
+   `formatPostDate()` in a byline reintroduces the bug.
+3. **Never hardcode an update month in a meta title or description.** "Updated
+   January 2026" in a description drifts the moment the post is edited, and a
+   document making two different freshness claims gets neither believed.
+
+`legacy_modified_at` is the single column the whole chain reads: the Article
+schema, the sitemap `lastmod`, and the visible dateline. Saving a post in
+`/admin/blog` sets it. A content change applied any other way (direct SQL, an
+import script) will not, and the article silently goes stale in search.
+
+After a substantial rewrite, request re-indexing for that URL in Search
+Console. Nothing here forces Google's hand; it raises the odds.
+
 ## Things that are NOT part of page work
 
 - `src/app/[slug]/page.tsx` — the blog post template. Never touch it.
@@ -91,5 +119,7 @@ Do not add npm dependencies. Icons are lucide-react.
 1. `npx tsc --noEmit` — must pass.
 2. `npx next build` — must pass.
 3. `node scripts/audit-images.mjs` — 0 missing, 0 hotlinks.
-4. Report: files changed, pages covered, anything skipped or approximated,
-   and the results of 1–3.
+4. `node scripts/audit-post-dates.mjs` — 0 drifted meta date claims, 0 posts
+   without a modified date. Only needed when blog content or metadata changed.
+5. Report: files changed, pages covered, anything skipped or approximated,
+   and the results of 1–4.
