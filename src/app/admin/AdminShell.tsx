@@ -7,12 +7,14 @@ import {
   BarChart3,
   BookOpen,
   Code2,
+  Braces,
   ExternalLink,
   FileText,
   Inbox,
   KeyRound,
   LayoutDashboard,
   Library,
+  Link2,
   Lock,
   LogOut,
   Menu,
@@ -42,6 +44,8 @@ const NAV = [
   { href: '/admin/analytics/', label: 'Analytics', icon: LineChart },
   { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
   { href: '/admin/wiki/', label: 'Wiki', icon: Library },
+  { href: '/admin/schema/', label: 'Schema', icon: Braces },
+  { href: '/admin/backlinks/', label: 'Backlinks', icon: Link2 },
   { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },
   { href: '/admin/embeds/', label: 'Embeds', icon: Code2 },
   { href: '/admin/users/', label: 'Users', icon: ShieldCheck },
@@ -286,7 +290,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         {/* Bookings and Leads are wide data tables — give them the full viewport. */}
         <div
           className={
-            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads') || pathname.startsWith('/admin/analytics')
+            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads') || pathname.startsWith('/admin/analytics') || pathname.startsWith('/admin/backlinks')
               ? 'max-w-none'
               : 'max-w-5xl mx-auto'
           }

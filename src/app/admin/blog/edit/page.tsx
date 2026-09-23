@@ -17,6 +17,7 @@ import { AUTHOR_META } from '../../../../data/authors';
 import { postThumbnails } from '../../../../data/postThumbnails';
 import { inputClass, revalidatePaths, textareaClass } from '../../ui';
 import RichEditor, { type LinkTarget, type RichEditorHandle } from './RichEditor';
+import SchemaPanel from './SchemaPanel';
 import { pageDefaults } from '../../../../data/pageContent';
 import { wikiTermDefaults } from '../../../../data/wiki';
 
@@ -362,6 +363,22 @@ function EditPage() {
             supabase.from('site_post_authors').delete().eq('post_slug', originalSlug),
             supabase.from('site_post_images').delete().eq('post_slug', originalSlug),
           ]);
+          /* Schema blocks list articles by slug too: carry them over. A
+             missing table (SQL not run yet) simply returns no rows. */
+          const { data: schemaRows } = await supabase
+            .from('site_schema_blocks')
+            .select('id, post_slugs')
+            .contains('post_slugs', [originalSlug]);
+          await Promise.all(
+            (schemaRows ?? []).map((row: { id: string; post_slugs: string[] }) =>
+              supabase
+                .from('site_schema_blocks')
+                .update({
+                  post_slugs: row.post_slugs.map((s) => (s === originalSlug ? cleanSlug : s)),
+                })
+                .eq('id', row.id)
+            )
+          );
         }
 
         // Sidebar eBook: explicit choice pins a synthetic ebook-<slug> tag rule
@@ -538,6 +555,7 @@ function EditPage() {
             uploadImage={uploadImage}
             linkTargets={linkTargets}
           />
+          <SchemaPanel postSlug={isNew ? null : originalSlug} bodyHtml={initialBody} />
         </div>
 
         {/* Sidebar */}

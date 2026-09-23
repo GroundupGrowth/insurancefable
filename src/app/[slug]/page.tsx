@@ -10,7 +10,15 @@ import AuthorBioCard from '../../components/AuthorBioCard';
 import PostDateline from '../../components/PostDateline';
 import TrustDisclosure from '../../components/TrustDisclosure';
 import CommentsSection from '../../components/CommentsSection';
-import { getComments, getOfferForPost, getPost, getPublishedSlugs, getRelatedPosts } from '../../lib/blog';
+import {
+  getComments,
+  getOfferForPost,
+  getPost,
+  getPublishedSlugs,
+  getRelatedPosts,
+  getSchemaBlocksForPost,
+} from '../../lib/blog';
+import { schemaTypes, toJsonLdEntities } from '../../lib/schemaBlocks';
 import { getPostAuthorship } from '../../lib/authors';
 import { SITE_URL } from '../../lib/content';
 import { getWikiTerms } from '../../lib/wiki';
@@ -72,12 +80,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const [offer, wikiTerms, relatedPosts, authorship, comments] = await Promise.all([
+  const [offer, wikiTerms, relatedPosts, authorship, comments, schemaBlocks] = await Promise.all([
     getOfferForPost(post.slug, post.category?.slug ?? null),
     getWikiTerms(),
     getRelatedPosts(post.slug, post.category?.slug ?? null),
     getPostAuthorship(post.slug, post.bodyHtml),
     getComments(post.slug),
+    getSchemaBlocksForPost(post.slug),
   ]);
   /* Legacy WordPress lead-magnet blocks (invisible white-on-white copy around
      a dead Gravity Form) become working offer cards — see lib/legacyOffers.
@@ -93,7 +102,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   /* Structured data regenerated from the body (the old site's hand-added
      FAQ/video schema was stripped by the import — see lib/articleSchema) */
-  const faqLd = faqJsonLd(post.bodyHtml);
+  /* Custom blocks from /admin/schema win: a hand-made FAQ replaces the
+     auto-detected one instead of publishing two FAQPage blocks. */
+  const customLds = schemaBlocks.flatMap(toJsonLdEntities);
+  const hasCustomFaq = schemaBlocks.some((block) => schemaTypes(block).includes('FAQPage'));
+  const faqLd = hasCustomFaq ? null : faqJsonLd(post.bodyHtml);
   const videoLds = await videoJsonLds(post);
   const breadcrumbLd = breadcrumbJsonLd(post);
 
@@ -132,6 +145,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {faqLd && <JsonLd data={faqLd} />}
       {videoLds.map((videoLd, i) => (
         <JsonLd key={i} data={videoLd} />
+      ))}
+      {customLds.map((customLd, i) => (
+        <JsonLd key={`custom-${i}`} data={customLd} />
       ))}
 
       {/* Article hero: category, title, byline row (freshness = E-E-A-T).

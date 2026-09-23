@@ -143,6 +143,22 @@ export async function getOfferForPost(
   return { tag, ebook };
 }
 
+/** Custom schema blocks for an article: its own plus the "all articles" ones.
+    The table may not exist until supabase/schema-and-backlinks.sql has run —
+    any error just means no custom schema. */
+export async function getSchemaBlocksForPost(slug: string): Promise<unknown[]> {
+  const supabase = serverClient();
+  if (!supabase || !/^[a-z0-9-]+$/.test(slug)) return [];
+  const { data, error } = await supabase
+    .from('site_schema_blocks')
+    .select('schema')
+    .eq('enabled', true)
+    .or(`applies_to.eq.all,post_slugs.cs.{${slug}}`)
+    .order('created_at');
+  if (error || !data) return [];
+  return data.map((row) => row.schema);
+}
+
 /** Every published slug — drives generateStaticParams for the full import. */
 export async function getPublishedSlugs(): Promise<string[]> {
   const supabase = serverClient();

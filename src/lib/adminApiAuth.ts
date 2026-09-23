@@ -24,3 +24,15 @@ export async function callerIsOwner(request: Request): Promise<boolean> {
   if (rolesError) return true;
   return resolveRole((rows ?? []) as AdminRoleRow[], email).role === 'owner';
 }
+
+/* Any signed-in admin (owner or editor) — for routes that do content/SEO work
+   rather than proxy CRM or analytics credentials. */
+export async function callerIsAdmin(request: Request): Promise<boolean> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+  if (!url || !anonKey || !bearer) return false;
+  const supabase = createClient(url, anonKey);
+  const { data, error } = await supabase.auth.getUser(bearer);
+  return !error && !!data?.user?.email;
+}
