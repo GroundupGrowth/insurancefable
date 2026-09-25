@@ -245,7 +245,16 @@ export const SmallText = Mark.create({
 export function buildExtensions(): Extensions {
   return [
     StarterKit.configure({
-      link: { openOnClick: false, autolink: false, defaultProtocol: 'https' },
+      /* Tiptap's Link default stamps target="_blank" rel="noopener noreferrer
+         nofollow" on every link it touches: internal links stopped passing
+         ranking signal and TOC anchors opened new tabs (2026-09-25). Null =
+         keep whatever the link had; lib/linkAttrs cleans the rest on save. */
+      link: {
+        openOnClick: false,
+        autolink: false,
+        defaultProtocol: 'https',
+        HTMLAttributes: { target: null, rel: null },
+      },
       heading: { levels: [2, 3, 4] },
     }),
     Table.configure({ resizable: false }),

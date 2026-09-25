@@ -1,32 +1,14 @@
-/* Stand-in typeface until the TT Norms Pro woff2 files are dropped into public/fonts.
-   Once /fonts/tt-norms-pro-regular.woff2 and /fonts/tt-norms-pro-semibold.woff2 exist,
-   the @font-face rules below take over automatically — no CSS changes needed.
-   (Figtree fallback weights are imported in layout.tsx via @fontsource.) */
+/* Figtree (via @fontsource in layout.tsx) is the site typeface. The TT Norms Pro
+   @font-face placeholders were removed 2026-09-25: the woff2 files were never
+   supplied, so every page requested two fonts that 404'd. */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* SWAP-LATER: drop the licensed TT Norms Pro woff2 files into public/fonts */
-@font-face {
-  font-family: 'TT Norms Pro';
-  src: url('/fonts/tt-norms-pro-regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'TT Norms Pro';
-  src: url('/fonts/tt-norms-pro-semibold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
 html,
 body {
-  font-family: 'TT Norms Pro', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
   background-color: #f5f5f5;
 }
 
@@ -368,3 +350,30 @@ body {
     gap: 1.25rem;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Article callout boxes: the CURRENT convention for new articles is a class
+   (<div class="tldr-box">…</div>), so the look lives here and can change in
+   one place. Colours match the inline-styled boxes of the older articles,
+   which keep working unchanged.
+   --------------------------------------------------------------------------- */
+.article-body .tldr-box,
+.article-body .trust-box,
+.article-body .takeaway-box,
+.article-body .keypoint-box,
+.article-body .warning-box,
+.article-body .tip-box,
+.article-body .cta-box {
+  padding: 20px;
+  margin: 25px 0;
+  border-left: 4px solid #0066cc;
+  background: #e8f4f8;
+}
+.article-body .trust-box { background: #f8f9fa; border-left-color: #28a745; }
+.article-body .takeaway-box { background: #fff3cd; border-left-color: #ffc107; }
+.article-body .keypoint-box { background: #e8f4fd; border-left-color: #007bff; padding: 15px; margin: 20px 0; }
+.article-body .warning-box { background: #f8d7da; border-left-color: #dc3545; padding: 15px; margin: 20px 0; }
+.article-body .tip-box { background: #d4edda; border-left-color: #28a745; padding: 15px; margin: 20px 0; }
+.article-body .cta-box { border-left-color: #0056b3; padding: 20px 25px; margin: 30px 0; border-radius: 4px; }
+.article-body :is(.tldr-box, .trust-box, .takeaway-box, .keypoint-box, .warning-box, .tip-box, .cta-box) > :first-child { margin-top: 0; }
+.article-body :is(.tldr-box, .trust-box, .takeaway-box, .keypoint-box, .warning-box, .tip-box, .cta-box) > :last-child { margin-bottom: 0; }

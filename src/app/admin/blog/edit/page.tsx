@@ -1,5 +1,6 @@
 'use client';
 
+import { cleanLinkAttrs } from '../../../../lib/linkAttrs';
 import {
   Suspense,
   useCallback,
@@ -285,8 +286,9 @@ function EditPage() {
         const now = new Date().toISOString();
         const publishedIso =
           fromLocalInput(publishedAt) ?? (nextStatus === 'published' ? now : null);
+        // cleanLinkAttrs: strip the old editor's nofollow/_blank stamp from what we store
         const body = bodyDirtyRef.current
-          ? (editorRef.current?.getHTML() ?? initialBody)
+          ? cleanLinkAttrs(editorRef.current?.getHTML() ?? initialBody)
           : initialBody;
 
         const payload = {

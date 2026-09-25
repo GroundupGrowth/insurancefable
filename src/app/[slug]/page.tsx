@@ -25,6 +25,8 @@ import { getWikiTerms } from '../../lib/wiki';
 import { linkWikiTerms } from '../../lib/wikiLinker';
 import { repairArticleBody, splitAtDeadMap } from '../../lib/legacyOffers';
 import { canonicalizeBodyLinks, demoteBodyH1 } from '../../lib/bodyLinks';
+import { cleanLinkAttrs } from '../../lib/linkAttrs';
+import { pruneSrcset } from '../../lib/srcsetPrune';
 import CreditorProtectionMap from '../../components/CreditorProtectionMap';
 import { JsonLd, breadcrumbJsonLd, faqJsonLd, videoJsonLds } from '../../lib/articleSchema';
 
@@ -92,7 +94,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   /* Legacy WordPress lead-magnet blocks (invisible white-on-white copy around
      a dead Gravity Form) become working offer cards — see lib/legacyOffers.
      Runs before the wiki linker so the promo's own copy is never linked. */
-  const repairedHtml = demoteBodyH1(canonicalizeBodyLinks(repairArticleBody(post.bodyHtml)));
+  const repairedHtml = pruneSrcset(
+    demoteBodyH1(cleanLinkAttrs(canonicalizeBodyLinks(repairArticleBody(post.bodyHtml))))
+  );
   // First mention of each wiki term becomes a link to its /wiki/ page
   const bodyHtml = linkWikiTerms(repairedHtml, wikiTerms);
 
