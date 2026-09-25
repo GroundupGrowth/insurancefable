@@ -53,6 +53,12 @@ export const siteForms: SiteForm[] = [
     fields: 'name, email, phone',
   },
   {
+    slotKey: 'page:live-rich-die-rich-webinar:form',
+    label: 'Live Rich, Die Rich webinar registration',
+    pages: ['/live-rich-die-rich-webinar/'],
+    fields: 'name, email, phone',
+  },
+  {
     slotKey: 'page:ibc-masterclass:form',
     label: 'IBC Masterclass webinar access',
     pages: ['/ibc-masterclass/'],

@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Insurance & Estates//Live Rich Die Rich Webinar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:lrdr-webinar-20261001@insuranceandestates.com
+DTSTAMP:20260925T000000Z
+DTSTART:20261001T190000Z
+DTEND:20261001T200000Z
+SUMMARY:Live Rich\, Die Rich (live webinar with Barry & Steve)
+DESCRIPTION:Your access link arrives by email before the session. Details: https://insuranceandestates.com/live-rich-die-rich-webinar/
+URL:https://insuranceandestates.com/live-rich-die-rich-webinar/
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Live Rich\, Die Rich starts in 30 minutes
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import { webinar, webinarIsUpcoming } from '../data/webinar';
 
 interface NavLink {
   label: string;
@@ -48,6 +49,15 @@ export default function Navbar() {
      iPads/touch laptops (wide enough for the desktop nav) the About/Products
      buttons did nothing. Click toggles them too; hover keeps working. */
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  /* "Upcoming Webinar" pill (src/data/webinar.ts). Rendered from the static
+     flag, then re-checked against the clock after mount so a page built
+     before the event stops showing it once the event is over. Also hidden
+     on the webinar's own pages, where it would just link to itself. */
+  const [showWebinar, setShowWebinar] = useState(webinar.showInNav);
+  useEffect(() => {
+    const onWebinarPage = window.location.pathname.startsWith(webinar.path);
+    if (webinar.showInNav && (!webinarIsUpcoming() || onWebinarPage)) setShowWebinar(false);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-4">
@@ -120,15 +130,26 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden md:flex items-center gap-5">
+            {showWebinar && (
+              <a
+                href={webinar.path}
+                className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-[#0D1B3D] bg-[#FFE9E6] px-3 py-1.5 rounded-full hover:bg-[#FFD9D3] transition-colors duration-200"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#E5484D]" aria-hidden="true" />
+                Upcoming Webinar
+              </a>
+            )}
+            {/* Hidden on desktop while the webinar pill shows: there's no room
+                for all three in the 5xl bar (they wrapped at 1366px). */}
             <a
               href="/start-your-journey/"
-              className="text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D] transition-colors duration-200"
+              className={`${showWebinar ? 'hidden' : ''} whitespace-nowrap text-base font-medium text-[#0D1B3D]/70 hover:text-[#0D1B3D] transition-colors duration-200`}
             >
               Start here
             </a>
             <a
               href="/connect-with-our-experts/"
-              className="inline-flex items-center bg-[#0D1B3D] text-white font-medium px-5 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
+              className="inline-flex items-center whitespace-nowrap bg-[#0D1B3D] text-white font-medium px-5 py-2 rounded-full hover:bg-[#1C2E55] transition-colors duration-200"
             >
               Connect with an Expert
             </a>
@@ -143,6 +164,19 @@ export default function Navbar() {
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
+
+        {/* Phones: no room for the pill beside the logo and menu button, so
+            it gets its own slim row under them. */}
+        {showWebinar && (
+          <a
+            href={webinar.path}
+            className="md:hidden mt-2 flex items-center gap-2 text-xs font-medium text-[#0D1B3D] bg-[#FFE9E6] px-3 py-1.5 rounded-xl"
+          >
+            <span className="w-2 h-2 rounded-full bg-[#E5484D] shrink-0" aria-hidden="true" />
+            <span className="truncate">Upcoming Webinar &middot; {webinar.dateLabel}</span>
+            <span className="ml-auto shrink-0">&rarr;</span>
+          </a>
+        )}
 
         {mobileOpen && (
           <div className="md:hidden pt-4 pb-2">

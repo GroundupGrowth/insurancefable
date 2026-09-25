@@ -7,7 +7,10 @@ import { LEAD_ERROR_MESSAGE, splitName, submitLead } from '../lib/submitLead';
    carried dead visual replicas (trust-workshop, ibc-masterclass,
    infinite-banking-pdf). Submits to /api/lead/ with the page's slot key as
    `source`; the webhook is set at /admin -> Forms. Renders inside the page's
-   existing EmbedSlot, so a pasted GHL embed still overrides it. */
+   existing EmbedSlot, so a pasted GHL embed still overrides it.
+   `redirectTo` sends the visitor to a thank-you page (which fires the Lead
+   conversion) instead of the inline success message; `question` adds an
+   optional free-text field forwarded to GHL as `question`. */
 
 export default function SimpleLeadForm({
   source,
@@ -15,12 +18,17 @@ export default function SimpleLeadForm({
   includeAge = false,
   submitLabel = 'Submit',
   successMessage = 'Thank you! We received your details and will follow up shortly.',
+  redirectTo,
+  question,
 }: {
   source: string;
   tone: 'navy' | 'light';
   includeAge?: boolean;
   submitLabel?: string;
   successMessage?: string;
+  redirectTo?: string;
+  /** Placeholder for an optional free-text question field. */
+  question?: string;
 }) {
   const [agreed, setAgreed] = useState(false);
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
@@ -44,9 +52,14 @@ export default function SimpleLeadForm({
       email: field('email'),
       phone: field('phone'),
       ...(includeAge ? { age: field('age') } : {}),
+      ...(question && field('question').trim() ? { question: field('question').trim() } : {}),
       consent: agreed,
       source,
     });
+    if (ok && redirectTo) {
+      window.location.href = redirectTo;
+      return;
+    }
     setStatus(ok ? 'sent' : 'error');
   };
 
@@ -73,6 +86,15 @@ export default function SimpleLeadForm({
             <input type="email" name="email" required placeholder="Email*" className={inputClass} />
             <input type="tel" name="phone" required placeholder="Phone*" className={inputClass} />
           </>
+        )}
+        {question && (
+          <textarea
+            name="question"
+            rows={3}
+            maxLength={1000}
+            placeholder={question}
+            className={`${inputClass} resize-y`}
+          />
         )}
       </div>
       <p className={`${smallText} text-xs leading-relaxed`}>
