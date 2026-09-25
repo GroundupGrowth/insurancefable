@@ -7,6 +7,7 @@ import legacyRedirects from '../../redirects.legacy.mjs';
       of bouncing through a 308 (the 2026-09-25 crawl found 206 distinct
       redirecting targets across the bodies). Same map as next.config
       redirects, so the two can never disagree.
+      Slashless page links get their trailing slash for the same reason.
    2. A handful of bodies open with their own <h1>; the page template already
       renders the title as the H1, so body H1s become H2s. */
 
@@ -29,7 +30,8 @@ const HREF = /href=(["'])(?:https?:\/\/(?:www\.)?insuranceandestates\.com)?(\/[^
 
 export function canonicalizeBodyLinks(html: string): string {
   return html.replace(HREF, (whole, quote: string, path: string, suffix = '') => {
-    const target = resolve(path);
+    // trailingSlash is on site-wide, so a slashless page link is one more 308
+    const target = resolve(path) ?? (/\/[^/.]+$/.test(path) ? `${path}/` : null);
     return target ? `href=${quote}${target}${suffix}${quote}` : whole;
   });
 }

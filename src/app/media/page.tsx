@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     'Press and media assets for Insurance & Estates: media one-pagers, headshots, and brand marks, ready to download. Booking contact included.',
   alternates: { canonical: '/media/' },
+  openGraph: { url: '/media/', type: 'website', images: [{ url: '/opengraph-image', width: 1200, height: 630 }] },
 };
 
 const BOOKING_EMAIL = 'jasonk@insuranceandestates.com';
