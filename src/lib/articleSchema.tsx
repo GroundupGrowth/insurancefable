@@ -1,6 +1,11 @@
 import { SITE_URL } from './content';
 import { toSiteIso } from './dates';
 import type { BlogPost } from './blog';
+import youtubeMeta from '../data/youtube-meta.json';
+
+type YtMeta = { uploadDate: string | null; duration: string | null; unavailable?: boolean };
+/* Pre-fetched locally by scripts/youtube-meta.mjs (YouTube doesn't answer Vercel's servers). */
+const ytMeta = youtubeMeta as Record<string, YtMeta>;
 
 /* Structured data derived from the imported article bodies. The old WordPress
    site carried hand-added FAQPage/VideoObject JSON-LD inside the post HTML;
@@ -133,8 +138,10 @@ export async function videoJsonLds(post: BlogPost): Promise<object[]> {
   ];
 
   return Promise.all(
-    ids.map(async (id) => {
-      const watch = await youtubeWatchMeta(id);
+    ids
+      .filter((id) => !ytMeta[id]?.unavailable)
+      .map(async (id) => {
+      const watch = ytMeta[id]?.uploadDate ? ytMeta[id] : await youtubeWatchMeta(id);
       let title: string | null = null;
       let thumbnail = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
       try {
