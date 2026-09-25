@@ -101,6 +101,27 @@ export function faqJsonLd(bodyHtml: string): object | null {
    rather than dropping the video. YouTube doesn't expose the upload date
    without an API key, so the post's publish date stands in — same trade-off
    the WordPress SEO plugins make. */
+/* The real upload date and duration of a YouTube video, read from the public
+   watch page (itemprop meta tags; no API key). uploadDate used to be the
+   article's publish date, which was months or years off (a 2020 video carried
+   a 2025 date) and misstated the markup. Weekly revalidation so a consent page
+   or hiccup isn't cached forever; null fields fall back to the post date. */
+async function youtubeWatchMeta(id: string): Promise<{ uploadDate: string | null; duration: string | null }> {
+  try {
+    const res = await fetch(`https://www.youtube.com/watch?v=${id}`, {
+      headers: { 'accept-language': 'en-US,en;q=0.9', cookie: 'SOCS=CAI; CONSENT=YES+1' },
+      next: { revalidate: 604800 },
+    });
+    if (!res.ok) return { uploadDate: null, duration: null };
+    const html = await res.text();
+    const pick = (prop: string) =>
+      html.match(new RegExp(`itemprop="${prop}" content="([^"]+)"`))?.[1] ?? null;
+    return { uploadDate: pick('uploadDate') ?? pick('datePublished'), duration: pick('duration') };
+  } catch {
+    return { uploadDate: null, duration: null };
+  }
+}
+
 export async function videoJsonLds(post: BlogPost): Promise<object[]> {
   if (/VideoObject/.test(post.bodyHtml)) return [];
   const ids = [
@@ -113,6 +134,7 @@ export async function videoJsonLds(post: BlogPost): Promise<object[]> {
 
   return Promise.all(
     ids.map(async (id) => {
+      const watch = await youtubeWatchMeta(id);
       let title: string | null = null;
       let thumbnail = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
       try {
@@ -137,7 +159,12 @@ export async function videoJsonLds(post: BlogPost): Promise<object[]> {
         description: post.metaDescription ?? post.excerpt ?? title ?? post.title,
         thumbnailUrl: thumbnail,
         embedUrl: `https://www.youtube.com/embed/${id}`,
-        ...(post.publishedAt ? { uploadDate: toSiteIso(post.publishedAt) } : {}),
+        ...(watch.uploadDate
+          ? { uploadDate: watch.uploadDate }
+          : post.publishedAt
+            ? { uploadDate: toSiteIso(post.publishedAt) }
+            : {}),
+        ...(watch.duration ? { duration: watch.duration } : {}),
       };
     })
   );
