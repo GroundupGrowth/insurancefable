@@ -26,7 +26,14 @@ export async function generateMetadata({
   const entry = explainers.find((candidate) => candidate.slug === slug);
   if (!entry) return {};
   return {
-    title: `${entry.title} (1-Minute Video Explainer)`,
+    /* Absolute: the 49-char site suffix pushed these to 103-144 chars. Keep the
+       "(Video)" hint when it still fits in Google's ~65-char window. */
+    title: {
+      absolute:
+        `${entry.title} (Video) | I&E`.length <= 65
+          ? `${entry.title} (Video) | I&E`
+          : `${entry.title} | I&E`,
+    },
     description: entry.summary,
     alternates: { canonical: `/explainers/${entry.slug}/` },
     openGraph: {

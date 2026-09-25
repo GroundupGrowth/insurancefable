@@ -12,10 +12,11 @@ import { explainers, explainerCategories } from '../../data/explainers';
    what search engines and LLMs read); this page is the grouped index. */
 
 export const metadata: Metadata = {
-  title: 'Life Insurance Explained in Simple Terms (Video Explainers)',
+  title: { absolute: 'Life Insurance Explained: Video Explainers | Insurance & Estates' },
   description:
     'Short video explainers answering the most common life insurance questions in plain language: cash value, policy loans, dividends, term vs whole life, taxes, and more. Full transcripts included.',
   alternates: { canonical: '/explainers/' },
+  openGraph: { url: '/explainers/', type: 'website', images: [{ url: '/opengraph-image', width: 1200, height: 630 }] },
 };
 
 const MEDIA = '/media/explainers';

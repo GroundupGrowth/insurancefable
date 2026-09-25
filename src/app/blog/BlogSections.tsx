@@ -42,6 +42,23 @@ function Section({ section }: { section: BlogSection }) {
           <BlogPostCard key={post.slug} post={post} />
         ))}
       </div>
+      {/* Collapsed sections still list every remaining article as a plain
+          link, so all posts are one crawlable click from /blog/ (the SEO
+          crawl of 2026-09-25 found articles with no inbound links at all). */}
+      {!expanded && hidden > 0 && (
+        <ul className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2.5">
+          {section.posts.slice(INITIAL).map((post) => (
+            <li key={post.slug}>
+              <a
+                href={`/${post.slug}/`}
+                className="text-[#0D1B3D]/75 hover:text-[#0D1B3D] text-[15px] leading-snug underline decoration-[#0D1B3D]/20 underline-offset-2 hover:decoration-[#0D1B3D] transition-colors duration-150"
+              >
+                {post.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
       {!expanded && hidden > 0 && (
         <div className="flex justify-center">
           <button
@@ -49,7 +66,7 @@ function Section({ section }: { section: BlogSection }) {
             onClick={() => setExpanded(true)}
             className="mt-8 inline-flex items-center gap-2 bg-white text-[#0D1B3D]/70 hover:text-[#0D1B3D] border border-black/5 hover:border-black/15 font-medium text-sm px-6 py-2.5 rounded-full transition-colors duration-200"
           >
-            Show all {section.posts.length} articles
+            Show all {section.posts.length} as cards
             <ChevronDown className="w-4 h-4" />
           </button>
         </div>

@@ -52,7 +52,11 @@ export async function ebookLandingMetadata(
   const description =
     live?.description ??
     book?.text ??
-    'Request your free copy from Insurance & Estates — whole life and infinite banking strategies.';
+    /* Named per book: the shared generic sentence made six landing pages
+       carry one identical meta description (2026-09-25 SEO crawl). */
+    (book
+      ? `Get your free copy of ${book.title}, a ${book.eyebrow.toLowerCase()} from Insurance & Estates on whole life insurance, infinite banking and estate planning strategy.`
+      : 'Request your free copy from Insurance & Estates: whole life and infinite banking strategies.');
   return {
     title: { absolute: absoluteTitle },
     description,

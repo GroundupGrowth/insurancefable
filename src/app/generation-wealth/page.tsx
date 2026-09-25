@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     'Media page for booking Barry Brooksby and Steve Gibbs, JD, AEP® as podcast guests. Bios, topics, books, and prior appearances in one place.',
   alternates: { canonical: '/generation-wealth/' },
+  openGraph: { url: '/generation-wealth/', type: 'website', images: [{ url: '/opengraph-image', width: 1200, height: 630 }] },
 };
 
 const BOOKING_EMAIL = 'jasonk@insuranceandestates.com';

@@ -1008,6 +1008,11 @@ const recoveredRedirects = [
   { source: '/life-insurance-calculator', destination: '/life-insurance-needs-calculator/', permanent: true },
   { source: '/about-us', destination: '/about/', permanent: true },
   { source: '/team', destination: '/proclientguide/', permanent: true },
+  /* Dead body links found in the 2026-09-25 SEO crawl (both from the mutual-vs-stock
+     article). Same destinations as their already-mapped siblings
+     (-dividends-rate-history, best-final-expense-insurance-companies). */
+  { source: '/whole-life-insurance-dividends', destination: '/top-10-best-dividend-paying-whole-life-insurance-companies/', permanent: true },
+  { source: '/burial-insurance', destination: '/top-10-best-life-insurance-companies/', permanent: true },
 ];
 
 export default [
