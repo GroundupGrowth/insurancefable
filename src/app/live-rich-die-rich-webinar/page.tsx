@@ -29,13 +29,27 @@ import { webinar } from '../../data/webinar';
 export const metadata: Metadata = {
   title: { absolute: 'Live Rich, Die Rich Webinar | Insurance & Estates' },
   description:
-    'Free live webinar with Barry Brooksby and Steve Gibbs: how to build, use, and secure your estate while you are alive, and lock down a legacy that still makes sense for your family.',
+    'Live webinar with Barry Brooksby and Steve Gibbs: how to build, use, and secure your estate while you are alive, and lock down a legacy that still makes sense for your family.',
   robots: { index: false, follow: true },
   alternates: { canonical: webinar.path },
 };
 
 const barry = advisorDefaults.barry;
 const steve = advisorDefaults.steve;
+
+/* Webinar-specific host bios, supplied by the team 2026-09-25 (Barry's via
+   Jason Kenyon, Steve's by Steve himself). They differ from the /proclientguide/
+   profile intros on purpose; em-dashes in Steve's text swapped for commas. */
+const HOST_BIOS: Record<string, string[]> = {
+  barry: [
+    'Barry Brooksby is our resident Infinite Banking Practitioner and Real Estate Strategist, with 25+ years in financial services and large scale real estate investing. He began as a traditional financial advisor, grew disillusioned with what conventional planning was actually doing for clients, and co-founded a trust deed investment company that managed over $100 million before the 2008 crash. He lost $1.4 million in that crash and rebuilt. He is the author of Live Rich, Die Rich, and a father of five.',
+  ],
+  steve: [
+    'Steven Gibbs, JD, AEP® is an estate planning attorney, Co-Owner and Co-Founder of Insurance and Estate Strategies LLC, and the visionary founder of WealthTransferCoach. With more than two decades of specialized experience, he has guided high-net-worth families through the complexities of wealth preservation, family office structuring, and multi-generational legacy planning.',
+    'After years of drafting wills and trusts, and then sitting with families as those documents were put into practice, Steven learned that even a technically flawless plan can leave a family unprepared, disconnected, or stuck.',
+    'He founded his own practice in 2007, at the onset of the real estate market collapse, and has since dedicated his work to helping families create plans designed not merely to work on paper, but to endure real-life circumstances, preserve family unity, and support a lasting legacy.',
+  ],
+};
 
 const PILLARS: { step: string; title: string; body: string }[] = [
   {
@@ -94,7 +108,7 @@ function EventFacts({ light = false }: { light?: boolean }) {
       </li>
       <li className="flex items-center gap-3">
         <MessageCircleQuestion className={`w-5 h-5 shrink-0 ${icon}`} />
-        <span>Free to attend, with live Q&amp;A</span>
+        <span>Live Q&amp;A: bring your questions</span>
       </li>
     </ul>
   );
@@ -109,7 +123,7 @@ export default function Page() {
           <div>
             <p className="inline-flex items-center gap-2 bg-white/10 text-white text-sm font-medium rounded-full px-4 py-1.5 mb-6">
               <span className="w-2 h-2 rounded-full bg-[#FF6B5A]" aria-hidden="true" />
-              Free live webinar
+              Live webinar
             </p>
             <h1
               className="text-white text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.05] mb-6"
@@ -150,7 +164,7 @@ export default function Page() {
                   className="text-white text-2xl font-medium"
                   style={{ letterSpacing: '-0.02em' }}
                 >
-                  Save your free seat
+                  Save your seat
                 </p>
                 <p className="text-white/60 text-sm leading-relaxed">
                   Register once and we&rsquo;ll send your access link and reminders before the
@@ -159,7 +173,7 @@ export default function Page() {
                 <SimpleLeadForm
                   source={webinar.formSource}
                   tone="navy"
-                  submitLabel="Register free"
+                  submitLabel="Save your seat"
                   question="What would you like Barry and Steve to cover? (optional)"
                   redirectTo={webinar.thankYouPath}
                 />
@@ -233,8 +247,9 @@ export default function Page() {
             <SalesHeading>This session is for you if&hellip;</SalesHeading>
             <SalesChecklist
               items={[
+                <>You want to learn about Infinite Banking and build a tax-free future</>,
+                <>You want certainty and predictability in your financial plan</>,
                 <>Your estate plan was written a few years ago and hasn&rsquo;t been reviewed since</>,
-                <>You have a will or trust but aren&rsquo;t sure it still does what you intended</>,
                 <>You want to enjoy what you&rsquo;ve built without putting your plan at risk</>,
                 <>You want your spouse and kids to have clear instructions, not open questions</>,
                 <>You have questions about your own situation and want to ask them live</>,
@@ -281,10 +296,20 @@ export default function Page() {
                   >
                     {host.name}
                   </h3>
-                  <p className="text-[#0D1B3D]/60 text-sm">{host.subtitle ?? host.role}</p>
+                  <p className="text-[#0D1B3D]/60 text-sm">
+                    {host.slug === 'steve'
+                      ? 'Estate Planning Attorney & Co-Founder'
+                      : (host.subtitle ?? host.role)}
+                  </p>
                 </div>
               </div>
-              <p className="text-[#0D1B3D]/70 leading-relaxed">{host.intro}</p>
+              <div className="space-y-4">
+                {(HOST_BIOS[host.slug] ?? [host.intro]).map((paragraph) => (
+                  <p key={paragraph} className="text-[#0D1B3D]/70 leading-relaxed">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
               <a
                 href={`/proclientguide/${host.slug}/`}
                 className="inline-block mt-5 text-[#0D1B3D] font-medium underline underline-offset-4 hover:text-[#1C2E55]"
@@ -304,12 +329,12 @@ export default function Page() {
             <SalesProse light>
               <p>
                 Join Barry and Steve live, hear the framework, and ask the questions that apply to
-                your family. It&rsquo;s free, and it takes one registration.
+                your family. It takes one registration.
               </p>
             </SalesProse>
             <div className="mt-8">
               <SalesCta href="#register" light>
-                Register free
+                Save your seat
               </SalesCta>
             </div>
           </div>
