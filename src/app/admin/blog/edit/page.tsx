@@ -201,7 +201,11 @@ function EditPage() {
     setMetaTitle(post.seo_meta_title ?? '');
     setMetaDescription(post.seo_meta_description ?? '');
     setPublishedAt(toLocalInput(post.published_at));
-    setInitialBody(post.body_html ?? '');
+    /* Clean on load, not only on save: the editor used to display the old
+       nofollow/_blank stamp from stored HTML (Jason, 2026-09-28), and a save
+       without body edits wrote it straight back. cleanLinkAttrs only touches
+       internal <a> attributes, so the untouched-body path stays byte-safe. */
+    setInitialBody(cleanLinkAttrs(post.body_html ?? ''));
     setCategoryId(rel?.data?.categories_id ?? '');
     setRelRowId(rel?.data?.id ?? null);
 
