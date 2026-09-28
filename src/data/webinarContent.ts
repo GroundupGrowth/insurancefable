@@ -34,6 +34,7 @@ export interface WebinarContent {
   formTitle: string;
   formIntro: string;
   formQuestion: string;
+  replayNote: string;
   submitLabel: string;
 
   problemHeading: string;
@@ -73,12 +74,12 @@ export interface WebinarContent {
 export const webinarContentDefaults: WebinarContent = {
   metaTitle: 'Live Rich, Die Rich Webinar | Insurance & Estates',
   metaDescription:
-    'Live webinar with Barry Brooksby and Steve Gibbs: how to build, use, and secure your estate while you are alive, and lock down a legacy that still makes sense for your family.',
+    'Live on it or leave it. Most plans make you pick. Barry and Steve show you how the same money can do both: build it and use it while you’re alive, and leave a legacy your family is ready to receive.',
 
   badge: 'Live webinar',
   heroTitle: 'Live Rich, Die Rich',
   heroIntro:
-    'How to build, use, and secure your estate during your lifetime, and lock down a legacy that still makes sense for your family today.',
+    'Live on it or leave it. Most plans make you pick. Barry and Steve show you how the same money can do both: build it and use it while you’re alive, and leave a legacy your family is ready to receive.',
   dateLine: 'Thursday, October 1',
   timeLine: '12 pm PT · 1 pm MT · 2 pm CT · 3 pm ET',
   hostsLine: 'Live with Barry Brooksby & Steve Gibbs',
@@ -88,75 +89,75 @@ export const webinarContentDefaults: WebinarContent = {
   formTitle: 'Save your seat',
   formIntro: 'Register once and we’ll send your access link and reminders before the session.',
   formQuestion: 'What would you like Barry and Steve to cover? (optional)',
+  replayNote: 'Can’t make it live? Register anyway and we’ll send the replay.',
   submitLabel: 'Save your seat',
 
-  problemHeading:
-    'One day you’re going to pass away. What you do now decides what your family inherits: a plan, or a mess.',
+  problemHeading: 'Conventional advice makes you choose.',
   problemIntro:
-    'Most people think they’re covered because they signed something once. Then the rules change, life changes, and the paperwork doesn’t. Here is where it usually goes wrong:',
+    'Build a pile, lock it away, then spend the rest of your life trying to make it last. Here’s where that plan breaks:',
   risks: [
     {
-      title: 'Built for old rules',
-      body: 'Many families still have plans, trusts and wording written for tax rules that have since moved. The documents stayed the same.',
+      title: 'Locked away',
+      body: 'Your money sits in a 401(k) you can’t touch until 60, right when you want capital to grow a business, buy property, or invest.',
     },
     {
-      title: 'Paperwork, no instructions',
-      body: 'A number on a statement is not a plan. Without clear instructions, the people you love are left guessing at the worst possible time.',
+      title: 'Spent down',
+      body: 'In retirement you’re guessing. Spend too much, you run out. Spend too little, you never enjoyed it.',
     },
     {
-      title: 'Stuck in probate',
-      body: 'When a plan is unfinished, probate can slow everything down while your spouse waits and your family carries the stress.',
+      title: 'Lost in the handoff',
+      body: 'Whatever’s left gets taxed on its way to your kids, and most families lose inherited wealth within two generations, rarely because of bad documents.',
     },
   ],
 
   frameworkEyebrow: 'What we’ll walk through',
   frameworkHeading: 'The Live Rich, Die Rich framework',
   frameworkIntro:
-    'An estate plan that only works after you’re gone isn’t finished. While you’re alive, your wealth has three jobs. Then you decide how it transfers, so your family isn’t guessing.',
+    'An estate plan that only works after you’re gone isn’t finished. While you’re alive, your wealth has three jobs.',
   pillars: [
     {
       title: 'Build it',
-      body: 'How to grow what you have in a way that supports both your life now and the plan for later.',
+      body: 'How banks build wealth with properly designed whole life insurance, and why the design matters more than the product.',
     },
     {
       title: 'Use it',
-      body: 'How to actually enjoy and access what you built, without undoing the plan you put in place.',
+      body: 'How to fund a business, real estate, or investments with policy loans while your cash value keeps working.',
     },
     {
       title: 'Secure it',
-      body: 'How to protect your estate while you are alive, so one event does not unravel years of work.',
+      body: 'Why most families lose what’s left to them, and what the ones who keep it do differently.',
     },
     {
-      title: 'Lock the legacy',
-      body: 'How to set up a clean handoff so your family knows who decides, who gets what, and what stays protected.',
+      title: 'Both at once',
+      body: 'One real illustration: lifetime income and a legacy from the same money. You don’t have to pick.',
     },
   ],
 
   audienceHeading: 'This session is for you if…',
   audience: [
-    'You want to learn about Infinite Banking and build a tax-free future',
-    'You want certainty and predictability in your financial plan',
-    'Your estate plan was written a few years ago and hasn’t been reviewed since',
-    'You want to enjoy what you’ve built without putting your plan at risk',
-    'You want your spouse and kids to have clear instructions, not open questions',
+    'You’re building a business, real estate, or investments and want capital you control',
+    'You’re tired of money locked in a 401(k) you can’t touch until 60',
+    'You want to use your money now without shortchanging your kids later',
+    'You want parts of your plan that don’t depend on the market',
+    'You want your kids ready to receive what you leave, not just named in a document',
     'You have questions about your own situation and want to ask them live',
   ],
   spouseHeading: 'Bring your spouse',
   spouseBody:
-    'Estate decisions are family decisions. If you can, watch together, so you both hear the same thing and can ask your questions in the moment.\n\nRegister once. Your access link works for everyone watching with you.',
+    'This is a family decision. If you can, watch together, so you both hear the same thing and can ask your questions in the moment.\n\nRegister once. Your access link works for everyone watching with you.',
   spouseCta: 'Save your seat',
 
   hostsHeading: 'Meet your hosts',
   barrySubtitle: 'Infinite Banking Practitioner & Real Estate Strategist',
   barryBio:
-    'Barry Brooksby is our resident Infinite Banking Practitioner and Real Estate Strategist, with 25+ years in financial services and large scale real estate investing. He began as a traditional financial advisor, grew disillusioned with what conventional planning was actually doing for clients, and co-founded a trust deed investment company that managed over $100 million before the 2008 crash. He lost $1.4 million in that crash and rebuilt. He is the author of Live Rich, Die Rich, and a father of five.',
+    'Barry Brooksby is our resident Infinite Banking Practitioner and Real Estate Strategist, with 25+ years in financial services and large scale real estate investing. He began as a traditional financial advisor, grew disillusioned with what conventional planning was actually doing for clients, and co-founded a trust deed investment company that managed over $100 million before the 2008 crash. He lost $1.4 million in that crash and rebuilt. He is the author of Live Rich, Die Rich, and a father of five. He uses these strategies with his own money.',
   steveSubtitle: 'Estate Planning Attorney & Co-Founder',
   steveBio:
-    'Steven Gibbs, JD, AEP® is an estate planning attorney, Co-Owner and Co-Founder of Insurance and Estate Strategies LLC, and the visionary founder of WealthTransferCoach. With more than two decades of specialized experience, he has guided high-net-worth families through the complexities of wealth preservation, family office structuring, and multi-generational legacy planning.\n\nAfter years of drafting wills and trusts, and then sitting with families as those documents were put into practice, Steven learned that even a technically flawless plan can leave a family unprepared, disconnected, or stuck.\n\nHe founded his own practice in 2007, at the onset of the real estate market collapse, and has since dedicated his work to helping families create plans designed not merely to work on paper, but to endure real-life circumstances, preserve family unity, and support a lasting legacy.',
+    'Steven Gibbs, JD, AEP® is an estate planning attorney, Co-Founder of Insurance and Estate Strategies LLC, and founder of WealthTransferCoach. After years of drafting wills and trusts, and then sitting with families as those documents were put into practice, Steven learned that even a technically flawless plan can leave a family unprepared, disconnected, or stuck. He is the author of The Generational Transfer and What Do You Want Your Kids to Inherit?',
 
-  closingHeading: 'Leave your family clarity, not a mess.',
+  closingHeading: 'You don’t have to pick.',
   closingBody:
-    'Join Barry and Steve live, hear the framework, and ask the questions that apply to your family. It takes one registration.',
+    'Join Barry and Steve live, see how the same money builds your life now and your legacy later, and ask the questions that apply to your family.',
   closingCta: 'Save your seat',
   disclaimer:
     'This webinar is for educational purposes only and is not legal, tax or investment advice. Consult a qualified professional about your specific situation.',

@@ -134,6 +134,9 @@ export default function WebinarView({
               <p {...edit('formIntro')} className="text-white/60 text-sm leading-relaxed">
                 {content.formIntro}
               </p>
+              <p {...edit('replayNote')} className="text-white text-sm font-medium leading-relaxed">
+                {content.replayNote}
+              </p>
               {formBlock}
             </div>
           </div>

@@ -27,6 +27,20 @@ export async function generateMetadata(): Promise<Metadata> {
     description: content.metaDescription,
     robots: { index: false, follow: true },
     alternates: { canonical: webinar.path },
+    /* Page-level so shares point at this page, not the homepage the root
+       layout defaults to; og:image/twitter:image come from the
+       opengraph-image / twitter-image files in this folder. */
+    openGraph: {
+      title: content.metaTitle,
+      description: content.metaDescription,
+      url: webinar.path,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: content.metaTitle,
+      description: content.metaDescription,
+    },
   };
 }
 

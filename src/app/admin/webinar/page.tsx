@@ -356,6 +356,7 @@ export default function WebinarAdminPage() {
               <>
                 {text('formTitle', 'Form heading')}
                 {area('formIntro', 'Text under the heading', undefined, 2)}
+                {text('replayNote', 'Replay note', 'E.g. "Can’t make it live? Register anyway and we’ll send the replay."')}
                 {text('formQuestion', 'Question box placeholder', 'The optional "what should we cover" field')}
                 {text('submitLabel', 'Button')}
               </>
