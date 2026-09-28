@@ -62,7 +62,7 @@ export const siteForms: SiteForm[] = [
     fields: 'name, email, phone, question (what they want covered)',
     // Erik's GHL workflow for the Oct 1 webinar (tags + routes to Barry)
     defaultWebhook:
-      'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/10ebd45c-1515-4a3e-b6e4-e2100b529b18',
+      'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/316fcfc4-c47e-40fa-8aa7-41bbae5c9591',
   },
   {
     slotKey: 'page:ibc-masterclass:form',
