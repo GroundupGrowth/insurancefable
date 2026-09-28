@@ -289,10 +289,11 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       )}
 
       <main className="flex-1 min-w-0 px-6 py-8 lg:px-10 pt-20 lg:pt-8">
-        {/* Bookings and Leads are wide data tables — give them the full viewport. */}
+        {/* Bookings and Leads are wide data tables, the Webinar editor is a split
+            view with a live preview: give them the full viewport. */}
         <div
           className={
-            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads') || pathname.startsWith('/admin/analytics') || pathname.startsWith('/admin/backlinks')
+            pathname.startsWith('/admin/bookings') || pathname.startsWith('/admin/leads') || pathname.startsWith('/admin/analytics') || pathname.startsWith('/admin/backlinks') || pathname.startsWith('/admin/webinar')
               ? 'max-w-none'
               : 'max-w-5xl mx-auto'
           }
