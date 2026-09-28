@@ -43,7 +43,8 @@ export default function FormsAdminPage() {
       const meta = parseSlotNotes(row?.notes);
       bySlot[key] = {
         slotKey: key,
-        webhook: meta.webhook ?? '',
+        // Code default (siteForms.ts) prefills until an admin value is saved
+        webhook: meta.webhook ?? siteForms.find((form) => form.slotKey === key)?.defaultWebhook ?? '',
         thankYou: meta.thankYou ?? '',
         hasEmbed: Boolean(row?.embed_code?.trim()),
       };

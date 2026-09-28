@@ -12,6 +12,9 @@ export interface SiteForm {
   pages: string[];
   /** What the form collects — shown in the admin so mapping in GHL is easy */
   fields: string;
+  /** GHL inbound webhook used until one is saved at /admin -> Forms (the
+      admin value wins), same model as the ebooks' code default. */
+  defaultWebhook?: string;
 }
 
 export const siteForms: SiteForm[] = [
@@ -56,7 +59,10 @@ export const siteForms: SiteForm[] = [
     slotKey: 'page:live-rich-die-rich-webinar:form',
     label: 'Live Rich, Die Rich webinar registration',
     pages: ['/live-rich-die-rich-webinar/'],
-    fields: 'name, email, phone',
+    fields: 'name, email, phone, question (what they want covered)',
+    // Erik's GHL workflow for the Oct 1 webinar (tags + routes to Barry)
+    defaultWebhook:
+      'https://services.leadconnectorhq.com/hooks/g8TD4Xx0YuFrBlcfcrE2/webhook-trigger/10ebd45c-1515-4a3e-b6e4-e2100b529b18',
   },
   {
     slotKey: 'page:ibc-masterclass:form',
@@ -135,3 +141,6 @@ export const siteForms: SiteForm[] = [
 ];
 
 export const siteFormSlotKeys = new Set(siteForms.map((form) => form.slotKey));
+
+export const siteFormDefaultWebhook = (slotKey: string): string | undefined =>
+  siteForms.find((form) => form.slotKey === slotKey)?.defaultWebhook;

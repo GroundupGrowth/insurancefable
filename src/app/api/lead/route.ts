@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { serverClient } from '../../../lib/content';
 import { parseSlotNotes } from '../../../lib/slotNotes';
 import { ebookDefaults, ebookLeadWebhook } from '../../../data/ebooks';
-import { siteFormSlotKeys } from '../../../data/siteForms';
+import { siteFormDefaultWebhook, siteFormSlotKeys } from '../../../data/siteForms';
 import { scoreLeadSpam } from '../../../lib/spamScore';
 
 /* Lead relay: receives the custom lead forms (src/components/LeadCaptureForm)
@@ -83,6 +83,7 @@ export async function POST(request: Request) {
       }
     }
     if (!webhook && isEbook) webhook = ebookLeadWebhook(source.slice('ebook:'.length));
+    if (!webhook && !isEbook) webhook = siteFormDefaultWebhook(source);
   }
   /* A KNOWN source without a configured webhook must never fail the visitor
      (client escalation 2026-08-22: broken ebook downloads). Those leads are
