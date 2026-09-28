@@ -50,7 +50,8 @@ export default function EmbedsAdminPage() {
     if (!supabase) return;
     const { data, error: loadError } = await supabase.from('embed_slots').select('*').order('slot_key');
     if (loadError) setError(loadError.message);
-    else setSlots((data as EmbedSlotRow[]) ?? []);
+    // content:* rows hold page copy (edited at /admin -> Webinar), not embed codes
+    else setSlots(((data as EmbedSlotRow[]) ?? []).filter((slot) => !slot.slot_key.startsWith('content:')));
   }, [supabase]);
 
   useEffect(() => {

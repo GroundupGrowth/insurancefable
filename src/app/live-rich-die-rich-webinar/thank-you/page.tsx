@@ -3,11 +3,15 @@ import { CalendarPlus, Download, Phone } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import LeadEvent from '../../../components/LeadEvent';
 import { webinar } from '../../../data/webinar';
+import { getWebinarContent } from '../../../lib/webinarContent';
 
 /* Confirmation page for the Live Rich, Die Rich webinar form (SimpleLeadForm
    redirects here on a successful /api/lead/ POST). Landing here fires the
    Meta `Lead` + GA4 `generate_lead` conversion via <LeadEvent />, which the
-   ad campaign optimizes on. Noindexed. */
+   ad campaign optimizes on. Copy is editable at /admin -> Webinar.
+   Noindexed. */
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: { absolute: "You're registered | Live Rich, Die Rich Webinar" },
@@ -26,24 +30,24 @@ const googleCalendarUrl =
     details: `Your access link arrives by email before the session. Details: https://insuranceandestates.com${webinar.path}`,
   }).toString();
 
-export default function Page() {
+export default async function Page() {
+  const content = await getWebinarContent();
   return (
     <PageShell>
       <LeadEvent />
       <section className="px-6 pb-24">
         <div className="max-w-3xl mx-auto bg-white rounded-3xl border border-black/5 p-8 md:p-14 text-center">
           <p className="text-[#0D1B3D]/50 text-sm uppercase tracking-wide mb-3">
-            {webinar.title} webinar
+            {content.thankYouEyebrow}
           </p>
           <h1
             className="text-[#0D1B3D] text-4xl md:text-5xl font-medium leading-[1.05]"
             style={{ letterSpacing: '-0.04em' }}
           >
-            You&rsquo;re registered.
+            {content.thankYouHeading}
           </h1>
           <p className="text-[#0D1B3D]/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto mt-6">
-            {webinar.dateLabel}, {webinar.timeLabel}. We&rsquo;ll email your access link and send
-            reminders before the session.
+            {content.thankYouBody}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
@@ -73,17 +77,16 @@ export default function Page() {
                 className="text-[#0D1B3D] text-xl font-medium mb-2"
                 style={{ letterSpacing: '-0.02em' }}
               >
-                Expect a quick call from Barry
+                {content.thankYouCallHeading}
               </p>
               <p className="text-[#0D1B3D]/70 leading-relaxed">
-                Before the session, Barry will give you a call to hear what you&rsquo;d like
-                covered, so the webinar answers your questions. Keep an eye out for his call.
+                {content.thankYouCallBody}
               </p>
             </div>
           </div>
 
           <p className="text-[#0D1B3D]/60 text-sm leading-relaxed mt-8">
-            Watching with your spouse? Great. One registration covers everyone watching with you.
+            {content.thankYouNote}
           </p>
         </div>
       </section>

@@ -25,6 +25,7 @@ import {
   LineChart,
   Users,
   X,
+  Presentation,
 } from 'lucide-react';
 import { getSupabase } from '../../lib/supabase';
 import { canAccess, loadRoleState, type RoleState } from '../../lib/adminRoles';
@@ -37,6 +38,7 @@ const NAV = [
   { href: '/admin/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/agents/', label: 'Agents', icon: Users },
   { href: '/admin/pages/', label: 'Pages', icon: FileText },
+  { href: '/admin/webinar/', label: 'Webinar', icon: Presentation },
   { href: '/admin/books/', label: 'Books', icon: BookOpen },
   { href: '/admin/forms/', label: 'Forms', icon: Inbox },
   { href: '/admin/leads/', label: 'Leads', icon: UserPlus },

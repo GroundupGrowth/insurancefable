@@ -53,7 +53,8 @@ export default function DashboardPage() {
         supabase.from('posts').select('id', { count: 'exact', head: true }),
       ]);
       if (cancelled) return;
-      const embedRows = embeds.data ?? [];
+      // content:* rows are page copy (e.g. /admin -> Webinar), not embeds
+      const embedRows = (embeds.data ?? []).filter((row) => !row.slot_key.startsWith('content:'));
       const recent = [
         ...(pages.data ?? []).map((r) => ({ what: `Page: ${r.slug}`, when: r.updated_at })),
         ...(advisors.data ?? []).map((r) => ({ what: `Agent: ${r.slug}`, when: r.updated_at })),
