@@ -377,3 +377,7 @@ body {
 .article-body .cta-box { border-left-color: #0056b3; padding: 20px 25px; margin: 30px 0; border-radius: 4px; }
 .article-body :is(.tldr-box, .trust-box, .takeaway-box, .keypoint-box, .warning-box, .tip-box, .cta-box) > :first-child { margin-top: 0; }
 .article-body :is(.tldr-box, .trust-box, .takeaway-box, .keypoint-box, .warning-box, .tip-box, .cta-box) > :last-child { margin-bottom: 0; }
+
+/* Editor "As published" preview: highlight the links the site injects. */
+.preview-autolinks a[data-autolink='pillar'] { background: #d1fae5; border-radius: 3px; }
+.preview-autolinks a[data-autolink='wiki'] { background: #fef3c7; border-radius: 3px; }

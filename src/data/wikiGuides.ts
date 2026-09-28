@@ -53,6 +53,10 @@ export const wikiGuides: Record<string, WikiGuide> = {
     href: '/best-convertible-term-life-insurance-companies/',
     label: 'Best Convertible Term Life Insurance Companies',
   },
+  'indexed-universal-life-iul': {
+    href: '/iul-user-guide/',
+    label: '2026 IUL Guide: How Indexed Universal Life Works',
+  },
   'cash-value': {
     href: '/cash-value-life-insurance/',
     label: 'Cash Value Life Insurance: How It Works, How It Grows, and How to Access It',
@@ -120,3 +124,42 @@ export const wikiGuides: Record<string, WikiGuide> = {
 };
 
 export const guideForTerm = (slug: string): WikiGuide | undefined => wikiGuides[slug];
+
+/* Terms whose in-article auto-links go to the guide above instead of the wiki
+   entry (Jason Kenyon, 2026-09-28). The blog auto-linker sends roughly one
+   link per term per article, so whichever URL it points at collects the site's
+   internal signal for that phrase. For head terms we want ranking on the
+   pillar, that has to be the pillar, not the definition page.
+
+   Only terms whose guide is the actual treatment of the term belong here.
+   Left out on purpose, so they keep linking to the wiki: guides that are
+   company listicles (universal life, long-term care, convertible term) or only
+   adjacent to the term (death benefit, estate planning, compound interest),
+   plus every term with no guide at all (premium, rider, dividend,
+   participating policy, ...). */
+export const pillarAutolinkTerms = new Set<string>([
+  'whole-life-insurance',
+  'term-life-insurance',
+  'cash-value',
+  'paid-up-additions',
+  'indexed-universal-life-iul',
+  'infinite-banking',
+  'annuity',
+  'key-person-insurance',
+  'policy-loan',
+  'underwriting',
+  'modified-endowment-contract-mec',
+  '1035-exchange',
+  'volume-based-banking',
+  'lirp',
+  'direct-recognition',
+  'non-direct-recognition',
+  'buy-sell-agreement',
+  'collateral-assignment',
+]);
+
+/** Where the blog auto-linker sends a term: its pillar guide, else the wiki. */
+export function autolinkHref(slug: string): string {
+  const guide = pillarAutolinkTerms.has(slug) ? wikiGuides[slug] : undefined;
+  return guide?.href ?? `/wiki/${slug}/`;
+}

@@ -19,6 +19,7 @@ import { postThumbnails } from '../../../../data/postThumbnails';
 import { inputClass, revalidatePaths, textareaClass } from '../../ui';
 import RichEditor, { type LinkTarget, type RichEditorHandle } from './RichEditor';
 import SchemaPanel from './SchemaPanel';
+import PublishedPreview from './PublishedPreview';
 import { pageDefaults } from '../../../../data/pageContent';
 import { wikiTermDefaults } from '../../../../data/wiki';
 
@@ -560,6 +561,10 @@ function EditPage() {
             }}
             uploadImage={uploadImage}
             linkTargets={linkTargets}
+          />
+          <PublishedPreview
+            getHtml={() => editorRef.current?.getHTML() ?? initialBody}
+            slug={slugify(slug)}
           />
           <SchemaPanel postSlug={isNew ? null : originalSlug} bodyHtml={initialBody} />
         </div>
