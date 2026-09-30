@@ -113,7 +113,7 @@ export const webinarContentDefaults: WebinarContent = {
   frameworkEyebrow: 'What we’ll walk through',
   frameworkHeading: 'The Live Rich, Die Rich framework',
   frameworkIntro:
-    'An estate plan that only works after you’re gone isn’t finished. While you’re alive, your wealth has three jobs.',
+    'An estate plan that only works after you’re gone isn’t finished. It has to work while you’re alive AND after you’re gone.',
   pillars: [
     {
       title: 'Build it',

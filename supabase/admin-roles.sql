@@ -66,3 +66,16 @@ create policy "owner write" on public.embed_slots
 -- Sanity checks.
 select public.is_admin_owner() as i_am_owner;
 select email, role from public.admin_roles order by role, email;
+
+-- ---------------------------------------------------------------------------
+-- Page copy edited in the admin (slot keys `content:*`, e.g. /admin -> Webinar)
+-- is content, not an embed or webhook, so editors may write it too. Without
+-- this an editor's save fails with "new row violates row-level security
+-- policy for table embed_slots". Permissive policies OR together, so owners
+-- keep full access through "owner write".
+-- ---------------------------------------------------------------------------
+drop policy if exists "editor write content" on public.embed_slots;
+create policy "editor write content" on public.embed_slots
+  for all to authenticated
+  using (slot_key like 'content:%')
+  with check (slot_key like 'content:%');

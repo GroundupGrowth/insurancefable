@@ -19,7 +19,8 @@ export const webinar = {
   dateLabel: 'Thursday, October 1',
   timeLabel: '12 pm PT · 1 pm MT · 2 pm CT · 3 pm ET',
   hosts: 'Barry Brooksby & Steve Gibbs',
-  showInNav: true,
+  /* Off until the registration flow is ready (Jason, 2026-09-30). */
+  showInNav: false,
 };
 
 export function webinarIsUpcoming(now: Date = new Date()): boolean {
