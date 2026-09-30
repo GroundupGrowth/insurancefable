@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ComponentType, type FormEvent, type ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import type { Session } from '@supabase/supabase-js';
 import {
@@ -22,6 +22,10 @@ import {
   ShieldCheck,
   UserPlus,
   CalendarCheck,
+  ChevronDown,
+  Globe,
+  Megaphone,
+  Wrench,
   LineChart,
   Users,
   X,
@@ -34,24 +38,64 @@ import { canAccess, loadRoleState, type RoleState } from '../../lib/adminRoles';
    inside this, so hiding a link and blocking a typed-in URL are the same code
    path. Roles come from src/lib/adminRoles.ts. */
 
-const NAV = [
-  { href: '/admin/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/agents/', label: 'Agents', icon: Users },
-  { href: '/admin/pages/', label: 'Pages', icon: FileText },
-  { href: '/admin/webinar/', label: 'Webinar', icon: Presentation },
-  { href: '/admin/books/', label: 'Books', icon: BookOpen },
-  { href: '/admin/forms/', label: 'Forms', icon: Inbox },
-  { href: '/admin/leads/', label: 'Leads', icon: UserPlus },
-  { href: '/admin/bookings/', label: 'Bookings', icon: CalendarCheck },
-  { href: '/admin/analytics/', label: 'Analytics', icon: LineChart },
-  { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
-  { href: '/admin/wiki/', label: 'Wiki', icon: Library },
-  { href: '/admin/schema/', label: 'Schema', icon: Braces },
-  { href: '/admin/backlinks/', label: 'Backlinks', icon: Link2 },
-  { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },
-  { href: '/admin/embeds/', label: 'Embeds', icon: Code2 },
-  { href: '/admin/users/', label: 'Users', icon: ShieldCheck },
+interface NavItem {
+  href: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+}
+
+/* Sidebar: Dashboard, three collapsible groups, then Users. A group opens by
+   itself when it holds the current page; otherwise the open/closed state is
+   remembered per browser. Groups with no page the role may see are hidden. */
+const DASHBOARD: NavItem = { href: '/admin/', label: 'Dashboard', icon: LayoutDashboard };
+
+const NAV_GROUPS: { key: string; label: string; icon: NavItem['icon']; items: NavItem[] }[] = [
+  {
+    key: 'content',
+    label: 'Website content',
+    icon: Globe,
+    items: [
+      { href: '/admin/agents/', label: 'Agents', icon: Users },
+      { href: '/admin/pages/', label: 'Pages', icon: FileText },
+      { href: '/admin/books/', label: 'Books', icon: BookOpen },
+      { href: '/admin/forms/', label: 'Forms', icon: Inbox },
+      { href: '/admin/blog/', label: 'Blog', icon: Newspaper },
+      { href: '/admin/wiki/', label: 'Wiki', icon: Library },
+    ],
+  },
+  {
+    key: 'technical',
+    label: 'Technical',
+    icon: Wrench,
+    items: [
+      { href: '/admin/schema/', label: 'Schema', icon: Braces },
+      { href: '/admin/backlinks/', label: 'Backlinks', icon: Link2 },
+      { href: '/admin/embeds/', label: 'Embeds', icon: Code2 },
+    ],
+  },
+  {
+    key: 'marketing',
+    label: 'Marketing',
+    icon: Megaphone,
+    items: [
+      { href: '/admin/analytics/', label: 'Analytics', icon: LineChart },
+      { href: '/admin/leads/', label: 'Leads', icon: UserPlus },
+      { href: '/admin/bookings/', label: 'Bookings', icon: CalendarCheck },
+      { href: '/admin/reports/', label: 'Reports', icon: BarChart3 },
+      { href: '/admin/webinar/', label: 'Webinar', icon: Presentation },
+    ],
+  },
 ];
+
+const USERS: NavItem = { href: '/admin/users/', label: 'Users', icon: ShieldCheck };
+
+const NAV_OPEN_KEY = 'ie-admin-nav-open';
+
+function isActive(href: string, pathname: string): boolean {
+  return href === '/admin/'
+    ? pathname === '/admin' || pathname === '/admin/'
+    : pathname.startsWith(href.slice(0, -1));
+}
 
 const inputClass =
   'bg-white border border-black/10 text-[#0D1B3D] rounded-xl px-4 py-3 w-full outline-none focus:border-black/30';
@@ -66,6 +110,27 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const [authError, setAuthError] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [roleState, setRoleState] = useState<RoleState | null>(null);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(NAV_OPEN_KEY);
+      if (saved) setOpenGroups(JSON.parse(saved));
+    } catch {
+      // storage blocked or corrupt: every group starts closed
+    }
+  }, []);
+
+  const toggleGroup = (key: string, open: boolean) =>
+    setOpenGroups((current) => {
+      const next = { ...current, [key]: !open };
+      try {
+        localStorage.setItem(NAV_OPEN_KEY, JSON.stringify(next));
+      } catch {
+        // not persisted; fine
+      }
+      return next;
+    });
 
   useEffect(() => {
     if (!supabase) {
@@ -188,26 +253,50 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const { role } = roleState;
   const allowed = canAccess(pathname, role);
 
+  const link = ({ href, label, icon: Icon }: NavItem, nested = false) => (
+    <a
+      key={href}
+      href={href}
+      className={`flex items-center gap-3 ${nested ? 'pl-7 pr-4 py-2' : 'px-4 py-2.5'} rounded-xl text-sm font-medium transition-colors duration-150 ${
+        isActive(href, pathname)
+          ? 'bg-[#0D1B3D] text-white'
+          : 'text-[#0D1B3D]/70 hover:bg-black/5 hover:text-[#0D1B3D]'
+      }`}
+    >
+      <Icon className="w-4 h-4" />
+      {label}
+    </a>
+  );
+
   const nav = (
     <nav className="flex flex-col gap-1">
-      {NAV.filter((item) => canAccess(item.href, role)).map(({ href, label, icon: Icon }) => {
-        const active =
-          href === '/admin/' ? pathname === '/admin' || pathname === '/admin/' : pathname.startsWith(href.slice(0, -1));
+      {canAccess(DASHBOARD.href, role) && link(DASHBOARD)}
+      {NAV_GROUPS.map(({ key, label, icon: GroupIcon, items }) => {
+        const visible = items.filter((item) => canAccess(item.href, role));
+        if (!visible.length) return null;
+        const holdsActive = visible.some((item) => isActive(item.href, pathname));
+        const open = holdsActive || openGroups[key] === true;
         return (
-          <a
-            key={href}
-            href={href}
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 ${
-              active
-                ? 'bg-[#0D1B3D] text-white'
-                : 'text-[#0D1B3D]/70 hover:bg-black/5 hover:text-[#0D1B3D]'
-            }`}
-          >
-            <Icon className="w-4 h-4" />
-            {label}
-          </a>
+          <div key={key} className="flex flex-col gap-0.5">
+            <button
+              type="button"
+              aria-expanded={open}
+              onClick={() => !holdsActive && toggleGroup(key, open)}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 text-left ${
+                holdsActive ? 'text-[#0D1B3D] cursor-default' : 'text-[#0D1B3D]/70 hover:bg-black/5 hover:text-[#0D1B3D]'
+              }`}
+            >
+              <GroupIcon className="w-4 h-4" />
+              <span className="flex-1">{label}</span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-150 ${open ? 'rotate-180' : ''} ${holdsActive ? 'opacity-30' : 'opacity-50'}`}
+              />
+            </button>
+            {open && <div className="flex flex-col gap-0.5">{visible.map((item) => link(item, true))}</div>}
+          </div>
         );
       })}
+      {canAccess(USERS.href, role) && link(USERS)}
     </nav>
   );
 
@@ -255,8 +344,8 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-[#F5F5F5] flex">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-60 shrink-0 flex-col justify-between bg-white border-r border-black/5 p-4 sticky top-0 h-screen">
-        <div>
+      <aside className="hidden lg:flex w-60 shrink-0 flex-col justify-between gap-4 bg-white border-r border-black/5 p-4 sticky top-0 h-screen">
+        <div className="min-h-0 overflow-y-auto">
           <div className="px-4 pt-3 pb-6">
             <p className="text-[#0D1B3D] text-lg font-medium" style={{ letterSpacing: '-0.02em' }}>
               I&amp;E <span className="text-[#0D1B3D]/40">Admin</span>
@@ -282,7 +371,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         </button>
       </div>
       {mobileNavOpen && (
-        <div className="lg:hidden fixed inset-0 z-30 bg-white pt-16 px-4">
+        <div className="lg:hidden fixed inset-0 z-30 bg-white pt-16 px-4 pb-6 overflow-y-auto">
           {nav}
           <div className="mt-4 border-t border-black/5 pt-4">{footerLinks}</div>
         </div>
