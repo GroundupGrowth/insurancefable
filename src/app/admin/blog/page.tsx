@@ -9,10 +9,12 @@ import {
   PenLine,
   Plus,
   Settings2,
+  Trash2,
 } from 'lucide-react';
 import { getSupabase } from '../../../lib/supabase';
 import { AUTHOR_META } from '../../../data/authors';
 import { PageHeader, inputClass } from '../ui';
+import { deleteDraftPost } from './deletePost';
 
 /* Blog: the article manager. Lists every post in the Payload tables (drafts
    included) and links each into the publisher at /admin/blog/edit/. The
@@ -65,6 +67,9 @@ export default function BlogListPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
@@ -118,6 +123,23 @@ export default function BlogListPage() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  const remove = async (row: PostListRow) => {
+    if (!supabase) return;
+    setDeletingId(row.id);
+    setError(null);
+    setNotice(null);
+    try {
+      await deleteDraftPost(supabase, row);
+      setRows((current) => current.filter((item) => item.id !== row.id));
+      setNotice(`Deleted “${row.title}”.`);
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : String(deleteError));
+    } finally {
+      setDeletingId(null);
+      setConfirmId(null);
+    }
+  };
 
   /* Clicking the active column reverses it; a new column starts newest-first
      for dates and A→Z for text. */
@@ -187,6 +209,11 @@ export default function BlogListPage() {
       {error && (
         <p className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-6">
           {error}
+        </p>
+      )}
+      {notice && (
+        <p className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3 mb-6">
+          {notice}
         </p>
       )}
 
@@ -274,7 +301,7 @@ export default function BlogListPage() {
             sortDir={sortDir}
             onSort={sortBy}
           />
-          <span className="text-right">Edit</span>
+          <span className="text-right">Actions</span>
         </div>
 
         {loading && <p className="px-5 py-8 text-[#0D1B3D]/40 text-sm">Loading articles…</p>}
@@ -297,6 +324,30 @@ export default function BlogListPage() {
                 {row.category && <span className="text-[#0D1B3D]/50"> · {row.category}</span>}
                 {row.author && <span className="text-[#0D1B3D]/50"> · {row.author}</span>}
               </p>
+              {confirmId === row.id && (
+                <div
+                  onClick={(event) => event.stopPropagation()}
+                  className="mt-2 flex items-center gap-2 flex-wrap cursor-default"
+                >
+                  <span className="text-red-700 text-xs">Delete this draft permanently? This can’t be undone.</span>
+                  <button
+                    type="button"
+                    disabled={deletingId !== null}
+                    onClick={() => void remove(row)}
+                    className="bg-red-600 text-white text-xs font-medium px-3 py-1 rounded-full hover:bg-red-700 disabled:opacity-40"
+                  >
+                    {deletingId === row.id ? 'Deleting…' : 'Delete'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={deletingId !== null}
+                    onClick={() => setConfirmId(null)}
+                    className="text-[#0D1B3D]/60 hover:text-[#0D1B3D] text-xs font-medium px-2 py-1"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Mobile: status + dates on one wrapped line. Desktop: own columns. */}
@@ -313,6 +364,20 @@ export default function BlogListPage() {
               <span className="text-[#0D1B3D]/50 text-xs md:hidden">
                 Published {formatDate(row.publishedAt)} · Updated {formatDate(row.updatedAt)}
               </span>
+              {row.status !== 'published' && (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setConfirmId(row.id);
+                  }}
+                  title="Delete draft"
+                  aria-label="Delete draft"
+                  className="md:hidden ml-auto text-[#0D1B3D]/40 hover:text-red-600"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             <span className="hidden md:block text-[#0D1B3D]/60 text-sm whitespace-nowrap">
@@ -342,6 +407,20 @@ export default function BlogListPage() {
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>
+              )}
+              {row.status !== 'published' && (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setConfirmId(row.id);
+                  }}
+                  title="Delete draft"
+                  aria-label="Delete draft"
+                  className="text-[#0D1B3D]/40 hover:text-red-600"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               )}
             </span>
           </div>

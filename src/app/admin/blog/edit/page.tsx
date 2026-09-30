@@ -19,6 +19,7 @@ import { postThumbnails } from '../../../../data/postThumbnails';
 import { inputClass, revalidatePaths, textareaClass } from '../../ui';
 import RichEditor, { type LinkTarget, type RichEditorHandle } from './RichEditor';
 import SchemaPanel from './SchemaPanel';
+import { deleteDraftPost } from '../deletePost';
 import PublishedPreview from './PublishedPreview';
 import { pageDefaults } from '../../../../data/pageContent';
 import { wikiTermDefaults } from '../../../../data/wiki';
@@ -80,6 +81,8 @@ function EditPage() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [saving, setSaving] = useState<'draft' | 'published' | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const [postId, setPostId] = useState<number | null>(null);
   const [status, setStatus] = useState<'draft' | 'published'>('draft');
@@ -472,6 +475,20 @@ function EditPage() {
     ]
   );
 
+  const removeDraft = async () => {
+    if (!supabase || postId === null || !originalSlug) return;
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteDraftPost(supabase, { id: postId, slug: originalSlug });
+      router.push('/admin/blog/');
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : String(deleteError));
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
+  };
+
   if (!loaded) return <p className="text-[#0D1B3D]/40 text-sm">Loading article…</p>;
 
   const metaTitleLength = (metaTitle.trim() || `${title}${SERP_SUFFIX}`).length;
@@ -507,7 +524,39 @@ function EditPage() {
             </a>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          {!isNew && status !== 'published' && originalSlug && (
+            confirmDelete ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="text-red-700 text-xs">Delete permanently?</span>
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => void removeDraft()}
+                  className="bg-red-600 text-white font-medium text-sm px-4 py-2.5 rounded-full hover:bg-red-700 transition-colors duration-200 disabled:opacity-40"
+                >
+                  {deleting ? 'Deleting…' : 'Delete'}
+                </button>
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => setConfirmDelete(false)}
+                  className="text-[#0D1B3D]/60 hover:text-[#0D1B3D] text-sm font-medium px-2"
+                >
+                  Cancel
+                </button>
+              </span>
+            ) : (
+              <button
+                type="button"
+                disabled={saving !== null}
+                onClick={() => setConfirmDelete(true)}
+                className="inline-flex items-center gap-1.5 text-[#0D1B3D]/50 hover:text-red-600 text-sm font-medium px-3 py-2.5 disabled:opacity-40"
+              >
+                <Trash2 className="w-4 h-4" /> Delete draft
+              </button>
+            )
+          )}
           <button
             type="button"
             disabled={saving !== null}
