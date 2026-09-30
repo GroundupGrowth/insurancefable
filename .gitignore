@@ -26,6 +26,7 @@ clipboard-*.png
 # Source material for content sync — never ship it in the repo.
 *.WordPress.*.xml
 /sync-from-export.*.sql
+/import-wp-drafts.*.sql
 extraction/
 
 # Raw unoptimized uploads (optimized copies live in public/media/)
