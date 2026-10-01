@@ -13,7 +13,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, ExternalLink, ImagePlus, Trash2 } from 'lucide-react';
 import { getSupabase } from '../../../../lib/supabase';
-import { ebookDefaults } from '../../../../data/ebooks';
+import { ebookPickerOptions } from '../../../../data/ebooks';
 import { AUTHOR_META } from '../../../../data/authors';
 import { postThumbnails } from '../../../../data/postThumbnails';
 import { inputClass, revalidatePaths, textareaClass } from '../../ui';
@@ -132,11 +132,7 @@ function EditPage() {
       supabase.from('posts').select('slug, title').eq('_status', 'published').order('title'),
     ]);
     setCategories(cats.data ?? []);
-    setEbooks(
-      ebookRows.data && ebookRows.data.length > 0
-        ? ebookRows.data
-        : ebookDefaults.map(({ slug: s, title: t }) => ({ slug: s, title: t }))
-    );
+    setEbooks(ebookPickerOptions(ebookRows.data));
 
     /* Articles first (what gets linked most), then wiki terms and the main
        static pages. Wiki/page titles come from the code defaults, which is

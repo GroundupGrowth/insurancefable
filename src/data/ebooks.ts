@@ -63,6 +63,21 @@ const REQUEST = '/ebooks-and-guides/#request-a-guide';
 
 /** Cover art for a slug, from the code defaults. Used to re-attach covers to
     catalogs loaded from Supabase, which does not store them. */
+/* Book choices for the admin pickers (article sidebar eBook, tag rules).
+   site_ebooks holds the catalog once it's been saved in /admin → Books, but
+   books added in code later aren't in it until the next Books save. Merge
+   them in, like getEbooks() does for the site, so every book can be picked. */
+export function ebookPickerOptions(
+  rows: { slug: string; title: string | null }[] | null | undefined
+): { slug: string; title: string }[] {
+  const fromSupabase = (rows ?? []).map((row) => ({ slug: row.slug, title: row.title ?? row.slug }));
+  const seen = new Set(fromSupabase.map((row) => row.slug));
+  return [
+    ...fromSupabase,
+    ...ebookDefaults.filter((book) => !seen.has(book.slug)).map(({ slug, title }) => ({ slug, title })),
+  ];
+}
+
 export function ebookCover(slug: string): EbookImage | undefined {
   return ebookDefaults.find((book) => book.slug === slug)?.image;
 }

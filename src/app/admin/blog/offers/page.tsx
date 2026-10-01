@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BookOpen, Newspaper, Plus, Trash2, UserPen } from 'lucide-react';
 import { getSupabase } from '../../../../lib/supabase';
-import { ebookDefaults } from '../../../../data/ebooks';
+import { ebookPickerOptions } from '../../../../data/ebooks';
 import { DEFAULT_OFFER_EBOOK, offerRuleDefaults } from '../../../../data/offers';
 import { AUTHOR_META } from '../../../../data/authors';
 import { Card, Field, PageHeader, SaveButton, inputClass, revalidatePaths } from '../../ui';
@@ -62,11 +62,7 @@ export default function BlogOffersPage() {
       return;
     }
 
-    setEbooks(
-      ebookRows.data && ebookRows.data.length > 0
-        ? ebookRows.data
-        : ebookDefaults.map(({ slug, title }) => ({ slug, title }))
-    );
+    setEbooks(ebookPickerOptions(ebookRows.data));
     setPostSlugs(posts.data?.map((row) => row.slug) ?? []);
 
     // Tags = every post category + default rule tags + anything saved in the DB.
